@@ -1,9 +1,6 @@
-#![allow(dead_code, unused_variables)]
-
 use std::fmt::Debug;
 use std::future::IntoFuture;
 use std::sync::atomic::AtomicI64;
-use std::sync::Arc;
 use std::time::Duration;
 
 use crate::client::ApiClient;
@@ -34,7 +31,6 @@ use crate::server_config::ApiServerConfig;
 
 use serde::de::DeserializeOwned;
 use serde::Serialize;
-use tokio::sync::RwLock;
 
 macro_rules! set_default_param {
     ($api_client: expr, $param_name: literal, $value: ident, [$($request: ty),*]) => {
@@ -55,19 +51,19 @@ pub struct APIConfig {
 }
 
 impl APIConfig {
-    pub fn new(bot_token: &str, server_config: Option<ApiServerConfig>) -> Self {
+    pub fn new(bot_token: impl ToString, server_config: Option<ApiServerConfig>) -> Self {
         Self {
             token: bot_token.to_string(),
             server_config: server_config.unwrap_or(ApiServerConfig::remote(false)),
         }
     }
 
-    pub fn remote(bot_token: &str, use_test_env: bool) -> Self {
+    pub fn remote(bot_token: impl ToString, use_test_env: bool) -> Self {
         Self::new(bot_token, Some(ApiServerConfig::remote(use_test_env)))
     }
 
     pub fn local(
-        bot_token: &str,
+        bot_token: impl ToString,
         server_url: impl Into<String>,
         port: impl Into<u16>,
         use_test_env: bool,
@@ -82,8 +78,6 @@ impl APIConfig {
         )
     }
 }
-
-type RwArc<T> = Arc<RwLock<T>>;
 
 pub struct API {
     config: APIConfig,
