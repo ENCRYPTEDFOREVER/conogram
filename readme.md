@@ -7,6 +7,9 @@
     <a href="https://core.telegram.org/bots/api#april-21-2023">
         <img src="https://img.shields.io/badge/Bot%20API%20version-6.7-brightgreen">
     </a>
+    <a href="https://crates.io/crates/conogram">
+    <img src="https://img.shields.io/crates/v/conogram.svg">
+  </a>
 </div>
 
 # Aims
