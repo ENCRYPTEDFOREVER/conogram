@@ -66,6 +66,7 @@ impl InlineQuery {
         api.answer_inline_query(&self.id, results.into())
     }
 
+    /// Answer with all server-side caching disabled
     pub fn answer_persnocache<'a>(
         &'a self,
         api: &'a API,

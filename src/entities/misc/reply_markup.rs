@@ -15,6 +15,8 @@ pub enum ReplyMarkup {
 }
 
 impl ReplyMarkup {
+    ///Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice [privacy mode](https://core.telegram.org/bots/features#privacy-mode).
+    ///API Reference: [link](https://core.telegram.org/bots/api/#forcereply)
     pub fn force_reply(
         input_field_placeholder: Option<impl Into<String>>,
         selective: bool,
@@ -26,6 +28,8 @@ impl ReplyMarkup {
         })
     }
 
+    ///This object represents a [custom keyboard](https://core.telegram.org/bots/features#keyboards) with reply options (see [Introduction to bots](https://core.telegram.org/bots/features#keyboards) for details and examples).
+    ///API Reference: [link](https://core.telegram.org/bots/api/#replykeyboardmarkup)
     pub fn keyboard(
         keyboard: impl Into<Vec<Vec<KeyboardButton>>>,
         is_persistent: bool,
@@ -44,12 +48,16 @@ impl ReplyMarkup {
         })
     }
 
+    ///This object represents an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards) that appears right next to the message it belongs to.
+    ///API Reference: [link](https://core.telegram.org/bots/api/#inlinekeyboardmarkup)
     pub fn inline(keyboard: impl Into<Vec<Vec<InlineKeyboardButton>>>) -> Self {
         Self::Inline(InlineKeyboardMarkup {
             inline_keyboard: keyboard.into(),
         })
     }
 
+    ///Upon receiving a message with this object, Telegram clients will remove the current custom keyboard and display the default letter-keyboard. By default, custom keyboards are displayed until a new keyboard is sent by a bot. An exception is made for one-time keyboards that are hidden immediately after the user presses a button (see [ReplyKeyboardMarkup](https://core.telegram.org/bots/api/#replykeyboardmarkup)).
+    ///API Reference: [link](https://core.telegram.org/bots/api/#replykeyboardremove)
     pub fn remove(remove_keyboard: bool, selective: bool) -> Self {
         Self::Remove(ReplyKeyboardRemove {
             remove_keyboard,

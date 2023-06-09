@@ -45,6 +45,7 @@ impl CallbackQuery {
         api.answer_callback_query(&self.id)
     }
 
+    /// An alert will be shown by the client instead of a notification at the top of the chat screen
     pub fn alert<'a>(
         &'a self,
         api: &'a API,
@@ -55,6 +56,7 @@ impl CallbackQuery {
             .text(text)
     }
 
+    /// Notification at the top of the chat screen will be shown instead of alert
     pub fn snackbar<'a>(
         &'a self,
         api: &'a API,

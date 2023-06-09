@@ -20,17 +20,18 @@
 
 # Features
 - Fully async
-- Utility extension methods for API entities _(e.g. ``message.reply`` method)_
+- Utility extension methods for _(not all yet)_ API entities _(e.g. ``message.reply`` method)_
 - Ability to set default request params _(e.g. ``parse_mode`` or ``allow_sending_without_reply``)_
 - Can be used in multithreaded context
 - Full control over update handling
 
 # TODO
-- More handy entity methods
+- More handy entity extension methods
 - #### Webhooks support
-- Logging
 - More examples
 
+# Logging
+[How to enable logging in your executable](https://github.com/rust-lang/log#in-executables)
 
 # Quick usage overview
 

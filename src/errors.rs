@@ -8,12 +8,16 @@ use crate::client::ApiResponse;
 
 #[derive(Debug)]
 pub enum Error {
+    /// Errors returned by the Telegram Bot API
     ApiError(TgApiError),
+    /// HTTP errors
     RequestError(reqwest::Error),
+
+    /// (De)serialization errors
     SerdeError(serde_json::Error),
+
+    /// IO errors
     IO(std::io::Error),
-    Custom(String),
-    TokenValidationError,
 }
 
 impl Display for Error {
@@ -23,8 +27,6 @@ impl Display for Error {
             Error::RequestError(err) => err.fmt(f),
             Error::SerdeError(err) => err.fmt(f),
             Error::IO(err) => err.fmt(f),
-            Error::TokenValidationError => f.write_str("API Token is malformed"),
-            Error::Custom(err_msg) => err_msg.fmt(f),
         }
     }
 }
@@ -68,14 +70,28 @@ pub struct TgApiErrorParams {
     retry_after: Option<i64>,
 }
 
+/// This object represents errors returned by the Telegram Bot API
 #[derive(Debug)]
 pub enum TgApiError {
+    /// Generic error
     Generic(GenericApiErrorParams),
+
+    /// Flood limit reached for this request, retry after N seconds
     RetryAfter(i64),
+
+    /// Regular http 404, bot token is incorrect or you're trying to access inexistent method
     NotFound,
+
+    /// Bot token is incorrect
     Unauthorized,
+
+    /// Another bot instance is running
     Conflict,
+
+    /// Server-side issues, repeat request later
     BadGateway,
+
+    /// Server-side issues, repeat request later
     GatewayTimeout,
 }
 
