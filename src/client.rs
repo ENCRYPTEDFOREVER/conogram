@@ -92,7 +92,7 @@ impl ApiClient {
             if let Value::Object(object) = value {
                 for (param_name, v) in method_entry.iter() {
                     if !object.contains_key(param_name) {
-                        println!("{method}: {param_name}={v}");
+                        log::debug!("Setting {param_name}={v} in {method}");
                         object.insert(param_name.clone(), v.clone());
                     }
                 }
@@ -100,7 +100,6 @@ impl ApiClient {
         }
     }
 
-    #[cfg(feature = "print_requests_and_errors")]
     fn value_to_string(value: &Value) -> String {
         match value {
             Value::Null => "None".into(),
@@ -143,24 +142,17 @@ impl ApiClient {
         let response_result = serde_json::from_str::<ApiResponse<ReturnType>>(&response_text);
 
         if let Err(error) = &response_result {
-            println!("Deserialization Error: {error}\n{response_text}");
+            log::error!("Deserialization Error: {error}\n{response_text}")
         }
 
-        #[cfg(feature = "print_requests_and_errors")]
-        {
-            let api_response = Self::process_api_response(response_result?);
-            if let Err(error) = &api_response {
-                println!(
-                    "Error in {method}({})\n{error}",
-                    Self::value_to_string(&serde_json::to_value(params).unwrap())
-                );
-            }
-            api_response
+        let api_response = Self::process_api_response(response_result?);
+        if let Err(error) = &api_response {
+            log::warn!(
+                "Error in {method}({})\n{error}",
+                Self::value_to_string(&serde_json::to_value(params).unwrap())
+            );
         }
-        #[cfg(not(feature = "print_requests_and_errors"))]
-        {
-            Self::process_api_response(response_result?)
-        }
+        api_response
     }
 
     pub async fn method_json<
@@ -176,8 +168,7 @@ impl ApiClient {
                 let mut value: Value = serde_json::to_value(params)?;
                 self.apply_default_params(method, &mut value);
 
-                #[cfg(feature = "print_requests_and_errors")]
-                println!("{method}({})", Self::value_to_string(&value));
+                log::info!("Calling {method}({})", Self::value_to_string(&value));
 
                 self.http_client.post(self.build_url(method)).json(&value)
             }
@@ -200,8 +191,7 @@ impl ApiClient {
                 let mut json_struct: Value = serde_json::to_value(params)?;
                 self.apply_default_params(method, &mut json_struct);
 
-                #[cfg(feature = "print_requests_and_errors")]
-                println!("{method}({})", Self::value_to_string(&json_struct));
+                log::info!("Calling {method}({})", Self::value_to_string(&json_struct));
 
                 let mut form = Form::new();
                 for (key, value) in json_struct.as_object().unwrap() {

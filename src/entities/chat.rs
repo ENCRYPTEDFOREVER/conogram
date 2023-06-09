@@ -148,3 +148,216 @@ pub enum ChatType {
     Channel,
 }
 // Divider: all content below this line will be preserved after code regen
+use crate::api::API;
+
+use super::misc::input_file::InputFile;
+
+impl Chat {
+    pub async fn unpin_all_messages<'a>(
+        &'a self,
+        api: &'a API,
+    ) -> crate::methods::unpin_all_chat_messages::UnpinAllChatMessagesRequest {
+        api.unpin_all_chat_messages(self.id)
+    }
+
+    pub async fn get_member_count<'a>(
+        &'a self,
+        api: &'a API,
+    ) -> crate::methods::get_chat_member_count::GetChatMemberCountRequest {
+        api.get_chat_member_count(self.id)
+    }
+
+    pub async fn get_administrators<'a>(
+        &'a self,
+        api: &'a API,
+    ) -> crate::methods::get_chat_administrators::GetChatAdministratorsRequest {
+        api.get_chat_administrators(self.id)
+    }
+
+    pub async fn get_member<'a>(
+        &'a self,
+        api: &'a API,
+        user_id: impl Into<i64>,
+    ) -> crate::methods::get_chat_member::GetChatMemberRequest {
+        api.get_chat_member(self.id, user_id)
+    }
+
+    pub async fn update<'a>(&'a self, api: &'a API) -> crate::methods::get_chat::GetChatRequest {
+        api.get_chat(self.id)
+    }
+
+    pub async fn ban_member<'a>(
+        &'a self,
+        api: &'a API,
+        user_id: impl Into<i64>,
+    ) -> crate::methods::ban_chat_member::BanChatMemberRequest {
+        api.ban_chat_member(self.id, user_id)
+    }
+
+    pub async fn unban_member<'a>(
+        &'a self,
+        api: &'a API,
+        user_id: impl Into<i64>,
+    ) -> crate::methods::unban_chat_member::UnbanChatMemberRequest {
+        api.unban_chat_member(self.id, user_id)
+    }
+
+    pub async fn ban_sender_chat<'a>(
+        &'a self,
+        api: &'a API,
+        sender_chat_id: impl Into<i64>,
+    ) -> crate::methods::ban_chat_sender_chat::BanChatSenderChatRequest {
+        api.ban_chat_sender_chat(self.id, sender_chat_id)
+    }
+
+    pub async fn unban_sender_chat<'a>(
+        &'a self,
+        api: &'a API,
+        sender_chat_id: impl Into<i64>,
+    ) -> crate::methods::unban_chat_sender_chat::UnbanChatSenderChatRequest {
+        api.unban_chat_sender_chat(self.id, sender_chat_id)
+    }
+
+    pub async fn set_administrator_custom_title<'a>(
+        &'a self,
+        api: &'a API,
+        user_id: impl Into<i64>,
+        custom_title: impl Into<String>,
+    ) -> crate::methods::set_chat_administrator_custom_title::SetChatAdministratorCustomTitleRequest
+    {
+        api.set_chat_administrator_custom_title(self.id, user_id, custom_title)
+    }
+
+    pub async fn set_title<'a>(
+        &'a self,
+        api: &'a API,
+        title: impl Into<String>,
+    ) -> crate::methods::set_chat_title::SetChatTitleRequest {
+        api.set_chat_title(self.id, title)
+    }
+
+    pub async fn set_description<'a>(
+        &'a self,
+        api: &'a API,
+        description: Option<impl Into<String>>,
+    ) -> crate::methods::set_chat_description::SetChatDescriptionRequest {
+        if let Some(description) = description {
+            api.set_chat_description(self.id).description(description)
+        } else {
+            api.set_chat_description(self.id)
+        }
+    }
+
+    pub async fn set_permissions<'a>(
+        &'a self,
+        api: &'a API,
+        permissions: impl Into<ChatPermissions>,
+    ) -> crate::methods::set_chat_permissions::SetChatPermissionsRequest {
+        api.set_chat_permissions(self.id, permissions)
+    }
+
+    pub async fn set_photo<'a>(
+        &'a self,
+        api: &'a API,
+        photo: impl Into<InputFile>,
+    ) -> crate::methods::set_chat_photo::SetChatPhotoRequest {
+        api.set_chat_photo(self.id, photo)
+    }
+
+    pub async fn set_sticker_set<'a>(
+        &'a self,
+        api: &'a API,
+        sticker_set_name: impl Into<String>,
+    ) -> crate::methods::set_chat_sticker_set::SetChatStickerSetRequest {
+        api.set_chat_sticker_set(self.id, sticker_set_name)
+    }
+
+    pub fn send_action<'a>(
+        &'a self,
+        api: &'a API,
+        action: impl Into<crate::methods::send_chat_action::SendChatActionAction>,
+    ) -> crate::methods::send_chat_action::SendChatActionRequest {
+        api.send_chat_action(self.id, action)
+    }
+
+    pub async fn edit_invite_link<'a>(
+        &'a self,
+        api: &'a API,
+        invite_link: impl Into<String>,
+    ) -> crate::methods::edit_chat_invite_link::EditChatInviteLinkRequest {
+        api.edit_chat_invite_link(self.id, invite_link)
+    }
+
+    pub async fn leave<'a>(&'a self, api: &'a API) -> crate::methods::leave_chat::LeaveChatRequest {
+        api.leave_chat(self.id)
+    }
+
+    pub async fn delete_photo<'a>(
+        &'a self,
+        api: &'a API,
+    ) -> crate::methods::delete_chat_photo::DeleteChatPhotoRequest {
+        api.delete_chat_photo(self.id)
+    }
+
+    pub async fn delete_sticker_set<'a>(
+        &'a self,
+        api: &'a API,
+    ) -> crate::methods::delete_chat_sticker_set::DeleteChatStickerSetRequest {
+        api.delete_chat_sticker_set(self.id)
+    }
+
+    pub async fn export_invite_link<'a>(
+        &'a self,
+        api: &'a API,
+    ) -> crate::methods::export_chat_invite_link::ExportChatInviteLinkRequest {
+        api.export_chat_invite_link(self.id)
+    }
+
+    pub async fn revoke_invite_link<'a>(
+        &'a self,
+        api: &'a API,
+        invite_link: impl Into<String>,
+    ) -> crate::methods::revoke_chat_invite_link::RevokeChatInviteLinkRequest {
+        api.revoke_chat_invite_link(self.id, invite_link)
+    }
+
+    pub async fn approve_join_request<'a>(
+        &'a self,
+        api: &'a API,
+        user_id: impl Into<i64>,
+    ) -> crate::methods::approve_chat_join_request::ApproveChatJoinRequestRequest {
+        api.approve_chat_join_request(self.id, user_id)
+    }
+
+    pub async fn decline_join_request<'a>(
+        &'a self,
+        api: &'a API,
+        user_id: impl Into<i64>,
+    ) -> crate::methods::decline_chat_join_request::DeclineChatJoinRequestRequest {
+        api.decline_chat_join_request(self.id, user_id)
+    }
+
+    pub async fn create_invite_link<'a>(
+        &'a self,
+        api: &'a API,
+    ) -> crate::methods::create_chat_invite_link::CreateChatInviteLinkRequest {
+        api.create_chat_invite_link(self.id)
+    }
+
+    pub async fn promote_member<'a>(
+        &'a self,
+        api: &'a API,
+        user_id: impl Into<i64>,
+    ) -> crate::methods::promote_chat_member::PromoteChatMemberRequest {
+        api.promote_chat_member(self.id, user_id)
+    }
+
+    pub async fn restrict_member<'a>(
+        &'a self,
+        api: &'a API,
+        user_id: impl Into<i64>,
+        permissions: impl Into<ChatPermissions>,
+    ) -> crate::methods::restrict_chat_member::RestrictChatMemberRequest {
+        api.restrict_chat_member(self.id, user_id, permissions)
+    }
+}
