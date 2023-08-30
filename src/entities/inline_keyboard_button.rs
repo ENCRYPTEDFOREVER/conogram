@@ -28,9 +28,7 @@ pub struct InlineKeyboardButton {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub login_url: Option<LoginUrl>,
 
-    ///*Optional*. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted.  
-    ///
-    ///**Note:** This offers an easy way for users to start using your bot in [inline mode](https://core.telegram.org/bots/inline) when they are currently in a private chat with it. Especially useful when combined with [*switch\_pm…*](https://core.telegram.org/bots/api/#answerinlinequery) actions - in this case the user will be automatically returned to the chat they switched from, skipping the chat selection screen.
+    ///*Optional*. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub switch_inline_query: Option<String>,
 
@@ -53,7 +51,7 @@ pub struct InlineKeyboardButton {
     ///*Optional*. Specify *True*, to send a [Pay button](https://core.telegram.org/bots/api/#payments).  
     ///
     ///**NOTE:** This type of button **must** always be the first button in the first row and can only be used in invoice messages.
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub pay: bool,
 }
 // Divider: all content below this line will be preserved after code regen

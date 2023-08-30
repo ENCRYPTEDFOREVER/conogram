@@ -132,6 +132,7 @@ pub mod shipping_option;
 pub mod shipping_query;
 pub mod sticker;
 pub mod sticker_set;
+pub mod story;
 pub mod successful_payment;
 pub mod switch_inline_query_chosen_chat;
 pub mod update;

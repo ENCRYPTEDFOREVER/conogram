@@ -1,4 +1,6 @@
+use crate::entities::chat::Chat;
 use crate::entities::user::User;
+use crate::utils::deserialize_utils::deserialize_boxed_option;
 use serde::{Deserialize, Serialize};
 
 ///This object represents an answer of a user in a non-anonymous poll.
@@ -8,10 +10,19 @@ pub struct PollAnswer {
     ///Unique poll identifier
     pub poll_id: String,
 
-    ///The user, who changed the answer to the poll
-    pub user: User,
+    ///*Optional*. The chat that changed the answer to the poll, if the voter is anonymous
+    #[serde(
+        default,
+        deserialize_with = "deserialize_boxed_option",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub voter_chat: Option<Box<Chat>>,
 
-    ///0-based identifiers of answer options, chosen by the user. May be empty if the user retracted their vote.
+    ///*Optional*. The user that changed the answer to the poll, if the voter isn't anonymous
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user: Option<User>,
+
+    ///0-based identifiers of chosen answer options. May be empty if the vote was retracted.
     pub option_ids: Vec<i64>,
 }
 // Divider: all content below this line will be preserved after code regen

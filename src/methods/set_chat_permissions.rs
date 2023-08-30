@@ -13,7 +13,7 @@ use std::pin::Pin;
 pub struct SetChatPermissionsParams {
     pub chat_id: ChatId,
     pub permissions: ChatPermissions,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub use_independent_chat_permissions: bool,
 }
 

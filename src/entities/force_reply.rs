@@ -13,7 +13,7 @@ pub struct ForceReply {
     pub input_field_placeholder: Option<String>,
 
     ///*Optional*. Use this parameter if you want to force reply from specific users only. Targets: 1) users that are @mentioned in the *text* of the [Message](https://core.telegram.org/bots/api/#message) object; 2) if the bot's message is a reply (has *reply\_to\_message\_id*), sender of the original message.
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub selective: bool,
 }
 // Divider: all content below this line will be preserved after code regen

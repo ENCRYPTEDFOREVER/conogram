@@ -15,7 +15,7 @@ pub struct AnswerInlineQueryParams {
     pub results: Vec<InlineQueryResult>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_time: Option<i64>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub is_personal: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_offset: Option<String>,

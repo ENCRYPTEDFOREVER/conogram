@@ -109,5 +109,6 @@ pub mod unban_chat_sender_chat;
 pub mod unhide_general_forum_topic;
 pub mod unpin_all_chat_messages;
 pub mod unpin_all_forum_topic_messages;
+pub mod unpin_all_general_forum_topic_messages;
 pub mod unpin_chat_message;
 pub mod upload_sticker_file;

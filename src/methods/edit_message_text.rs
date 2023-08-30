@@ -24,7 +24,7 @@ pub struct EditMessageTextParams {
     pub parse_mode: Option<String>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub entities: Vec<MessageEntity>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub disable_web_page_preview: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<InlineKeyboardMarkup>,

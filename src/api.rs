@@ -216,7 +216,7 @@ impl API {
             .get_updates()
             .allowed_updates(self.allowed_updates.clone())
             .offset(offset)
-            .timeout(60);
+            .timeout(600);
 
         let updates = r.await?;
         if let Some(last_update) = updates.iter().max_by_key(|update| update.update_id) {
