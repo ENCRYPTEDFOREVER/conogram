@@ -168,7 +168,7 @@ impl ApiClient {
                 let mut value: Value = serde_json::to_value(params)?;
                 self.apply_default_params(method, &mut value);
 
-                log::info!("Calling {method}({})", Self::value_to_string(&value));
+                log::debug!("Calling {method}({})", Self::value_to_string(&value));
 
                 self.http_client.post(self.build_url(method)).json(&value)
             }
@@ -191,7 +191,7 @@ impl ApiClient {
                 let mut json_struct: Value = serde_json::to_value(params)?;
                 self.apply_default_params(method, &mut json_struct);
 
-                log::info!("Calling {method}({})", Self::value_to_string(&json_struct));
+                log::debug!("Calling {method}({})", Self::value_to_string(&json_struct));
 
                 let mut form = Form::new();
                 for (key, value) in json_struct.as_object().unwrap() {

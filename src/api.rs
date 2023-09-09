@@ -180,28 +180,6 @@ impl API {
         Ok(())
     }
 
-    pub async fn method_json<
-        ReturnType: DeserializeOwned + std::fmt::Debug,
-        Params: Serialize + std::fmt::Debug,
-    >(
-        &self,
-        method: &str,
-        params: Option<&Params>,
-    ) -> Result<ReturnType, Error> {
-        self.api_client.method_json(method, params).await
-    }
-
-    pub async fn method_multipart_form<
-        ReturnType: DeserializeOwned + std::fmt::Debug,
-        Params: Serialize + GetFiles + std::fmt::Debug,
-    >(
-        &self,
-        method: &str,
-        params: Option<&Params>,
-    ) -> Result<ReturnType, Error> {
-        self.api_client.method_multipart_form(method, params).await
-    }
-
     /// Set allowed update kinds list which will be later used in polling
     pub fn set_allowed_updates(&mut self, allowed_updates: Vec<AllowedUpdates>) {
         self.allowed_updates = allowed_updates.iter().map(|x| x.to_string()).collect();
@@ -226,6 +204,28 @@ impl API {
             );
         }
         Ok(updates)
+    }
+
+    pub async fn method_json<
+        ReturnType: DeserializeOwned + std::fmt::Debug,
+        Params: Serialize + std::fmt::Debug,
+    >(
+        &self,
+        method: &str,
+        params: Option<&Params>,
+    ) -> Result<ReturnType, Error> {
+        self.api_client.method_json(method, params).await
+    }
+
+    pub async fn method_multipart_form<
+        ReturnType: DeserializeOwned + std::fmt::Debug,
+        Params: Serialize + GetFiles + std::fmt::Debug,
+    >(
+        &self,
+        method: &str,
+        params: Option<&Params>,
+    ) -> Result<ReturnType, Error> {
+        self.api_client.method_multipart_form(method, params).await
     }
 
     /// Same as [`API::request_ref`] but will consume the request
