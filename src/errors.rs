@@ -1,4 +1,5 @@
 #![allow(dead_code)]
+use thiserror::Error;
 
 use std::fmt::Display;
 
@@ -6,7 +7,7 @@ use serde::Deserialize;
 
 use crate::client::ApiResponse;
 
-#[derive(Debug)]
+#[derive(Error, Debug)]
 pub enum Error {
     /// Errors returned by the Telegram Bot API
     ApiError(TgApiError),
@@ -71,7 +72,7 @@ pub struct TgApiErrorParams {
 }
 
 /// This object represents errors returned by the Telegram Bot API
-#[derive(Debug)]
+#[derive(Error, Debug)]
 pub enum TgApiError {
     /// Generic error
     Generic(GenericApiErrorParams),
