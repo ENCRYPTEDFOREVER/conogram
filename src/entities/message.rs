@@ -361,6 +361,17 @@ use crate::methods::send_message::SendMessageRequest;
 use super::misc::input_file::InputFile;
 
 impl Message {
+    /// ID of the message author
+    pub fn from_id(&self) -> i64 {
+        if let Some(sender_chat) = &self.sender_chat {
+            sender_chat.id
+        } else if let Some(from_user) = &self.from {
+            from_user.id
+        } else {
+            0
+        }
+    }
+
     pub fn reply<'a>(&'a self, api: &'a API, text: impl Into<String>) -> SendMessageRequest {
         api.send_message(self.chat.id, text)
             .reply_to_message_id(self.message_id)
