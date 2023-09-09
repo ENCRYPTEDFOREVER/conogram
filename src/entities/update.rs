@@ -116,6 +116,28 @@ pub enum AllowedUpdates {
     ChatJoinRequest,
 }
 
+impl AllowedUpdates {
+    /// All existing updates
+    pub fn all() -> Vec<Self> {
+        vec![
+            Self::Message,
+            Self::EditedMessage,
+            Self::ChannelPost,
+            Self::EditedChannelPost,
+            Self::InlineQuery,
+            Self::ChosenInlineResult,
+            Self::CallbackQuery,
+            Self::ShippingQuery,
+            Self::PreCheckoutQuery,
+            Self::Poll,
+            Self::PollAnswer,
+            Self::MyChatMember,
+            Self::ChatMember,
+            Self::ChatJoinRequest,
+        ]
+    }
+}
+
 impl ToString for AllowedUpdates {
     fn to_string(&self) -> String {
         match self {
