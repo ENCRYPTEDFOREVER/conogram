@@ -15,9 +15,9 @@ pub struct CallbackQuery {
 
     ///*Optional*. Message with the callback button that originated the query. Note that message content and message date will not be available if the message is too old
     #[serde(
-        default,
         deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none"
+        skip_serializing_if = "Option::is_none",
+        default
     )]
     pub message: Option<Box<Message>>,
 

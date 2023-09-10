@@ -18,7 +18,7 @@ pub struct InputTextMessageContent {
     pub entities: Vec<MessageEntity>,
 
     ///*Optional*. Disables link previews for links in the sent message
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub disable_web_page_preview: bool,
 }
 // Divider: all content below this line will be preserved after code regen

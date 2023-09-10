@@ -11,7 +11,7 @@ use std::str::FromStr;
 
 use crate::api::APIConfig;
 use crate::entities::misc::input_file::{GetFiles, InputFile};
-use crate::errors::{Error, TgApiErrorParams};
+use crate::errors::{ConogramError, ConogramErrorType, TgApiErrorParams};
 
 #[derive(Deserialize, Debug)]
 pub(crate) struct ApiResponse<ReturnValue> {
@@ -60,7 +60,7 @@ impl ApiClient {
         method: impl Into<String>,
         param_name: impl Into<String>,
         value: impl Serialize,
-    ) -> Result<(), Error> {
+    ) -> Result<(), ConogramErrorType> {
         let method_entry = self
             .default_params
             .entry(method.into())
@@ -125,8 +125,8 @@ impl ApiClient {
 
     fn process_api_response<ReturnType>(
         response: ApiResponse<ReturnType>,
-    ) -> Result<ReturnType, Error> {
-        Into::<Result<ReturnType, Error>>::into(response)
+    ) -> Result<ReturnType, ConogramErrorType> {
+        Into::<Result<ReturnType, ConogramErrorType>>::into(response)
     }
 
     pub async fn method<
@@ -136,23 +136,26 @@ impl ApiClient {
         method: &str,
         builder: RequestBuilder,
         params: Option<&Params>,
-    ) -> Result<ReturnType, Error> {
-        let response = builder.send().await?;
-        let response_text = response.text().await?;
-        let response_result = serde_json::from_str::<ApiResponse<ReturnType>>(&response_text);
+    ) -> Result<ReturnType, ConogramError> {
+        let response = match builder.send().await {
+            Ok(r) => r,
+            Err(err) => return Err(ConogramError::new(method, params, err.into())),
+        };
 
-        if let Err(error) = &response_result {
-            log::error!("Deserialization Error: {error}\n{response_text}")
-        }
+        let response_text = match response.text().await {
+            Ok(rt) => rt,
+            Err(err) => return Err(ConogramError::new(method, params, err.into())),
+        };
 
-        let api_response = Self::process_api_response(response_result?);
-        if let Err(error) = &api_response {
-            log::warn!(
-                "Error in {method}({})\n{error}",
-                Self::value_to_string(&serde_json::to_value(params).unwrap())
-            );
+        let api_response = match serde_json::from_str::<ApiResponse<ReturnType>>(&response_text) {
+            Ok(r) => r,
+            Err(err) => return Err(ConogramError::new(method, params, err.into())),
+        };
+
+        match Self::process_api_response(api_response) {
+            Ok(r) => Ok(r),
+            Err(err) => return Err(ConogramError::new(method, params, err.into())),
         }
-        api_response
     }
 
     pub async fn method_json<
@@ -162,10 +165,13 @@ impl ApiClient {
         &self,
         method: &str,
         params: Option<&Params>,
-    ) -> Result<ReturnType, Error> {
+    ) -> Result<ReturnType, ConogramError> {
         let builder = match params {
             Some(params) => {
-                let mut value: Value = serde_json::to_value(params)?;
+                let mut value: Value = match serde_json::to_value(params) {
+                    Ok(v) => v,
+                    Err(err) => return Err(ConogramError::new(method, params, err.into())),
+                };
                 self.apply_default_params(method, &mut value);
 
                 log::debug!("Calling {method}({})", Self::value_to_string(&value));
@@ -185,10 +191,13 @@ impl ApiClient {
         &self,
         method: &str,
         params: Option<&Params>,
-    ) -> Result<ReturnType, Error> {
+    ) -> Result<ReturnType, ConogramError> {
         let builder = match params {
             Some(params) => {
-                let mut json_struct: Value = serde_json::to_value(params)?;
+                let mut json_struct: Value = match serde_json::to_value(params) {
+                    Ok(v) => v,
+                    Err(err) => return Err(ConogramError::new(method, params, err.into())),
+                };
                 self.apply_default_params(method, &mut json_struct);
 
                 log::debug!("Calling {method}({})", Self::value_to_string(&json_struct));
@@ -206,7 +215,13 @@ impl ApiClient {
                     match file {
                         InputFile::File(f) => {
                             let file_name = f.get_file_name();
-                            let part = Part::stream(f.open().await?).file_name(file_name);
+                            let file = match f.open().await {
+                                Ok(f) => f,
+                                Err(err) => {
+                                    return Err(ConogramError::new(method, params, err.into()))
+                                }
+                            };
+                            let part = Part::stream(file).file_name(file_name);
 
                             if key == "media" {
                                 form = form.part(f.get_uuid_str(), part);

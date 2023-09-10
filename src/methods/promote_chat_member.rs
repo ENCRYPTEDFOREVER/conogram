@@ -1,6 +1,6 @@
 use crate::api::API;
 use crate::entities::misc::chat_id::ChatId;
-use crate::errors::Error;
+use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
 use crate::utils::deserialize_utils::is_false;
@@ -12,29 +12,29 @@ use std::pin::Pin;
 pub struct PromoteChatMemberParams {
     pub chat_id: ChatId,
     pub user_id: i64,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub is_anonymous: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub can_manage_chat: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub can_post_messages: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub can_edit_messages: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub can_delete_messages: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub can_manage_video_chats: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub can_restrict_members: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub can_promote_members: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub can_change_info: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub can_invite_users: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub can_pin_messages: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub can_manage_topics: bool,
 }
 

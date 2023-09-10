@@ -58,9 +58,9 @@ pub struct Message {
 
     ///*Optional*. Sender of the message, sent on behalf of a chat. For example, the channel itself for channel posts, the supergroup itself for messages from anonymous group administrators, the linked channel for messages automatically forwarded to the discussion group. For backward compatibility, the field *from* contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
     #[serde(
-        default,
         deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none"
+        skip_serializing_if = "Option::is_none",
+        default
     )]
     pub sender_chat: Option<Box<Chat>>,
 
@@ -77,9 +77,9 @@ pub struct Message {
 
     ///*Optional*. For messages forwarded from channels or from anonymous administrators, information about the original sender chat
     #[serde(
-        default,
         deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none"
+        skip_serializing_if = "Option::is_none",
+        default
     )]
     pub forward_from_chat: Option<Box<Chat>>,
 
@@ -100,18 +100,18 @@ pub struct Message {
     pub forward_date: Option<i64>,
 
     ///*Optional*. *True*, if the message is sent to a forum topic
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub is_topic_message: bool,
 
     ///*Optional*. *True*, if the message is a channel post that was automatically forwarded to the connected discussion group
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub is_automatic_forward: bool,
 
     ///*Optional*. For replies, the original message. Note that the Message object in this field will not contain further *reply\_to\_message* fields even if it itself is a reply.
     #[serde(
-        default,
         deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none"
+        skip_serializing_if = "Option::is_none",
+        default
     )]
     pub reply_to_message: Option<Box<Message>>,
 
@@ -124,7 +124,7 @@ pub struct Message {
     pub edit_date: Option<i64>,
 
     ///*Optional*. *True*, if the message can't be forwarded
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub has_protected_content: bool,
 
     ///*Optional*. The unique identifier of a media message group this message belongs to
@@ -188,7 +188,7 @@ pub struct Message {
     pub caption_entities: Vec<MessageEntity>,
 
     ///*Optional*. *True*, if the message media is covered by a spoiler animation
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub has_media_spoiler: bool,
 
     ///*Optional*. Message is a shared contact, information about the contact
@@ -232,19 +232,19 @@ pub struct Message {
     pub new_chat_photo: Vec<PhotoSize>,
 
     ///*Optional*. Service message: the chat photo was deleted
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub delete_chat_photo: bool,
 
     ///*Optional*. Service message: the group has been created
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub group_chat_created: bool,
 
     ///*Optional*. Service message: the supergroup has been created. This field can't be received in a message coming through updates, because bot can't be a member of a supergroup when it is created. It can only be found in reply\_to\_message if someone replies to a very first message in a directly created supergroup.
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub supergroup_chat_created: bool,
 
     ///*Optional*. Service message: the channel has been created. This field can't be received in a message coming through updates, because bot can't be a member of a channel when it is created. It can only be found in reply\_to\_message if someone replies to a very first message in a channel.
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub channel_chat_created: bool,
 
     ///*Optional*. Service message: auto-delete timer settings changed in the chat
@@ -261,9 +261,9 @@ pub struct Message {
 
     ///*Optional*. Specified message was pinned. Note that the Message object in this field will not contain further *reply\_to\_message* fields even if it is itself a reply.
     #[serde(
-        default,
         deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none"
+        skip_serializing_if = "Option::is_none",
+        default
     )]
     pub pinned_message: Option<Box<Message>>,
 

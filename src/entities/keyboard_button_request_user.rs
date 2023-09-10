@@ -9,11 +9,11 @@ pub struct KeyboardButtonRequestUser {
     pub request_id: i64,
 
     ///*Optional*. Pass *True* to request a bot, pass *False* to request a regular user. If not specified, no additional restrictions are applied.
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub user_is_bot: bool,
 
     ///*Optional*. Pass *True* to request a premium user, pass *False* to request a non-premium user. If not specified, no additional restrictions are applied.
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub user_is_premium: bool,
 }
 // Divider: all content below this line will be preserved after code regen

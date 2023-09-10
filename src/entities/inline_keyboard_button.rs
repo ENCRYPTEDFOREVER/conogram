@@ -51,7 +51,7 @@ pub struct InlineKeyboardButton {
     ///*Optional*. Specify *True*, to send a [Pay button](https://core.telegram.org/bots/api/#payments).  
     ///
     ///**NOTE:** This type of button **must** always be the first button in the first row and can only be used in invoice messages.
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub pay: bool,
 }
 // Divider: all content below this line will be preserved after code regen

@@ -23,7 +23,7 @@ pub struct LoginUrl {
     pub bot_username: Option<String>,
 
     ///*Optional*. Pass *True* to request the permission for your bot to send messages to the user.
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub request_write_access: bool,
 }
 // Divider: all content below this line will be preserved after code regen

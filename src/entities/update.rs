@@ -21,33 +21,33 @@ pub struct Update {
 
     ///*Optional*. New incoming message of any kind - text, photo, sticker, etc.
     #[serde(
-        default,
         deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none"
+        skip_serializing_if = "Option::is_none",
+        default
     )]
     pub message: Option<Box<Message>>,
 
     ///*Optional*. New version of a message that is known to the bot and was edited
     #[serde(
-        default,
         deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none"
+        skip_serializing_if = "Option::is_none",
+        default
     )]
     pub edited_message: Option<Box<Message>>,
 
     ///*Optional*. New incoming channel post of any kind - text, photo, sticker, etc.
     #[serde(
-        default,
         deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none"
+        skip_serializing_if = "Option::is_none",
+        default
     )]
     pub channel_post: Option<Box<Message>>,
 
     ///*Optional*. New version of a channel post that is known to the bot and was edited
     #[serde(
-        default,
         deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none"
+        skip_serializing_if = "Option::is_none",
+        default
     )]
     pub edited_channel_post: Option<Box<Message>>,
 

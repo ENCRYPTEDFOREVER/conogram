@@ -37,19 +37,19 @@ pub struct ChatMemberAdministrator {
     pub can_invite_users: bool,
 
     ///*Optional*. *True*, if the administrator can post in the channel; channels only
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub can_post_messages: bool,
 
     ///*Optional*. *True*, if the administrator can edit messages of other users and can pin messages; channels only
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub can_edit_messages: bool,
 
     ///*Optional*. *True*, if the user is allowed to pin messages; groups and supergroups only
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub can_pin_messages: bool,
 
     ///*Optional*. *True*, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub can_manage_topics: bool,
 
     ///*Optional*. Custom title for this user

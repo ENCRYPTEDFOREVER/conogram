@@ -1,7 +1,7 @@
 use crate::api::API;
 use crate::entities::chat_invite_link::ChatInviteLink;
 use crate::entities::misc::chat_id::ChatId;
-use crate::errors::Error;
+use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
 use crate::utils::deserialize_utils::is_false;
@@ -18,7 +18,7 @@ pub struct CreateChatInviteLinkParams {
     pub expire_date: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_limit: Option<i64>,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub creates_join_request: bool,
 }
 

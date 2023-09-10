@@ -1,7 +1,7 @@
 use crate::api::API;
 use crate::entities::chat_permissions::ChatPermissions;
 use crate::entities::misc::chat_id::ChatId;
-use crate::errors::Error;
+use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
 use crate::utils::deserialize_utils::is_false;
@@ -14,7 +14,7 @@ pub struct RestrictChatMemberParams {
     pub chat_id: ChatId,
     pub user_id: i64,
     pub permissions: ChatPermissions,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub use_independent_chat_permissions: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub until_date: Option<i64>,

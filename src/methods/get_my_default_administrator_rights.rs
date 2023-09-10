@@ -1,6 +1,6 @@
 use crate::api::API;
 use crate::entities::chat_administrator_rights::ChatAdministratorRights;
-use crate::errors::Error;
+use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
 use crate::utils::deserialize_utils::is_false;
@@ -10,7 +10,7 @@ use std::pin::Pin;
 
 #[derive(Debug, Clone, Serialize)]
 pub struct GetMyDefaultAdministratorRightsParams {
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub for_channels: bool,
 }
 

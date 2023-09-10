@@ -2,7 +2,7 @@ use crate::api::API;
 use crate::entities::misc::input_file::GetFiles;
 use crate::entities::misc::input_file::InputFile;
 use crate::entities::misc::input_file::Moose;
-use crate::errors::Error;
+use crate::errors::ConogramError;
 use crate::impl_into_future_multipart;
 use crate::request::RequestT;
 use crate::utils::deserialize_utils::is_false;
@@ -22,7 +22,7 @@ pub struct SetWebhookParams {
     pub max_connections: Option<i64>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub allowed_updates: Vec<String>,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub drop_pending_updates: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_token: Option<String>,

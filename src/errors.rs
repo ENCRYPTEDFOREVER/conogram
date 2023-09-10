@@ -1,153 +1,130 @@
 #![allow(dead_code)]
 use thiserror::Error;
 
-use std::fmt::Display;
+use std::fmt::{Debug, Display};
 
 use serde::Deserialize;
 
 use crate::client::ApiResponse;
 
-#[derive(Error, Debug)]
-pub enum Error {
-    /// Errors returned by the Telegram Bot API
-    ApiError(TgApiError),
-    /// HTTP errors
-    RequestError(reqwest::Error),
-
-    /// (De)serialization errors
-    SerdeError(serde_json::Error),
-
-    /// IO errors
-    IO(std::io::Error),
+#[derive(Error)]
+pub struct ConogramError {
+    pub method_name: String,
+    pub params: serde_json::Value,
+    pub error: ConogramErrorType,
 }
 
-impl Display for Error {
+impl Debug for ConogramError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Error::ApiError(err) => err.fmt(f),
-            Error::RequestError(err) => err.fmt(f),
-            Error::SerdeError(err) => err.fmt(f),
-            Error::IO(err) => err.fmt(f),
+        f.write_fmt(format_args!(
+            "{}\nCaused by {}({})",
+            self.error, self.method_name, self.params
+        ))
+    }
+}
+
+impl Display for ConogramError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_fmt(format_args!(
+            "{}\nCaused by {}({})",
+            self.error, self.method_name, self.params
+        ))
+    }
+}
+
+impl ConogramError {
+    pub(crate) fn new(
+        method_name: impl Into<String>,
+        params: impl serde::Serialize + std::fmt::Debug,
+        error: ConogramErrorType,
+    ) -> Self {
+        Self {
+            method_name: method_name.into(),
+            params: serde_json::to_value(params).unwrap(),
+            error,
         }
     }
 }
 
-impl From<std::io::Error> for Error {
-    fn from(value: std::io::Error) -> Self {
-        Self::IO(value)
-    }
+#[derive(Error, Debug)]
+pub enum ConogramErrorType {
+    /// Errors returned by the Telegram Bot API
+    #[error("{0}")]
+    ApiError(#[from] TgApiError),
+
+    /// HTTP errors
+    #[error("{0}")]
+    RequestError(#[from] reqwest::Error),
+
+    /// (De)serialization errors
+    #[error("{0}")]
+    SerdeError(#[from] serde_json::Error),
+
+    /// IO errors
+    #[error("{0}")]
+    IO(#[from] std::io::Error),
 }
 
-impl From<serde_json::Error> for Error {
-    fn from(value: serde_json::Error) -> Self {
-        Self::SerdeError(value)
-    }
-}
-
-impl From<reqwest::Error> for Error {
-    fn from(value: reqwest::Error) -> Self {
-        Self::RequestError(value)
-    }
-}
-
-impl From<TgApiError> for Error {
-    fn from(value: TgApiError) -> Self {
-        Self::ApiError(value)
-    }
-}
-
-impl<ReturnType> From<ApiResponse<ReturnType>> for Result<ReturnType, Error> {
+impl<ReturnType> From<ApiResponse<ReturnType>> for Result<ReturnType, ConogramErrorType> {
     fn from(value: ApiResponse<ReturnType>) -> Self {
         match value.ok {
             true => Ok(value.result.unwrap()),
-            false => Err(Error::ApiError(TgApiError::from(value))),
+            false => Err(ConogramErrorType::ApiError(TgApiError::from(value))),
         }
     }
 }
 
 #[derive(Deserialize, Debug, Default)]
 pub struct TgApiErrorParams {
-    migrate_to_chat_id: Option<i64>,
-    retry_after: Option<i64>,
+    pub migrate_to_chat_id: Option<i64>,
+    pub retry_after: Option<i64>,
 }
 
 /// This object represents errors returned by the Telegram Bot API
 #[derive(Error, Debug)]
 pub enum TgApiError {
     /// Generic error
+    #[error("{0}")]
     Generic(GenericApiErrorParams),
 
     /// Flood limit reached for this request, retry after N seconds
-    RetryAfter(i64),
+    #[error("{0}")]
+    RetryAfter(GenericApiErrorParams),
 
     /// Regular http 404, bot token is incorrect or you're trying to access inexistent method
-    NotFound,
+    #[error("{0}")]
+    NotFound(GenericApiErrorParams),
 
     /// Bot token is incorrect
-    Unauthorized,
+    #[error("{0}")]
+    Unauthorized(GenericApiErrorParams),
 
     /// Another bot instance is running
-    Conflict,
+    #[error("{0}")]
+    Conflict(GenericApiErrorParams),
 
     /// Server-side issues, repeat request later
-    BadGateway,
+    #[error("{0}")]
+    BadGateway(GenericApiErrorParams),
 
     /// Server-side issues, repeat request later
-    GatewayTimeout,
-}
-
-impl Display for TgApiError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Generic(params) => f.write_fmt(format_args!(
-                "[API Error {code}] {desc}",
-                code = params.error_code,
-                desc = params
-                    .description
-                    .as_ref()
-                    .unwrap_or(&"No description".into())
-            )),
-            Self::RetryAfter(wait_for) => f.write_fmt(format_args!(
-                "[API Error 429] Retry request after {wait_for}s",
-            )),
-            Self::Unauthorized => f.write_str("[API Error 401] Unauthorized: API token is incorrect"),
-            Self::NotFound => f.write_str("[API Error 404] Not Found: most likely API token is incorrect"),
-            Self::BadGateway => f.write_str("[API Error 502] Bad Gateway"),
-            Self::GatewayTimeout => f.write_str("[API Error 504] Gateway Timeout"),
-            Self::Conflict => f.write_str("[API Error 409] Conflict: terminated by other getUpdates request, make sure that only one bot instance is running"),
-        }
-    }
-}
-
-impl Default for TgApiError {
-    fn default() -> Self {
-        Self::Generic(GenericApiErrorParams::default())
-    }
+    #[error("{0}")]
+    GatewayTimeout(GenericApiErrorParams),
 }
 
 impl<ReturnType> From<ApiResponse<ReturnType>> for TgApiError {
     fn from(value: ApiResponse<ReturnType>) -> Self {
         match value.error_code {
             Some(error_code) => match error_code {
-                401 => Self::Unauthorized,
-                404 => Self::NotFound,
-                409 => Self::Conflict,
-                429 => Self::RetryAfter(
-                    value
-                        .parameters
-                        .unwrap_or_default()
-                        .retry_after
-                        .unwrap_or_default(),
-                ),
-                502 => Self::BadGateway,
-                504 => Self::GatewayTimeout,
-                _ => Self::Generic(GenericApiErrorParams {
-                    error_code,
-                    description: value.description,
-                    parameters: value.parameters,
-                }),
+                401 => Self::Unauthorized(value.into()),
+                404 => Self::NotFound(value.into()),
+                409 => Self::Conflict(value.into()),
+                429 => Self::RetryAfter(value.into()),
+                502 => Self::BadGateway(value.into()),
+                504 => Self::GatewayTimeout(value.into()),
+                _ => Self::Generic(value.into()),
             },
-            None => Self::default(),
+            None => Self::Generic(value.into()),
         }
     }
 }
@@ -157,4 +134,26 @@ pub struct GenericApiErrorParams {
     pub error_code: i64,
     pub description: Option<String>,
     pub parameters: Option<TgApiErrorParams>,
+}
+
+impl<T> From<ApiResponse<T>> for GenericApiErrorParams {
+    fn from(value: ApiResponse<T>) -> Self {
+        Self {
+            error_code: value.error_code.unwrap_or_default(),
+            description: Some(value.description.unwrap_or("No decsription".to_owned())),
+            parameters: value.parameters,
+        }
+    }
+}
+
+impl Display for GenericApiErrorParams {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_fmt(format_args!(
+            "[API Error {}] {}",
+            self.error_code,
+            self.description
+                .as_ref()
+                .unwrap_or(&"No description".to_string())
+        ))
+    }
 }

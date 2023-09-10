@@ -3,7 +3,7 @@ use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
 use crate::entities::message::Message;
 use crate::entities::message_entity::MessageEntity;
 use crate::entities::misc::chat_id::ChatId;
-use crate::errors::Error;
+use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
 use crate::utils::deserialize_utils::is_false;
@@ -24,7 +24,7 @@ pub struct EditMessageTextParams {
     pub parse_mode: Option<String>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub entities: Vec<MessageEntity>,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub disable_web_page_preview: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<InlineKeyboardMarkup>,

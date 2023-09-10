@@ -26,7 +26,7 @@ fn main() {
     }
 }
 
-async fn run_bot(mut api: API) -> Result<(), conogram::errors::Error> {
+async fn run_bot(mut api: API) -> Result<(), conogram::errors::ConogramError> {
     api.set_allowed_updates(vec![AllowedUpdates::Message]);
 
     loop {

@@ -1,7 +1,7 @@
 use crate::api::API;
 use crate::entities::inline_query_result::InlineQueryResult;
 use crate::entities::inline_query_results_button::InlineQueryResultsButton;
-use crate::errors::Error;
+use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
 use crate::utils::deserialize_utils::is_false;
@@ -15,7 +15,7 @@ pub struct AnswerInlineQueryParams {
     pub results: Vec<InlineQueryResult>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_time: Option<i64>,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub is_personal: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_offset: Option<String>,

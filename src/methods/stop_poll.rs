@@ -2,7 +2,7 @@ use crate::api::API;
 use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
 use crate::entities::misc::chat_id::ChatId;
 use crate::entities::poll::Poll;
-use crate::errors::Error;
+use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
 use serde::Serialize;

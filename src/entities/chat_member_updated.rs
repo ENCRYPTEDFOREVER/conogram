@@ -31,7 +31,7 @@ pub struct ChatMemberUpdated {
     pub invite_link: Option<ChatInviteLink>,
 
     ///*Optional*. True, if the user joined the chat via a chat folder invite link
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub via_chat_folder_invite_link: bool,
 }
 // Divider: all content below this line will be preserved after code regen

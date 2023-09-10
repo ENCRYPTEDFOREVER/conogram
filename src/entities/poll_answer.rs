@@ -12,9 +12,9 @@ pub struct PollAnswer {
 
     ///*Optional*. The chat that changed the answer to the poll, if the voter is anonymous
     #[serde(
-        default,
         deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none"
+        skip_serializing_if = "Option::is_none",
+        default
     )]
     pub voter_chat: Option<Box<Chat>>,
 

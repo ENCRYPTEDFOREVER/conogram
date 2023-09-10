@@ -4,14 +4,14 @@ macro_rules! impl_into_future {
         impl<'a> IntoFuture for $struct {
             type IntoFuture = Pin<
                 Box<
-                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, Error>>
+                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, ConogramError>>
                         + Send
                         + 'a,
                 >,
             >;
             type Output = <Pin<
                 Box<
-                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, Error>>
+                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, ConogramError>>
                         + Send
                         + 'a,
                 >,
@@ -25,14 +25,14 @@ macro_rules! impl_into_future {
         impl<'a, 'b> IntoFuture for &'b $struct {
             type IntoFuture = Pin<
                 Box<
-                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, Error>>
+                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, ConogramError>>
                         + Send
                         + 'b,
                 >,
             >;
             type Output = <Pin<
                 Box<
-                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, Error>>
+                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, ConogramError>>
                         + Send
                         + 'b,
                 >,
@@ -51,14 +51,14 @@ macro_rules! impl_into_future_multipart {
         impl<'a> IntoFuture for $struct {
             type IntoFuture = Pin<
                 Box<
-                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, Error>>
+                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, ConogramError>>
                         + Send
                         + 'a,
                 >,
             >;
             type Output = <Pin<
                 Box<
-                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, Error>>
+                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, ConogramError>>
                         + Send
                         + 'a,
                 >,
@@ -72,14 +72,14 @@ macro_rules! impl_into_future_multipart {
         impl<'a, 'b> IntoFuture for &'b $struct {
             type IntoFuture = Pin<
                 Box<
-                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, Error>>
+                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, ConogramError>>
                         + Send
                         + 'b,
                 >,
             >;
             type Output = <Pin<
                 Box<
-                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, Error>>
+                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, ConogramError>>
                         + Send
                         + 'b,
                 >,
