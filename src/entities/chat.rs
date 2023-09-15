@@ -157,6 +157,25 @@ use crate::api::API;
 use super::misc::input_file::InputFile;
 
 impl Chat {
+    // Returns Chat's title for groups and User::full_name for private chats
+    pub fn full_name(&self) -> String {
+        if let Some(title) = &self.title {
+            title.clone()
+        } else {
+            if let Some(first) = &self.first_name {
+                if let Some(last) = &self.last_name {
+                    format!("{first} {last}")
+                } else {
+                    first.clone()
+                }
+            } else {
+                "No Title".to_owned()
+            }
+        }
+    }
+}
+
+impl Chat {
     pub async fn unpin_all_messages<'a>(
         &'a self,
         api: &'a API,
