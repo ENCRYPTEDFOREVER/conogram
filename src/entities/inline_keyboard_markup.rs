@@ -39,4 +39,9 @@ impl InlineKeyboardMarkup {
             .and_then(|row| Some(row.push(button.into())));
         self
     }
+
+    // Adds a button to the new row
+    pub fn add_button_row(self, button: impl Into<InlineKeyboardButton>) -> Self {
+        self.add_row().add_button(button)
+    }
 }
