@@ -1,6 +1,6 @@
 use crate::api::API;
 use crate::entities::bot_name::BotName;
-use crate::errors::Error;
+use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
 use serde::Serialize;

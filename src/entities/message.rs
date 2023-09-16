@@ -22,6 +22,7 @@ use crate::entities::photo_size::PhotoSize;
 use crate::entities::poll::Poll;
 use crate::entities::proximity_alert_triggered::ProximityAlertTriggered;
 use crate::entities::sticker::Sticker;
+use crate::entities::story::Story;
 use crate::entities::successful_payment::SuccessfulPayment;
 use crate::entities::user::User;
 use crate::entities::user_shared::UserShared;
@@ -99,11 +100,11 @@ pub struct Message {
     pub forward_date: Option<i64>,
 
     ///*Optional*. *True*, if the message is sent to a forum topic
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub is_topic_message: bool,
 
     ///*Optional*. *True*, if the message is a channel post that was automatically forwarded to the connected discussion group
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub is_automatic_forward: bool,
 
     ///*Optional*. For replies, the original message. Note that the Message object in this field will not contain further *reply\_to\_message* fields even if it itself is a reply.
@@ -123,7 +124,7 @@ pub struct Message {
     pub edit_date: Option<i64>,
 
     ///*Optional*. *True*, if the message can't be forwarded
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub has_protected_content: bool,
 
     ///*Optional*. The unique identifier of a media message group this message belongs to
@@ -162,6 +163,10 @@ pub struct Message {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sticker: Option<Sticker>,
 
+    ///*Optional*. Message is a forwarded story
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub story: Option<Story>,
+
     ///*Optional*. Message is a video, information about the video
     #[serde(skip_serializing_if = "Option::is_none")]
     pub video: Option<Video>,
@@ -183,7 +188,7 @@ pub struct Message {
     pub caption_entities: Vec<MessageEntity>,
 
     ///*Optional*. *True*, if the message media is covered by a spoiler animation
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub has_media_spoiler: bool,
 
     ///*Optional*. Message is a shared contact, information about the contact
@@ -227,19 +232,19 @@ pub struct Message {
     pub new_chat_photo: Vec<PhotoSize>,
 
     ///*Optional*. Service message: the chat photo was deleted
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub delete_chat_photo: bool,
 
     ///*Optional*. Service message: the group has been created
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub group_chat_created: bool,
 
     ///*Optional*. Service message: the supergroup has been created. This field can't be received in a message coming through updates, because bot can't be a member of a supergroup when it is created. It can only be found in reply\_to\_message if someone replies to a very first message in a directly created supergroup.
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub supergroup_chat_created: bool,
 
     ///*Optional*. Service message: the channel has been created. This field can't be received in a message coming through updates, because bot can't be a member of a channel when it is created. It can only be found in reply\_to\_message if someone replies to a very first message in a channel.
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub channel_chat_created: bool,
 
     ///*Optional*. Service message: auto-delete timer settings changed in the chat
@@ -356,6 +361,17 @@ use crate::methods::send_message::SendMessageRequest;
 use super::misc::input_file::InputFile;
 
 impl Message {
+    /// ID of the message author
+    pub fn from_id(&self) -> i64 {
+        if let Some(sender_chat) = &self.sender_chat {
+            sender_chat.id
+        } else if let Some(from_user) = &self.from {
+            from_user.id
+        } else {
+            0
+        }
+    }
+
     pub fn reply<'a>(&'a self, api: &'a API, text: impl Into<String>) -> SendMessageRequest {
         api.send_message(self.chat.id, text)
             .reply_to_message_id(self.message_id)

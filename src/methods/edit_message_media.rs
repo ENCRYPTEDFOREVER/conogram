@@ -6,7 +6,7 @@ use crate::entities::misc::chat_id::ChatId;
 use crate::entities::misc::input_file::GetFiles;
 use crate::entities::misc::input_file::InputFile;
 use crate::entities::misc::input_file::Moose;
-use crate::errors::Error;
+use crate::errors::ConogramError;
 use crate::impl_into_future_multipart;
 use crate::request::RequestT;
 use serde::Serialize;

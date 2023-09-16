@@ -1,6 +1,6 @@
 use crate::api::API;
 use crate::entities::misc::chat_id::ChatId;
-use crate::errors::Error;
+use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
 use crate::utils::deserialize_utils::is_false;
@@ -12,7 +12,7 @@ use std::pin::Pin;
 pub struct UnbanChatMemberParams {
     pub chat_id: ChatId,
     pub user_id: i64,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub only_if_banned: bool,
 }
 

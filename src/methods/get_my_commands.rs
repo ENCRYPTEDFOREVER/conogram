@@ -1,7 +1,7 @@
 use crate::api::API;
 use crate::entities::bot_command::BotCommand;
 use crate::entities::bot_command_scope::BotCommandScope;
-use crate::errors::Error;
+use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
 use serde::Serialize;

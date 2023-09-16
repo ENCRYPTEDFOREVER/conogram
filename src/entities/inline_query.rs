@@ -58,19 +58,22 @@ use crate::api::API;
 use crate::methods::answer_inline_query::AnswerInlineQueryRequest;
 
 impl InlineQuery {
-    pub fn answer<'a>(
+    pub fn answer<'a, T: Into<InlineQueryResult>>(
         &'a self,
         api: &'a API,
-        results: impl Into<Vec<InlineQueryResult>>,
+        results: impl IntoIterator<Item = T>,
     ) -> AnswerInlineQueryRequest {
-        api.answer_inline_query(&self.id, results.into())
+        api.answer_inline_query(
+            &self.id,
+            results.into_iter().map(|v| v.into()).collect::<Vec<_>>(),
+        )
     }
 
     /// Answer with all server-side caching disabled
-    pub fn answer_persnocache<'a>(
+    pub fn answer_persnocache<'a, T: Into<InlineQueryResult>>(
         &'a self,
         api: &'a API,
-        results: impl Into<Vec<InlineQueryResult>>,
+        results: impl IntoIterator<Item = T>,
     ) -> AnswerInlineQueryRequest {
         self.answer(api, results).is_personal(true).cache_time(0)
     }

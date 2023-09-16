@@ -3,7 +3,7 @@ use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
 use crate::entities::message::Message;
 use crate::entities::message_entity::MessageEntity;
 use crate::entities::misc::chat_id::ChatId;
-use crate::errors::Error;
+use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
 use serde::Serialize;

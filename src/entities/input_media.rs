@@ -27,6 +27,35 @@ pub enum InputMedia {
     #[serde(rename = "video")]
     Video(InputMediaVideo),
 }
+impl From<InputMediaAnimation> for InputMedia {
+    fn from(value: InputMediaAnimation) -> Self {
+        Self::Animation(value)
+    }
+}
+
+impl From<InputMediaDocument> for InputMedia {
+    fn from(value: InputMediaDocument) -> Self {
+        Self::Document(value)
+    }
+}
+
+impl From<InputMediaAudio> for InputMedia {
+    fn from(value: InputMediaAudio) -> Self {
+        Self::Audio(value)
+    }
+}
+
+impl From<InputMediaPhoto> for InputMedia {
+    fn from(value: InputMediaPhoto) -> Self {
+        Self::Photo(value)
+    }
+}
+
+impl From<InputMediaVideo> for InputMedia {
+    fn from(value: InputMediaVideo) -> Self {
+        Self::Video(value)
+    }
+}
 // Divider: all content below this line will be preserved after code regen
 
 use super::misc::input_file::GetFiles;

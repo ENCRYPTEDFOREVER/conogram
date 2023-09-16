@@ -3,7 +3,7 @@ use crate::entities::message::Message;
 use crate::entities::message_entity::MessageEntity;
 use crate::entities::misc::chat_id::ChatId;
 use crate::entities::misc::reply_markup::ReplyMarkup;
-use crate::errors::Error;
+use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
 use crate::utils::deserialize_utils::is_false;
@@ -18,11 +18,11 @@ pub struct SendPollParams {
     pub message_thread_id: Option<i64>,
     pub question: String,
     pub options: Vec<String>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub is_anonymous: bool,
     #[serde(skip_serializing_if = "Option::is_none", rename = "type")]
     pub type_: Option<SendPollType>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub allows_multiple_answers: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub correct_option_id: Option<i64>,
@@ -36,15 +36,15 @@ pub struct SendPollParams {
     pub open_period: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub close_date: Option<i64>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub is_closed: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub disable_notification: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_to_message_id: Option<i64>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub allow_sending_without_reply: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<ReplyMarkup>,
@@ -248,4 +248,5 @@ pub enum SendPollType {
     #[serde(rename = "regular")]
     Regular,
 }
+
 // Divider: all content below this line will be preserved after code regen

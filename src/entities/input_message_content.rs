@@ -22,6 +22,35 @@ pub enum InputMessageContent {
     ContactMessageContent(InputContactMessageContent),
     InvoiceMessageContent(InputInvoiceMessageContent),
 }
+impl From<InputTextMessageContent> for InputMessageContent {
+    fn from(value: InputTextMessageContent) -> Self {
+        Self::TextMessageContent(value)
+    }
+}
+
+impl From<InputLocationMessageContent> for InputMessageContent {
+    fn from(value: InputLocationMessageContent) -> Self {
+        Self::LocationMessageContent(value)
+    }
+}
+
+impl From<InputVenueMessageContent> for InputMessageContent {
+    fn from(value: InputVenueMessageContent) -> Self {
+        Self::VenueMessageContent(value)
+    }
+}
+
+impl From<InputContactMessageContent> for InputMessageContent {
+    fn from(value: InputContactMessageContent) -> Self {
+        Self::ContactMessageContent(value)
+    }
+}
+
+impl From<InputInvoiceMessageContent> for InputMessageContent {
+    fn from(value: InputInvoiceMessageContent) -> Self {
+        Self::InvoiceMessageContent(value)
+    }
+}
 // Divider: all content below this line will be preserved after code regen
 impl Default for InputMessageContent {
     fn default() -> Self {

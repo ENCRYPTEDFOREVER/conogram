@@ -1,7 +1,7 @@
 use crate::api::API;
 use crate::entities::inline_query_result::InlineQueryResult;
 use crate::entities::sent_web_app_message::SentWebAppMessage;
-use crate::errors::Error;
+use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
 use serde::Serialize;

@@ -1,7 +1,7 @@
 use crate::api::API;
 use crate::entities::message::Message;
 use crate::entities::misc::chat_id::ChatId;
-use crate::errors::Error;
+use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
 use crate::utils::deserialize_utils::is_false;
@@ -15,9 +15,9 @@ pub struct ForwardMessageParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_thread_id: Option<i64>,
     pub from_chat_id: ChatId,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub disable_notification: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
     pub message_id: i64,
 }

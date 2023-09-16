@@ -31,9 +31,61 @@ pub enum ChatMember {
     #[serde(rename = "kicked")]
     Banned(ChatMemberBanned),
 }
+impl From<ChatMemberOwner> for ChatMember {
+    fn from(value: ChatMemberOwner) -> Self {
+        Self::Owner(value)
+    }
+}
+
+impl From<ChatMemberAdministrator> for ChatMember {
+    fn from(value: ChatMemberAdministrator) -> Self {
+        Self::Administrator(value)
+    }
+}
+
+impl From<ChatMemberMember> for ChatMember {
+    fn from(value: ChatMemberMember) -> Self {
+        Self::Member(value)
+    }
+}
+
+impl From<ChatMemberRestricted> for ChatMember {
+    fn from(value: ChatMemberRestricted) -> Self {
+        Self::Restricted(value)
+    }
+}
+
+impl From<ChatMemberLeft> for ChatMember {
+    fn from(value: ChatMemberLeft) -> Self {
+        Self::Left(value)
+    }
+}
+
+impl From<ChatMemberBanned> for ChatMember {
+    fn from(value: ChatMemberBanned) -> Self {
+        Self::Banned(value)
+    }
+}
 // Divider: all content below this line will be preserved after code regen
 impl Default for ChatMember {
     fn default() -> Self {
         Self::Left(ChatMemberLeft::default())
+    }
+}
+
+impl ChatMember {
+    pub fn is_admin(&self) -> bool {
+        match self {
+            ChatMember::Owner(_) | ChatMember::Administrator(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_in_chat(&self) -> bool {
+        match self {
+            ChatMember::Owner(_) | ChatMember::Administrator(_) | ChatMember::Member(_) => true,
+            ChatMember::Restricted(m) => m.is_member,
+            _ => false,
+        }
     }
 }

@@ -1,6 +1,6 @@
 use crate::api::API;
 use crate::entities::message::Message;
-use crate::errors::Error;
+use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
 use crate::utils::deserialize_utils::is_false;
@@ -12,9 +12,9 @@ use std::pin::Pin;
 pub struct SetGameScoreParams {
     pub user_id: i64,
     pub score: i64,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub force: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub disable_edit_message: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub chat_id: Option<i64>,

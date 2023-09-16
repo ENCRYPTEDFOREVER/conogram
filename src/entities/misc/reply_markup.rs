@@ -14,6 +14,30 @@ pub enum ReplyMarkup {
     Remove(ReplyKeyboardRemove),
 }
 
+impl From<ReplyKeyboardMarkup> for ReplyMarkup {
+    fn from(value: ReplyKeyboardMarkup) -> Self {
+        Self::Keyboard(value)
+    }
+}
+
+impl From<InlineKeyboardMarkup> for ReplyMarkup {
+    fn from(value: InlineKeyboardMarkup) -> Self {
+        Self::Inline(value)
+    }
+}
+
+impl From<ForceReply> for ReplyMarkup {
+    fn from(value: ForceReply) -> Self {
+        Self::ForceReply(value)
+    }
+}
+
+impl From<ReplyKeyboardRemove> for ReplyMarkup {
+    fn from(value: ReplyKeyboardRemove) -> Self {
+        Self::Remove(value)
+    }
+}
+
 impl ReplyMarkup {
     ///Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice [privacy mode](https://core.telegram.org/bots/features#privacy-mode).
     ///API Reference: [link](https://core.telegram.org/bots/api/#forcereply)

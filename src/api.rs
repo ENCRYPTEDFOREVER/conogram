@@ -6,7 +6,7 @@ use std::time::Duration;
 use crate::client::ApiClient;
 use crate::entities::misc::input_file::GetFiles;
 use crate::entities::update::{AllowedUpdates, Update};
-use crate::errors::{Error, TgApiError};
+use crate::errors::{ConogramError, ConogramErrorType, TgApiError};
 use crate::methods::edit_message_caption::EditMessageCaptionRequest;
 use crate::methods::edit_message_text::EditMessageTextRequest;
 use crate::methods::send_animation::SendAnimationRequest;
@@ -112,7 +112,7 @@ impl API {
     }
 
     /// Sets `allow_sending_without_reply` to `true` for all requests
-    pub fn set_essential_request_defaults(&mut self) -> Result<(), Error> {
+    pub fn set_essential_request_defaults(&mut self) -> Result<(), ConogramErrorType> {
         set_default_param!(
             self.api_client,
             "allow_sending_without_reply",
@@ -146,13 +146,13 @@ impl API {
         method: impl Into<String>,
         param_name: impl Into<String>,
         value: impl Serialize,
-    ) -> Result<(), Error> {
+    ) -> Result<(), ConogramErrorType> {
         self.api_client
             .set_default_request_param(method.into(), param_name, value)
     }
 
     /// Sets default `parse_mode` for applicable requests
-    pub fn set_parse_mode(&mut self, value: impl Into<String>) -> Result<(), Error> {
+    pub fn set_parse_mode(&mut self, value: impl Into<String>) -> Result<(), ConogramErrorType> {
         let value = value.into();
 
         set_default_param!(
@@ -180,35 +180,13 @@ impl API {
         Ok(())
     }
 
-    pub async fn method_json<
-        ReturnType: DeserializeOwned + std::fmt::Debug,
-        Params: Serialize + std::fmt::Debug,
-    >(
-        &self,
-        method: &str,
-        params: Option<&Params>,
-    ) -> Result<ReturnType, Error> {
-        self.api_client.method_json(method, params).await
-    }
-
-    pub async fn method_multipart_form<
-        ReturnType: DeserializeOwned + std::fmt::Debug,
-        Params: Serialize + GetFiles + std::fmt::Debug,
-    >(
-        &self,
-        method: &str,
-        params: Option<&Params>,
-    ) -> Result<ReturnType, Error> {
-        self.api_client.method_multipart_form(method, params).await
-    }
-
     /// Set allowed update kinds list which will be later used in polling
     pub fn set_allowed_updates(&mut self, allowed_updates: Vec<AllowedUpdates>) {
         self.allowed_updates = allowed_updates.iter().map(|x| x.to_string()).collect();
     }
 
     /// Poll the server for pending updates
-    pub async fn poll_once(&self) -> Result<Vec<Update>, Error> {
+    pub async fn poll_once(&self) -> Result<Vec<Update>, ConogramError> {
         let offset = self
             .get_updates_offset
             .load(std::sync::atomic::Ordering::Relaxed);
@@ -216,7 +194,7 @@ impl API {
             .get_updates()
             .allowed_updates(self.allowed_updates.clone())
             .offset(offset)
-            .timeout(60);
+            .timeout(600);
 
         let updates = r.await?;
         if let Some(last_update) = updates.iter().max_by_key(|update| update.update_id) {
@@ -228,36 +206,110 @@ impl API {
         Ok(updates)
     }
 
+    pub async fn method_json<
+        ReturnType: DeserializeOwned + std::fmt::Debug,
+        Params: Serialize + std::fmt::Debug,
+    >(
+        &self,
+        method: &str,
+        params: Option<&Params>,
+    ) -> Result<ReturnType, ConogramError> {
+        self.api_client.method_json(method, params).await
+    }
+
+    pub async fn method_multipart_form<
+        ReturnType: DeserializeOwned + std::fmt::Debug,
+        Params: Serialize + GetFiles + std::fmt::Debug,
+    >(
+        &self,
+        method: &str,
+        params: Option<&Params>,
+    ) -> Result<ReturnType, ConogramError> {
+        self.api_client.method_multipart_form(method, params).await
+    }
+
     /// Same as [`API::request_ref`] but will consume the request
-    pub async fn request<Request, ReturnType>(request: Request) -> Result<ReturnType, Error>
+    pub async fn request<Request, ReturnType>(request: Request) -> Result<ReturnType, ConogramError>
     where
-        for<'a> &'a Request: IntoFuture<Output = Result<ReturnType, Error>>,
+        for<'a> &'a Request: IntoFuture<Output = Result<ReturnType, ConogramError>>,
     {
         Self::request_ref(&request).await
     }
 
     /// This will make API request and automativally handle some common errors like RetryAfter or BadGateway
-    pub async fn request_ref<Request, ReturnType>(request: &Request) -> Result<ReturnType, Error>
+    pub async fn request_ref<Request, ReturnType>(
+        request: &Request,
+    ) -> Result<ReturnType, ConogramError>
     where
-        for<'a> &'a Request: IntoFuture<Output = Result<ReturnType, Error>>,
+        for<'a> &'a Request: IntoFuture<Output = Result<ReturnType, ConogramError>>,
     {
         let mut result = request.await;
 
         let mut wait_for = 1;
 
         while !match &result {
-            Err(Error::ApiError(TgApiError::RetryAfter(wait_for))) => {
-                tokio::time::sleep(Duration::from_secs(*wait_for as u64)).await;
-                result = request.await;
-                false
+            Err(err) => {
+                if let ConogramErrorType::ApiError(error) = &err.error {
+                    match error {
+                        TgApiError::RetryAfter(params) => {
+                            if let Some(params) = params.parameters.as_ref() {
+                                tokio::time::sleep(Duration::from_secs(
+                                    params.retry_after.unwrap_or_default() as u64,
+                                ))
+                                .await;
+                                result = request.await;
+                                false
+                            } else {
+                                true
+                            }
+                        }
+                        TgApiError::BadGateway(_) | TgApiError::GatewayTimeout(_) => {
+                            wait_for = std::cmp::min(wait_for * 2, 60);
+                            tokio::time::sleep(Duration::from_secs(wait_for)).await;
+                            result = request.await;
+                            false
+                        }
+                        _ => true,
+                    }
+                } else {
+                    true
+                }
             }
-            Err(Error::ApiError(TgApiError::BadGateway))
-            | Err(Error::ApiError(TgApiError::GatewayTimeout)) => {
-                wait_for = std::cmp::min(wait_for * 2, 60);
-                tokio::time::sleep(Duration::from_secs(wait_for)).await;
-                result = request.await;
-                false
-            }
+
+            // match &err.error {
+            //     ConogramErrorType::ApiError(TgApiError::RetryAfter(params)) => {
+            //         if let Some(params) = params.parameters.as_ref() {
+            //             tokio::time::sleep(Duration::from_secs(
+            //                 params.retry_after.unwrap_or_default() as u64,
+            //             ))
+            //             .await;
+            //             result = request.await;
+            //             false
+            //         } else {
+            //             true
+            //         }
+            //     }
+            //     ConogramErrorType::ApiError(TgApiError::BadGateway(_))
+            //     | ConogramErrorType::ApiError(TgApiError::GatewayTimeout(_)) => {
+            //         wait_for = std::cmp::min(wait_for * 2, 60);
+            //         tokio::time::sleep(Duration::from_secs(wait_for)).await;
+            //         result = request.await;
+            //         false
+            //     }
+            //     _ => true,
+            // },
+            // Err(ConogramError::ApiError(TgApiError::RetryAfter(wait_for))) => {
+            //     tokio::time::sleep(Duration::from_secs(*wait_for as u64)).await;
+            //     result = request.await;
+            //     false
+            // }
+            // Err(ConogramError::ApiError(TgApiError::BadGateway))
+            // | Err(ConogramError::ApiError(TgApiError::GatewayTimeout)) => {
+            //     wait_for = std::cmp::min(wait_for * 2, 60);
+            //     tokio::time::sleep(Duration::from_secs(wait_for)).await;
+            //     result = request.await;
+            //     false
+            // }
             _ => true,
         } {}
 

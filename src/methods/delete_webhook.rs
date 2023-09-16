@@ -1,5 +1,5 @@
 use crate::api::API;
-use crate::errors::Error;
+use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
 use crate::utils::deserialize_utils::is_false;
@@ -9,7 +9,7 @@ use std::pin::Pin;
 
 #[derive(Debug, Clone, Serialize)]
 pub struct DeleteWebhookParams {
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub drop_pending_updates: bool,
 }
 

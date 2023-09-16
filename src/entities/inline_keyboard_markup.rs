@@ -22,4 +22,26 @@ impl InlineKeyboardMarkup {
             inline_keyboard: vec![],
         }
     }
+
+    // Adds empty row to the keyboard
+    pub fn add_row(mut self) -> Self {
+        self.inline_keyboard.push(vec![]);
+        self
+    }
+
+    // Adds a button to the last row of the keyboard. New row will be created if the keyboard is empty
+    pub fn add_button(mut self, button: impl Into<InlineKeyboardButton>) -> Self {
+        if self.inline_keyboard.is_empty() {
+            self.inline_keyboard.push(Vec::with_capacity(1));
+        }
+        self.inline_keyboard
+            .last_mut()
+            .and_then(|row| Some(row.push(button.into())));
+        self
+    }
+
+    // Adds a button to the new row
+    pub fn add_button_row(self, button: impl Into<InlineKeyboardButton>) -> Self {
+        self.add_row().add_button(button)
+    }
 }
