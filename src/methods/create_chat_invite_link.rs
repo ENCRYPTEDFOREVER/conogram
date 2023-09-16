@@ -18,7 +18,7 @@ pub struct CreateChatInviteLinkParams {
     pub expire_date: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_limit: Option<i64>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub creates_join_request: bool,
 }
 

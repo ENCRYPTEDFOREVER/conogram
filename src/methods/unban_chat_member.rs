@@ -12,7 +12,7 @@ use std::pin::Pin;
 pub struct UnbanChatMemberParams {
     pub chat_id: ChatId,
     pub user_id: i64,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub only_if_banned: bool,
 }
 

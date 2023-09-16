@@ -21,7 +21,7 @@ pub struct CreateNewStickerSetParams {
     pub sticker_format: CreateNewStickerSetStickerFormat,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sticker_type: Option<CreateNewStickerSetStickerType>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub needs_repainting: bool,
 }
 

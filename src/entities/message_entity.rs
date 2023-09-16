@@ -107,4 +107,17 @@ pub enum MessageEntityType {
 }
 // Divider: all content below this line will be preserved after code regen
 
-impl MessageEntity {}
+impl MessageEntity {
+    // Experimental
+    pub fn get_text(&self, text: impl AsRef<str>) -> String {
+        if self.offset < 0 || self.length < 0 {
+            String::new()
+        } else {
+            text.as_ref()
+                .chars()
+                .skip(self.offset as usize)
+                .take(self.length as usize)
+                .collect()
+        }
+    }
+}

@@ -38,27 +38,27 @@ pub struct SendInvoiceParams {
     pub photo_width: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub photo_height: Option<i64>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub need_name: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub need_phone_number: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub need_email: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub need_shipping_address: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub send_phone_number_to_provider: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub send_email_to_provider: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub is_flexible: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub disable_notification: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_to_message_id: Option<i64>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub allow_sending_without_reply: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<InlineKeyboardMarkup>,

@@ -30,19 +30,19 @@ pub struct ChatAdministratorRights {
     pub can_invite_users: bool,
 
     ///*Optional*. *True*, if the administrator can post in the channel; channels only
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub can_post_messages: bool,
 
     ///*Optional*. *True*, if the administrator can edit messages of other users and can pin messages; channels only
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub can_edit_messages: bool,
 
     ///*Optional*. *True*, if the user is allowed to pin messages; groups and supergroups only
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub can_pin_messages: bool,
 
     ///*Optional*. *True*, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub can_manage_topics: bool,
 }
 // Divider: all content below this line will be preserved after code regen

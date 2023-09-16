@@ -14,7 +14,7 @@ use std::pin::Pin;
 #[derive(Debug, Clone, Serialize)]
 pub struct SetWebhookParams {
     pub url: String,
-    #[serde(skip, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none", skip)]
     pub certificate: Option<InputFile>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
@@ -22,7 +22,7 @@ pub struct SetWebhookParams {
     pub max_connections: Option<i64>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub allowed_updates: Vec<String>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub drop_pending_updates: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_token: Option<String>,

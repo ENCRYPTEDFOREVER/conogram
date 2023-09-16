@@ -119,4 +119,5 @@ pub enum UploadStickerFileStickerFormat {
     #[serde(rename = "video")]
     Video,
 }
+
 // Divider: all content below this line will be preserved after code regen

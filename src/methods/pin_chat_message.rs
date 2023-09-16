@@ -12,7 +12,7 @@ use std::pin::Pin;
 pub struct PinChatMessageParams {
     pub chat_id: ChatId,
     pub message_id: i64,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub disable_notification: bool,
 }
 

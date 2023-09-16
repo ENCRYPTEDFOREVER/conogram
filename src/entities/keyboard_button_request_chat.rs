@@ -13,15 +13,15 @@ pub struct KeyboardButtonRequestChat {
     pub chat_is_channel: bool,
 
     ///*Optional*. Pass *True* to request a forum supergroup, pass *False* to request a non-forum chat. If not specified, no additional restrictions are applied.
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub chat_is_forum: bool,
 
     ///*Optional*. Pass *True* to request a supergroup or a channel with a username, pass *False* to request a chat without a username. If not specified, no additional restrictions are applied.
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub chat_has_username: bool,
 
     ///*Optional*. Pass *True* to request a chat owned by the user. Otherwise, no additional restrictions are applied.
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub chat_is_created: bool,
 
     ///*Optional*. A JSON-serialized object listing the required administrator rights of the user in the chat. The rights must be a superset of *bot\_administrator\_rights*. If not specified, no additional restrictions are applied.
@@ -33,7 +33,7 @@ pub struct KeyboardButtonRequestChat {
     pub bot_administrator_rights: Option<ChatAdministratorRights>,
 
     ///*Optional*. Pass *True* to request a chat with the bot as a member. Otherwise, no additional restrictions are applied.
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub bot_is_member: bool,
 }
 // Divider: all content below this line will be preserved after code regen
