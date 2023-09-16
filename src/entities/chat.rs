@@ -34,7 +34,7 @@ pub struct Chat {
     pub last_name: Option<String>,
 
     ///*Optional*. *True*, if the supergroup chat is a forum (has [topics](https://telegram.org/blog/topics-in-groups-collectible-usernames#topics-in-groups) enabled)
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub is_forum: bool,
 
     ///*Optional*. Chat photo. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
@@ -58,19 +58,19 @@ pub struct Chat {
     pub bio: Option<String>,
 
     ///*Optional*. *True*, if privacy settings of the other party in the private chat allows to use `tg://user?id=<user_id>` links only in chats with the user. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub has_private_forwards: bool,
 
     ///*Optional*. *True*, if the privacy settings of the other party restrict sending voice and video note messages in the private chat. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub has_restricted_voice_and_video_messages: bool,
 
     ///*Optional*. *True*, if users need to join the supergroup before they can send messages. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub join_to_send_messages: bool,
 
     ///*Optional*. *True*, if all users directly joining the supergroup need to be approved by supergroup administrators. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub join_by_request: bool,
 
     ///*Optional*. Description, for groups, supergroups and channel chats. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
@@ -102,15 +102,15 @@ pub struct Chat {
     pub message_auto_delete_time: Option<i64>,
 
     ///*Optional*. *True*, if aggressive anti-spam checks are enabled in the supergroup. The field is only available to chat administrators. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub has_aggressive_anti_spam_enabled: bool,
 
     ///*Optional*. *True*, if non-administrators can only get the list of bots and administrators in the chat. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub has_hidden_members: bool,
 
     ///*Optional*. *True*, if messages from the chat can't be forwarded to other chats. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub has_protected_content: bool,
 
     ///*Optional*. For supergroups, name of group sticker set. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
@@ -118,7 +118,7 @@ pub struct Chat {
     pub sticker_set_name: Option<String>,
 
     ///*Optional*. *True*, if the bot can change the group sticker set. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub can_set_sticker_set: bool,
 
     ///*Optional*. Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
@@ -176,28 +176,28 @@ impl Chat {
 }
 
 impl Chat {
-    pub async fn unpin_all_messages<'a>(
+    pub fn unpin_all_messages<'a>(
         &'a self,
         api: &'a API,
     ) -> crate::methods::unpin_all_chat_messages::UnpinAllChatMessagesRequest {
         api.unpin_all_chat_messages(self.id)
     }
 
-    pub async fn get_member_count<'a>(
+    pub fn get_member_count<'a>(
         &'a self,
         api: &'a API,
     ) -> crate::methods::get_chat_member_count::GetChatMemberCountRequest {
         api.get_chat_member_count(self.id)
     }
 
-    pub async fn get_administrators<'a>(
+    pub fn get_administrators<'a>(
         &'a self,
         api: &'a API,
     ) -> crate::methods::get_chat_administrators::GetChatAdministratorsRequest {
         api.get_chat_administrators(self.id)
     }
 
-    pub async fn get_member<'a>(
+    pub fn get_member<'a>(
         &'a self,
         api: &'a API,
         user_id: impl Into<i64>,
@@ -205,11 +205,11 @@ impl Chat {
         api.get_chat_member(self.id, user_id)
     }
 
-    pub async fn update<'a>(&'a self, api: &'a API) -> crate::methods::get_chat::GetChatRequest {
+    pub fn update<'a>(&'a self, api: &'a API) -> crate::methods::get_chat::GetChatRequest {
         api.get_chat(self.id)
     }
 
-    pub async fn ban_member<'a>(
+    pub fn ban_member<'a>(
         &'a self,
         api: &'a API,
         user_id: impl Into<i64>,
@@ -217,7 +217,7 @@ impl Chat {
         api.ban_chat_member(self.id, user_id)
     }
 
-    pub async fn unban_member<'a>(
+    pub fn unban_member<'a>(
         &'a self,
         api: &'a API,
         user_id: impl Into<i64>,
@@ -225,7 +225,7 @@ impl Chat {
         api.unban_chat_member(self.id, user_id)
     }
 
-    pub async fn ban_sender_chat<'a>(
+    pub fn ban_sender_chat<'a>(
         &'a self,
         api: &'a API,
         sender_chat_id: impl Into<i64>,
@@ -233,7 +233,7 @@ impl Chat {
         api.ban_chat_sender_chat(self.id, sender_chat_id)
     }
 
-    pub async fn unban_sender_chat<'a>(
+    pub fn unban_sender_chat<'a>(
         &'a self,
         api: &'a API,
         sender_chat_id: impl Into<i64>,
@@ -241,7 +241,7 @@ impl Chat {
         api.unban_chat_sender_chat(self.id, sender_chat_id)
     }
 
-    pub async fn set_administrator_custom_title<'a>(
+    pub fn set_administrator_custom_title<'a>(
         &'a self,
         api: &'a API,
         user_id: impl Into<i64>,
@@ -251,7 +251,7 @@ impl Chat {
         api.set_chat_administrator_custom_title(self.id, user_id, custom_title)
     }
 
-    pub async fn set_title<'a>(
+    pub fn set_title<'a>(
         &'a self,
         api: &'a API,
         title: impl Into<String>,
@@ -259,7 +259,7 @@ impl Chat {
         api.set_chat_title(self.id, title)
     }
 
-    pub async fn set_description<'a>(
+    pub fn set_description<'a>(
         &'a self,
         api: &'a API,
         description: Option<impl Into<String>>,
@@ -271,7 +271,7 @@ impl Chat {
         }
     }
 
-    pub async fn set_permissions<'a>(
+    pub fn set_permissions<'a>(
         &'a self,
         api: &'a API,
         permissions: impl Into<ChatPermissions>,
@@ -279,7 +279,7 @@ impl Chat {
         api.set_chat_permissions(self.id, permissions)
     }
 
-    pub async fn set_photo<'a>(
+    pub fn set_photo<'a>(
         &'a self,
         api: &'a API,
         photo: impl Into<InputFile>,
@@ -287,7 +287,7 @@ impl Chat {
         api.set_chat_photo(self.id, photo)
     }
 
-    pub async fn set_sticker_set<'a>(
+    pub fn set_sticker_set<'a>(
         &'a self,
         api: &'a API,
         sticker_set_name: impl Into<String>,
@@ -303,7 +303,7 @@ impl Chat {
         api.send_chat_action(self.id, action)
     }
 
-    pub async fn edit_invite_link<'a>(
+    pub fn edit_invite_link<'a>(
         &'a self,
         api: &'a API,
         invite_link: impl Into<String>,
@@ -311,32 +311,32 @@ impl Chat {
         api.edit_chat_invite_link(self.id, invite_link)
     }
 
-    pub async fn leave<'a>(&'a self, api: &'a API) -> crate::methods::leave_chat::LeaveChatRequest {
+    pub fn leave<'a>(&'a self, api: &'a API) -> crate::methods::leave_chat::LeaveChatRequest {
         api.leave_chat(self.id)
     }
 
-    pub async fn delete_photo<'a>(
+    pub fn delete_photo<'a>(
         &'a self,
         api: &'a API,
     ) -> crate::methods::delete_chat_photo::DeleteChatPhotoRequest {
         api.delete_chat_photo(self.id)
     }
 
-    pub async fn delete_sticker_set<'a>(
+    pub fn delete_sticker_set<'a>(
         &'a self,
         api: &'a API,
     ) -> crate::methods::delete_chat_sticker_set::DeleteChatStickerSetRequest {
         api.delete_chat_sticker_set(self.id)
     }
 
-    pub async fn export_invite_link<'a>(
+    pub fn export_invite_link<'a>(
         &'a self,
         api: &'a API,
     ) -> crate::methods::export_chat_invite_link::ExportChatInviteLinkRequest {
         api.export_chat_invite_link(self.id)
     }
 
-    pub async fn revoke_invite_link<'a>(
+    pub fn revoke_invite_link<'a>(
         &'a self,
         api: &'a API,
         invite_link: impl Into<String>,
@@ -344,7 +344,7 @@ impl Chat {
         api.revoke_chat_invite_link(self.id, invite_link)
     }
 
-    pub async fn approve_join_request<'a>(
+    pub fn approve_join_request<'a>(
         &'a self,
         api: &'a API,
         user_id: impl Into<i64>,
@@ -352,7 +352,7 @@ impl Chat {
         api.approve_chat_join_request(self.id, user_id)
     }
 
-    pub async fn decline_join_request<'a>(
+    pub fn decline_join_request<'a>(
         &'a self,
         api: &'a API,
         user_id: impl Into<i64>,
@@ -360,14 +360,14 @@ impl Chat {
         api.decline_chat_join_request(self.id, user_id)
     }
 
-    pub async fn create_invite_link<'a>(
+    pub fn create_invite_link<'a>(
         &'a self,
         api: &'a API,
     ) -> crate::methods::create_chat_invite_link::CreateChatInviteLinkRequest {
         api.create_chat_invite_link(self.id)
     }
 
-    pub async fn promote_member<'a>(
+    pub fn promote_member<'a>(
         &'a self,
         api: &'a API,
         user_id: impl Into<i64>,
@@ -375,7 +375,7 @@ impl Chat {
         api.promote_chat_member(self.id, user_id)
     }
 
-    pub async fn restrict_member<'a>(
+    pub fn restrict_member<'a>(
         &'a self,
         api: &'a API,
         user_id: impl Into<i64>,
