@@ -19,4 +19,21 @@ pub enum MenuButton {
     #[serde(rename = "default")]
     Default(MenuButtonDefault),
 }
+impl From<MenuButtonCommands> for MenuButton {
+    fn from(value: MenuButtonCommands) -> Self {
+        Self::Commands(value)
+    }
+}
+
+impl From<MenuButtonWebApp> for MenuButton {
+    fn from(value: MenuButtonWebApp) -> Self {
+        Self::WebApp(value)
+    }
+}
+
+impl From<MenuButtonDefault> for MenuButton {
+    fn from(value: MenuButtonDefault) -> Self {
+        Self::Default(value)
+    }
+}
 // Divider: all content below this line will be preserved after code regen

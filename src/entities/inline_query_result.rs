@@ -87,4 +87,123 @@ pub enum InlineQueryResult {
     #[serde(rename = "voice")]
     Voice(InlineQueryResultVoice),
 }
+impl From<InlineQueryResultCachedAudio> for InlineQueryResult {
+    fn from(value: InlineQueryResultCachedAudio) -> Self {
+        Self::CachedAudio(value)
+    }
+}
+
+impl From<InlineQueryResultCachedDocument> for InlineQueryResult {
+    fn from(value: InlineQueryResultCachedDocument) -> Self {
+        Self::CachedDocument(value)
+    }
+}
+
+impl From<InlineQueryResultCachedGif> for InlineQueryResult {
+    fn from(value: InlineQueryResultCachedGif) -> Self {
+        Self::CachedGif(value)
+    }
+}
+
+impl From<InlineQueryResultCachedMpeg4Gif> for InlineQueryResult {
+    fn from(value: InlineQueryResultCachedMpeg4Gif) -> Self {
+        Self::CachedMpeg4Gif(value)
+    }
+}
+
+impl From<InlineQueryResultCachedPhoto> for InlineQueryResult {
+    fn from(value: InlineQueryResultCachedPhoto) -> Self {
+        Self::CachedPhoto(value)
+    }
+}
+
+impl From<InlineQueryResultCachedSticker> for InlineQueryResult {
+    fn from(value: InlineQueryResultCachedSticker) -> Self {
+        Self::CachedSticker(value)
+    }
+}
+
+impl From<InlineQueryResultCachedVideo> for InlineQueryResult {
+    fn from(value: InlineQueryResultCachedVideo) -> Self {
+        Self::CachedVideo(value)
+    }
+}
+
+impl From<InlineQueryResultCachedVoice> for InlineQueryResult {
+    fn from(value: InlineQueryResultCachedVoice) -> Self {
+        Self::CachedVoice(value)
+    }
+}
+
+impl From<InlineQueryResultArticle> for InlineQueryResult {
+    fn from(value: InlineQueryResultArticle) -> Self {
+        Self::Article(value)
+    }
+}
+
+impl From<InlineQueryResultAudio> for InlineQueryResult {
+    fn from(value: InlineQueryResultAudio) -> Self {
+        Self::Audio(value)
+    }
+}
+
+impl From<InlineQueryResultContact> for InlineQueryResult {
+    fn from(value: InlineQueryResultContact) -> Self {
+        Self::Contact(value)
+    }
+}
+
+impl From<InlineQueryResultGame> for InlineQueryResult {
+    fn from(value: InlineQueryResultGame) -> Self {
+        Self::Game(value)
+    }
+}
+
+impl From<InlineQueryResultDocument> for InlineQueryResult {
+    fn from(value: InlineQueryResultDocument) -> Self {
+        Self::Document(value)
+    }
+}
+
+impl From<InlineQueryResultGif> for InlineQueryResult {
+    fn from(value: InlineQueryResultGif) -> Self {
+        Self::Gif(value)
+    }
+}
+
+impl From<InlineQueryResultLocation> for InlineQueryResult {
+    fn from(value: InlineQueryResultLocation) -> Self {
+        Self::Location(value)
+    }
+}
+
+impl From<InlineQueryResultMpeg4Gif> for InlineQueryResult {
+    fn from(value: InlineQueryResultMpeg4Gif) -> Self {
+        Self::Mpeg4Gif(value)
+    }
+}
+
+impl From<InlineQueryResultPhoto> for InlineQueryResult {
+    fn from(value: InlineQueryResultPhoto) -> Self {
+        Self::Photo(value)
+    }
+}
+
+impl From<InlineQueryResultVenue> for InlineQueryResult {
+    fn from(value: InlineQueryResultVenue) -> Self {
+        Self::Venue(value)
+    }
+}
+
+impl From<InlineQueryResultVideo> for InlineQueryResult {
+    fn from(value: InlineQueryResultVideo) -> Self {
+        Self::Video(value)
+    }
+}
+
+impl From<InlineQueryResultVoice> for InlineQueryResult {
+    fn from(value: InlineQueryResultVoice) -> Self {
+        Self::Voice(value)
+    }
+}
 // Divider: all content below this line will be preserved after code regen

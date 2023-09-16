@@ -43,4 +43,57 @@ pub enum PassportElementError {
     #[serde(rename = "unspecified")]
     Unspecified(PassportElementErrorUnspecified),
 }
+impl From<PassportElementErrorDataField> for PassportElementError {
+    fn from(value: PassportElementErrorDataField) -> Self {
+        Self::DataField(value)
+    }
+}
+
+impl From<PassportElementErrorFrontSide> for PassportElementError {
+    fn from(value: PassportElementErrorFrontSide) -> Self {
+        Self::FrontSide(value)
+    }
+}
+
+impl From<PassportElementErrorReverseSide> for PassportElementError {
+    fn from(value: PassportElementErrorReverseSide) -> Self {
+        Self::ReverseSide(value)
+    }
+}
+
+impl From<PassportElementErrorSelfie> for PassportElementError {
+    fn from(value: PassportElementErrorSelfie) -> Self {
+        Self::Selfie(value)
+    }
+}
+
+impl From<PassportElementErrorFile> for PassportElementError {
+    fn from(value: PassportElementErrorFile) -> Self {
+        Self::File(value)
+    }
+}
+
+impl From<PassportElementErrorFiles> for PassportElementError {
+    fn from(value: PassportElementErrorFiles) -> Self {
+        Self::Files(value)
+    }
+}
+
+impl From<PassportElementErrorTranslationFile> for PassportElementError {
+    fn from(value: PassportElementErrorTranslationFile) -> Self {
+        Self::TranslationFile(value)
+    }
+}
+
+impl From<PassportElementErrorTranslationFiles> for PassportElementError {
+    fn from(value: PassportElementErrorTranslationFiles) -> Self {
+        Self::TranslationFiles(value)
+    }
+}
+
+impl From<PassportElementErrorUnspecified> for PassportElementError {
+    fn from(value: PassportElementErrorUnspecified) -> Self {
+        Self::Unspecified(value)
+    }
+}
 // Divider: all content below this line will be preserved after code regen

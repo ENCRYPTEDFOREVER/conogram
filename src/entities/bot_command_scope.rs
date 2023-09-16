@@ -35,6 +35,47 @@ pub enum BotCommandScope {
     #[serde(rename = "chat_member")]
     ChatMember(BotCommandScopeChatMember),
 }
+impl From<BotCommandScopeDefault> for BotCommandScope {
+    fn from(value: BotCommandScopeDefault) -> Self {
+        Self::Default(value)
+    }
+}
+
+impl From<BotCommandScopeAllPrivateChats> for BotCommandScope {
+    fn from(value: BotCommandScopeAllPrivateChats) -> Self {
+        Self::AllPrivateChats(value)
+    }
+}
+
+impl From<BotCommandScopeAllGroupChats> for BotCommandScope {
+    fn from(value: BotCommandScopeAllGroupChats) -> Self {
+        Self::AllGroupChats(value)
+    }
+}
+
+impl From<BotCommandScopeAllChatAdministrators> for BotCommandScope {
+    fn from(value: BotCommandScopeAllChatAdministrators) -> Self {
+        Self::AllChatAdministrators(value)
+    }
+}
+
+impl From<BotCommandScopeChat> for BotCommandScope {
+    fn from(value: BotCommandScopeChat) -> Self {
+        Self::Chat(value)
+    }
+}
+
+impl From<BotCommandScopeChatAdministrators> for BotCommandScope {
+    fn from(value: BotCommandScopeChatAdministrators) -> Self {
+        Self::ChatAdministrators(value)
+    }
+}
+
+impl From<BotCommandScopeChatMember> for BotCommandScope {
+    fn from(value: BotCommandScopeChatMember) -> Self {
+        Self::ChatMember(value)
+    }
+}
 // Divider: all content below this line will be preserved after code regen
 
 impl ToString for BotCommandScope {
