@@ -72,3 +72,20 @@ impl Default for ChatMember {
         Self::Left(ChatMemberLeft::default())
     }
 }
+
+impl ChatMember {
+    pub fn is_admin(&self) -> bool {
+        match self {
+            ChatMember::Owner(_) | ChatMember::Administrator(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_in_chat(&self) -> bool {
+        match self {
+            ChatMember::Owner(_) | ChatMember::Administrator(_) | ChatMember::Member(_) => true,
+            ChatMember::Restricted(m) => m.is_member,
+            _ => false,
+        }
+    }
+}
