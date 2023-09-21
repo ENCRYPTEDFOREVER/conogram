@@ -276,40 +276,6 @@ impl API {
                 }
             }
 
-            // match &err.error {
-            //     ConogramErrorType::ApiError(TgApiError::RetryAfter(params)) => {
-            //         if let Some(params) = params.parameters.as_ref() {
-            //             tokio::time::sleep(Duration::from_secs(
-            //                 params.retry_after.unwrap_or_default() as u64,
-            //             ))
-            //             .await;
-            //             result = request.await;
-            //             false
-            //         } else {
-            //             true
-            //         }
-            //     }
-            //     ConogramErrorType::ApiError(TgApiError::BadGateway(_))
-            //     | ConogramErrorType::ApiError(TgApiError::GatewayTimeout(_)) => {
-            //         wait_for = std::cmp::min(wait_for * 2, 60);
-            //         tokio::time::sleep(Duration::from_secs(wait_for)).await;
-            //         result = request.await;
-            //         false
-            //     }
-            //     _ => true,
-            // },
-            // Err(ConogramError::ApiError(TgApiError::RetryAfter(wait_for))) => {
-            //     tokio::time::sleep(Duration::from_secs(*wait_for as u64)).await;
-            //     result = request.await;
-            //     false
-            // }
-            // Err(ConogramError::ApiError(TgApiError::BadGateway))
-            // | Err(ConogramError::ApiError(TgApiError::GatewayTimeout)) => {
-            //     wait_for = std::cmp::min(wait_for * 2, 60);
-            //     tokio::time::sleep(Duration::from_secs(wait_for)).await;
-            //     result = request.await;
-            //     false
-            // }
             _ => true,
         } {}
 

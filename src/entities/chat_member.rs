@@ -75,10 +75,7 @@ impl Default for ChatMember {
 
 impl ChatMember {
     pub fn is_admin(&self) -> bool {
-        match self {
-            ChatMember::Owner(_) | ChatMember::Administrator(_) => true,
-            _ => false,
-        }
+        matches!(self, ChatMember::Owner(_) | ChatMember::Administrator(_))
     }
 
     pub fn is_in_chat(&self) -> bool {

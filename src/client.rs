@@ -11,7 +11,7 @@ use std::str::FromStr;
 
 use crate::api::APIConfig;
 use crate::entities::misc::input_file::{GetFiles, InputFile};
-use crate::errors::{ConogramError, ConogramErrorType, TgApiErrorParams};
+use crate::errors::{ConogramError, ConogramErrorType, TgApiError, TgApiErrorParams};
 
 #[derive(Deserialize, Debug)]
 pub(crate) struct ApiResponse<ReturnValue> {
@@ -154,7 +154,36 @@ impl ApiClient {
 
         match Self::process_api_response(api_response) {
             Ok(r) => Ok(r),
-            Err(err) => return Err(ConogramError::new(method, params, err.into())),
+            Err(err) => {
+                if let ConogramErrorType::ApiError(api_err) = &err {
+                    match api_err {
+                        TgApiError::RetryAfter(params) => {
+                            if let Some(retry_after) =
+                                params.parameters.as_ref().and_then(|p| p.retry_after)
+                            {
+                                if retry_after < 0 {
+                                    log::warn!("[{method}] retry_after is < 0: {retry_after}");
+                                } else if retry_after > 300 {
+                                    log::warn!(
+                                        "[{method}] retry_after is unusually big: {retry_after}"
+                                    );
+                                }
+                            } else {
+                                log::warn!(
+                                    "[{method}] Got RetryAfter error but retry_after field is absent"
+                                );
+                            }
+                        }
+                        TgApiError::BadGateway(_) => log::warn!("[{method}] Got BadGateway"),
+                        TgApiError::GatewayTimeout(_) => {
+                            log::warn!("[{method}] Got GatewayTimeout")
+                        }
+                        _ => {}
+                    }
+                }
+
+                Err(ConogramError::new(method, params, err))
+            }
         }
     }
 

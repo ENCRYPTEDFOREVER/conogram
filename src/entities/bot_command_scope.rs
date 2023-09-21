@@ -96,12 +96,36 @@ impl ToString for BotCommandScope {
 use super::misc::chat_id::ChatId;
 impl BotCommandScope {
     pub fn chat(chat_id: impl Into<ChatId>) -> Self {
-        Self::Chat(BotCommandScopeChat {
+        BotCommandScopeChat {
             chat_id: chat_id.into(),
-        })
+        }
+        .into()
+    }
+
+    pub fn chat_member(chat_id: impl Into<ChatId>, user_id: impl Into<i64>) -> Self {
+        BotCommandScopeChatMember {
+            chat_id: chat_id.into(),
+            user_id: user_id.into(),
+        }
+        .into()
+    }
+
+    pub fn chat_administrators(chat_id: impl Into<ChatId>) -> Self {
+        BotCommandScopeChatAdministrators {
+            chat_id: chat_id.into(),
+        }
+        .into()
     }
 
     pub fn all_private_chats() -> Self {
-        Self::AllPrivateChats(BotCommandScopeAllPrivateChats {})
+        BotCommandScopeAllPrivateChats {}.into()
+    }
+
+    pub fn all_group_chats() -> Self {
+        BotCommandScopeAllGroupChats {}.into()
+    }
+
+    pub fn all_chat_administrators() -> Self {
+        BotCommandScopeAllChatAdministrators {}.into()
     }
 }
