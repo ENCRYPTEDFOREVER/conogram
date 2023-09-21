@@ -34,9 +34,9 @@ impl InlineKeyboardMarkup {
         if self.inline_keyboard.is_empty() {
             self.inline_keyboard.push(Vec::with_capacity(1));
         }
-        self.inline_keyboard
-            .last_mut()
-            .and_then(|row| Some(row.push(button.into())));
+        if let Some(row) = self.inline_keyboard.last_mut() {
+            row.push(button.into())
+        }
         self
     }
 

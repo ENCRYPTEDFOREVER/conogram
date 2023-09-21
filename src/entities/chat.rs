@@ -161,16 +161,14 @@ impl Chat {
     pub fn full_name(&self) -> String {
         if let Some(title) = &self.title {
             title.clone()
-        } else {
-            if let Some(first) = &self.first_name {
-                if let Some(last) = &self.last_name {
-                    format!("{first} {last}")
-                } else {
-                    first.clone()
-                }
+        } else if let Some(first) = &self.first_name {
+            if let Some(last) = &self.last_name {
+                format!("{first} {last}")
             } else {
-                "No Title".to_owned()
+                first.clone()
             }
+        } else {
+            "No Title".to_owned()
         }
     }
 }
