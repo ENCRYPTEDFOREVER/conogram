@@ -69,6 +69,11 @@ impl InlineQuery {
         )
     }
 
+    // Answer with no results
+    pub fn answer_empty<'a>(&'a self, api: &'a API) -> AnswerInlineQueryRequest {
+        api.answer_inline_query(&self.id, Vec::<InlineQueryResult>::new())
+    }
+
     /// Answer with all server-side caching disabled
     pub fn answer_persnocache<'a, T: Into<InlineQueryResult>>(
         &'a self,
