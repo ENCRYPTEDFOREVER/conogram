@@ -45,3 +45,20 @@ pub struct InlineQueryResultArticle {
     pub thumbnail_height: Option<i64>,
 }
 // Divider: all content below this line will be preserved after code regen
+use super::input_text_message_content::InputTextMessageContent;
+
+impl InlineQueryResultArticle {
+    /// Makes an article with provided title and text
+    pub fn new_simple_text(title: impl Into<String>, text: impl Into<String>) -> Self {
+        Self {
+            id: uuid::Uuid::new_v4().to_string(),
+            title: title.into(),
+            input_message_content: InputTextMessageContent {
+                message_text: text.into(),
+                ..Default::default()
+            }
+            .into(),
+            ..Default::default()
+        }
+    }
+}
