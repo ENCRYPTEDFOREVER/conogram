@@ -59,8 +59,8 @@ pub struct Message {
     ///*Optional*. Sender of the message, sent on behalf of a chat. For example, the channel itself for channel posts, the supergroup itself for messages from anonymous group administrators, the linked channel for messages automatically forwarded to the discussion group. For backward compatibility, the field *from* contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
     #[serde(
         deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none",
-        default
+        default,
+        skip_serializing_if = "Option::is_none"
     )]
     pub sender_chat: Option<Box<Chat>>,
 
@@ -78,8 +78,8 @@ pub struct Message {
     ///*Optional*. For messages forwarded from channels or from anonymous administrators, information about the original sender chat
     #[serde(
         deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none",
-        default
+        default,
+        skip_serializing_if = "Option::is_none"
     )]
     pub forward_from_chat: Option<Box<Chat>>,
 
@@ -110,8 +110,8 @@ pub struct Message {
     ///*Optional*. For replies, the original message. Note that the Message object in this field will not contain further *reply\_to\_message* fields even if it itself is a reply.
     #[serde(
         deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none",
-        default
+        default,
+        skip_serializing_if = "Option::is_none"
     )]
     pub reply_to_message: Option<Box<Message>>,
 
@@ -262,8 +262,8 @@ pub struct Message {
     ///*Optional*. Specified message was pinned. Note that the Message object in this field will not contain further *reply\_to\_message* fields even if it is itself a reply.
     #[serde(
         deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none",
-        default
+        default,
+        skip_serializing_if = "Option::is_none"
     )]
     pub pinned_message: Option<Box<Message>>,
 
@@ -287,7 +287,7 @@ pub struct Message {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connected_website: Option<String>,
 
-    ///*Optional*. Service message: the user allowed the bot added to the attachment menu to write messages
+    ///*Optional*. Service message: the user allowed the bot to write messages after adding it to the attachment or side menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method [requestWriteAccess](https://core.telegram.org/bots/webapps#initializing-mini-apps)
     #[serde(skip_serializing_if = "Option::is_none")]
     pub write_access_allowed: Option<WriteAccessAllowed>,
 

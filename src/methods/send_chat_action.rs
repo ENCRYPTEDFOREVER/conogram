@@ -139,4 +139,5 @@ pub enum SendChatActionAction {
     #[serde(rename = "upload_video_note")]
     UploadVideoNote,
 }
+
 // Divider: all content below this line will be preserved after code regen

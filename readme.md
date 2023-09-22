@@ -4,8 +4,8 @@
     <a href="https://github.com/ENCRYPTEDFOREVER/conogram/actions">
         <img src="https://github.com/ENCRYPTEDFOREVER/conogram/workflows/Build/badge.svg">
     </a>
-    <a href="https://core.telegram.org/bots/api#august-18-2023">
-        <img src="https://img.shields.io/badge/Bot%20API%20version-6.8-brightgreen">
+    <a href="https://core.telegram.org/bots/api#september-22-2023">
+        <img src="https://img.shields.io/badge/Bot%20API%20version-6.9-brightgreen">
     </a>
     <a href="https://crates.io/crates/conogram">
     <img src="https://img.shields.io/crates/v/conogram.svg">

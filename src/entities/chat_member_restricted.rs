@@ -53,7 +53,7 @@ pub struct ChatMemberRestricted {
     ///*True*, if the user is allowed to create forum topics
     pub can_manage_topics: bool,
 
-    ///Date when restrictions will be lifted for this user; unix time. If 0, then the user is restricted forever
+    ///Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever
     pub until_date: i64,
 }
 // Divider: all content below this line will be preserved after code regen

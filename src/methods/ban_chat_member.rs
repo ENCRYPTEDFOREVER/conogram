@@ -14,7 +14,7 @@ pub struct BanChatMemberParams {
     pub user_id: i64,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub until_date: Option<i64>,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub revoke_messages: bool,
 }
 
@@ -68,7 +68,7 @@ impl<'a> BanChatMemberRequest<'a> {
         self
     }
 
-    ///Date when the user will be unbanned, unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever. Applied for supergroups and channels only.
+    ///Date when the user will be unbanned; Unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever. Applied for supergroups and channels only.
     pub fn until_date(mut self, until_date: impl Into<i64>) -> Self {
         self.params.until_date = Some(until_date.into());
         self

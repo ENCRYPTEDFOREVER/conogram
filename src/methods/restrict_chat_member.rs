@@ -14,7 +14,7 @@ pub struct RestrictChatMemberParams {
     pub chat_id: ChatId,
     pub user_id: i64,
     pub permissions: ChatPermissions,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub use_independent_chat_permissions: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub until_date: Option<i64>,
@@ -86,7 +86,7 @@ impl<'a> RestrictChatMemberRequest<'a> {
         self
     }
 
-    ///Date when restrictions will be lifted for the user, unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever
+    ///Date when restrictions will be lifted for the user; Unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever
     pub fn until_date(mut self, until_date: impl Into<i64>) -> Self {
         self.params.until_date = Some(until_date.into());
         self
