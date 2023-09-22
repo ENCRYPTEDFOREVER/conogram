@@ -23,6 +23,12 @@ pub struct PromoteChatMemberParams {
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_delete_messages: bool,
     #[serde(default, skip_serializing_if = "is_false")]
+    pub can_post_stories: bool,
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub can_edit_stories: bool,
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub can_delete_stories: bool,
+    #[serde(default, skip_serializing_if = "is_false")]
     pub can_manage_video_chats: bool,
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_restrict_members: bool,
@@ -75,6 +81,9 @@ impl<'a> PromoteChatMemberRequest<'a> {
                 can_post_messages: bool::default(),
                 can_edit_messages: bool::default(),
                 can_delete_messages: bool::default(),
+                can_post_stories: bool::default(),
+                can_edit_stories: bool::default(),
+                can_delete_stories: bool::default(),
                 can_manage_video_chats: bool::default(),
                 can_restrict_members: bool::default(),
                 can_promote_members: bool::default(),
@@ -125,6 +134,24 @@ impl<'a> PromoteChatMemberRequest<'a> {
     ///Pass *True* if the administrator can delete messages of other users
     pub fn can_delete_messages(mut self, can_delete_messages: impl Into<bool>) -> Self {
         self.params.can_delete_messages = can_delete_messages.into();
+        self
+    }
+
+    /// Pass *True* if the administrator can post stories in the channel; channels only
+    pub fn can_post_stories(mut self, can_post_stories: impl Into<bool>) -> Self {
+        self.params.can_post_stories = can_post_stories.into();
+        self
+    }
+
+    ///Pass *True* if the administrator can edit stories posted by other users; channels only
+    pub fn can_edit_stories(mut self, can_edit_stories: impl Into<bool>) -> Self {
+        self.params.can_edit_stories = can_edit_stories.into();
+        self
+    }
+
+    ///Pass *True* if the administrator can delete stories posted by other users; channels only
+    pub fn can_delete_stories(mut self, can_delete_stories: impl Into<bool>) -> Self {
+        self.params.can_delete_stories = can_delete_stories.into();
         self
     }
 
