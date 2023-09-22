@@ -49,7 +49,7 @@ pub struct Chat {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub emoji_status_custom_emoji_id: Option<String>,
 
-    ///*Optional*. Expiration date of the emoji status of the other party in a private chat, if any. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
+    ///*Optional*. Expiration date of the emoji status of the other party in a private chat in Unix time, if any. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub emoji_status_expiration_date: Option<i64>,
 
@@ -84,8 +84,8 @@ pub struct Chat {
     ///*Optional*. The most recent pinned message (by sending date). Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
     #[serde(
         deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none",
-        default
+        default,
+        skip_serializing_if = "Option::is_none"
     )]
     pub pinned_message: Option<Box<Message>>,
 
