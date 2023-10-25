@@ -372,6 +372,26 @@ impl Message {
         }
     }
 
+    pub fn file_uid(&self) -> Option<String> {
+        if let Some(m) = self.photo.first() {
+            Some(m.file_unique_id.clone())
+        } else if let Some(m) = &self.animation {
+            Some(m.file_unique_id.clone())
+        } else if let Some(m) = &self.audio {
+            Some(m.file_unique_id.clone())
+        } else if let Some(m) = &self.document {
+            Some(m.file_unique_id.clone())
+        } else if let Some(m) = &self.video {
+            Some(m.file_unique_id.clone())
+        } else if let Some(m) = &self.video_note {
+            Some(m.file_unique_id.clone())
+        } else if let Some(m) = &self.voice {
+            Some(m.file_unique_id.clone())
+        } else {
+            self.sticker.as_ref().map(|m| m.file_unique_id.clone())
+        }
+    }
+
     pub fn reply<'a>(&'a self, api: &'a API, text: impl Into<String>) -> SendMessageRequest {
         api.send_message(self.chat.id, text)
             .reply_to_message_id(self.message_id)
