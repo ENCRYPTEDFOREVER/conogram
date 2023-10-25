@@ -55,4 +55,16 @@ impl User {
             None => self.first_name.clone(),
         }
     }
+
+    pub fn mention_html(&self) -> String {
+        if let Some(username) = &self.username {
+            format!("@{username}")
+        } else {
+            format!(
+                "<a href=\"tg://user?id={}\">{}</a>",
+                self.id,
+                self.full_name()
+            )
+        }
+    }
 }

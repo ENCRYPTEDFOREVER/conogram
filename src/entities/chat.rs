@@ -157,6 +157,16 @@ use crate::api::API;
 use super::misc::input_file::InputFile;
 
 impl Chat {
+    pub fn mention_html(&self) -> String {
+        if let Some(link) = &self.invite_link {
+            format!("<a href=\"{link}\">{}</a>", self.full_name())
+        } else if let Some(username) = &self.username {
+            format!("@{}", username)
+        } else {
+            self.full_name()
+        }
+    }
+
     // Returns Chat's title for groups and User::full_name for private chats
     pub fn full_name(&self) -> String {
         if let Some(title) = &self.title {

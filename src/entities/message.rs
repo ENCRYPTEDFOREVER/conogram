@@ -361,6 +361,19 @@ use crate::methods::send_message::SendMessageRequest;
 use super::misc::input_file::InputFile;
 
 impl Message {
+    pub fn sender_mention_html(&self) -> String {
+        if let Some(sender_chat) = &self.sender_chat {
+            sender_chat.mention_html()
+        } else if let Some(user) = &self.from {
+            user.mention_html()
+        } else if let Some(signature) = &self.author_signature {
+            signature.clone()
+        } else {
+            // TODO: Channels or smth, idk if even possible...
+            panic!("Can't create mention from message {self:?}")
+        }
+    }
+
     /// ID of the message author
     pub fn from_id(&self) -> i64 {
         if let Some(sender_chat) = &self.sender_chat {
