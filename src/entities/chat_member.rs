@@ -67,6 +67,9 @@ impl From<ChatMemberBanned> for ChatMember {
     }
 }
 // Divider: all content below this line will be preserved after code regen
+
+use super::user::User;
+
 impl Default for ChatMember {
     fn default() -> Self {
         Self::Left(ChatMemberLeft::default())
@@ -74,6 +77,18 @@ impl Default for ChatMember {
 }
 
 impl ChatMember {
+    /// Returns a User object from underlying value
+    pub fn user(&self) -> &User {
+        match self {
+            ChatMember::Owner(m) => &m.user,
+            ChatMember::Administrator(m) => &m.user,
+            ChatMember::Member(m) => &m.user,
+            ChatMember::Restricted(m) => &m.user,
+            ChatMember::Left(m) => &m.user,
+            ChatMember::Banned(m) => &m.user,
+        }
+    }
+
     pub fn is_admin(&self) -> bool {
         matches!(self, ChatMember::Owner(_) | ChatMember::Administrator(_))
     }
