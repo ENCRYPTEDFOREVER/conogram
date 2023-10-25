@@ -4,6 +4,7 @@ use std::sync::atomic::AtomicI64;
 use std::time::Duration;
 
 use crate::client::ApiClient;
+use crate::entities::misc::chat_id::ChatId;
 use crate::entities::misc::input_file::GetFiles;
 use crate::entities::update::{AllowedUpdates, Update};
 use crate::errors::{ConogramError, ConogramErrorType, TgApiError};
@@ -183,6 +184,21 @@ impl API {
     /// Set allowed update kinds list which will be later used in polling
     pub fn set_allowed_updates(&mut self, allowed_updates: Vec<AllowedUpdates>) {
         self.allowed_updates = allowed_updates.iter().map(|x| x.to_string()).collect();
+    }
+
+    /// Internal conogram method. Returns Ok(false) instead of Err if the message can't be deleted
+    pub async fn delete_message_exp(
+        &self,
+        chat_id: impl Into<ChatId>,
+        message_id: impl Into<i64>,
+    ) -> Result<bool, ConogramError> {
+        let result = Self::request(self.delete_message(chat_id, message_id)).await;
+        if let Err(err) = &result {
+            if let ConogramErrorType::ApiError(_) = &err.error {
+                return Ok(false);
+            }
+        }
+        result
     }
 
     /// Poll the server for pending updates

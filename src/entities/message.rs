@@ -351,6 +351,7 @@ pub struct Message {
 
 use crate::api::API;
 use crate::entities::misc::chat_id::ChatId;
+use crate::errors::ConogramError;
 use crate::methods::copy_message::CopyMessageRequest;
 use crate::methods::delete_message::DeleteMessageRequest;
 use crate::methods::edit_message_reply_markup::EditMessageReplyMarkupRequest;
@@ -447,6 +448,11 @@ impl Message {
 
     pub fn delete<'a>(&'a self, api: &'a API) -> DeleteMessageRequest {
         api.delete_message(self.chat.id, self.message_id)
+    }
+
+    /// Internal conogram method. Returns Ok(false) instead of Err if the message can't be deleted
+    pub async fn delete_exp<'a>(&'a self, api: &'a API) -> Result<bool, ConogramError> {
+        api.delete_message_exp(self.chat.id, self.message_id).await
     }
 
     pub fn reply_document<'a>(
