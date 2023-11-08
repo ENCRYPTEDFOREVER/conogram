@@ -112,7 +112,7 @@ impl API {
         }
     }
 
-    /// Sets `allow_sending_without_reply` to `true` for all requests
+    /// Sets `allow_sending_without_reply` to `true` for all applicable requests
     pub fn set_essential_request_defaults(&mut self) -> Result<(), ConogramErrorType> {
         set_default_param!(
             self.api_client,
@@ -186,7 +186,7 @@ impl API {
         self.allowed_updates = allowed_updates.iter().map(|x| x.to_string()).collect();
     }
 
-    /// Internal conogram method. Returns Ok(false) instead of Err if the message can't be deleted
+    /// Internal conogram method. Returns `Ok(false)`` instead of `Err` if the message can't be deleted
     pub async fn delete_message_exp(
         &self,
         chat_id: impl Into<ChatId>,
@@ -244,7 +244,7 @@ impl API {
         self.api_client.method_multipart_form(method, params).await
     }
 
-    /// Same as [`API::request_ref`] but will consume the request
+    /// Same as [`API::request_ref`] but takes `request` by value
     pub async fn request<Request, ReturnType>(request: Request) -> Result<ReturnType, ConogramError>
     where
         for<'a> &'a Request: IntoFuture<Output = Result<ReturnType, ConogramError>>,
@@ -252,7 +252,7 @@ impl API {
         Self::request_ref(&request).await
     }
 
-    /// This will make API request and automativally handle some common errors like RetryAfter or BadGateway
+    /// This will make API request and automativally handle some common errors like `RetryAfter`, `BadGateway` and `GatewayTimeout`
     pub async fn request_ref<Request, ReturnType>(
         request: &Request,
     ) -> Result<ReturnType, ConogramError>
