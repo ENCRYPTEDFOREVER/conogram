@@ -356,22 +356,22 @@ use crate::methods::copy_message::CopyMessageRequest;
 use crate::methods::delete_message::DeleteMessageRequest;
 use crate::methods::edit_message_reply_markup::EditMessageReplyMarkupRequest;
 use crate::methods::edit_message_text::EditMessageTextRequest;
+use crate::methods::get_custom_emoji_stickers::GetCustomEmojiStickersRequest;
 use crate::methods::send_document::SendDocumentRequest;
 use crate::methods::send_message::SendMessageRequest;
 
 use super::misc::input_file::InputFile;
 
 impl Message {
-    pub fn sender_mention_html(&self) -> String {
-        if let Some(sender_chat) = &self.sender_chat {
-            sender_chat.mention_html()
-        } else if let Some(user) = &self.from {
-            user.mention_html()
-        } else if let Some(signature) = &self.author_signature {
-            signature.clone()
+    pub fn get_url(&self) -> String {
+        if let Some(username) = &self.chat.username {
+            format!("https://t.me/{username}/{}", self.message_id)
         } else {
-            // TODO: Channels or smth, idk if even possible...
-            panic!("Can't create mention from message {self:?}")
+            format!(
+                "https://t.me/c/{}/{}",
+                &self.chat.id.to_string()[4..],
+                self.message_id
+            )
         }
     }
 
@@ -384,6 +384,38 @@ impl Message {
         } else {
             0
         }
+    }
+
+    /// Returns `text` or `caption` if `text` is empty
+    pub fn get_text(&self) -> &Option<String> {
+        if self.text.is_some() {
+            &self.text
+        } else {
+            &self.caption
+        }
+    }
+
+    /// Returns `entities` or `caption_entities` if `entities` is empty
+    pub fn get_entities(&self) -> &Vec<MessageEntity> {
+        if self.entities.is_empty() {
+            &self.caption_entities
+        } else {
+            &self.entities
+        }
+    }
+
+    /// Returns vec of `custom_emoji_id` present in the message
+    pub fn get_custom_emoji_ids(&self) -> Vec<String> {
+        self.get_entities()
+            .iter()
+            // .map(|ent| ent.custom_emoji_id)
+            .filter_map(|ent| ent.custom_emoji_id.as_ref())
+            .map(String::from)
+            .collect()
+    }
+
+    pub fn get_custom_emoji_stickers<'a>(&'a self, api: &'a API) -> GetCustomEmojiStickersRequest {
+        api.get_custom_emoji_stickers(self.get_custom_emoji_ids())
     }
 
     pub fn file_uid(&self) -> Option<String> {
@@ -411,7 +443,17 @@ impl Message {
             .reply_to_message_id(self.message_id)
     }
 
-    // Sends message to the same chat and thread
+    /// The same as Message::reply().entities()
+    pub fn reply_entities<'a>(
+        &'a self,
+        api: &'a API,
+        text: impl Into<String>,
+        entities: impl Into<Vec<MessageEntity>>,
+    ) -> SendMessageRequest {
+        self.reply(api, text).entities(entities)
+    }
+
+    /// Sends message to the same chat and thread
     pub fn answer<'a>(&'a self, api: &'a API, text: impl Into<String>) -> SendMessageRequest {
         if self.is_topic_message {
             if let Some(thread_id) = self.message_thread_id {
@@ -421,6 +463,16 @@ impl Message {
             }
         }
         api.send_message(self.chat.id, text)
+    }
+
+    /// The same as Message::answer().entities()
+    pub fn answer_entities<'a>(
+        &'a self,
+        api: &'a API,
+        text: impl Into<String>,
+        entities: impl Into<Vec<MessageEntity>>,
+    ) -> SendMessageRequest {
+        self.answer(api, text).entities(entities)
     }
 
     pub fn edit_text<'a>(
@@ -450,7 +502,7 @@ impl Message {
         api.delete_message(self.chat.id, self.message_id)
     }
 
-    /// Internal conogram method. Returns Ok(false) instead of Err if the message can't be deleted
+    /// Internal conogram method. Returns `Ok(false)` instead of `Err` if the message can't be deleted
     pub async fn delete_exp<'a>(&'a self, api: &'a API) -> Result<bool, ConogramError> {
         api.delete_message_exp(self.chat.id, self.message_id).await
     }
