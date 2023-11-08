@@ -81,3 +81,14 @@ pub enum StickerType {
     CustomEmoji,
 }
 // Divider: all content below this line will be preserved after code regen
+use crate::api::API;
+use crate::methods::get_sticker_set::GetStickerSetRequest;
+
+impl Sticker {
+    /// Returns a [GetStickerSetRequest] if the sticker has a set, e.g. ([Sticker.set_name](Self::set_name) is `Some`)
+    pub fn get_sticker_set<'a>(&'a self, api: &'a API) -> Option<GetStickerSetRequest> {
+        self.set_name
+            .as_ref()
+            .map(|set_name| api.get_sticker_set(set_name))
+    }
+}
