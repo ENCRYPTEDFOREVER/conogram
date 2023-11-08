@@ -57,3 +57,25 @@ pub struct ChatMemberRestricted {
     pub until_date: i64,
 }
 // Divider: all content below this line will be preserved after code regen
+use super::chat_permissions::ChatPermissions;
+
+impl ChatMemberRestricted {
+    pub fn permissions(&self) -> ChatPermissions {
+        ChatPermissions {
+            can_send_messages: self.can_send_messages,
+            can_send_audios: self.can_send_audios,
+            can_send_documents: self.can_send_documents,
+            can_send_photos: self.can_send_photos,
+            can_send_videos: self.can_send_videos,
+            can_send_video_notes: self.can_send_video_notes,
+            can_send_voice_notes: self.can_send_voice_notes,
+            can_send_polls: self.can_send_polls,
+            can_send_other_messages: self.can_send_other_messages,
+            can_add_web_page_previews: self.can_add_web_page_previews,
+            can_change_info: self.can_change_info,
+            can_invite_users: self.can_invite_users,
+            can_pin_messages: self.can_pin_messages,
+            can_manage_topics: self.can_manage_topics,
+        }
+    }
+}
