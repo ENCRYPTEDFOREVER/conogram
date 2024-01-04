@@ -1,8 +1,10 @@
 use crate::api::API;
+use crate::entities::link_preview_options::LinkPreviewOptions;
 use crate::entities::message::Message;
 use crate::entities::message_entity::MessageEntity;
 use crate::entities::misc::chat_id::ChatId;
 use crate::entities::misc::reply_markup::ReplyMarkup;
+use crate::entities::reply_parameters::ReplyParameters;
 use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
@@ -21,16 +23,14 @@ pub struct SendMessageParams {
     pub parse_mode: Option<String>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub entities: Vec<MessageEntity>,
-    #[serde(default, skip_serializing_if = "is_false")]
-    pub disable_web_page_preview: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub link_preview_options: Option<LinkPreviewOptions>,
+    #[serde(skip_serializing_if = "is_false", default)]
     pub disable_notification: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub protect_content: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reply_to_message_id: Option<i64>,
-    #[serde(default, skip_serializing_if = "is_false")]
-    pub allow_sending_without_reply: bool,
+    pub reply_parameters: Option<ReplyParameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<ReplyMarkup>,
 }
@@ -61,20 +61,19 @@ impl<'a> RequestT for SendMessageRequest<'a> {
     }
 }
 impl<'a> SendMessageRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, text: String) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, text: impl Into<String>) -> Self {
         Self {
             api,
             params: SendMessageParams {
-                chat_id,
-                text,
+                chat_id: chat_id.into(),
+                text: text.into(),
                 message_thread_id: Option::default(),
                 parse_mode: Option::default(),
                 entities: Vec::default(),
-                disable_web_page_preview: bool::default(),
+                link_preview_options: Option::default(),
                 disable_notification: bool::default(),
                 protect_content: bool::default(),
-                reply_to_message_id: Option::default(),
-                allow_sending_without_reply: bool::default(),
+                reply_parameters: Option::default(),
                 reply_markup: Option::default(),
             },
         }
@@ -110,9 +109,12 @@ impl<'a> SendMessageRequest<'a> {
         self
     }
 
-    ///Disables link previews for links in this message
-    pub fn disable_web_page_preview(mut self, disable_web_page_preview: impl Into<bool>) -> Self {
-        self.params.disable_web_page_preview = disable_web_page_preview.into();
+    ///Link preview generation options for the message
+    pub fn link_preview_options(
+        mut self,
+        link_preview_options: impl Into<LinkPreviewOptions>,
+    ) -> Self {
+        self.params.link_preview_options = Some(link_preview_options.into());
         self
     }
 
@@ -128,18 +130,9 @@ impl<'a> SendMessageRequest<'a> {
         self
     }
 
-    ///If the message is a reply, ID of the original message
-    pub fn reply_to_message_id(mut self, reply_to_message_id: impl Into<i64>) -> Self {
-        self.params.reply_to_message_id = Some(reply_to_message_id.into());
-        self
-    }
-
-    ///Pass *True* if the message should be sent even if the specified replied-to message is not found
-    pub fn allow_sending_without_reply(
-        mut self,
-        allow_sending_without_reply: impl Into<bool>,
-    ) -> Self {
-        self.params.allow_sending_without_reply = allow_sending_without_reply.into();
+    ///Description of the message to reply to
+    pub fn reply_parameters(mut self, reply_parameters: impl Into<ReplyParameters>) -> Self {
+        self.params.reply_parameters = Some(reply_parameters.into());
         self
     }
 
@@ -162,3 +155,13 @@ impl<'a> API {
 }
 
 // Divider: all content below this line will be preserved after code regen
+
+impl SendMessageRequest<'_> {
+    /// For backwards compatibility (Bot API < 7.0)
+    pub fn disable_web_page_preview(self, disable: bool) -> Self {
+        self.link_preview_options(LinkPreviewOptions {
+            is_disabled: disable,
+            ..Default::default()
+        })
+    }
+}

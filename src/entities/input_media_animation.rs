@@ -39,7 +39,7 @@ pub struct InputMediaAnimation {
     pub duration: Option<i64>,
 
     ///*Optional*. Pass *True* if the animation needs to be covered with a spoiler animation
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub has_spoiler: bool,
 }
 // Divider: all content below this line will be preserved after code regen

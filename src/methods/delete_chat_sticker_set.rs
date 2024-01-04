@@ -38,10 +38,12 @@ impl<'a> RequestT for DeleteChatStickerSetRequest<'a> {
     }
 }
 impl<'a> DeleteChatStickerSetRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
-            params: DeleteChatStickerSetParams { chat_id },
+            params: DeleteChatStickerSetParams {
+                chat_id: chat_id.into(),
+            },
         }
     }
 

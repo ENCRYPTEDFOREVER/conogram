@@ -44,12 +44,12 @@ impl<'a> RequestT for CreateForumTopicRequest<'a> {
     }
 }
 impl<'a> CreateForumTopicRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, name: String) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, name: impl Into<String>) -> Self {
         Self {
             api,
             params: CreateForumTopicParams {
-                chat_id,
-                name,
+                chat_id: chat_id.into(),
+                name: name.into(),
                 icon_color: Option::default(),
                 icon_custom_emoji_id: Option::default(),
             },

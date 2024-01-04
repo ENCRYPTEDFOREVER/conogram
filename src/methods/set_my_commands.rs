@@ -43,11 +43,11 @@ impl<'a> RequestT for SetMyCommandsRequest<'a> {
     }
 }
 impl<'a> SetMyCommandsRequest<'a> {
-    pub fn new(api: &'a API, commands: Vec<BotCommand>) -> Self {
+    pub fn new(api: &'a API, commands: impl Into<Vec<BotCommand>>) -> Self {
         Self {
             api,
             params: SetMyCommandsParams {
-                commands,
+                commands: commands.into(),
                 scope: Option::default(),
                 language_code: Option::default(),
             },

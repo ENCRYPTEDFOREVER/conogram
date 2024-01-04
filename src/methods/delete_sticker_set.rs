@@ -37,10 +37,10 @@ impl<'a> RequestT for DeleteStickerSetRequest<'a> {
     }
 }
 impl<'a> DeleteStickerSetRequest<'a> {
-    pub fn new(api: &'a API, name: String) -> Self {
+    pub fn new(api: &'a API, name: impl Into<String>) -> Self {
         Self {
             api,
-            params: DeleteStickerSetParams { name },
+            params: DeleteStickerSetParams { name: name.into() },
         }
     }
 

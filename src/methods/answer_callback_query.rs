@@ -12,7 +12,7 @@ pub struct AnswerCallbackQueryParams {
     pub callback_query_id: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text: Option<String>,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub show_alert: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
@@ -48,11 +48,11 @@ impl<'a> RequestT for AnswerCallbackQueryRequest<'a> {
     }
 }
 impl<'a> AnswerCallbackQueryRequest<'a> {
-    pub fn new(api: &'a API, callback_query_id: String) -> Self {
+    pub fn new(api: &'a API, callback_query_id: impl Into<String>) -> Self {
         Self {
             api,
             params: AnswerCallbackQueryParams {
-                callback_query_id,
+                callback_query_id: callback_query_id.into(),
                 text: Option::default(),
                 show_alert: bool::default(),
                 url: Option::default(),

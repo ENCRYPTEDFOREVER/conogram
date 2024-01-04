@@ -41,10 +41,17 @@ impl<'a> RequestT for SetPassportDataErrorsRequest<'a> {
     }
 }
 impl<'a> SetPassportDataErrorsRequest<'a> {
-    pub fn new(api: &'a API, user_id: i64, errors: Vec<PassportElementError>) -> Self {
+    pub fn new(
+        api: &'a API,
+        user_id: impl Into<i64>,
+        errors: impl Into<Vec<PassportElementError>>,
+    ) -> Self {
         Self {
             api,
-            params: SetPassportDataErrorsParams { user_id, errors },
+            params: SetPassportDataErrorsParams {
+                user_id: user_id.into(),
+                errors: errors.into(),
+            },
         }
     }
 

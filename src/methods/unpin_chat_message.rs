@@ -40,11 +40,11 @@ impl<'a> RequestT for UnpinChatMessageRequest<'a> {
     }
 }
 impl<'a> UnpinChatMessageRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
             params: UnpinChatMessageParams {
-                chat_id,
+                chat_id: chat_id.into(),
                 message_id: Option::default(),
             },
         }

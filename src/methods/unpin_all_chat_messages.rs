@@ -38,10 +38,12 @@ impl<'a> RequestT for UnpinAllChatMessagesRequest<'a> {
     }
 }
 impl<'a> UnpinAllChatMessagesRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
-            params: UnpinAllChatMessagesParams { chat_id },
+            params: UnpinAllChatMessagesParams {
+                chat_id: chat_id.into(),
+            },
         }
     }
 

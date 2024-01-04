@@ -21,7 +21,7 @@ pub struct CreateNewStickerSetParams {
     pub sticker_format: CreateNewStickerSetStickerFormat,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sticker_type: Option<CreateNewStickerSetStickerType>,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub needs_repainting: bool,
 }
 
@@ -62,20 +62,20 @@ impl<'a> RequestT for CreateNewStickerSetRequest<'a> {
 impl<'a> CreateNewStickerSetRequest<'a> {
     pub fn new(
         api: &'a API,
-        user_id: i64,
-        name: String,
-        title: String,
-        stickers: Vec<InputSticker>,
-        sticker_format: CreateNewStickerSetStickerFormat,
+        user_id: impl Into<i64>,
+        name: impl Into<String>,
+        title: impl Into<String>,
+        stickers: impl Into<Vec<InputSticker>>,
+        sticker_format: impl Into<CreateNewStickerSetStickerFormat>,
     ) -> Self {
         Self {
             api,
             params: CreateNewStickerSetParams {
-                user_id,
-                name,
-                title,
-                stickers,
-                sticker_format,
+                user_id: user_id.into(),
+                name: name.into(),
+                title: title.into(),
+                stickers: stickers.into(),
+                sticker_format: sticker_format.into(),
                 sticker_type: Option::default(),
                 needs_repainting: bool::default(),
             },
@@ -180,4 +180,5 @@ pub enum CreateNewStickerSetStickerType {
     #[serde(rename = "custom_emoji")]
     CustomEmoji,
 }
+
 // Divider: all content below this line will be preserved after code regen

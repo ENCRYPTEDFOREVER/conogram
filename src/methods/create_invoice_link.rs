@@ -30,19 +30,19 @@ pub struct CreateInvoiceLinkParams {
     pub photo_width: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub photo_height: Option<i64>,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub need_name: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub need_phone_number: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub need_email: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub need_shipping_address: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub send_phone_number_to_provider: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub send_email_to_provider: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub is_flexible: bool,
 }
 
@@ -74,22 +74,22 @@ impl<'a> RequestT for CreateInvoiceLinkRequest<'a> {
 impl<'a> CreateInvoiceLinkRequest<'a> {
     pub fn new(
         api: &'a API,
-        title: String,
-        description: String,
-        payload: String,
-        provider_token: String,
-        currency: String,
-        prices: Vec<LabeledPrice>,
+        title: impl Into<String>,
+        description: impl Into<String>,
+        payload: impl Into<String>,
+        provider_token: impl Into<String>,
+        currency: impl Into<String>,
+        prices: impl Into<Vec<LabeledPrice>>,
     ) -> Self {
         Self {
             api,
             params: CreateInvoiceLinkParams {
-                title,
-                description,
-                payload,
-                provider_token,
-                currency,
-                prices,
+                title: title.into(),
+                description: description.into(),
+                payload: payload.into(),
+                provider_token: provider_token.into(),
+                currency: currency.into(),
+                prices: prices.into(),
                 max_tip_amount: Option::default(),
                 suggested_tip_amounts: Vec::default(),
                 provider_data: Option::default(),

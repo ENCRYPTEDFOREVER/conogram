@@ -38,12 +38,16 @@ impl<'a> RequestT for SetStickerEmojiListRequest<'a> {
     }
 }
 impl<'a> SetStickerEmojiListRequest<'a> {
-    pub fn new(api: &'a API, sticker: String, emoji_list: Vec<String>) -> Self {
+    pub fn new(
+        api: &'a API,
+        sticker: impl Into<String>,
+        emoji_list: impl Into<Vec<String>>,
+    ) -> Self {
         Self {
             api,
             params: SetStickerEmojiListParams {
-                sticker,
-                emoji_list,
+                sticker: sticker.into(),
+                emoji_list: emoji_list.into(),
             },
         }
     }

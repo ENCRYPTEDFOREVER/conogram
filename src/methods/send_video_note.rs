@@ -5,6 +5,7 @@ use crate::entities::misc::input_file::GetFiles;
 use crate::entities::misc::input_file::InputFile;
 use crate::entities::misc::input_file::Moose;
 use crate::entities::misc::reply_markup::ReplyMarkup;
+use crate::entities::reply_parameters::ReplyParameters;
 use crate::errors::ConogramError;
 use crate::impl_into_future_multipart;
 use crate::request::RequestT;
@@ -27,14 +28,12 @@ pub struct SendVideoNoteParams {
     pub length: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", skip)]
     pub thumbnail: Option<InputFile>,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub disable_notification: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub protect_content: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reply_to_message_id: Option<i64>,
-    #[serde(default, skip_serializing_if = "is_false")]
-    pub allow_sending_without_reply: bool,
+    pub reply_parameters: Option<ReplyParameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<ReplyMarkup>,
 }
@@ -75,20 +74,19 @@ impl<'a> RequestT for SendVideoNoteRequest<'a> {
     }
 }
 impl<'a> SendVideoNoteRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, video_note: InputFile) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, video_note: impl Into<InputFile>) -> Self {
         Self {
             api,
             params: SendVideoNoteParams {
-                chat_id,
-                video_note,
+                chat_id: chat_id.into(),
+                video_note: video_note.into(),
                 message_thread_id: Option::default(),
                 duration: Option::default(),
                 length: Option::default(),
                 thumbnail: Option::default(),
                 disable_notification: bool::default(),
                 protect_content: bool::default(),
-                reply_to_message_id: Option::default(),
-                allow_sending_without_reply: bool::default(),
+                reply_parameters: Option::default(),
                 reply_markup: Option::default(),
             },
         }
@@ -142,18 +140,9 @@ impl<'a> SendVideoNoteRequest<'a> {
         self
     }
 
-    ///If the message is a reply, ID of the original message
-    pub fn reply_to_message_id(mut self, reply_to_message_id: impl Into<i64>) -> Self {
-        self.params.reply_to_message_id = Some(reply_to_message_id.into());
-        self
-    }
-
-    ///Pass *True* if the message should be sent even if the specified replied-to message is not found
-    pub fn allow_sending_without_reply(
-        mut self,
-        allow_sending_without_reply: impl Into<bool>,
-    ) -> Self {
-        self.params.allow_sending_without_reply = allow_sending_without_reply.into();
+    ///Description of the message to reply to
+    pub fn reply_parameters(mut self, reply_parameters: impl Into<ReplyParameters>) -> Self {
+        self.params.reply_parameters = Some(reply_parameters.into());
         self
     }
 

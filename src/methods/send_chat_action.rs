@@ -45,12 +45,16 @@ impl<'a> RequestT for SendChatActionRequest<'a> {
     }
 }
 impl<'a> SendChatActionRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, action: SendChatActionAction) -> Self {
+    pub fn new(
+        api: &'a API,
+        chat_id: impl Into<ChatId>,
+        action: impl Into<SendChatActionAction>,
+    ) -> Self {
         Self {
             api,
             params: SendChatActionParams {
-                chat_id,
-                action,
+                chat_id: chat_id.into(),
+                action: action.into(),
                 message_thread_id: Option::default(),
             },
         }

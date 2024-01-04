@@ -27,7 +27,7 @@ pub struct InputMediaDocument {
     pub caption_entities: Vec<MessageEntity>,
 
     ///*Optional*. Disables automatic server-side content type detection for files uploaded using multipart/form-data. Always *True*, if the document is sent as part of an album.
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub disable_content_type_detection: bool,
 }
 // Divider: all content below this line will be preserved after code regen

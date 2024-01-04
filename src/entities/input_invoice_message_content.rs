@@ -53,31 +53,31 @@ pub struct InputInvoiceMessageContent {
     pub photo_height: Option<i64>,
 
     ///*Optional*. Pass *True* if you require the user's full name to complete the order
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub need_name: bool,
 
     ///*Optional*. Pass *True* if you require the user's phone number to complete the order
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub need_phone_number: bool,
 
     ///*Optional*. Pass *True* if you require the user's email address to complete the order
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub need_email: bool,
 
     ///*Optional*. Pass *True* if you require the user's shipping address to complete the order
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub need_shipping_address: bool,
 
     ///*Optional*. Pass *True* if the user's phone number should be sent to provider
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub send_phone_number_to_provider: bool,
 
     ///*Optional*. Pass *True* if the user's email address should be sent to provider
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub send_email_to_provider: bool,
 
     ///*Optional*. Pass *True* if the final price depends on the shipping method
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub is_flexible: bool,
 }
 // Divider: all content below this line will be preserved after code regen

@@ -40,11 +40,11 @@ impl<'a> RequestT for SetChatDescriptionRequest<'a> {
     }
 }
 impl<'a> SetChatDescriptionRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
             params: SetChatDescriptionParams {
-                chat_id,
+                chat_id: chat_id.into(),
                 description: Option::default(),
             },
         }

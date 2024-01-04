@@ -1,14 +1,17 @@
 use crate::entities::callback_query::CallbackQuery;
+use crate::entities::chat_boost_removed::ChatBoostRemoved;
+use crate::entities::chat_boost_updated::ChatBoostUpdated;
 use crate::entities::chat_join_request::ChatJoinRequest;
 use crate::entities::chat_member_updated::ChatMemberUpdated;
 use crate::entities::chosen_inline_result::ChosenInlineResult;
 use crate::entities::inline_query::InlineQuery;
 use crate::entities::message::Message;
+use crate::entities::message_reaction_count_updated::MessageReactionCountUpdated;
+use crate::entities::message_reaction_updated::MessageReactionUpdated;
 use crate::entities::poll::Poll;
 use crate::entities::poll_answer::PollAnswer;
 use crate::entities::pre_checkout_query::PreCheckoutQuery;
 use crate::entities::shipping_query::ShippingQuery;
-use crate::utils::deserialize_utils::deserialize_boxed_option;
 use serde::{Deserialize, Serialize};
 
 ///This [object](https://core.telegram.org/bots/api/#available-types) represents an incoming update.  
@@ -20,36 +23,28 @@ pub struct Update {
     pub update_id: i64,
 
     ///*Optional*. New incoming message of any kind - text, photo, sticker, etc.
-    #[serde(
-        deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none",
-        default
-    )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<Box<Message>>,
 
     ///*Optional*. New version of a message that is known to the bot and was edited
-    #[serde(
-        deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none",
-        default
-    )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub edited_message: Option<Box<Message>>,
 
     ///*Optional*. New incoming channel post of any kind - text, photo, sticker, etc.
-    #[serde(
-        deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none",
-        default
-    )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_post: Option<Box<Message>>,
 
     ///*Optional*. New version of a channel post that is known to the bot and was edited
-    #[serde(
-        deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none",
-        default
-    )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub edited_channel_post: Option<Box<Message>>,
+
+    ///*Optional*. A reaction to a message was changed by a user. The bot must be an administrator in the chat and must explicitly specify `"message_reaction"` in the list of *allowed\_updates* to receive these updates. The update isn't received for reactions set by bots.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message_reaction: Option<MessageReactionUpdated>,
+
+    ///*Optional*. Reactions to a message with anonymous reactions were changed. The bot must be an administrator in the chat and must explicitly specify `"message_reaction_count"` in the list of *allowed\_updates* to receive these updates.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message_reaction_count: Option<MessageReactionCountUpdated>,
 
     ///*Optional*. New incoming [inline](https://core.telegram.org/bots/api/#inline-mode) query
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -83,13 +78,21 @@ pub struct Update {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub my_chat_member: Option<ChatMemberUpdated>,
 
-    ///*Optional*. A chat member's status was updated in a chat. The bot must be an administrator in the chat and must explicitly specify “chat\_member” in the list of *allowed\_updates* to receive these updates.
+    ///*Optional*. A chat member's status was updated in a chat. The bot must be an administrator in the chat and must explicitly specify `"chat_member"` in the list of *allowed\_updates* to receive these updates.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub chat_member: Option<ChatMemberUpdated>,
 
     ///*Optional*. A request to join the chat has been sent. The bot must have the *can\_invite\_users* administrator right in the chat to receive these updates.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub chat_join_request: Option<ChatJoinRequest>,
+
+    ///*Optional*. A chat boost was added or changed. The bot must be an administrator in the chat to receive these updates.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chat_boost: Option<ChatBoostUpdated>,
+
+    ///*Optional*. A boost was removed from a chat. The bot must be an administrator in the chat to receive these updates.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub removed_chat_boost: Option<ChatBoostRemoved>,
 }
 // Divider: all content below this line will be preserved after code regen
 

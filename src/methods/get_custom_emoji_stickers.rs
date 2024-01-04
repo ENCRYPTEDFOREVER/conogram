@@ -38,10 +38,12 @@ impl<'a> RequestT for GetCustomEmojiStickersRequest<'a> {
     }
 }
 impl<'a> GetCustomEmojiStickersRequest<'a> {
-    pub fn new(api: &'a API, custom_emoji_ids: Vec<String>) -> Self {
+    pub fn new(api: &'a API, custom_emoji_ids: impl Into<Vec<String>>) -> Self {
         Self {
             api,
-            params: GetCustomEmojiStickersParams { custom_emoji_ids },
+            params: GetCustomEmojiStickersParams {
+                custom_emoji_ids: custom_emoji_ids.into(),
+            },
         }
     }
 

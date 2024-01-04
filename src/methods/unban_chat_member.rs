@@ -12,7 +12,7 @@ use std::pin::Pin;
 pub struct UnbanChatMemberParams {
     pub chat_id: ChatId,
     pub user_id: i64,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub only_if_banned: bool,
 }
 
@@ -42,12 +42,12 @@ impl<'a> RequestT for UnbanChatMemberRequest<'a> {
     }
 }
 impl<'a> UnbanChatMemberRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, user_id: i64) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, user_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: UnbanChatMemberParams {
-                chat_id,
-                user_id,
+                chat_id: chat_id.into(),
+                user_id: user_id.into(),
                 only_if_banned: bool::default(),
             },
         }

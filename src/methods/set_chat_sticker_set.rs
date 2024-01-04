@@ -39,12 +39,16 @@ impl<'a> RequestT for SetChatStickerSetRequest<'a> {
     }
 }
 impl<'a> SetChatStickerSetRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, sticker_set_name: String) -> Self {
+    pub fn new(
+        api: &'a API,
+        chat_id: impl Into<ChatId>,
+        sticker_set_name: impl Into<String>,
+    ) -> Self {
         Self {
             api,
             params: SetChatStickerSetParams {
-                chat_id,
-                sticker_set_name,
+                chat_id: chat_id.into(),
+                sticker_set_name: sticker_set_name.into(),
             },
         }
     }

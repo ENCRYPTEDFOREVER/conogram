@@ -10,19 +10,19 @@ pub struct SwitchInlineQueryChosenChat {
     pub query: Option<String>,
 
     ///*Optional*. True, if private chats with users can be chosen
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub allow_user_chats: bool,
 
     ///*Optional*. True, if private chats with bots can be chosen
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub allow_bot_chats: bool,
 
     ///*Optional*. True, if group and supergroup chats can be chosen
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub allow_group_chats: bool,
 
     ///*Optional*. True, if channel chats can be chosen
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub allow_channel_chats: bool,
 }
 // Divider: all content below this line will be preserved after code regen

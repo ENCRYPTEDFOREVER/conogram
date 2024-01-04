@@ -38,10 +38,12 @@ impl<'a> RequestT for CloseGeneralForumTopicRequest<'a> {
     }
 }
 impl<'a> CloseGeneralForumTopicRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
-            params: CloseGeneralForumTopicParams { chat_id },
+            params: CloseGeneralForumTopicParams {
+                chat_id: chat_id.into(),
+            },
         }
     }
 

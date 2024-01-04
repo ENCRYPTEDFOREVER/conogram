@@ -1,12 +1,12 @@
 use crate::api::API;
 use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
+use crate::entities::link_preview_options::LinkPreviewOptions;
 use crate::entities::message::Message;
 use crate::entities::message_entity::MessageEntity;
 use crate::entities::misc::chat_id::ChatId;
 use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
-use crate::utils::deserialize_utils::is_false;
 use serde::Serialize;
 use std::future::{Future, IntoFuture};
 use std::pin::Pin;
@@ -24,8 +24,8 @@ pub struct EditMessageTextParams {
     pub parse_mode: Option<String>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub entities: Vec<MessageEntity>,
-    #[serde(default, skip_serializing_if = "is_false")]
-    pub disable_web_page_preview: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub link_preview_options: Option<LinkPreviewOptions>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<InlineKeyboardMarkup>,
 }
@@ -56,17 +56,17 @@ impl<'a> RequestT for EditMessageTextRequest<'a> {
     }
 }
 impl<'a> EditMessageTextRequest<'a> {
-    pub fn new(api: &'a API, text: String) -> Self {
+    pub fn new(api: &'a API, text: impl Into<String>) -> Self {
         Self {
             api,
             params: EditMessageTextParams {
-                text,
+                text: text.into(),
                 chat_id: Option::default(),
                 message_id: Option::default(),
                 inline_message_id: Option::default(),
                 parse_mode: Option::default(),
                 entities: Vec::default(),
-                disable_web_page_preview: bool::default(),
+                link_preview_options: Option::default(),
                 reply_markup: Option::default(),
             },
         }
@@ -108,9 +108,12 @@ impl<'a> EditMessageTextRequest<'a> {
         self
     }
 
-    ///Disables link previews for links in this message
-    pub fn disable_web_page_preview(mut self, disable_web_page_preview: impl Into<bool>) -> Self {
-        self.params.disable_web_page_preview = disable_web_page_preview.into();
+    ///Link preview generation options for the message
+    pub fn link_preview_options(
+        mut self,
+        link_preview_options: impl Into<LinkPreviewOptions>,
+    ) -> Self {
+        self.params.link_preview_options = Some(link_preview_options.into());
         self
     }
 
@@ -134,5 +137,13 @@ impl EditMessageTextRequest<'_> {
     pub fn remove_reply_markup(mut self) -> Self {
         self.params.reply_markup = None;
         self
+    }
+
+    /// For backwards compatibility (Bot API < 7.0)
+    pub fn disable_web_page_preview(self, disable: bool) -> Self {
+        self.link_preview_options(LinkPreviewOptions {
+            is_disabled: disable,
+            ..Default::default()
+        })
     }
 }

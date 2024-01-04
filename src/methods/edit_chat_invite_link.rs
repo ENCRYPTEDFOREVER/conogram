@@ -19,7 +19,7 @@ pub struct EditChatInviteLinkParams {
     pub expire_date: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_limit: Option<i64>,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub creates_join_request: bool,
 }
 
@@ -49,12 +49,12 @@ impl<'a> RequestT for EditChatInviteLinkRequest<'a> {
     }
 }
 impl<'a> EditChatInviteLinkRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, invite_link: String) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, invite_link: impl Into<String>) -> Self {
         Self {
             api,
             params: EditChatInviteLinkParams {
-                chat_id,
-                invite_link,
+                chat_id: chat_id.into(),
+                invite_link: invite_link.into(),
                 name: Option::default(),
                 expire_date: Option::default(),
                 member_limit: Option::default(),

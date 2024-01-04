@@ -51,10 +51,13 @@ impl<'a> RequestT for SetChatPhotoRequest<'a> {
     }
 }
 impl<'a> SetChatPhotoRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, photo: InputFile) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, photo: impl Into<InputFile>) -> Self {
         Self {
             api,
-            params: SetChatPhotoParams { chat_id, photo },
+            params: SetChatPhotoParams {
+                chat_id: chat_id.into(),
+                photo: photo.into(),
+            },
         }
     }
 

@@ -60,11 +60,11 @@ impl<'a> RequestT for EditMessageMediaRequest<'a> {
     }
 }
 impl<'a> EditMessageMediaRequest<'a> {
-    pub fn new(api: &'a API, media: InputMedia) -> Self {
+    pub fn new(api: &'a API, media: impl Into<InputMedia>) -> Self {
         Self {
             api,
             params: EditMessageMediaParams {
-                media,
+                media: media.into(),
                 chat_id: Option::default(),
                 message_id: Option::default(),
                 inline_message_id: Option::default(),

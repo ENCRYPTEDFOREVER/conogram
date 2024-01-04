@@ -39,11 +39,11 @@ impl<'a> RequestT for SetStickerKeywordsRequest<'a> {
     }
 }
 impl<'a> SetStickerKeywordsRequest<'a> {
-    pub fn new(api: &'a API, sticker: String) -> Self {
+    pub fn new(api: &'a API, sticker: impl Into<String>) -> Self {
         Self {
             api,
             params: SetStickerKeywordsParams {
-                sticker,
+                sticker: sticker.into(),
                 keywords: Vec::default(),
             },
         }

@@ -39,10 +39,13 @@ impl<'a> RequestT for SetChatTitleRequest<'a> {
     }
 }
 impl<'a> SetChatTitleRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, title: String) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, title: impl Into<String>) -> Self {
         Self {
             api,
-            params: SetChatTitleParams { chat_id, title },
+            params: SetChatTitleParams {
+                chat_id: chat_id.into(),
+                title: title.into(),
+            },
         }
     }
 

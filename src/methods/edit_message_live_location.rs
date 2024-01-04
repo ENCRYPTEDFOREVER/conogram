@@ -55,12 +55,12 @@ impl<'a> RequestT for EditMessageLiveLocationRequest<'a> {
     }
 }
 impl<'a> EditMessageLiveLocationRequest<'a> {
-    pub fn new(api: &'a API, latitude: f64, longitude: f64) -> Self {
+    pub fn new(api: &'a API, latitude: impl Into<f64>, longitude: impl Into<f64>) -> Self {
         Self {
             api,
             params: EditMessageLiveLocationParams {
-                latitude,
-                longitude,
+                latitude: latitude.into(),
+                longitude: longitude.into(),
                 chat_id: Option::default(),
                 message_id: Option::default(),
                 inline_message_id: Option::default(),

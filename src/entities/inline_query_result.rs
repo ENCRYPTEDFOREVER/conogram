@@ -87,6 +87,11 @@ pub enum InlineQueryResult {
     #[serde(rename = "voice")]
     Voice(InlineQueryResultVoice),
 }
+impl Default for InlineQueryResult {
+    fn default() -> Self {
+        Self::CachedAudio(InlineQueryResultCachedAudio::default())
+    }
+}
 impl From<InlineQueryResultCachedAudio> for InlineQueryResult {
     fn from(value: InlineQueryResultCachedAudio) -> Self {
         Self::CachedAudio(value)

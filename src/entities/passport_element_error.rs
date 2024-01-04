@@ -43,6 +43,11 @@ pub enum PassportElementError {
     #[serde(rename = "unspecified")]
     Unspecified(PassportElementErrorUnspecified),
 }
+impl Default for PassportElementError {
+    fn default() -> Self {
+        Self::DataField(PassportElementErrorDataField::default())
+    }
+}
 impl From<PassportElementErrorDataField> for PassportElementError {
     fn from(value: PassportElementErrorDataField) -> Self {
         Self::DataField(value)

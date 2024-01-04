@@ -3,6 +3,7 @@ use crate::entities::message::Message;
 use crate::entities::message_entity::MessageEntity;
 use crate::entities::misc::chat_id::ChatId;
 use crate::entities::misc::reply_markup::ReplyMarkup;
+use crate::entities::reply_parameters::ReplyParameters;
 use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
@@ -18,11 +19,11 @@ pub struct SendPollParams {
     pub message_thread_id: Option<i64>,
     pub question: String,
     pub options: Vec<String>,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub is_anonymous: bool,
     #[serde(skip_serializing_if = "Option::is_none", rename = "type")]
     pub type_: Option<SendPollType>,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub allows_multiple_answers: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub correct_option_id: Option<i64>,
@@ -36,16 +37,14 @@ pub struct SendPollParams {
     pub open_period: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub close_date: Option<i64>,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub is_closed: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub disable_notification: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub protect_content: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reply_to_message_id: Option<i64>,
-    #[serde(default, skip_serializing_if = "is_false")]
-    pub allow_sending_without_reply: bool,
+    pub reply_parameters: Option<ReplyParameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<ReplyMarkup>,
 }
@@ -76,13 +75,18 @@ impl<'a> RequestT for SendPollRequest<'a> {
     }
 }
 impl<'a> SendPollRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, question: String, options: Vec<String>) -> Self {
+    pub fn new(
+        api: &'a API,
+        chat_id: impl Into<ChatId>,
+        question: impl Into<String>,
+        options: impl Into<Vec<String>>,
+    ) -> Self {
         Self {
             api,
             params: SendPollParams {
-                chat_id,
-                question,
-                options,
+                chat_id: chat_id.into(),
+                question: question.into(),
+                options: options.into(),
                 message_thread_id: Option::default(),
                 is_anonymous: bool::default(),
                 type_: Option::default(),
@@ -96,8 +100,7 @@ impl<'a> SendPollRequest<'a> {
                 is_closed: bool::default(),
                 disable_notification: bool::default(),
                 protect_content: bool::default(),
-                reply_to_message_id: Option::default(),
-                allow_sending_without_reply: bool::default(),
+                reply_parameters: Option::default(),
                 reply_markup: Option::default(),
             },
         }
@@ -201,18 +204,9 @@ impl<'a> SendPollRequest<'a> {
         self
     }
 
-    ///If the message is a reply, ID of the original message
-    pub fn reply_to_message_id(mut self, reply_to_message_id: impl Into<i64>) -> Self {
-        self.params.reply_to_message_id = Some(reply_to_message_id.into());
-        self
-    }
-
-    ///Pass *True* if the message should be sent even if the specified replied-to message is not found
-    pub fn allow_sending_without_reply(
-        mut self,
-        allow_sending_without_reply: impl Into<bool>,
-    ) -> Self {
-        self.params.allow_sending_without_reply = allow_sending_without_reply.into();
+    ///Description of the message to reply to
+    pub fn reply_parameters(mut self, reply_parameters: impl Into<ReplyParameters>) -> Self {
+        self.params.reply_parameters = Some(reply_parameters.into());
         self
     }
 

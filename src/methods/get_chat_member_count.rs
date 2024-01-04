@@ -38,10 +38,12 @@ impl<'a> RequestT for GetChatMemberCountRequest<'a> {
     }
 }
 impl<'a> GetChatMemberCountRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
-            params: GetChatMemberCountParams { chat_id },
+            params: GetChatMemberCountParams {
+                chat_id: chat_id.into(),
+            },
         }
     }
 

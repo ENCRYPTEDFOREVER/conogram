@@ -40,12 +40,16 @@ impl<'a> RequestT for AnswerPreCheckoutQueryRequest<'a> {
     }
 }
 impl<'a> AnswerPreCheckoutQueryRequest<'a> {
-    pub fn new(api: &'a API, pre_checkout_query_id: String, ok: bool) -> Self {
+    pub fn new(
+        api: &'a API,
+        pre_checkout_query_id: impl Into<String>,
+        ok: impl Into<bool>,
+    ) -> Self {
         Self {
             api,
             params: AnswerPreCheckoutQueryParams {
-                pre_checkout_query_id,
-                ok,
+                pre_checkout_query_id: pre_checkout_query_id.into(),
+                ok: ok.into(),
                 error_message: Option::default(),
             },
         }

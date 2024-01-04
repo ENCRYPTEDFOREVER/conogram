@@ -38,10 +38,10 @@ impl<'a> RequestT for GetStickerSetRequest<'a> {
     }
 }
 impl<'a> GetStickerSetRequest<'a> {
-    pub fn new(api: &'a API, name: String) -> Self {
+    pub fn new(api: &'a API, name: impl Into<String>) -> Self {
         Self {
             api,
-            params: GetStickerSetParams { name },
+            params: GetStickerSetParams { name: name.into() },
         }
     }
 

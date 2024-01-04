@@ -15,7 +15,7 @@ pub struct GetChatParams {
 
 impl_into_future!(GetChatRequest<'a>);
 
-///Use this method to get up to date information about the chat (current name of the user for one-on-one conversations, current username of a user, group or channel, etc.). Returns a [Chat](https://core.telegram.org/bots/api/#chat) object on success.
+///Use this method to get up to date information about the chat. Returns a [Chat](https://core.telegram.org/bots/api/#chat) object on success.
 #[derive(Clone)]
 pub struct GetChatRequest<'a> {
     api: &'a API,
@@ -39,10 +39,12 @@ impl<'a> RequestT for GetChatRequest<'a> {
     }
 }
 impl<'a> GetChatRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
-            params: GetChatParams { chat_id },
+            params: GetChatParams {
+                chat_id: chat_id.into(),
+            },
         }
     }
 
@@ -54,7 +56,7 @@ impl<'a> GetChatRequest<'a> {
 }
 
 impl<'a> API {
-    ///Use this method to get up to date information about the chat (current name of the user for one-on-one conversations, current username of a user, group or channel, etc.). Returns a [Chat](https://core.telegram.org/bots/api/#chat) object on success.
+    ///Use this method to get up to date information about the chat. Returns a [Chat](https://core.telegram.org/bots/api/#chat) object on success.
     pub fn get_chat(&'a self, chat_id: impl Into<ChatId>) -> GetChatRequest {
         GetChatRequest::new(self, chat_id.into())
     }

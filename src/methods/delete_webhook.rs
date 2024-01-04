@@ -9,7 +9,7 @@ use std::pin::Pin;
 
 #[derive(Debug, Clone, Serialize)]
 pub struct DeleteWebhookParams {
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub drop_pending_updates: bool,
 }
 

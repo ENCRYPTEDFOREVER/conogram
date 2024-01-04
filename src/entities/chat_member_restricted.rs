@@ -11,7 +11,7 @@ pub struct ChatMemberRestricted {
     ///*True*, if the user is a member of the chat at the moment of the request
     pub is_member: bool,
 
-    ///*True*, if the user is allowed to send text messages, contacts, invoices, locations and venues
+    ///*True*, if the user is allowed to send text messages, contacts, giveaways, giveaway winners, invoices, locations and venues
     pub can_send_messages: bool,
 
     ///*True*, if the user is allowed to send audios

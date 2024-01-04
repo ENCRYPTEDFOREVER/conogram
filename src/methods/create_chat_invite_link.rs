@@ -18,7 +18,7 @@ pub struct CreateChatInviteLinkParams {
     pub expire_date: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_limit: Option<i64>,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub creates_join_request: bool,
 }
 
@@ -48,11 +48,11 @@ impl<'a> RequestT for CreateChatInviteLinkRequest<'a> {
     }
 }
 impl<'a> CreateChatInviteLinkRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
             params: CreateChatInviteLinkParams {
-                chat_id,
+                chat_id: chat_id.into(),
                 name: Option::default(),
                 expire_date: Option::default(),
                 member_limit: Option::default(),

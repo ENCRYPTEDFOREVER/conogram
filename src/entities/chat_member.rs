@@ -31,6 +31,11 @@ pub enum ChatMember {
     #[serde(rename = "kicked")]
     Banned(ChatMemberBanned),
 }
+impl Default for ChatMember {
+    fn default() -> Self {
+        Self::Owner(ChatMemberOwner::default())
+    }
+}
 impl From<ChatMemberOwner> for ChatMember {
     fn from(value: ChatMemberOwner) -> Self {
         Self::Owner(value)
@@ -69,12 +74,6 @@ impl From<ChatMemberBanned> for ChatMember {
 // Divider: all content below this line will be preserved after code regen
 
 use super::user::User;
-
-impl Default for ChatMember {
-    fn default() -> Self {
-        Self::Left(ChatMemberLeft::default())
-    }
-}
 
 impl ChatMember {
     /// Returns a User object from underlying value

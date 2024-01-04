@@ -40,11 +40,11 @@ impl<'a> RequestT for SetStickerMaskPositionRequest<'a> {
     }
 }
 impl<'a> SetStickerMaskPositionRequest<'a> {
-    pub fn new(api: &'a API, sticker: String) -> Self {
+    pub fn new(api: &'a API, sticker: impl Into<String>) -> Self {
         Self {
             api,
             params: SetStickerMaskPositionParams {
-                sticker,
+                sticker: sticker.into(),
                 mask_position: Option::default(),
             },
         }

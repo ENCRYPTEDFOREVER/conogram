@@ -5,6 +5,7 @@ use crate::entities::misc::chat_id::ChatId;
 use crate::entities::misc::input_file::GetFiles;
 use crate::entities::misc::input_file::InputFile;
 use crate::entities::misc::input_file::Moose;
+use crate::entities::reply_parameters::ReplyParameters;
 use crate::errors::ConogramError;
 use crate::impl_into_future_multipart;
 use crate::request::RequestT;
@@ -20,14 +21,12 @@ pub struct SendMediaGroupParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_thread_id: Option<i64>,
     pub media: Vec<InputMedia>,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub disable_notification: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub protect_content: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reply_to_message_id: Option<i64>,
-    #[serde(default, skip_serializing_if = "is_false")]
-    pub allow_sending_without_reply: bool,
+    pub reply_parameters: Option<ReplyParameters>,
 }
 
 impl GetFiles for SendMediaGroupParams {
@@ -65,17 +64,20 @@ impl<'a> RequestT for SendMediaGroupRequest<'a> {
     }
 }
 impl<'a> SendMediaGroupRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, media: Vec<InputMedia>) -> Self {
+    pub fn new(
+        api: &'a API,
+        chat_id: impl Into<ChatId>,
+        media: impl Into<Vec<InputMedia>>,
+    ) -> Self {
         Self {
             api,
             params: SendMediaGroupParams {
-                chat_id,
-                media,
+                chat_id: chat_id.into(),
+                media: media.into(),
                 message_thread_id: Option::default(),
                 disable_notification: bool::default(),
                 protect_content: bool::default(),
-                reply_to_message_id: Option::default(),
-                allow_sending_without_reply: bool::default(),
+                reply_parameters: Option::default(),
             },
         }
     }
@@ -110,18 +112,9 @@ impl<'a> SendMediaGroupRequest<'a> {
         self
     }
 
-    ///If the messages are a reply, ID of the original message
-    pub fn reply_to_message_id(mut self, reply_to_message_id: impl Into<i64>) -> Self {
-        self.params.reply_to_message_id = Some(reply_to_message_id.into());
-        self
-    }
-
-    ///Pass *True* if the message should be sent even if the specified replied-to message is not found
-    pub fn allow_sending_without_reply(
-        mut self,
-        allow_sending_without_reply: impl Into<bool>,
-    ) -> Self {
-        self.params.allow_sending_without_reply = allow_sending_without_reply.into();
+    ///Description of the message to reply to
+    pub fn reply_parameters(mut self, reply_parameters: impl Into<ReplyParameters>) -> Self {
+        self.params.reply_parameters = Some(reply_parameters.into());
         self
     }
 }

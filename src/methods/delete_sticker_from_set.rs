@@ -37,10 +37,12 @@ impl<'a> RequestT for DeleteStickerFromSetRequest<'a> {
     }
 }
 impl<'a> DeleteStickerFromSetRequest<'a> {
-    pub fn new(api: &'a API, sticker: String) -> Self {
+    pub fn new(api: &'a API, sticker: impl Into<String>) -> Self {
         Self {
             api,
-            params: DeleteStickerFromSetParams { sticker },
+            params: DeleteStickerFromSetParams {
+                sticker: sticker.into(),
+            },
         }
     }
 

@@ -38,10 +38,12 @@ impl<'a> RequestT for UnpinAllGeneralForumTopicMessagesRequest<'a> {
     }
 }
 impl<'a> UnpinAllGeneralForumTopicMessagesRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
-            params: UnpinAllGeneralForumTopicMessagesParams { chat_id },
+            params: UnpinAllGeneralForumTopicMessagesParams {
+                chat_id: chat_id.into(),
+            },
         }
     }
 

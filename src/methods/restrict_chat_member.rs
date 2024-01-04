@@ -46,13 +46,18 @@ impl<'a> RequestT for RestrictChatMemberRequest<'a> {
     }
 }
 impl<'a> RestrictChatMemberRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, user_id: i64, permissions: ChatPermissions) -> Self {
+    pub fn new(
+        api: &'a API,
+        chat_id: impl Into<ChatId>,
+        user_id: impl Into<i64>,
+        permissions: impl Into<ChatPermissions>,
+    ) -> Self {
         Self {
             api,
             params: RestrictChatMemberParams {
-                chat_id,
-                user_id,
-                permissions,
+                chat_id: chat_id.into(),
+                user_id: user_id.into(),
+                permissions: permissions.into(),
                 use_independent_chat_permissions: bool::default(),
                 until_date: Option::default(),
             },

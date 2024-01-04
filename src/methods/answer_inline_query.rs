@@ -15,7 +15,7 @@ pub struct AnswerInlineQueryParams {
     pub results: Vec<InlineQueryResult>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_time: Option<i64>,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub is_personal: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_offset: Option<String>,
@@ -50,12 +50,16 @@ impl<'a> RequestT for AnswerInlineQueryRequest<'a> {
     }
 }
 impl<'a> AnswerInlineQueryRequest<'a> {
-    pub fn new(api: &'a API, inline_query_id: String, results: Vec<InlineQueryResult>) -> Self {
+    pub fn new(
+        api: &'a API,
+        inline_query_id: impl Into<String>,
+        results: impl Into<Vec<InlineQueryResult>>,
+    ) -> Self {
         Self {
             api,
             params: AnswerInlineQueryParams {
-                inline_query_id,
-                results,
+                inline_query_id: inline_query_id.into(),
+                results: results.into(),
                 cache_time: Option::default(),
                 is_personal: bool::default(),
                 next_offset: Option::default(),

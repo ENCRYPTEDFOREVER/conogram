@@ -35,6 +35,11 @@ pub enum BotCommandScope {
     #[serde(rename = "chat_member")]
     ChatMember(BotCommandScopeChatMember),
 }
+impl Default for BotCommandScope {
+    fn default() -> Self {
+        Self::Default(BotCommandScopeDefault::default())
+    }
+}
 impl From<BotCommandScopeDefault> for BotCommandScope {
     fn from(value: BotCommandScopeDefault) -> Self {
         Self::Default(value)

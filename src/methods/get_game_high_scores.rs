@@ -46,11 +46,11 @@ impl<'a> RequestT for GetGameHighScoresRequest<'a> {
     }
 }
 impl<'a> GetGameHighScoresRequest<'a> {
-    pub fn new(api: &'a API, user_id: i64) -> Self {
+    pub fn new(api: &'a API, user_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: GetGameHighScoresParams {
-                user_id,
+                user_id: user_id.into(),
                 chat_id: Option::default(),
                 message_id: Option::default(),
                 inline_message_id: Option::default(),

@@ -42,11 +42,11 @@ impl<'a> RequestT for GetUserProfilePhotosRequest<'a> {
     }
 }
 impl<'a> GetUserProfilePhotosRequest<'a> {
-    pub fn new(api: &'a API, user_id: i64) -> Self {
+    pub fn new(api: &'a API, user_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: GetUserProfilePhotosParams {
-                user_id,
+                user_id: user_id.into(),
                 offset: Option::default(),
                 limit: Option::default(),
             },

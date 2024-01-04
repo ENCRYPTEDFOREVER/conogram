@@ -39,11 +39,11 @@ impl<'a> RequestT for SetCustomEmojiStickerSetThumbnailRequest<'a> {
     }
 }
 impl<'a> SetCustomEmojiStickerSetThumbnailRequest<'a> {
-    pub fn new(api: &'a API, name: String) -> Self {
+    pub fn new(api: &'a API, name: impl Into<String>) -> Self {
         Self {
             api,
             params: SetCustomEmojiStickerSetThumbnailParams {
-                name,
+                name: name.into(),
                 custom_emoji_id: Option::default(),
             },
         }

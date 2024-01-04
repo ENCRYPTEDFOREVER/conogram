@@ -43,12 +43,12 @@ impl<'a> RequestT for AnswerShippingQueryRequest<'a> {
     }
 }
 impl<'a> AnswerShippingQueryRequest<'a> {
-    pub fn new(api: &'a API, shipping_query_id: String, ok: bool) -> Self {
+    pub fn new(api: &'a API, shipping_query_id: impl Into<String>, ok: impl Into<bool>) -> Self {
         Self {
             api,
             params: AnswerShippingQueryParams {
-                shipping_query_id,
-                ok,
+                shipping_query_id: shipping_query_id.into(),
+                ok: ok.into(),
                 shipping_options: Vec::default(),
                 error_message: Option::default(),
             },

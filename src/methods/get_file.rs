@@ -38,10 +38,12 @@ impl<'a> RequestT for GetFileRequest<'a> {
     }
 }
 impl<'a> GetFileRequest<'a> {
-    pub fn new(api: &'a API, file_id: String) -> Self {
+    pub fn new(api: &'a API, file_id: impl Into<String>) -> Self {
         Self {
             api,
-            params: GetFileParams { file_id },
+            params: GetFileParams {
+                file_id: file_id.into(),
+            },
         }
     }
 

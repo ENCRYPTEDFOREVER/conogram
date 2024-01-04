@@ -12,7 +12,7 @@ use std::pin::Pin;
 pub struct PinChatMessageParams {
     pub chat_id: ChatId,
     pub message_id: i64,
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(skip_serializing_if = "is_false", default)]
     pub disable_notification: bool,
 }
 
@@ -42,12 +42,12 @@ impl<'a> RequestT for PinChatMessageRequest<'a> {
     }
 }
 impl<'a> PinChatMessageRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, message_id: i64) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, message_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: PinChatMessageParams {
-                chat_id,
-                message_id,
+                chat_id: chat_id.into(),
+                message_id: message_id.into(),
                 disable_notification: bool::default(),
             },
         }
