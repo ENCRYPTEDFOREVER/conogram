@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::entities::chat::Chat;
+
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(untagged)]
 pub enum ChatId {
@@ -37,6 +39,12 @@ impl From<&String> for ChatId {
 impl From<String> for ChatId {
     fn from(value: String) -> Self {
         Self::String(value)
+    }
+}
+
+impl<T: AsRef<Chat>> From<T> for ChatId {
+    fn from(value: T) -> Self {
+        Self::Integer(value.as_ref().id)
     }
 }
 

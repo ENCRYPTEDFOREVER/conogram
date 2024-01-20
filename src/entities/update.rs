@@ -103,6 +103,9 @@ pub enum AllowedUpdates {
     ChannelPost,
     EditedChannelPost,
 
+    MessageReaction,
+    MessageReactionCount,
+
     InlineQuery,
     ChosenInlineResult,
 
@@ -117,6 +120,9 @@ pub enum AllowedUpdates {
     ChatMember,
 
     ChatJoinRequest,
+
+    ChatBoost,
+    RemovedChatBoost,
 }
 
 impl AllowedUpdates {
@@ -125,6 +131,8 @@ impl AllowedUpdates {
         vec![
             Self::Message,
             Self::EditedMessage,
+            Self::MessageReaction,
+            Self::MessageReactionCount,
             Self::ChannelPost,
             Self::EditedChannelPost,
             Self::InlineQuery,
@@ -137,6 +145,8 @@ impl AllowedUpdates {
             Self::MyChatMember,
             Self::ChatMember,
             Self::ChatJoinRequest,
+            Self::ChatBoost,
+            Self::RemovedChatBoost,
         ]
     }
 }
@@ -146,6 +156,8 @@ impl ToString for AllowedUpdates {
         match self {
             AllowedUpdates::Message => "message".into(),
             AllowedUpdates::EditedMessage => "edited_message".into(),
+            AllowedUpdates::MessageReaction => "message_reaction".into(),
+            AllowedUpdates::MessageReactionCount => "message_reaction_count".into(),
             AllowedUpdates::ChannelPost => "channel_post".into(),
             AllowedUpdates::EditedChannelPost => "edited_channel_post".into(),
             AllowedUpdates::InlineQuery => "inline_query".into(),
@@ -158,6 +170,9 @@ impl ToString for AllowedUpdates {
             AllowedUpdates::MyChatMember => "my_chat_member".into(),
             AllowedUpdates::ChatMember => "chat_member".into(),
             AllowedUpdates::ChatJoinRequest => "chat_join_request".into(),
+
+            AllowedUpdates::ChatBoost => "chat_boost".into(),
+            AllowedUpdates::RemovedChatBoost => "removed_chat_boost".into(),
         }
     }
 }
