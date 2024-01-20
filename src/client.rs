@@ -61,10 +61,7 @@ impl ApiClient {
         param_name: impl Into<String>,
         value: impl Serialize,
     ) -> Result<(), ConogramErrorType> {
-        let method_entry = self
-            .default_params
-            .entry(method.into())
-            .or_insert_with(HashMap::new);
+        let method_entry = self.default_params.entry(method.into()).or_default();
 
         match method_entry.entry(param_name.into()) {
             Entry::Occupied(mut v) => {

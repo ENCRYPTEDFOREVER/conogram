@@ -335,7 +335,7 @@ impl FormattedText {
                 MessageEntityType::TextMention,
                 None,
                 Some(User {
-                    id: user_id.into(),
+                    id: user_id,
                     ..Default::default()
                 }),
                 None,
