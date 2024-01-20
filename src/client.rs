@@ -1,6 +1,6 @@
 #![allow(dead_code, unused_variables)]
 
-use reqwest::multipart::{Form, Part};
+use reqwest::multipart::Form;
 use reqwest::{Client, RequestBuilder, Url};
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
@@ -243,14 +243,12 @@ impl ApiClient {
                 for (key, file) in params.get_files().into_iter() {
                     match file {
                         InputFile::File(f) => {
-                            let file_name = f.get_file_name();
-                            let file = match f.open().await {
-                                Ok(f) => f,
+                            let part = match f.get_part().await {
+                                Ok(part) => part,
                                 Err(err) => {
                                     return Err(ConogramError::new(method, params, err.into()))
                                 }
                             };
-                            let part = Part::stream(file).file_name(file_name);
 
                             if key == "media" {
                                 form = form.part(f.get_uuid_str(), part);
@@ -260,6 +258,13 @@ impl ApiClient {
                         }
                         InputFile::FileIdOrURL(value) => {
                             form = form.text(key.into_owned(), value.clone());
+                        }
+                        InputFile::InMemory(f) => {
+                            if key == "media" {
+                                form = form.part(f.get_uuid_str(), f.get_part().await);
+                            } else {
+                                form = form.part(key, f.get_part().await);
+                            }
                         }
                     }
                 }

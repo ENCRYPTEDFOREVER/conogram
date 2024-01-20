@@ -19,6 +19,11 @@ pub enum MenuButton {
     #[serde(rename = "default")]
     Default(MenuButtonDefault),
 }
+impl Default for MenuButton {
+    fn default() -> Self {
+        Self::Commands(MenuButtonCommands::default())
+    }
+}
 impl From<MenuButtonCommands> for MenuButton {
     fn from(value: MenuButtonCommands) -> Self {
         Self::Commands(value)

@@ -39,11 +39,11 @@ impl<'a> RequestT for SetStickerKeywordsRequest<'a> {
     }
 }
 impl<'a> SetStickerKeywordsRequest<'a> {
-    pub fn new(api: &'a API, sticker: String) -> Self {
+    pub fn new(api: &'a API, sticker: impl Into<String>) -> Self {
         Self {
             api,
             params: SetStickerKeywordsParams {
-                sticker,
+                sticker: sticker.into(),
                 keywords: Vec::default(),
             },
         }
@@ -56,8 +56,8 @@ impl<'a> SetStickerKeywordsRequest<'a> {
     }
 
     ///A JSON-serialized list of 0-20 search keywords for the sticker with total length of up to 64 characters
-    pub fn keywords(mut self, keywords: impl Into<Vec<String>>) -> Self {
-        self.params.keywords = keywords.into();
+    pub fn keywords(mut self, keywords: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.params.keywords = keywords.into_iter().map(Into::into).collect();
         self
     }
 }

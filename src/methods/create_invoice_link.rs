@@ -74,22 +74,22 @@ impl<'a> RequestT for CreateInvoiceLinkRequest<'a> {
 impl<'a> CreateInvoiceLinkRequest<'a> {
     pub fn new(
         api: &'a API,
-        title: String,
-        description: String,
-        payload: String,
-        provider_token: String,
-        currency: String,
-        prices: Vec<LabeledPrice>,
+        title: impl Into<String>,
+        description: impl Into<String>,
+        payload: impl Into<String>,
+        provider_token: impl Into<String>,
+        currency: impl Into<String>,
+        prices: impl Into<Vec<LabeledPrice>>,
     ) -> Self {
         Self {
             api,
             params: CreateInvoiceLinkParams {
-                title,
-                description,
-                payload,
-                provider_token,
-                currency,
-                prices,
+                title: title.into(),
+                description: description.into(),
+                payload: payload.into(),
+                provider_token: provider_token.into(),
+                currency: currency.into(),
+                prices: prices.into(),
                 max_tip_amount: Option::default(),
                 suggested_tip_amounts: Vec::default(),
                 provider_data: Option::default(),
@@ -139,8 +139,8 @@ impl<'a> CreateInvoiceLinkRequest<'a> {
     }
 
     ///Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.)
-    pub fn prices(mut self, prices: impl Into<Vec<LabeledPrice>>) -> Self {
-        self.params.prices = prices.into();
+    pub fn prices(mut self, prices: impl IntoIterator<Item = impl Into<LabeledPrice>>) -> Self {
+        self.params.prices = prices.into_iter().map(Into::into).collect();
         self
     }
 
@@ -151,8 +151,12 @@ impl<'a> CreateInvoiceLinkRequest<'a> {
     }
 
     ///A JSON-serialized array of suggested amounts of tips in the *smallest units* of the currency (integer, **not** float/double). At most 4 suggested tip amounts can be specified. The suggested tip amounts must be positive, passed in a strictly increased order and must not exceed *max\_tip\_amount*.
-    pub fn suggested_tip_amounts(mut self, suggested_tip_amounts: impl Into<Vec<i64>>) -> Self {
-        self.params.suggested_tip_amounts = suggested_tip_amounts.into();
+    pub fn suggested_tip_amounts(
+        mut self,
+        suggested_tip_amounts: impl IntoIterator<Item = impl Into<i64>>,
+    ) -> Self {
+        self.params.suggested_tip_amounts =
+            suggested_tip_amounts.into_iter().map(Into::into).collect();
         self
     }
 

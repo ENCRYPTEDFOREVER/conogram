@@ -39,12 +39,16 @@ impl<'a> RequestT for CloseForumTopicRequest<'a> {
     }
 }
 impl<'a> CloseForumTopicRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, message_thread_id: i64) -> Self {
+    pub fn new(
+        api: &'a API,
+        chat_id: impl Into<ChatId>,
+        message_thread_id: impl Into<i64>,
+    ) -> Self {
         Self {
             api,
             params: CloseForumTopicParams {
-                chat_id,
-                message_thread_id,
+                chat_id: chat_id.into(),
+                message_thread_id: message_thread_id.into(),
             },
         }
     }

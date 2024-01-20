@@ -1,6 +1,7 @@
 use crate::api::API;
 use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
 use crate::entities::message::Message;
+use crate::entities::reply_parameters::ReplyParameters;
 use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
@@ -20,9 +21,7 @@ pub struct SendGameParams {
     #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reply_to_message_id: Option<i64>,
-    #[serde(default, skip_serializing_if = "is_false")]
-    pub allow_sending_without_reply: bool,
+    pub reply_parameters: Option<ReplyParameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<InlineKeyboardMarkup>,
 }
@@ -53,17 +52,16 @@ impl<'a> RequestT for SendGameRequest<'a> {
     }
 }
 impl<'a> SendGameRequest<'a> {
-    pub fn new(api: &'a API, chat_id: i64, game_short_name: String) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<i64>, game_short_name: impl Into<String>) -> Self {
         Self {
             api,
             params: SendGameParams {
-                chat_id,
-                game_short_name,
+                chat_id: chat_id.into(),
+                game_short_name: game_short_name.into(),
                 message_thread_id: Option::default(),
                 disable_notification: bool::default(),
                 protect_content: bool::default(),
-                reply_to_message_id: Option::default(),
-                allow_sending_without_reply: bool::default(),
+                reply_parameters: Option::default(),
                 reply_markup: Option::default(),
             },
         }
@@ -99,18 +97,9 @@ impl<'a> SendGameRequest<'a> {
         self
     }
 
-    ///If the message is a reply, ID of the original message
-    pub fn reply_to_message_id(mut self, reply_to_message_id: impl Into<i64>) -> Self {
-        self.params.reply_to_message_id = Some(reply_to_message_id.into());
-        self
-    }
-
-    ///Pass *True* if the message should be sent even if the specified replied-to message is not found
-    pub fn allow_sending_without_reply(
-        mut self,
-        allow_sending_without_reply: impl Into<bool>,
-    ) -> Self {
-        self.params.allow_sending_without_reply = allow_sending_without_reply.into();
+    ///Description of the message to reply to
+    pub fn reply_parameters(mut self, reply_parameters: impl Into<ReplyParameters>) -> Self {
+        self.params.reply_parameters = Some(reply_parameters.into());
         self
     }
 

@@ -27,6 +27,11 @@ pub enum InputMedia {
     #[serde(rename = "video")]
     Video(InputMediaVideo),
 }
+impl Default for InputMedia {
+    fn default() -> Self {
+        Self::Animation(InputMediaAnimation::default())
+    }
+}
 impl From<InputMediaAnimation> for InputMedia {
     fn from(value: InputMediaAnimation) -> Self {
         Self::Animation(value)

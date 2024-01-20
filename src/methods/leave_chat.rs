@@ -38,10 +38,12 @@ impl<'a> RequestT for LeaveChatRequest<'a> {
     }
 }
 impl<'a> LeaveChatRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
-            params: LeaveChatParams { chat_id },
+            params: LeaveChatParams {
+                chat_id: chat_id.into(),
+            },
         }
     }
 

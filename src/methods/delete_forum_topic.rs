@@ -39,12 +39,16 @@ impl<'a> RequestT for DeleteForumTopicRequest<'a> {
     }
 }
 impl<'a> DeleteForumTopicRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, message_thread_id: i64) -> Self {
+    pub fn new(
+        api: &'a API,
+        chat_id: impl Into<ChatId>,
+        message_thread_id: impl Into<i64>,
+    ) -> Self {
         Self {
             api,
             params: DeleteForumTopicParams {
-                chat_id,
-                message_thread_id,
+                chat_id: chat_id.into(),
+                message_thread_id: message_thread_id.into(),
             },
         }
     }

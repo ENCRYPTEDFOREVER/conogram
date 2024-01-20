@@ -39,10 +39,13 @@ impl<'a> RequestT for EditGeneralForumTopicRequest<'a> {
     }
 }
 impl<'a> EditGeneralForumTopicRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, name: String) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, name: impl Into<String>) -> Self {
         Self {
             api,
-            params: EditGeneralForumTopicParams { chat_id, name },
+            params: EditGeneralForumTopicParams {
+                chat_id: chat_id.into(),
+                name: name.into(),
+            },
         }
     }
 

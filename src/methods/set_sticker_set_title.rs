@@ -38,10 +38,13 @@ impl<'a> RequestT for SetStickerSetTitleRequest<'a> {
     }
 }
 impl<'a> SetStickerSetTitleRequest<'a> {
-    pub fn new(api: &'a API, name: String, title: String) -> Self {
+    pub fn new(api: &'a API, name: impl Into<String>, title: impl Into<String>) -> Self {
         Self {
             api,
-            params: SetStickerSetTitleParams { name, title },
+            params: SetStickerSetTitleParams {
+                name: name.into(),
+                title: title.into(),
+            },
         }
     }
 

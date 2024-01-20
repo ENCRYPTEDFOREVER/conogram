@@ -4,6 +4,7 @@ use std::sync::atomic::AtomicI64;
 use std::time::Duration;
 
 use crate::client::ApiClient;
+use crate::entities::misc::chat_id::ChatId;
 use crate::entities::misc::input_file::GetFiles;
 use crate::entities::update::{AllowedUpdates, Update};
 use crate::errors::{ConogramError, ConogramErrorType, TgApiError};
@@ -43,6 +44,20 @@ macro_rules! set_default_param {
         )*
     }
 }
+
+/// Wraps API request into [API::request_ref(self)]
+pub trait WrapRequest {
+    fn wrap<ReturnType>(
+        &self,
+    ) -> impl std::future::Future<Output = Result<ReturnType, ConogramError>>
+    where
+        for<'a> &'a Self: IntoFuture<Output = Result<ReturnType, ConogramError>>,
+        Self: Sized,
+    {
+        API::request_ref(self)
+    }
+}
+impl<T> WrapRequest for T {}
 
 #[derive(Clone)]
 pub struct APIConfig {
@@ -111,13 +126,14 @@ impl API {
         }
     }
 
-    /// Sets `allow_sending_without_reply` to `true` for all requests
+    /// Sets `allow_sending_without_reply` to `true` for all applicable requests
     pub fn set_essential_request_defaults(&mut self) -> Result<(), ConogramErrorType> {
         set_default_param!(
             self.api_client,
             "allow_sending_without_reply",
             true,
             [
+                // crate::entities::reply_parameters::ReplyParameters,
                 SendMessageRequest,
                 SendPhotoRequest,
                 SendAnimationRequest,
@@ -185,6 +201,21 @@ impl API {
         self.allowed_updates = allowed_updates.iter().map(|x| x.to_string()).collect();
     }
 
+    /// Internal conogram method. Returns `Ok(false)`` instead of `Err` if the message can't be deleted
+    pub async fn delete_message_exp(
+        &self,
+        chat_id: impl Into<ChatId>,
+        message_id: impl Into<i64>,
+    ) -> Result<bool, ConogramError> {
+        let result = Self::request(self.delete_message(chat_id, message_id)).await;
+        if let Err(err) = &result {
+            if let ConogramErrorType::ApiError(_) = &err.error {
+                return Ok(false);
+            }
+        }
+        result
+    }
+
     /// Poll the server for pending updates
     pub async fn poll_once(&self) -> Result<Vec<Update>, ConogramError> {
         let offset = self
@@ -228,7 +259,7 @@ impl API {
         self.api_client.method_multipart_form(method, params).await
     }
 
-    /// Same as [`API::request_ref`] but will consume the request
+    /// Same as [`API::request_ref`] but takes `request` by value
     pub async fn request<Request, ReturnType>(request: Request) -> Result<ReturnType, ConogramError>
     where
         for<'a> &'a Request: IntoFuture<Output = Result<ReturnType, ConogramError>>,
@@ -236,7 +267,7 @@ impl API {
         Self::request_ref(&request).await
     }
 
-    /// This will make API request and automativally handle some common errors like RetryAfter or BadGateway
+    /// This will make API request and automativally handle some common errors like `RetryAfter`, `BadGateway` and `GatewayTimeout`
     pub async fn request_ref<Request, ReturnType>(
         request: &Request,
     ) -> Result<ReturnType, ConogramError>

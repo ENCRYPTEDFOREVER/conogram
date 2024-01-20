@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 ///API Reference: [link](https://core.telegram.org/bots/api/#chatpermissions)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ChatPermissions {
-    ///*Optional*. *True*, if the user is allowed to send text messages, contacts, invoices, locations and venues
+    ///*Optional*. *True*, if the user is allowed to send text messages, contacts, giveaways, giveaway winners, invoices, locations and venues
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_send_messages: bool,
 
@@ -62,3 +62,29 @@ pub struct ChatPermissions {
     pub can_manage_topics: bool,
 }
 // Divider: all content below this line will be preserved after code regen
+impl ChatPermissions {
+    /// An instance with **none** permissions
+    pub fn none() -> Self {
+        Self::default()
+    }
+
+    /// An instance with **all** permissions
+    pub fn all() -> Self {
+        Self {
+            can_send_messages: true,
+            can_send_audios: true,
+            can_send_documents: true,
+            can_send_photos: true,
+            can_send_videos: true,
+            can_send_video_notes: true,
+            can_send_voice_notes: true,
+            can_send_polls: true,
+            can_send_other_messages: true,
+            can_add_web_page_previews: true,
+            can_change_info: true,
+            can_invite_users: true,
+            can_pin_messages: true,
+            can_manage_topics: true,
+        }
+    }
+}

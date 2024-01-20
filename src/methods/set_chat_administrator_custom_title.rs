@@ -40,13 +40,18 @@ impl<'a> RequestT for SetChatAdministratorCustomTitleRequest<'a> {
     }
 }
 impl<'a> SetChatAdministratorCustomTitleRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, user_id: i64, custom_title: String) -> Self {
+    pub fn new(
+        api: &'a API,
+        chat_id: impl Into<ChatId>,
+        user_id: impl Into<i64>,
+        custom_title: impl Into<String>,
+    ) -> Self {
         Self {
             api,
             params: SetChatAdministratorCustomTitleParams {
-                chat_id,
-                user_id,
-                custom_title,
+                chat_id: chat_id.into(),
+                user_id: user_id.into(),
+                custom_title: custom_title.into(),
             },
         }
     }

@@ -38,10 +38,12 @@ impl<'a> RequestT for ExportChatInviteLinkRequest<'a> {
     }
 }
 impl<'a> ExportChatInviteLinkRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
-            params: ExportChatInviteLinkParams { chat_id },
+            params: ExportChatInviteLinkParams {
+                chat_id: chat_id.into(),
+            },
         }
     }
 

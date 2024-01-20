@@ -40,12 +40,16 @@ impl<'a> RequestT for AnswerWebAppQueryRequest<'a> {
     }
 }
 impl<'a> AnswerWebAppQueryRequest<'a> {
-    pub fn new(api: &'a API, web_app_query_id: String, result: InlineQueryResult) -> Self {
+    pub fn new(
+        api: &'a API,
+        web_app_query_id: impl Into<String>,
+        result: impl Into<InlineQueryResult>,
+    ) -> Self {
         Self {
             api,
             params: AnswerWebAppQueryParams {
-                web_app_query_id,
-                result,
+                web_app_query_id: web_app_query_id.into(),
+                result: result.into(),
             },
         }
     }

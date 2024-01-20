@@ -39,10 +39,12 @@ impl<'a> RequestT for GetChatAdministratorsRequest<'a> {
     }
 }
 impl<'a> GetChatAdministratorsRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
-            params: GetChatAdministratorsParams { chat_id },
+            params: GetChatAdministratorsParams {
+                chat_id: chat_id.into(),
+            },
         }
     }
 

@@ -100,8 +100,11 @@ impl<'a> EditMessageCaptionRequest<'a> {
     }
 
     ///A JSON-serialized list of special entities that appear in the caption, which can be specified instead of *parse\_mode*
-    pub fn caption_entities(mut self, caption_entities: impl Into<Vec<MessageEntity>>) -> Self {
-        self.params.caption_entities = caption_entities.into();
+    pub fn caption_entities(
+        mut self,
+        caption_entities: impl IntoIterator<Item = impl Into<MessageEntity>>,
+    ) -> Self {
+        self.params.caption_entities = caption_entities.into_iter().map(Into::into).collect();
         self
     }
 

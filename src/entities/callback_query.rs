@@ -1,6 +1,5 @@
-use crate::entities::message::Message;
+use crate::entities::maybe_inaccessible_message::MaybeInaccessibleMessage;
 use crate::entities::user::User;
-use crate::utils::deserialize_utils::deserialize_boxed_option;
 use serde::{Deserialize, Serialize};
 
 ///This object represents an incoming callback query from a callback button in an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards). If the button that originated the query was attached to a message sent by the bot, the field *message* will be present. If the button was attached to a message sent via the bot (in [inline mode](https://core.telegram.org/bots/api/#inline-mode)), the field *inline\_message\_id* will be present. Exactly one of the fields *data* or *game\_short\_name* will be present.
@@ -13,13 +12,9 @@ pub struct CallbackQuery {
     ///Sender
     pub from: User,
 
-    ///*Optional*. Message with the callback button that originated the query. Note that message content and message date will not be available if the message is too old
-    #[serde(
-        deserialize_with = "deserialize_boxed_option",
-        skip_serializing_if = "Option::is_none",
-        default
-    )]
-    pub message: Option<Box<Message>>,
+    ///*Optional*. Message sent by the bot with the callback button that originated the query
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<Box<MaybeInaccessibleMessage>>,
 
     ///*Optional*. Identifier of the message sent via the bot in inline mode, that originated the query.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -39,6 +34,8 @@ pub struct CallbackQuery {
 // Divider: all content below this line will be preserved after code regen
 use crate::api::API;
 use crate::methods::answer_callback_query::AnswerCallbackQueryRequest;
+
+use super::message::Message;
 
 impl CallbackQuery {
     pub fn answer<'a>(&'a self, api: &'a API) -> AnswerCallbackQueryRequest {
@@ -65,5 +62,12 @@ impl CallbackQuery {
         api.answer_callback_query(&self.id)
             .show_alert(false)
             .text(text)
+    }
+
+    /// Backwards compatibility (Bot API <7.0)
+    ///
+    /// _Optional._ Message sent by the bot with the callback button that originated the query
+    pub fn message(&self) -> Option<&Message> {
+        self.message.as_ref().and_then(|m| m.as_ref().into())
     }
 }

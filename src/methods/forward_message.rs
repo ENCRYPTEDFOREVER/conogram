@@ -24,7 +24,7 @@ pub struct ForwardMessageParams {
 
 impl_into_future!(ForwardMessageRequest<'a>);
 
-///Use this method to forward messages of any kind. Service messages can't be forwarded. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
+///Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
 #[derive(Clone)]
 pub struct ForwardMessageRequest<'a> {
     api: &'a API,
@@ -48,13 +48,18 @@ impl<'a> RequestT for ForwardMessageRequest<'a> {
     }
 }
 impl<'a> ForwardMessageRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, from_chat_id: ChatId, message_id: i64) -> Self {
+    pub fn new(
+        api: &'a API,
+        chat_id: impl Into<ChatId>,
+        from_chat_id: impl Into<ChatId>,
+        message_id: impl Into<i64>,
+    ) -> Self {
         Self {
             api,
             params: ForwardMessageParams {
-                chat_id,
-                from_chat_id,
-                message_id,
+                chat_id: chat_id.into(),
+                from_chat_id: from_chat_id.into(),
+                message_id: message_id.into(),
                 message_thread_id: Option::default(),
                 disable_notification: bool::default(),
                 protect_content: bool::default(),
@@ -100,7 +105,7 @@ impl<'a> ForwardMessageRequest<'a> {
 }
 
 impl<'a> API {
-    ///Use this method to forward messages of any kind. Service messages can't be forwarded. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
+    ///Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn forward_message(
         &'a self,
         chat_id: impl Into<ChatId>,

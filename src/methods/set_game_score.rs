@@ -50,12 +50,12 @@ impl<'a> RequestT for SetGameScoreRequest<'a> {
     }
 }
 impl<'a> SetGameScoreRequest<'a> {
-    pub fn new(api: &'a API, user_id: i64, score: i64) -> Self {
+    pub fn new(api: &'a API, user_id: impl Into<i64>, score: impl Into<i64>) -> Self {
         Self {
             api,
             params: SetGameScoreParams {
-                user_id,
-                score,
+                user_id: user_id.into(),
+                score: score.into(),
                 force: bool::default(),
                 disable_edit_message: bool::default(),
                 chat_id: Option::default(),

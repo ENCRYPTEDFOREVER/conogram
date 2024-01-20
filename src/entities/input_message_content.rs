@@ -22,6 +22,11 @@ pub enum InputMessageContent {
     ContactMessageContent(InputContactMessageContent),
     InvoiceMessageContent(InputInvoiceMessageContent),
 }
+impl Default for InputMessageContent {
+    fn default() -> Self {
+        Self::TextMessageContent(InputTextMessageContent::default())
+    }
+}
 impl From<InputTextMessageContent> for InputMessageContent {
     fn from(value: InputTextMessageContent) -> Self {
         Self::TextMessageContent(value)
@@ -52,8 +57,3 @@ impl From<InputInvoiceMessageContent> for InputMessageContent {
     }
 }
 // Divider: all content below this line will be preserved after code regen
-impl Default for InputMessageContent {
-    fn default() -> Self {
-        Self::TextMessageContent(InputTextMessageContent::default())
-    }
-}

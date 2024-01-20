@@ -2,6 +2,7 @@ use crate::api::API;
 use crate::entities::message::Message;
 use crate::entities::misc::chat_id::ChatId;
 use crate::entities::misc::reply_markup::ReplyMarkup;
+use crate::entities::reply_parameters::ReplyParameters;
 use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
@@ -26,9 +27,7 @@ pub struct SendContactParams {
     #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reply_to_message_id: Option<i64>,
-    #[serde(default, skip_serializing_if = "is_false")]
-    pub allow_sending_without_reply: bool,
+    pub reply_parameters: Option<ReplyParameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<ReplyMarkup>,
 }
@@ -59,20 +58,24 @@ impl<'a> RequestT for SendContactRequest<'a> {
     }
 }
 impl<'a> SendContactRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, phone_number: String, first_name: String) -> Self {
+    pub fn new(
+        api: &'a API,
+        chat_id: impl Into<ChatId>,
+        phone_number: impl Into<String>,
+        first_name: impl Into<String>,
+    ) -> Self {
         Self {
             api,
             params: SendContactParams {
-                chat_id,
-                phone_number,
-                first_name,
+                chat_id: chat_id.into(),
+                phone_number: phone_number.into(),
+                first_name: first_name.into(),
                 message_thread_id: Option::default(),
                 last_name: Option::default(),
                 vcard: Option::default(),
                 disable_notification: bool::default(),
                 protect_content: bool::default(),
-                reply_to_message_id: Option::default(),
-                allow_sending_without_reply: bool::default(),
+                reply_parameters: Option::default(),
                 reply_markup: Option::default(),
             },
         }
@@ -126,18 +129,9 @@ impl<'a> SendContactRequest<'a> {
         self
     }
 
-    ///If the message is a reply, ID of the original message
-    pub fn reply_to_message_id(mut self, reply_to_message_id: impl Into<i64>) -> Self {
-        self.params.reply_to_message_id = Some(reply_to_message_id.into());
-        self
-    }
-
-    ///Pass *True* if the message should be sent even if the specified replied-to message is not found
-    pub fn allow_sending_without_reply(
-        mut self,
-        allow_sending_without_reply: impl Into<bool>,
-    ) -> Self {
-        self.params.allow_sending_without_reply = allow_sending_without_reply.into();
+    ///Description of the message to reply to
+    pub fn reply_parameters(mut self, reply_parameters: impl Into<ReplyParameters>) -> Self {
+        self.params.reply_parameters = Some(reply_parameters.into());
         self
     }
 

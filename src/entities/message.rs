@@ -5,6 +5,7 @@ use crate::entities::chat_shared::ChatShared;
 use crate::entities::contact::Contact;
 use crate::entities::dice::Dice;
 use crate::entities::document::Document;
+use crate::entities::external_reply_info::ExternalReplyInfo;
 use crate::entities::forum_topic_closed::ForumTopicClosed;
 use crate::entities::forum_topic_created::ForumTopicCreated;
 use crate::entities::forum_topic_edited::ForumTopicEdited;
@@ -12,11 +13,18 @@ use crate::entities::forum_topic_reopened::ForumTopicReopened;
 use crate::entities::game::Game;
 use crate::entities::general_forum_topic_hidden::GeneralForumTopicHidden;
 use crate::entities::general_forum_topic_unhidden::GeneralForumTopicUnhidden;
+use crate::entities::giveaway::Giveaway;
+use crate::entities::giveaway_completed::GiveawayCompleted;
+use crate::entities::giveaway_created::GiveawayCreated;
+use crate::entities::giveaway_winners::GiveawayWinners;
 use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
 use crate::entities::invoice::Invoice;
+use crate::entities::link_preview_options::LinkPreviewOptions;
 use crate::entities::location::Location;
+use crate::entities::maybe_inaccessible_message::MaybeInaccessibleMessage;
 use crate::entities::message_auto_delete_timer_changed::MessageAutoDeleteTimerChanged;
 use crate::entities::message_entity::MessageEntity;
+use crate::entities::message_origin::MessageOrigin;
 use crate::entities::passport_data::PassportData;
 use crate::entities::photo_size::PhotoSize;
 use crate::entities::poll::Poll;
@@ -24,8 +32,9 @@ use crate::entities::proximity_alert_triggered::ProximityAlertTriggered;
 use crate::entities::sticker::Sticker;
 use crate::entities::story::Story;
 use crate::entities::successful_payment::SuccessfulPayment;
+use crate::entities::text_quote::TextQuote;
 use crate::entities::user::User;
-use crate::entities::user_shared::UserShared;
+use crate::entities::users_shared::UsersShared;
 use crate::entities::venue::Venue;
 use crate::entities::video::Video;
 use crate::entities::video_chat_ended::VideoChatEnded;
@@ -37,7 +46,6 @@ use crate::entities::voice::Voice;
 use crate::entities::web_app_data::WebAppData;
 use crate::entities::write_access_allowed::WriteAccessAllowed;
 use crate::utils::deserialize_utils::deserialize_boxed;
-use crate::utils::deserialize_utils::deserialize_boxed_option;
 use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
@@ -57,47 +65,19 @@ pub struct Message {
     pub from: Option<User>,
 
     ///*Optional*. Sender of the message, sent on behalf of a chat. For example, the channel itself for channel posts, the supergroup itself for messages from anonymous group administrators, the linked channel for messages automatically forwarded to the discussion group. For backward compatibility, the field *from* contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
-    #[serde(
-        deserialize_with = "deserialize_boxed_option",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sender_chat: Option<Box<Chat>>,
 
-    ///Date the message was sent in Unix time
+    ///Date the message was sent in Unix time. It is always a positive number, representing a valid date.
     pub date: i64,
 
-    ///Conversation the message belongs to
+    ///Chat the message belongs to
     #[serde(deserialize_with = "deserialize_boxed")]
     pub chat: Box<Chat>,
 
-    ///*Optional*. For forwarded messages, sender of the original message
+    ///*Optional*. Information about the original message for forwarded messages
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub forward_from: Option<User>,
-
-    ///*Optional*. For messages forwarded from channels or from anonymous administrators, information about the original sender chat
-    #[serde(
-        deserialize_with = "deserialize_boxed_option",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub forward_from_chat: Option<Box<Chat>>,
-
-    ///*Optional*. For messages forwarded from channels, identifier of the original message in the channel
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub forward_from_message_id: Option<i64>,
-
-    ///*Optional*. For forwarded messages that were originally sent in channels or by an anonymous chat administrator, signature of the message sender if present
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub forward_signature: Option<String>,
-
-    ///*Optional*. Sender's name for messages forwarded from users who disallow adding a link to their account in forwarded messages
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub forward_sender_name: Option<String>,
-
-    ///*Optional*. For forwarded messages, date the original message was sent in Unix time
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub forward_date: Option<i64>,
+    pub forward_origin: Option<MessageOrigin>,
 
     ///*Optional*. *True*, if the message is sent to a forum topic
     #[serde(default, skip_serializing_if = "is_false")]
@@ -107,13 +87,17 @@ pub struct Message {
     #[serde(default, skip_serializing_if = "is_false")]
     pub is_automatic_forward: bool,
 
-    ///*Optional*. For replies, the original message. Note that the Message object in this field will not contain further *reply\_to\_message* fields even if it itself is a reply.
-    #[serde(
-        deserialize_with = "deserialize_boxed_option",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    ///*Optional*. For replies in the same chat and message thread, the original message. Note that the Message object in this field will not contain further *reply\_to\_message* fields even if it itself is a reply.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_to_message: Option<Box<Message>>,
+
+    ///*Optional*. Information about the message that is being replied to, which may come from another chat or forum topic
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_reply: Option<ExternalReplyInfo>,
+
+    ///*Optional*. For replies that quote part of the original message, the quoted part of the message
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quote: Option<TextQuote>,
 
     ///*Optional*. Bot through which the message was sent
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -142,6 +126,10 @@ pub struct Message {
     ///*Optional*. For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text
     #[serde(default)]
     pub entities: Vec<MessageEntity>,
+
+    ///*Optional*. Options used for link preview generation for the message, if it is a text message and link preview options were changed
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub link_preview_options: Option<LinkPreviewOptions>,
 
     ///*Optional*. Message is an animation, information about the animation. For backward compatibility, when this field is set, the *document* field will also be set
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -259,13 +247,9 @@ pub struct Message {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub migrate_from_chat_id: Option<i64>,
 
-    ///*Optional*. Specified message was pinned. Note that the Message object in this field will not contain further *reply\_to\_message* fields even if it is itself a reply.
-    #[serde(
-        deserialize_with = "deserialize_boxed_option",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub pinned_message: Option<Box<Message>>,
+    ///*Optional*. Specified message was pinned. Note that the Message object in this field will not contain further *reply\_to\_message* fields even if it itself is a reply.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pinned_message: Option<Box<MaybeInaccessibleMessage>>,
 
     ///*Optional*. Message is an invoice for a [payment](https://core.telegram.org/bots/api/#payments), information about the invoice. [More about payments »](https://core.telegram.org/bots/api/#payments)
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -275,9 +259,9 @@ pub struct Message {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub successful_payment: Option<SuccessfulPayment>,
 
-    ///*Optional*. Service message: a user was shared with the bot
+    ///*Optional*. Service message: users were shared with the bot
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_shared: Option<UserShared>,
+    pub users_shared: Option<UsersShared>,
 
     ///*Optional*. Service message: a chat was shared with the bot
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -323,6 +307,22 @@ pub struct Message {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub general_forum_topic_unhidden: Option<GeneralForumTopicUnhidden>,
 
+    ///*Optional*. Service message: a scheduled giveaway was created
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub giveaway_created: Option<GiveawayCreated>,
+
+    ///*Optional*. The message is a scheduled giveaway message
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub giveaway: Option<Giveaway>,
+
+    ///*Optional*. A giveaway with public winners was completed
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub giveaway_winners: Option<GiveawayWinners>,
+
+    ///*Optional*. Service message: a giveaway without public winners was completed
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub giveaway_completed: Option<GiveawayCompleted>,
+
     ///*Optional*. Service message: video chat scheduled
     #[serde(skip_serializing_if = "Option::is_none")]
     pub video_chat_scheduled: Option<VideoChatScheduled>,
@@ -349,18 +349,75 @@ pub struct Message {
 }
 // Divider: all content below this line will be preserved after code regen
 
+use super::misc::formatting::FormattedText;
+use super::misc::input_file::InputFile;
+use super::reaction_type::ReactionType;
+use super::reply_parameters::ReplyParameters;
 use crate::api::API;
 use crate::entities::misc::chat_id::ChatId;
+use crate::errors::ConogramError;
 use crate::methods::copy_message::CopyMessageRequest;
 use crate::methods::delete_message::DeleteMessageRequest;
 use crate::methods::edit_message_reply_markup::EditMessageReplyMarkupRequest;
 use crate::methods::edit_message_text::EditMessageTextRequest;
+use crate::methods::get_custom_emoji_stickers::GetCustomEmojiStickersRequest;
 use crate::methods::send_document::SendDocumentRequest;
 use crate::methods::send_message::SendMessageRequest;
+use crate::methods::set_message_reaction::SetMessageReactionRequest;
+use std::ops::Range;
 
-use super::misc::input_file::InputFile;
+impl From<MaybeInaccessibleMessage> for Option<Message> {
+    fn from(value: MaybeInaccessibleMessage) -> Self {
+        match value {
+            MaybeInaccessibleMessage::Message(m) => Some(m),
+            MaybeInaccessibleMessage::InaccessibleMessage(_) => None,
+        }
+    }
+}
+
+impl<'a> From<&'a MaybeInaccessibleMessage> for Option<&'a Message> {
+    fn from(value: &'a MaybeInaccessibleMessage) -> Self {
+        match value {
+            MaybeInaccessibleMessage::Message(m) => Some(m),
+            MaybeInaccessibleMessage::InaccessibleMessage(_) => None,
+        }
+    }
+}
 
 impl Message {
+    pub fn sender_mention_html(&self) -> String {
+        if let Some(sender_chat) = &self.sender_chat {
+            sender_chat.mention_html()
+        } else if let Some(user) = &self.from {
+            user.mention_html()
+        } else if let Some(signature) = &self.author_signature {
+            signature.clone()
+        } else {
+            // TODO: Channels or smth, idk if even possible...
+            panic!("Can't create mention from message {self:?}")
+        }
+    }
+
+    pub fn make_url(chat_id: impl Into<ChatId>, message_id: impl Into<i64>) -> String {
+        format!(
+            "https://t.me/c/{}/{}",
+            &chat_id.into().to_string()[4..],
+            message_id.into()
+        )
+    }
+
+    pub fn get_url(&self) -> String {
+        if let Some(username) = &self.chat.username {
+            format!("https://t.me/{username}/{}", self.message_id)
+        } else {
+            format!(
+                "https://t.me/c/{}/{}",
+                &self.chat.id.to_string()[4..],
+                self.message_id
+            )
+        }
+    }
+
     /// ID of the message author
     pub fn from_id(&self) -> i64 {
         if let Some(sender_chat) = &self.sender_chat {
@@ -372,12 +429,169 @@ impl Message {
         }
     }
 
-    pub fn reply<'a>(&'a self, api: &'a API, text: impl Into<String>) -> SendMessageRequest {
-        api.send_message(self.chat.id, text)
-            .reply_to_message_id(self.message_id)
+    /// Returns `text` or `caption` if `text` is empty
+    pub fn get_text(&self) -> &Option<String> {
+        if self.text.is_some() {
+            &self.text
+        } else {
+            &self.caption
+        }
     }
 
-    // Sends message to the same chat and thread
+    /// Returns `entities` or `caption_entities` if `entities` is empty
+    pub fn get_entities(&self) -> &Vec<MessageEntity> {
+        if self.entities.is_empty() {
+            &self.caption_entities
+        } else {
+            &self.entities
+        }
+    }
+
+    /// Returns vec of `custom_emoji_id` present in the message
+    pub fn get_custom_emoji_ids(&self) -> Vec<String> {
+        self.get_entities()
+            .iter()
+            // .map(|ent| ent.custom_emoji_id)
+            .filter_map(|ent| ent.custom_emoji_id.as_ref())
+            .map(String::from)
+            .collect()
+    }
+
+    pub fn get_custom_emoji_stickers<'a>(&'a self, api: &'a API) -> GetCustomEmojiStickersRequest {
+        api.get_custom_emoji_stickers(self.get_custom_emoji_ids())
+    }
+
+    pub fn file_uid(&self) -> Option<String> {
+        if let Some(m) = self.photo.first() {
+            Some(m.file_unique_id.clone())
+        } else if let Some(m) = &self.animation {
+            Some(m.file_unique_id.clone())
+        } else if let Some(m) = &self.audio {
+            Some(m.file_unique_id.clone())
+        } else if let Some(m) = &self.document {
+            Some(m.file_unique_id.clone())
+        } else if let Some(m) = &self.video {
+            Some(m.file_unique_id.clone())
+        } else if let Some(m) = &self.video_note {
+            Some(m.file_unique_id.clone())
+        } else if let Some(m) = &self.voice {
+            Some(m.file_unique_id.clone())
+        } else {
+            self.sticker.as_ref().map(|m| m.file_unique_id.clone())
+        }
+    }
+
+    pub fn get_formatted_text(&self) -> Option<FormattedText> {
+        if let (Some(text), entities) = (self.get_text(), self.get_entities()) {
+            Some(FormattedText::new(text.clone(), entities.clone()))
+        } else {
+            None
+        }
+    }
+
+    /// Quote entire message and reply in the same Chat
+    pub fn quote_reply<'a>(&'a self, api: &'a API, text: impl Into<String>) -> SendMessageRequest {
+        self.quote_reply_args(api, text, Option::<Range<usize>>::None, Option::<i64>::None)
+    }
+
+    /// Quote part of the message and reply in the same Chat
+    pub fn quote_reply_partial<'a>(
+        &'a self,
+        api: &'a API,
+        text: impl Into<String>,
+        quoting_range: impl Into<Range<usize>>,
+    ) -> SendMessageRequest {
+        self.quote_reply_args(api, text, Some(quoting_range), Option::<i64>::None)
+    }
+
+    /// Quote entire message and reply in the Chat, specified by `chat_id`
+    pub fn quote_reply_to<'a>(
+        &'a self,
+        api: &'a API,
+        text: impl Into<String>,
+        chat_id: impl Into<ChatId>,
+    ) -> SendMessageRequest {
+        self.quote_reply_args(api, text, Option::<Range<usize>>::None, Some(chat_id))
+    }
+
+    /// Quote part of the message and reply in the Chat, specified by `chat_id`
+    pub fn quote_reply_partial_to<'a>(
+        &'a self,
+        api: &'a API,
+        text: impl Into<String>,
+        quoting_range: impl Into<Range<usize>>,
+        chat_id: impl Into<ChatId>,
+    ) -> SendMessageRequest<'a> {
+        self.quote_reply_args(api, text, Some(quoting_range), Some(chat_id))
+    }
+
+    /// Params:
+    ///
+    /// `chat_id`: identifier of the target chat
+    ///
+    /// `quoting_range`: char-range of the part of the original message which needs to be quoted
+    pub fn quote_reply_args<'a>(
+        &'a self,
+        api: &'a API,
+        text: impl Into<String>,
+        quoting_range: Option<impl Into<Range<usize>>>,
+        chat_id: Option<impl Into<ChatId>>,
+    ) -> SendMessageRequest<'a> {
+        let chat_id = if let Some(chat_id) = chat_id {
+            chat_id.into()
+        } else {
+            self.chat.id.into()
+        };
+
+        let (quote_text, quote_entities, quote_pos) = if let Some(range) = quoting_range {
+            let range = range.into();
+            let range_start = range.start as i64;
+            let (quote_text, quote_entities) = self
+                .get_formatted_text()
+                .unwrap_or_default()
+                .slice(range)
+                .build();
+
+            (Some(quote_text), quote_entities, Some(range_start))
+        } else {
+            (None, vec![], None)
+        };
+
+        SendMessageRequest::new(api, chat_id, text).reply_parameters(ReplyParameters {
+            message_id: self.message_id,
+            chat_id: Some(self.chat.id.into()),
+            quote: quote_text,
+            quote_entities,
+            quote_position: quote_pos,
+            ..Default::default()
+        })
+    }
+
+    pub fn reply<'a>(&'a self, api: &'a API, text: impl Into<String>) -> SendMessageRequest {
+        api.send_message(self.chat.id, text)
+            .reply_parameters(ReplyParameters::new_current_chat(self.message_id))
+    }
+
+    /// The same as Message::reply().entities()
+    pub fn reply_entities<'a>(
+        &'a self,
+        api: &'a API,
+        text: impl Into<String>,
+        entities: impl IntoIterator<Item = MessageEntity>,
+    ) -> SendMessageRequest {
+        self.reply(api, text).entities(entities)
+    }
+
+    pub fn reply_formatted<'a>(
+        &'a self,
+        api: &'a API,
+        formatted_text: FormattedText,
+    ) -> SendMessageRequest {
+        let (text, entities) = formatted_text.build();
+        self.reply(api, text).entities(entities)
+    }
+
+    /// Sends message to the same chat and thread
     pub fn answer<'a>(&'a self, api: &'a API, text: impl Into<String>) -> SendMessageRequest {
         if self.is_topic_message {
             if let Some(thread_id) = self.message_thread_id {
@@ -387,6 +601,16 @@ impl Message {
             }
         }
         api.send_message(self.chat.id, text)
+    }
+
+    /// The same as Message::answer().entities()
+    pub fn answer_entities<'a>(
+        &'a self,
+        api: &'a API,
+        text: impl Into<String>,
+        entities: impl IntoIterator<Item = MessageEntity>,
+    ) -> SendMessageRequest {
+        self.answer(api, text).entities(entities)
     }
 
     pub fn edit_text<'a>(
@@ -416,16 +640,44 @@ impl Message {
         api.delete_message(self.chat.id, self.message_id)
     }
 
+    /// Internal conogram method. Returns `Ok(false)` instead of `Err` if the message can't be deleted
+    pub async fn delete_exp<'a>(&'a self, api: &'a API) -> Result<bool, ConogramError> {
+        api.delete_message_exp(self.chat.id, self.message_id).await
+    }
+
     pub fn reply_document<'a>(
         &'a self,
         api: &'a API,
         document: impl Into<InputFile>,
     ) -> SendDocumentRequest {
         api.send_document(self.chat.id, document)
-            .reply_to_message_id(self.message_id)
+            .reply_parameters(ReplyParameters::new_current_chat(self.message_id))
     }
 
     pub fn copy_to<'a>(&'a self, api: &'a API, chat_id: impl Into<ChatId>) -> CopyMessageRequest {
         api.copy_message(chat_id, self.chat.id, self.message_id)
+    }
+
+    pub fn set_reactions<'a>(
+        &'a self,
+        api: &'a API,
+        reactions: impl IntoIterator<Item = impl Into<ReactionType>>,
+    ) -> SetMessageReactionRequest {
+        api.set_message_reaction(self.chat.id, self.message_id)
+            .reaction(reactions)
+    }
+
+    pub fn delete_reactions<'a>(&'a self, api: &'a API) -> SetMessageReactionRequest {
+        let reactions: [ReactionType; 0] = [];
+        self.set_reactions(api, reactions)
+    }
+
+    /// The same as [`message.set_reactions([reaction])`](Self::set_reactions)
+    pub fn react<'a>(
+        &'a self,
+        api: &'a API,
+        reaction: impl Into<ReactionType>,
+    ) -> SetMessageReactionRequest {
+        self.set_reactions(api, [reaction.into()])
     }
 }

@@ -38,10 +38,12 @@ impl<'a> RequestT for ReopenGeneralForumTopicRequest<'a> {
     }
 }
 impl<'a> ReopenGeneralForumTopicRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
-            params: ReopenGeneralForumTopicParams { chat_id },
+            params: ReopenGeneralForumTopicParams {
+                chat_id: chat_id.into(),
+            },
         }
     }
 

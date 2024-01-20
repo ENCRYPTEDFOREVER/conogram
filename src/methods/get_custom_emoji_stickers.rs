@@ -38,16 +38,21 @@ impl<'a> RequestT for GetCustomEmojiStickersRequest<'a> {
     }
 }
 impl<'a> GetCustomEmojiStickersRequest<'a> {
-    pub fn new(api: &'a API, custom_emoji_ids: Vec<String>) -> Self {
+    pub fn new(api: &'a API, custom_emoji_ids: impl Into<Vec<String>>) -> Self {
         Self {
             api,
-            params: GetCustomEmojiStickersParams { custom_emoji_ids },
+            params: GetCustomEmojiStickersParams {
+                custom_emoji_ids: custom_emoji_ids.into(),
+            },
         }
     }
 
     ///List of custom emoji identifiers. At most 200 custom emoji identifiers can be specified.
-    pub fn custom_emoji_ids(mut self, custom_emoji_ids: impl Into<Vec<String>>) -> Self {
-        self.params.custom_emoji_ids = custom_emoji_ids.into();
+    pub fn custom_emoji_ids(
+        mut self,
+        custom_emoji_ids: impl IntoIterator<Item = impl Into<String>>,
+    ) -> Self {
+        self.params.custom_emoji_ids = custom_emoji_ids.into_iter().map(Into::into).collect();
         self
     }
 }

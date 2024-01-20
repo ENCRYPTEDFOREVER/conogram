@@ -38,10 +38,13 @@ impl<'a> RequestT for SetStickerPositionInSetRequest<'a> {
     }
 }
 impl<'a> SetStickerPositionInSetRequest<'a> {
-    pub fn new(api: &'a API, sticker: String, position: i64) -> Self {
+    pub fn new(api: &'a API, sticker: impl Into<String>, position: impl Into<i64>) -> Self {
         Self {
             api,
-            params: SetStickerPositionInSetParams { sticker, position },
+            params: SetStickerPositionInSetParams {
+                sticker: sticker.into(),
+                position: position.into(),
+            },
         }
     }
 

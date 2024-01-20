@@ -43,12 +43,16 @@ impl<'a> RequestT for SetChatPermissionsRequest<'a> {
     }
 }
 impl<'a> SetChatPermissionsRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, permissions: ChatPermissions) -> Self {
+    pub fn new(
+        api: &'a API,
+        chat_id: impl Into<ChatId>,
+        permissions: impl Into<ChatPermissions>,
+    ) -> Self {
         Self {
             api,
             params: SetChatPermissionsParams {
-                chat_id,
-                permissions,
+                chat_id: chat_id.into(),
+                permissions: permissions.into(),
                 use_independent_chat_permissions: bool::default(),
             },
         }

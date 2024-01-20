@@ -50,12 +50,16 @@ impl<'a> RequestT for AnswerInlineQueryRequest<'a> {
     }
 }
 impl<'a> AnswerInlineQueryRequest<'a> {
-    pub fn new(api: &'a API, inline_query_id: String, results: Vec<InlineQueryResult>) -> Self {
+    pub fn new(
+        api: &'a API,
+        inline_query_id: impl Into<String>,
+        results: impl Into<Vec<InlineQueryResult>>,
+    ) -> Self {
         Self {
             api,
             params: AnswerInlineQueryParams {
-                inline_query_id,
-                results,
+                inline_query_id: inline_query_id.into(),
+                results: results.into(),
                 cache_time: Option::default(),
                 is_personal: bool::default(),
                 next_offset: Option::default(),
@@ -71,8 +75,11 @@ impl<'a> AnswerInlineQueryRequest<'a> {
     }
 
     ///A JSON-serialized array of results for the inline query
-    pub fn results(mut self, results: impl Into<Vec<InlineQueryResult>>) -> Self {
-        self.params.results = results.into();
+    pub fn results(
+        mut self,
+        results: impl IntoIterator<Item = impl Into<InlineQueryResult>>,
+    ) -> Self {
+        self.params.results = results.into_iter().map(Into::into).collect();
         self
     }
 

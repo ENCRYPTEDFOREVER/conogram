@@ -54,16 +54,16 @@ impl<'a> RequestT for UploadStickerFileRequest<'a> {
 impl<'a> UploadStickerFileRequest<'a> {
     pub fn new(
         api: &'a API,
-        user_id: i64,
-        sticker: InputFile,
-        sticker_format: UploadStickerFileStickerFormat,
+        user_id: impl Into<i64>,
+        sticker: impl Into<InputFile>,
+        sticker_format: impl Into<UploadStickerFileStickerFormat>,
     ) -> Self {
         Self {
             api,
             params: UploadStickerFileParams {
-                user_id,
-                sticker,
-                sticker_format,
+                user_id: user_id.into(),
+                sticker: sticker.into(),
+                sticker_format: sticker_format.into(),
             },
         }
     }

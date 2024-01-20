@@ -43,11 +43,11 @@ impl<'a> RequestT for SetMyCommandsRequest<'a> {
     }
 }
 impl<'a> SetMyCommandsRequest<'a> {
-    pub fn new(api: &'a API, commands: Vec<BotCommand>) -> Self {
+    pub fn new(api: &'a API, commands: impl Into<Vec<BotCommand>>) -> Self {
         Self {
             api,
             params: SetMyCommandsParams {
-                commands,
+                commands: commands.into(),
                 scope: Option::default(),
                 language_code: Option::default(),
             },
@@ -55,8 +55,8 @@ impl<'a> SetMyCommandsRequest<'a> {
     }
 
     ///A JSON-serialized list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified.
-    pub fn commands(mut self, commands: impl Into<Vec<BotCommand>>) -> Self {
-        self.params.commands = commands.into();
+    pub fn commands(mut self, commands: impl IntoIterator<Item = impl Into<BotCommand>>) -> Self {
+        self.params.commands = commands.into_iter().map(Into::into).collect();
         self
     }
 

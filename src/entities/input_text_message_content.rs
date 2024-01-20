@@ -1,5 +1,5 @@
+use crate::entities::link_preview_options::LinkPreviewOptions;
 use crate::entities::message_entity::MessageEntity;
-use crate::utils::deserialize_utils::is_false;
 use serde::Serialize;
 
 ///Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a text message to be sent as the result of an inline query.
@@ -17,8 +17,8 @@ pub struct InputTextMessageContent {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub entities: Vec<MessageEntity>,
 
-    ///*Optional*. Disables link previews for links in the sent message
-    #[serde(default, skip_serializing_if = "is_false")]
-    pub disable_web_page_preview: bool,
+    ///*Optional*. Link preview generation options for the message
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub link_preview_options: Option<LinkPreviewOptions>,
 }
 // Divider: all content below this line will be preserved after code regen

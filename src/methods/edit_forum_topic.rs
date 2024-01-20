@@ -43,12 +43,16 @@ impl<'a> RequestT for EditForumTopicRequest<'a> {
     }
 }
 impl<'a> EditForumTopicRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, message_thread_id: i64) -> Self {
+    pub fn new(
+        api: &'a API,
+        chat_id: impl Into<ChatId>,
+        message_thread_id: impl Into<i64>,
+    ) -> Self {
         Self {
             api,
             params: EditForumTopicParams {
-                chat_id,
-                message_thread_id,
+                chat_id: chat_id.into(),
+                message_thread_id: message_thread_id.into(),
                 name: Option::default(),
                 icon_custom_emoji_id: Option::default(),
             },

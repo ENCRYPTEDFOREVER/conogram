@@ -2,7 +2,7 @@ use crate::entities::chat_location::ChatLocation;
 use crate::entities::chat_permissions::ChatPermissions;
 use crate::entities::chat_photo::ChatPhoto;
 use crate::entities::message::Message;
-use crate::utils::deserialize_utils::deserialize_boxed_option;
+use crate::entities::reaction_type::ReactionType;
 use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
@@ -45,11 +45,31 @@ pub struct Chat {
     #[serde(default)]
     pub active_usernames: Vec<String>,
 
-    ///*Optional*. Custom emoji identifier of emoji status of the other party in a private chat. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
+    ///*Optional*. List of available reactions allowed in the chat. If omitted, then all [emoji reactions](https://core.telegram.org/bots/api/#reactiontypeemoji) are allowed. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
+    #[serde(default)]
+    pub available_reactions: Vec<ReactionType>,
+
+    ///*Optional*. Identifier of the accent color for the chat name and backgrounds of the chat photo, reply header, and link preview. See [accent colors](https://core.telegram.org/bots/api/#accent-colors) for more details. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat). Always returned in [getChat](https://core.telegram.org/bots/api/#getchat).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accent_color_id: Option<i64>,
+
+    ///*Optional*. Custom emoji identifier of emoji chosen by the chat for the reply header and link preview background. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub background_custom_emoji_id: Option<String>,
+
+    ///*Optional*. Identifier of the accent color for the chat's profile background. See [profile accent colors](https://core.telegram.org/bots/api/#profile-accent-colors) for more details. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profile_accent_color_id: Option<i64>,
+
+    ///*Optional*. Custom emoji identifier of the emoji chosen by the chat for its profile background. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profile_background_custom_emoji_id: Option<String>,
+
+    ///*Optional*. Custom emoji identifier of the emoji status of the chat or the other party in a private chat. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub emoji_status_custom_emoji_id: Option<String>,
 
-    ///*Optional*. Expiration date of the emoji status of the other party in a private chat in Unix time, if any. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
+    ///*Optional*. Expiration date of the emoji status of the chat or the other party in a private chat, in Unix time, if any. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub emoji_status_expiration_date: Option<i64>,
 
@@ -82,11 +102,7 @@ pub struct Chat {
     pub invite_link: Option<String>,
 
     ///*Optional*. The most recent pinned message (by sending date). Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
-    #[serde(
-        deserialize_with = "deserialize_boxed_option",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pinned_message: Option<Box<Message>>,
 
     ///*Optional*. Default chat member permissions, for groups and supergroups. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
@@ -112,6 +128,10 @@ pub struct Chat {
     ///*Optional*. *True*, if messages from the chat can't be forwarded to other chats. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
     #[serde(default, skip_serializing_if = "is_false")]
     pub has_protected_content: bool,
+
+    ///*Optional*. *True*, if new chat members will have access to old messages; available only to chat administrators. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub has_visible_history: bool,
 
     ///*Optional*. For supergroups, name of group sticker set. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -157,6 +177,16 @@ use crate::api::API;
 use super::misc::input_file::InputFile;
 
 impl Chat {
+    pub fn mention_html(&self) -> String {
+        if let Some(link) = &self.invite_link {
+            format!("<a href=\"{link}\">{}</a>", self.full_name())
+        } else if let Some(username) = &self.username {
+            format!("@{}", username)
+        } else {
+            self.full_name()
+        }
+    }
+
     // Returns Chat's title for groups and User::full_name for private chats
     pub fn full_name(&self) -> String {
         if let Some(title) = &self.title {

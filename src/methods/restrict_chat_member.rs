@@ -14,7 +14,7 @@ pub struct RestrictChatMemberParams {
     pub chat_id: ChatId,
     pub user_id: i64,
     pub permissions: ChatPermissions,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub use_independent_chat_permissions: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub until_date: Option<i64>,
@@ -46,13 +46,18 @@ impl<'a> RequestT for RestrictChatMemberRequest<'a> {
     }
 }
 impl<'a> RestrictChatMemberRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, user_id: i64, permissions: ChatPermissions) -> Self {
+    pub fn new(
+        api: &'a API,
+        chat_id: impl Into<ChatId>,
+        user_id: impl Into<i64>,
+        permissions: impl Into<ChatPermissions>,
+    ) -> Self {
         Self {
             api,
             params: RestrictChatMemberParams {
-                chat_id,
-                user_id,
-                permissions,
+                chat_id: chat_id.into(),
+                user_id: user_id.into(),
+                permissions: permissions.into(),
                 use_independent_chat_permissions: bool::default(),
                 until_date: Option::default(),
             },

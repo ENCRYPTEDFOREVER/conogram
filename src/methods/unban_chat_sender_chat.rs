@@ -39,12 +39,12 @@ impl<'a> RequestT for UnbanChatSenderChatRequest<'a> {
     }
 }
 impl<'a> UnbanChatSenderChatRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, sender_chat_id: i64) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, sender_chat_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: UnbanChatSenderChatParams {
-                chat_id,
-                sender_chat_id,
+                chat_id: chat_id.into(),
+                sender_chat_id: sender_chat_id.into(),
             },
         }
     }

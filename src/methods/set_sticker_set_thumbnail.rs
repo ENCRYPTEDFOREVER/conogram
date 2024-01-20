@@ -14,7 +14,7 @@ use std::pin::Pin;
 pub struct SetStickerSetThumbnailParams {
     pub name: String,
     pub user_id: i64,
-    #[serde(skip_serializing_if = "Option::is_none", skip)]
+    #[serde(skip, skip_serializing_if = "Option::is_none")]
     pub thumbnail: Option<InputFile>,
 }
 
@@ -53,12 +53,12 @@ impl<'a> RequestT for SetStickerSetThumbnailRequest<'a> {
     }
 }
 impl<'a> SetStickerSetThumbnailRequest<'a> {
-    pub fn new(api: &'a API, name: String, user_id: i64) -> Self {
+    pub fn new(api: &'a API, name: impl Into<String>, user_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: SetStickerSetThumbnailParams {
-                name,
-                user_id,
+                name: name.into(),
+                user_id: user_id.into(),
                 thumbnail: Option::default(),
             },
         }

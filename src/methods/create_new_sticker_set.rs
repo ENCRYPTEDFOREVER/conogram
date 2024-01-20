@@ -62,20 +62,20 @@ impl<'a> RequestT for CreateNewStickerSetRequest<'a> {
 impl<'a> CreateNewStickerSetRequest<'a> {
     pub fn new(
         api: &'a API,
-        user_id: i64,
-        name: String,
-        title: String,
-        stickers: Vec<InputSticker>,
-        sticker_format: CreateNewStickerSetStickerFormat,
+        user_id: impl Into<i64>,
+        name: impl Into<String>,
+        title: impl Into<String>,
+        stickers: impl Into<Vec<InputSticker>>,
+        sticker_format: impl Into<CreateNewStickerSetStickerFormat>,
     ) -> Self {
         Self {
             api,
             params: CreateNewStickerSetParams {
-                user_id,
-                name,
-                title,
-                stickers,
-                sticker_format,
+                user_id: user_id.into(),
+                name: name.into(),
+                title: title.into(),
+                stickers: stickers.into(),
+                sticker_format: sticker_format.into(),
                 sticker_type: Option::default(),
                 needs_repainting: bool::default(),
             },
@@ -101,8 +101,8 @@ impl<'a> CreateNewStickerSetRequest<'a> {
     }
 
     ///A JSON-serialized list of 1-50 initial stickers to be added to the sticker set
-    pub fn stickers(mut self, stickers: impl Into<Vec<InputSticker>>) -> Self {
-        self.params.stickers = stickers.into();
+    pub fn stickers(mut self, stickers: impl IntoIterator<Item = impl Into<InputSticker>>) -> Self {
+        self.params.stickers = stickers.into_iter().map(Into::into).collect();
         self
     }
 
@@ -180,4 +180,5 @@ pub enum CreateNewStickerSetStickerType {
     #[serde(rename = "custom_emoji")]
     CustomEmoji,
 }
+
 // Divider: all content below this line will be preserved after code regen

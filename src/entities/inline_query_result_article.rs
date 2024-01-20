@@ -49,9 +49,13 @@ use super::input_text_message_content::InputTextMessageContent;
 
 impl InlineQueryResultArticle {
     /// Makes an article with provided title and text
-    pub fn new_simple_text(title: impl Into<String>, text: impl Into<String>) -> Self {
+    pub fn new_simple_text(
+        id: impl Into<String>,
+        title: impl Into<String>,
+        text: impl Into<String>,
+    ) -> Self {
         Self {
-            id: uuid::Uuid::new_v4().to_string(),
+            id: id.into(),
             title: title.into(),
             input_message_content: InputTextMessageContent {
                 message_text: text.into(),

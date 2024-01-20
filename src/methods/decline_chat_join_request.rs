@@ -39,10 +39,13 @@ impl<'a> RequestT for DeclineChatJoinRequestRequest<'a> {
     }
 }
 impl<'a> DeclineChatJoinRequestRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, user_id: i64) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, user_id: impl Into<i64>) -> Self {
         Self {
             api,
-            params: DeclineChatJoinRequestParams { chat_id, user_id },
+            params: DeclineChatJoinRequestParams {
+                chat_id: chat_id.into(),
+                user_id: user_id.into(),
+            },
         }
     }
 

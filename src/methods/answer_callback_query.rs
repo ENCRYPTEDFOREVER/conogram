@@ -48,11 +48,11 @@ impl<'a> RequestT for AnswerCallbackQueryRequest<'a> {
     }
 }
 impl<'a> AnswerCallbackQueryRequest<'a> {
-    pub fn new(api: &'a API, callback_query_id: String) -> Self {
+    pub fn new(api: &'a API, callback_query_id: impl Into<String>) -> Self {
         Self {
             api,
             params: AnswerCallbackQueryParams {
-                callback_query_id,
+                callback_query_id: callback_query_id.into(),
                 text: Option::default(),
                 show_alert: bool::default(),
                 url: Option::default(),

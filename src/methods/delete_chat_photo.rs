@@ -38,10 +38,12 @@ impl<'a> RequestT for DeleteChatPhotoRequest<'a> {
     }
 }
 impl<'a> DeleteChatPhotoRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
-            params: DeleteChatPhotoParams { chat_id },
+            params: DeleteChatPhotoParams {
+                chat_id: chat_id.into(),
+            },
         }
     }
 

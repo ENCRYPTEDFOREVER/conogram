@@ -48,11 +48,11 @@ impl<'a> RequestT for CreateChatInviteLinkRequest<'a> {
     }
 }
 impl<'a> CreateChatInviteLinkRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
             params: CreateChatInviteLinkParams {
-                chat_id,
+                chat_id: chat_id.into(),
                 name: Option::default(),
                 expire_date: Option::default(),
                 member_limit: Option::default(),

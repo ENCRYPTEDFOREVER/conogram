@@ -38,10 +38,12 @@ impl<'a> RequestT for UnhideGeneralForumTopicRequest<'a> {
     }
 }
 impl<'a> UnhideGeneralForumTopicRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId) -> Self {
+    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
-            params: UnhideGeneralForumTopicParams { chat_id },
+            params: UnhideGeneralForumTopicParams {
+                chat_id: chat_id.into(),
+            },
         }
     }
 

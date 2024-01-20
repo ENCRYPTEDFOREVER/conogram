@@ -3,6 +3,7 @@ use crate::entities::message_entity::MessageEntity;
 use crate::entities::message_id::MessageId;
 use crate::entities::misc::chat_id::ChatId;
 use crate::entities::misc::reply_markup::ReplyMarkup;
+use crate::entities::reply_parameters::ReplyParameters;
 use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
@@ -29,16 +30,14 @@ pub struct CopyMessageParams {
     #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reply_to_message_id: Option<i64>,
-    #[serde(default, skip_serializing_if = "is_false")]
-    pub allow_sending_without_reply: bool,
+    pub reply_parameters: Option<ReplyParameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<ReplyMarkup>,
 }
 
 impl_into_future!(CopyMessageRequest<'a>);
 
-///Use this method to copy messages of any kind. Service messages and invoice messages can't be copied. A quiz [poll](https://core.telegram.org/bots/api/#poll) can be copied only if the value of the field *correct\_option\_id* is known to the bot. The method is analogous to the method [forwardMessage](https://core.telegram.org/bots/api/#forwardmessage), but the copied message doesn't have a link to the original message. Returns the [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent message on success.
+///Use this method to copy messages of any kind. Service messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz [poll](https://core.telegram.org/bots/api/#poll) can be copied only if the value of the field *correct\_option\_id* is known to the bot. The method is analogous to the method [forwardMessage](https://core.telegram.org/bots/api/#forwardmessage), but the copied message doesn't have a link to the original message. Returns the [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent message on success.
 #[derive(Clone)]
 pub struct CopyMessageRequest<'a> {
     api: &'a API,
@@ -62,21 +61,25 @@ impl<'a> RequestT for CopyMessageRequest<'a> {
     }
 }
 impl<'a> CopyMessageRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, from_chat_id: ChatId, message_id: i64) -> Self {
+    pub fn new(
+        api: &'a API,
+        chat_id: impl Into<ChatId>,
+        from_chat_id: impl Into<ChatId>,
+        message_id: impl Into<i64>,
+    ) -> Self {
         Self {
             api,
             params: CopyMessageParams {
-                chat_id,
-                from_chat_id,
-                message_id,
+                chat_id: chat_id.into(),
+                from_chat_id: from_chat_id.into(),
+                message_id: message_id.into(),
                 message_thread_id: Option::default(),
                 caption: Option::default(),
                 parse_mode: Option::default(),
                 caption_entities: Vec::default(),
                 disable_notification: bool::default(),
                 protect_content: bool::default(),
-                reply_to_message_id: Option::default(),
-                allow_sending_without_reply: bool::default(),
+                reply_parameters: Option::default(),
                 reply_markup: Option::default(),
             },
         }
@@ -119,8 +122,11 @@ impl<'a> CopyMessageRequest<'a> {
     }
 
     ///A JSON-serialized list of special entities that appear in the new caption, which can be specified instead of *parse\_mode*
-    pub fn caption_entities(mut self, caption_entities: impl Into<Vec<MessageEntity>>) -> Self {
-        self.params.caption_entities = caption_entities.into();
+    pub fn caption_entities(
+        mut self,
+        caption_entities: impl IntoIterator<Item = impl Into<MessageEntity>>,
+    ) -> Self {
+        self.params.caption_entities = caption_entities.into_iter().map(Into::into).collect();
         self
     }
 
@@ -136,18 +142,9 @@ impl<'a> CopyMessageRequest<'a> {
         self
     }
 
-    ///If the message is a reply, ID of the original message
-    pub fn reply_to_message_id(mut self, reply_to_message_id: impl Into<i64>) -> Self {
-        self.params.reply_to_message_id = Some(reply_to_message_id.into());
-        self
-    }
-
-    ///Pass *True* if the message should be sent even if the specified replied-to message is not found
-    pub fn allow_sending_without_reply(
-        mut self,
-        allow_sending_without_reply: impl Into<bool>,
-    ) -> Self {
-        self.params.allow_sending_without_reply = allow_sending_without_reply.into();
+    ///Description of the message to reply to
+    pub fn reply_parameters(mut self, reply_parameters: impl Into<ReplyParameters>) -> Self {
+        self.params.reply_parameters = Some(reply_parameters.into());
         self
     }
 
@@ -159,7 +156,7 @@ impl<'a> CopyMessageRequest<'a> {
 }
 
 impl<'a> API {
-    ///Use this method to copy messages of any kind. Service messages and invoice messages can't be copied. A quiz [poll](https://core.telegram.org/bots/api/#poll) can be copied only if the value of the field *correct\_option\_id* is known to the bot. The method is analogous to the method [forwardMessage](https://core.telegram.org/bots/api/#forwardmessage), but the copied message doesn't have a link to the original message. Returns the [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent message on success.
+    ///Use this method to copy messages of any kind. Service messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz [poll](https://core.telegram.org/bots/api/#poll) can be copied only if the value of the field *correct\_option\_id* is known to the bot. The method is analogous to the method [forwardMessage](https://core.telegram.org/bots/api/#forwardmessage), but the copied message doesn't have a link to the original message. Returns the [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent message on success.
     pub fn copy_message(
         &'a self,
         chat_id: impl Into<ChatId>,

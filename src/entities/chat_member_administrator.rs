@@ -15,7 +15,7 @@ pub struct ChatMemberAdministrator {
     ///*True*, if the user's presence in the chat is hidden
     pub is_anonymous: bool,
 
-    ///*True*, if the administrator can access the chat event log, chat statistics, boost list in channels, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
+    ///*True*, if the administrator can access the chat event log, boost list in channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
     pub can_manage_chat: bool,
 
     ///*True*, if the administrator can delete messages of other users
@@ -24,7 +24,7 @@ pub struct ChatMemberAdministrator {
     ///*True*, if the administrator can manage video chats
     pub can_manage_video_chats: bool,
 
-    ///*True*, if the administrator can restrict, ban or unban chat members
+    ///*True*, if the administrator can restrict, ban or unban chat members, or access supergroup statistics
     pub can_restrict_members: bool,
 
     ///*True*, if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by the user)
@@ -36,7 +36,7 @@ pub struct ChatMemberAdministrator {
     ///*True*, if the user is allowed to invite new users to the chat
     pub can_invite_users: bool,
 
-    ///*Optional*. *True*, if the administrator can post messages in the channel; channels only
+    ///*Optional*. *True*, if the administrator can post messages in the channel, or access channel statistics; channels only
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_post_messages: bool,
 
@@ -56,7 +56,7 @@ pub struct ChatMemberAdministrator {
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_edit_stories: bool,
 
-    ///*Optional*. *True*, if the administrator can delete stories posted by other users
+    ///*Optional*. *True*, if the administrator can delete stories posted by other users; channels only
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_delete_stories: bool,
 

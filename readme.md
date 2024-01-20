@@ -46,7 +46,7 @@
     let api = API::new(api_config);
 ```
 
-## Setting default [`parse_mode`](https://core.telegram.org/bots/api#formatting-options)
+<!-- ## Setting default [`parse_mode`](https://core.telegram.org/bots/api#formatting-options)
 ```rust, no_run
     let mut api = API::new(/**/);
 
@@ -55,7 +55,7 @@
 
     // For all applicable requests
     api.set_parse_mode("html")?;
-```
+``` -->
 
 ## Calling API methods
 ```rust, no_run
@@ -68,8 +68,14 @@
     // All requests implement IntoFuture
     let message = request.await?;
 
-    // You can handle some common API errors automatically
+    // You can handle some common API errors automatically:
+
+    // 1. By wrapping manually 
     let message = API::request(request).await?;
+
+    // 2. Or by using a trait
+    use conogram::api::WrapRequest;
+    let message = request.wrap().await?;
 ```
 
 ## Mutating and calling requests by references

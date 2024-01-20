@@ -51,13 +51,18 @@ impl<'a> RequestT for AddStickerToSetRequest<'a> {
     }
 }
 impl<'a> AddStickerToSetRequest<'a> {
-    pub fn new(api: &'a API, user_id: i64, name: String, sticker: InputSticker) -> Self {
+    pub fn new(
+        api: &'a API,
+        user_id: impl Into<i64>,
+        name: impl Into<String>,
+        sticker: impl Into<InputSticker>,
+    ) -> Self {
         Self {
             api,
             params: AddStickerToSetParams {
-                user_id,
-                name,
-                sticker,
+                user_id: user_id.into(),
+                name: name.into(),
+                sticker: sticker.into(),
             },
         }
     }

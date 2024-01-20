@@ -3,6 +3,7 @@ use crate::entities::message::Message;
 use crate::entities::message_entity::MessageEntity;
 use crate::entities::misc::chat_id::ChatId;
 use crate::entities::misc::reply_markup::ReplyMarkup;
+use crate::entities::reply_parameters::ReplyParameters;
 use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
@@ -43,9 +44,7 @@ pub struct SendPollParams {
     #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reply_to_message_id: Option<i64>,
-    #[serde(default, skip_serializing_if = "is_false")]
-    pub allow_sending_without_reply: bool,
+    pub reply_parameters: Option<ReplyParameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<ReplyMarkup>,
 }
@@ -76,13 +75,18 @@ impl<'a> RequestT for SendPollRequest<'a> {
     }
 }
 impl<'a> SendPollRequest<'a> {
-    pub fn new(api: &'a API, chat_id: ChatId, question: String, options: Vec<String>) -> Self {
+    pub fn new(
+        api: &'a API,
+        chat_id: impl Into<ChatId>,
+        question: impl Into<String>,
+        options: impl Into<Vec<String>>,
+    ) -> Self {
         Self {
             api,
             params: SendPollParams {
-                chat_id,
-                question,
-                options,
+                chat_id: chat_id.into(),
+                question: question.into(),
+                options: options.into(),
                 message_thread_id: Option::default(),
                 is_anonymous: bool::default(),
                 type_: Option::default(),
@@ -96,8 +100,7 @@ impl<'a> SendPollRequest<'a> {
                 is_closed: bool::default(),
                 disable_notification: bool::default(),
                 protect_content: bool::default(),
-                reply_to_message_id: Option::default(),
-                allow_sending_without_reply: bool::default(),
+                reply_parameters: Option::default(),
                 reply_markup: Option::default(),
             },
         }
@@ -122,8 +125,8 @@ impl<'a> SendPollRequest<'a> {
     }
 
     ///A JSON-serialized list of answer options, 2-10 strings 1-100 characters each
-    pub fn options(mut self, options: impl Into<Vec<String>>) -> Self {
-        self.params.options = options.into();
+    pub fn options(mut self, options: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.params.options = options.into_iter().map(Into::into).collect();
         self
     }
 
@@ -165,9 +168,10 @@ impl<'a> SendPollRequest<'a> {
     ///A JSON-serialized list of special entities that appear in the poll explanation, which can be specified instead of *parse\_mode*
     pub fn explanation_entities(
         mut self,
-        explanation_entities: impl Into<Vec<MessageEntity>>,
+        explanation_entities: impl IntoIterator<Item = impl Into<MessageEntity>>,
     ) -> Self {
-        self.params.explanation_entities = explanation_entities.into();
+        self.params.explanation_entities =
+            explanation_entities.into_iter().map(Into::into).collect();
         self
     }
 
@@ -201,18 +205,9 @@ impl<'a> SendPollRequest<'a> {
         self
     }
 
-    ///If the message is a reply, ID of the original message
-    pub fn reply_to_message_id(mut self, reply_to_message_id: impl Into<i64>) -> Self {
-        self.params.reply_to_message_id = Some(reply_to_message_id.into());
-        self
-    }
-
-    ///Pass *True* if the message should be sent even if the specified replied-to message is not found
-    pub fn allow_sending_without_reply(
-        mut self,
-        allow_sending_without_reply: impl Into<bool>,
-    ) -> Self {
-        self.params.allow_sending_without_reply = allow_sending_without_reply.into();
+    ///Description of the message to reply to
+    pub fn reply_parameters(mut self, reply_parameters: impl Into<ReplyParameters>) -> Self {
+        self.params.reply_parameters = Some(reply_parameters.into());
         self
     }
 
