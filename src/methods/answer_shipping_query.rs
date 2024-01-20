@@ -70,9 +70,9 @@ impl<'a> AnswerShippingQueryRequest<'a> {
     ///Required if *ok* is *True*. A JSON-serialized array of available shipping options.
     pub fn shipping_options(
         mut self,
-        shipping_options: impl IntoIterator<Item = ShippingOption>,
+        shipping_options: impl IntoIterator<Item = impl Into<ShippingOption>>,
     ) -> Self {
-        self.params.shipping_options = shipping_options.into_iter().collect();
+        self.params.shipping_options = shipping_options.into_iter().map(Into::into).collect();
         self
     }
 

@@ -39,23 +39,23 @@ pub struct SendInvoiceParams {
     pub photo_width: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub photo_height: Option<i64>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub need_name: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub need_phone_number: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub need_email: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub need_shipping_address: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub send_phone_number_to_provider: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub send_email_to_provider: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub is_flexible: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub disable_notification: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_parameters: Option<ReplyParameters>,
@@ -176,8 +176,8 @@ impl<'a> SendInvoiceRequest<'a> {
     }
 
     ///Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.)
-    pub fn prices(mut self, prices: impl IntoIterator<Item = LabeledPrice>) -> Self {
-        self.params.prices = prices.into_iter().collect();
+    pub fn prices(mut self, prices: impl IntoIterator<Item = impl Into<LabeledPrice>>) -> Self {
+        self.params.prices = prices.into_iter().map(Into::into).collect();
         self
     }
 
@@ -190,9 +190,10 @@ impl<'a> SendInvoiceRequest<'a> {
     ///A JSON-serialized array of suggested amounts of tips in the *smallest units* of the currency (integer, **not** float/double). At most 4 suggested tip amounts can be specified. The suggested tip amounts must be positive, passed in a strictly increased order and must not exceed *max\_tip\_amount*.
     pub fn suggested_tip_amounts(
         mut self,
-        suggested_tip_amounts: impl IntoIterator<Item = i64>,
+        suggested_tip_amounts: impl IntoIterator<Item = impl Into<i64>>,
     ) -> Self {
-        self.params.suggested_tip_amounts = suggested_tip_amounts.into_iter().collect();
+        self.params.suggested_tip_amounts =
+            suggested_tip_amounts.into_iter().map(Into::into).collect();
         self
     }
 

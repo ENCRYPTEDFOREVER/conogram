@@ -78,7 +78,7 @@ pub struct ExternalReplyInfo {
     pub voice: Option<Voice>,
 
     ///*Optional*. *True*, if the message media is covered by a spoiler animation
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub has_media_spoiler: bool,
 
     ///*Optional*. Message is a shared contact, information about the contact

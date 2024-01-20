@@ -48,8 +48,11 @@ impl<'a> GetCustomEmojiStickersRequest<'a> {
     }
 
     ///List of custom emoji identifiers. At most 200 custom emoji identifiers can be specified.
-    pub fn custom_emoji_ids(mut self, custom_emoji_ids: impl IntoIterator<Item = String>) -> Self {
-        self.params.custom_emoji_ids = custom_emoji_ids.into_iter().collect();
+    pub fn custom_emoji_ids(
+        mut self,
+        custom_emoji_ids: impl IntoIterator<Item = impl Into<String>>,
+    ) -> Self {
+        self.params.custom_emoji_ids = custom_emoji_ids.into_iter().map(Into::into).collect();
         self
     }
 }

@@ -23,7 +23,7 @@ pub struct InputMediaPhoto {
     pub caption_entities: Vec<MessageEntity>,
 
     ///*Optional*. Pass *True* if the photo needs to be covered with a spoiler animation
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub has_spoiler: bool,
 }
 // Divider: all content below this line will be preserved after code regen

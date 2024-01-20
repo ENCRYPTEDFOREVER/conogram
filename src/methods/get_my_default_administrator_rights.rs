@@ -10,7 +10,7 @@ use std::pin::Pin;
 
 #[derive(Debug, Clone, Serialize)]
 pub struct GetMyDefaultAdministratorRightsParams {
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub for_channels: bool,
 }
 

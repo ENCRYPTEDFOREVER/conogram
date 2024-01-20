@@ -25,7 +25,7 @@ pub struct InlineQueryResultArticle {
     pub url: Option<String>,
 
     ///*Optional*. Pass *True* if you don't want the URL to be shown in the message
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub hide_url: bool,
 
     ///*Optional*. Short description of the result

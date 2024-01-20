@@ -306,3 +306,8 @@ pub enum ReactionTypeEmojiEmoji {
     EnragedFace,
 }
 // Divider: all content below this line will be preserved after code regen
+impl From<ReactionTypeEmojiEmoji> for ReactionTypeEmoji {
+    fn from(value: ReactionTypeEmojiEmoji) -> Self {
+        Self { emoji: value }
+    }
+}

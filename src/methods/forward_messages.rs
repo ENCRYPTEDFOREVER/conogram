@@ -16,9 +16,9 @@ pub struct ForwardMessagesParams {
     pub message_thread_id: Option<i64>,
     pub from_chat_id: ChatId,
     pub message_ids: Vec<i64>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub disable_notification: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
 }
 
@@ -86,8 +86,8 @@ impl<'a> ForwardMessagesRequest<'a> {
     }
 
     ///Identifiers of 1-100 messages in the chat *from\_chat\_id* to forward. The identifiers must be specified in a strictly increasing order.
-    pub fn message_ids(mut self, message_ids: impl IntoIterator<Item = i64>) -> Self {
-        self.params.message_ids = message_ids.into_iter().collect();
+    pub fn message_ids(mut self, message_ids: impl IntoIterator<Item = impl Into<i64>>) -> Self {
+        self.params.message_ids = message_ids.into_iter().map(Into::into).collect();
         self
     }
 

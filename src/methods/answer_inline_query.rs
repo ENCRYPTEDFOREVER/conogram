@@ -15,7 +15,7 @@ pub struct AnswerInlineQueryParams {
     pub results: Vec<InlineQueryResult>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_time: Option<i64>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub is_personal: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_offset: Option<String>,
@@ -75,8 +75,11 @@ impl<'a> AnswerInlineQueryRequest<'a> {
     }
 
     ///A JSON-serialized array of results for the inline query
-    pub fn results(mut self, results: impl IntoIterator<Item = InlineQueryResult>) -> Self {
-        self.params.results = results.into_iter().collect();
+    pub fn results(
+        mut self,
+        results: impl IntoIterator<Item = impl Into<InlineQueryResult>>,
+    ) -> Self {
+        self.params.results = results.into_iter().map(Into::into).collect();
         self
     }
 

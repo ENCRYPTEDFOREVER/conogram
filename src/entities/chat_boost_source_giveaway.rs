@@ -14,7 +14,7 @@ pub struct ChatBoostSourceGiveaway {
     pub user: Option<User>,
 
     ///*Optional*. True, if the giveaway was completed, but there was no user to win the prize
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub is_unclaimed: bool,
 }
 // Divider: all content below this line will be preserved after code regen

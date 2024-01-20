@@ -62,8 +62,11 @@ impl<'a> SetPassportDataErrorsRequest<'a> {
     }
 
     ///A JSON-serialized array describing the errors
-    pub fn errors(mut self, errors: impl IntoIterator<Item = PassportElementError>) -> Self {
-        self.params.errors = errors.into_iter().collect();
+    pub fn errors(
+        mut self,
+        errors: impl IntoIterator<Item = impl Into<PassportElementError>>,
+    ) -> Self {
+        self.params.errors = errors.into_iter().map(Into::into).collect();
         self
     }
 }

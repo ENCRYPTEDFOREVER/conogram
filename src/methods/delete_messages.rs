@@ -56,8 +56,8 @@ impl<'a> DeleteMessagesRequest<'a> {
     }
 
     ///Identifiers of 1-100 messages to delete. See [deleteMessage](https://core.telegram.org/bots/api/#deletemessage) for limitations on which messages can be deleted
-    pub fn message_ids(mut self, message_ids: impl IntoIterator<Item = i64>) -> Self {
-        self.params.message_ids = message_ids.into_iter().collect();
+    pub fn message_ids(mut self, message_ids: impl IntoIterator<Item = impl Into<i64>>) -> Self {
+        self.params.message_ids = message_ids.into_iter().map(Into::into).collect();
         self
     }
 }

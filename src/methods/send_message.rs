@@ -25,9 +25,9 @@ pub struct SendMessageParams {
     pub entities: Vec<MessageEntity>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub link_preview_options: Option<LinkPreviewOptions>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub disable_notification: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_parameters: Option<ReplyParameters>,
@@ -104,8 +104,11 @@ impl<'a> SendMessageRequest<'a> {
     }
 
     ///A JSON-serialized list of special entities that appear in message text, which can be specified instead of *parse\_mode*
-    pub fn entities(mut self, entities: impl IntoIterator<Item = MessageEntity>) -> Self {
-        self.params.entities = entities.into_iter().collect();
+    pub fn entities(
+        mut self,
+        entities: impl IntoIterator<Item = impl Into<MessageEntity>>,
+    ) -> Self {
+        self.params.entities = entities.into_iter().map(Into::into).collect();
         self
     }
 

@@ -16,9 +16,9 @@ pub struct SendGameParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_thread_id: Option<i64>,
     pub game_short_name: String,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub disable_notification: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_parameters: Option<ReplyParameters>,

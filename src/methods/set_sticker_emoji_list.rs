@@ -59,8 +59,8 @@ impl<'a> SetStickerEmojiListRequest<'a> {
     }
 
     ///A JSON-serialized list of 1-20 emoji associated with the sticker
-    pub fn emoji_list(mut self, emoji_list: impl IntoIterator<Item = String>) -> Self {
-        self.params.emoji_list = emoji_list.into_iter().collect();
+    pub fn emoji_list(mut self, emoji_list: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.params.emoji_list = emoji_list.into_iter().map(Into::into).collect();
         self
     }
 }

@@ -18,9 +18,9 @@ pub struct SendDiceParams {
     pub message_thread_id: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub emoji: Option<SendDiceEmoji>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub disable_notification: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_parameters: Option<ReplyParameters>,

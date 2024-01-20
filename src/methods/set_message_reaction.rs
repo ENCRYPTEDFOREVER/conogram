@@ -15,7 +15,7 @@ pub struct SetMessageReactionParams {
     pub message_id: i64,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub reaction: Vec<ReactionType>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub is_big: bool,
 }
 
@@ -70,8 +70,8 @@ impl<'a> SetMessageReactionRequest<'a> {
     }
 
     ///New list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators.
-    pub fn reaction(mut self, reaction: impl IntoIterator<Item = ReactionType>) -> Self {
-        self.params.reaction = reaction.into_iter().collect();
+    pub fn reaction(mut self, reaction: impl IntoIterator<Item = impl Into<ReactionType>>) -> Self {
+        self.params.reaction = reaction.into_iter().map(Into::into).collect();
         self
     }
 

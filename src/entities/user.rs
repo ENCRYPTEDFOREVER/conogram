@@ -27,23 +27,23 @@ pub struct User {
     pub language_code: Option<String>,
 
     ///*Optional*. *True*, if this user is a Telegram Premium user
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub is_premium: bool,
 
     ///*Optional*. *True*, if this user added the bot to the attachment menu
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub added_to_attachment_menu: bool,
 
     ///*Optional*. *True*, if the bot can be invited to groups. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub can_join_groups: bool,
 
     ///*Optional*. *True*, if [privacy mode](https://core.telegram.org/bots/features#privacy-mode) is disabled for the bot. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub can_read_all_group_messages: bool,
 
     ///*Optional*. *True*, if the bot supports inline queries. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub supports_inline_queries: bool,
 }
 // Divider: all content below this line will be preserved after code regen

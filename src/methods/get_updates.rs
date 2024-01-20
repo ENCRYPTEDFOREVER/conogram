@@ -78,8 +78,11 @@ impl<'a> GetUpdatesRequest<'a> {
     ///A JSON-serialized list of the update types you want your bot to receive. For example, specify `["message", "edited_channel_post", "callback_query"]` to only receive updates of these types. See [Update](https://core.telegram.org/bots/api/#update) for a complete list of available update types. Specify an empty list to receive all update types except *chat\_member*, *message\_reaction*, and *message\_reaction\_count* (default). If not specified, the previous setting will be used.  
     ///
     ///Please note that this parameter doesn't affect updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time.
-    pub fn allowed_updates(mut self, allowed_updates: impl IntoIterator<Item = String>) -> Self {
-        self.params.allowed_updates = allowed_updates.into_iter().collect();
+    pub fn allowed_updates(
+        mut self,
+        allowed_updates: impl IntoIterator<Item = impl Into<String>>,
+    ) -> Self {
+        self.params.allowed_updates = allowed_updates.into_iter().map(Into::into).collect();
         self
     }
 }

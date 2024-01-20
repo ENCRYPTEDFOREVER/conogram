@@ -21,9 +21,9 @@ pub struct SendMediaGroupParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_thread_id: Option<i64>,
     pub media: Vec<InputMedia>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub disable_notification: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_parameters: Option<ReplyParameters>,
@@ -95,8 +95,8 @@ impl<'a> SendMediaGroupRequest<'a> {
     }
 
     ///A JSON-serialized array describing messages to be sent, must include 2-10 items
-    pub fn media(mut self, media: impl IntoIterator<Item = InputMedia>) -> Self {
-        self.params.media = media.into_iter().collect();
+    pub fn media(mut self, media: impl IntoIterator<Item = impl Into<InputMedia>>) -> Self {
+        self.params.media = media.into_iter().map(Into::into).collect();
         self
     }
 

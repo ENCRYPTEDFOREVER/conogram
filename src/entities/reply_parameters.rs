@@ -15,7 +15,7 @@ pub struct ReplyParameters {
     pub chat_id: Option<ChatId>,
 
     ///*Optional*. Pass *True* if the message should be sent even if the specified message to be replied to is not found; can be used only for replies in the same chat and forum topic.
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub allow_sending_without_reply: bool,
 
     ///*Optional*. Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be an exact substring of the message to be replied to, including *bold*, *italic*, *underline*, *strikethrough*, *spoiler*, and *custom\_emoji* entities. The message will fail to send if the quote isn't found in the original message.

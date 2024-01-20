@@ -37,11 +37,11 @@ pub struct GiveawayWinners {
     pub unclaimed_prize_count: Option<i64>,
 
     ///*Optional*. *True*, if only users who had joined the chats after the giveaway started were eligible to win
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub only_new_members: bool,
 
     ///*Optional*. *True*, if the giveaway was canceled because the payment for it was refunded
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub was_refunded: bool,
 
     ///*Optional*. Description of additional giveaway prize

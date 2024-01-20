@@ -12,7 +12,7 @@ use std::pin::Pin;
 pub struct SetMyDefaultAdministratorRightsParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rights: Option<ChatAdministratorRights>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub for_channels: bool,
 }
 

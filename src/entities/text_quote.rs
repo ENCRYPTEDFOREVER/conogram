@@ -17,7 +17,7 @@ pub struct TextQuote {
     pub position: i64,
 
     ///*Optional*. True, if the quote was chosen manually by the message sender. Otherwise, the quote was added automatically by the server.
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub is_manual: bool,
 }
 // Divider: all content below this line will be preserved after code regen

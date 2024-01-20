@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct WriteAccessAllowed {
     ///*Optional*. True, if the access was granted after the user accepted an explicit request from a Web App sent by the method [requestWriteAccess](https://core.telegram.org/bots/webapps#initializing-mini-apps)
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub from_request: bool,
 
     ///*Optional*. Name of the Web App, if the access was granted when the Web App was launched from a link
@@ -14,7 +14,7 @@ pub struct WriteAccessAllowed {
     pub web_app_name: Option<String>,
 
     ///*Optional*. True, if the access was granted when the bot was added to the attachment or side menu
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub from_attachment_menu: bool,
 }
 // Divider: all content below this line will be preserved after code regen

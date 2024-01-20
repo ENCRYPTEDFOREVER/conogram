@@ -19,11 +19,11 @@ pub struct SendPollParams {
     pub message_thread_id: Option<i64>,
     pub question: String,
     pub options: Vec<String>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub is_anonymous: bool,
-    #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none", rename = "type")]
     pub type_: Option<SendPollType>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub allows_multiple_answers: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub correct_option_id: Option<i64>,
@@ -37,11 +37,11 @@ pub struct SendPollParams {
     pub open_period: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub close_date: Option<i64>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub is_closed: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub disable_notification: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_parameters: Option<ReplyParameters>,
@@ -125,8 +125,8 @@ impl<'a> SendPollRequest<'a> {
     }
 
     ///A JSON-serialized list of answer options, 2-10 strings 1-100 characters each
-    pub fn options(mut self, options: impl IntoIterator<Item = String>) -> Self {
-        self.params.options = options.into_iter().collect();
+    pub fn options(mut self, options: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.params.options = options.into_iter().map(Into::into).collect();
         self
     }
 
@@ -168,9 +168,10 @@ impl<'a> SendPollRequest<'a> {
     ///A JSON-serialized list of special entities that appear in the poll explanation, which can be specified instead of *parse\_mode*
     pub fn explanation_entities(
         mut self,
-        explanation_entities: impl IntoIterator<Item = MessageEntity>,
+        explanation_entities: impl IntoIterator<Item = impl Into<MessageEntity>>,
     ) -> Self {
-        self.params.explanation_entities = explanation_entities.into_iter().collect();
+        self.params.explanation_entities =
+            explanation_entities.into_iter().map(Into::into).collect();
         self
     }
 

@@ -37,11 +37,11 @@ pub struct SendAnimationParams {
     pub parse_mode: Option<String>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub caption_entities: Vec<MessageEntity>,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub has_spoiler: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub disable_notification: bool,
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_parameters: Option<ReplyParameters>,
@@ -165,9 +165,9 @@ impl<'a> SendAnimationRequest<'a> {
     ///A JSON-serialized list of special entities that appear in the caption, which can be specified instead of *parse\_mode*
     pub fn caption_entities(
         mut self,
-        caption_entities: impl IntoIterator<Item = MessageEntity>,
+        caption_entities: impl IntoIterator<Item = impl Into<MessageEntity>>,
     ) -> Self {
-        self.params.caption_entities = caption_entities.into_iter().collect();
+        self.params.caption_entities = caption_entities.into_iter().map(Into::into).collect();
         self
     }
 

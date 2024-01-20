@@ -80,11 +80,11 @@ pub struct Message {
     pub forward_origin: Option<MessageOrigin>,
 
     ///*Optional*. *True*, if the message is sent to a forum topic
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub is_topic_message: bool,
 
     ///*Optional*. *True*, if the message is a channel post that was automatically forwarded to the connected discussion group
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub is_automatic_forward: bool,
 
     ///*Optional*. For replies in the same chat and message thread, the original message. Note that the Message object in this field will not contain further *reply\_to\_message* fields even if it itself is a reply.
@@ -108,7 +108,7 @@ pub struct Message {
     pub edit_date: Option<i64>,
 
     ///*Optional*. *True*, if the message can't be forwarded
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub has_protected_content: bool,
 
     ///*Optional*. The unique identifier of a media message group this message belongs to
@@ -176,7 +176,7 @@ pub struct Message {
     pub caption_entities: Vec<MessageEntity>,
 
     ///*Optional*. *True*, if the message media is covered by a spoiler animation
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub has_media_spoiler: bool,
 
     ///*Optional*. Message is a shared contact, information about the contact
@@ -220,19 +220,19 @@ pub struct Message {
     pub new_chat_photo: Vec<PhotoSize>,
 
     ///*Optional*. Service message: the chat photo was deleted
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub delete_chat_photo: bool,
 
     ///*Optional*. Service message: the group has been created
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub group_chat_created: bool,
 
     ///*Optional*. Service message: the supergroup has been created. This field can't be received in a message coming through updates, because bot can't be a member of a supergroup when it is created. It can only be found in reply\_to\_message if someone replies to a very first message in a directly created supergroup.
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub supergroup_chat_created: bool,
 
     ///*Optional*. Service message: the channel has been created. This field can't be received in a message coming through updates, because bot can't be a member of a channel when it is created. It can only be found in reply\_to\_message if someone replies to a very first message in a channel.
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub channel_chat_created: bool,
 
     ///*Optional*. Service message: auto-delete timer settings changed in the chat
@@ -661,12 +661,18 @@ impl Message {
     pub fn set_reactions<'a>(
         &'a self,
         api: &'a API,
-        reactions: impl IntoIterator<Item = ReactionType>,
+        reactions: impl IntoIterator<Item = impl Into<ReactionType>>,
     ) -> SetMessageReactionRequest {
         api.set_message_reaction(self.chat.id, self.message_id)
             .reaction(reactions)
     }
 
+    pub fn delete_reactions<'a>(&'a self, api: &'a API) -> SetMessageReactionRequest {
+        let reactions: [ReactionType; 0] = [];
+        self.set_reactions(api, reactions)
+    }
+
+    /// The same as [`message.set_reactions([reaction])`](Self::set_reactions)
     pub fn react<'a>(
         &'a self,
         api: &'a API,

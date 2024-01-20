@@ -16,11 +16,11 @@ pub struct Giveaway {
     pub winner_count: i64,
 
     ///*Optional*. *True*, if only users who join the chats after the giveaway started should be eligible to win
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub only_new_members: bool,
 
     ///*Optional*. *True*, if the list of giveaway winners will be visible to everyone
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub has_public_winners: bool,
 
     ///*Optional*. Description of additional giveaway prize

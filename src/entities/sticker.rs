@@ -55,7 +55,7 @@ pub struct Sticker {
     pub custom_emoji_id: Option<String>,
 
     ///*Optional*. *True*, if the sticker must be repainted to a text color in messages, the color of the Telegram Premium badge in emoji status, white color on chat photos, or another appropriate color in other places
-    #[serde(skip_serializing_if = "is_false", default)]
+    #[serde(default, skip_serializing_if = "is_false")]
     pub needs_repainting: bool,
 
     ///*Optional*. File size in bytes
