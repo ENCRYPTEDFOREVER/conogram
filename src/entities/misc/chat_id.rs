@@ -5,51 +5,64 @@ use crate::entities::chat::Chat;
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(untagged)]
 pub enum ChatId {
-    String(String),
-    Integer(i64),
+    /// @channel_username
+    Username(String),
+
+    /// Chat/Channel ID
+    Id(i64),
+}
+
+impl ChatId {
+    fn parse_from_str(value: &str) -> Self {
+        if value.starts_with('@') {
+            Self::Username(value.to_owned())
+        } else {
+            Self::Username(format!("@{value}"))
+        }
+    }
 }
 
 impl ToString for ChatId {
     fn to_string(&self) -> String {
         match self {
-            ChatId::String(value) => value.to_string(),
-            ChatId::Integer(value) => value.to_string(),
+            ChatId::Username(value) => value.to_string(),
+            ChatId::Id(value) => value.to_string(),
         }
     }
 }
 
 impl From<i64> for ChatId {
     fn from(value: i64) -> Self {
-        Self::Integer(value)
+        Self::Id(value)
     }
 }
 
 impl From<&str> for ChatId {
     fn from(value: &str) -> Self {
-        Self::String(value.to_owned())
+        Self::parse_from_str(value)
     }
 }
 
 impl From<&String> for ChatId {
     fn from(value: &String) -> Self {
-        Self::String(value.to_owned())
+        Self::parse_from_str(value)
     }
 }
 
 impl From<String> for ChatId {
     fn from(value: String) -> Self {
-        Self::String(value)
+        Self::parse_from_str(&value)
     }
 }
 
 impl<T: AsRef<Chat>> From<T> for ChatId {
     fn from(value: T) -> Self {
-        Self::Integer(value.as_ref().id)
+        Self::Id(value.as_ref().id)
     }
 }
 
 impl Default for ChatId {
     fn default() -> Self {
-        Self::Integer(0)
+        Self::Id(0)
     }
 }
