@@ -45,6 +45,20 @@ macro_rules! set_default_param {
     }
 }
 
+/// Wraps API request into [API::request_ref(self)]
+pub trait WrapRequest {
+    fn wrap<ReturnType>(
+        &self,
+    ) -> impl std::future::Future<Output = Result<ReturnType, ConogramError>>
+    where
+        for<'a> &'a Self: IntoFuture<Output = Result<ReturnType, ConogramError>>,
+        Self: Sized,
+    {
+        API::request_ref(self)
+    }
+}
+impl<T> WrapRequest for T {}
+
 #[derive(Clone)]
 pub struct APIConfig {
     pub token: String,
@@ -119,6 +133,7 @@ impl API {
             "allow_sending_without_reply",
             true,
             [
+                // crate::entities::reply_parameters::ReplyParameters,
                 SendMessageRequest,
                 SendPhotoRequest,
                 SendAnimationRequest,

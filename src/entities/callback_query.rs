@@ -1,5 +1,3 @@
-use std::ops::Deref;
-
 use crate::entities::maybe_inaccessible_message::MaybeInaccessibleMessage;
 use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
@@ -67,6 +65,8 @@ impl CallbackQuery {
     }
 
     /// Backwards compatibility (Bot API <7.0)
+    ///
+    /// _Optional._ Message sent by the bot with the callback button that originated the query
     pub fn message(&self) -> Option<&Message> {
         self.message.as_ref().and_then(|m| m.as_ref().into())
     }

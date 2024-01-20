@@ -351,6 +351,10 @@ pub struct Message {
 }
 // Divider: all content below this line will be preserved after code regen
 
+use super::misc::formatting::FormattedText;
+use super::misc::input_file::InputFile;
+use super::reaction_type::ReactionType;
+use super::reply_parameters::ReplyParameters;
 use crate::api::API;
 use crate::entities::misc::chat_id::ChatId;
 use crate::errors::ConogramError;
@@ -361,10 +365,7 @@ use crate::methods::edit_message_text::EditMessageTextRequest;
 use crate::methods::get_custom_emoji_stickers::GetCustomEmojiStickersRequest;
 use crate::methods::send_document::SendDocumentRequest;
 use crate::methods::send_message::SendMessageRequest;
-
-use super::misc::formatting::FormattedText;
-use super::misc::input_file::InputFile;
-use super::reply_parameters::ReplyParameters;
+use crate::methods::set_message_reaction::SetMessageReactionRequest;
 
 impl From<MaybeInaccessibleMessage> for Option<Message> {
     fn from(value: MaybeInaccessibleMessage) -> Self {
@@ -396,6 +397,14 @@ impl Message {
             // TODO: Channels or smth, idk if even possible...
             panic!("Can't create mention from message {self:?}")
         }
+    }
+
+    pub fn make_url(chat_id: impl Into<ChatId>, message_id: impl Into<i64>) -> String {
+        format!(
+            "https://t.me/c/{}/{}",
+            &chat_id.into().to_string()[4..],
+            message_id.into()
+        )
     }
 
     pub fn get_url(&self) -> String {
@@ -574,6 +583,15 @@ impl Message {
         self.reply(api, text).entities(entities)
     }
 
+    pub fn reply_formatted<'a>(
+        &'a self,
+        api: &'a API,
+        formatted_text: FormattedText,
+    ) -> SendMessageRequest {
+        let (text, entities) = formatted_text.build();
+        self.reply(api, text).entities(entities)
+    }
+
     /// Sends message to the same chat and thread
     pub fn answer<'a>(&'a self, api: &'a API, text: impl Into<String>) -> SendMessageRequest {
         if self.is_topic_message {
@@ -639,5 +657,14 @@ impl Message {
 
     pub fn copy_to<'a>(&'a self, api: &'a API, chat_id: impl Into<ChatId>) -> CopyMessageRequest {
         api.copy_message(chat_id, self.chat.id, self.message_id)
+    }
+
+    pub fn set_reaction<'a>(
+        &'a self,
+        api: &'a API,
+        reactions: impl Into<Vec<ReactionType>>,
+    ) -> SetMessageReactionRequest {
+        api.set_message_reaction(self.chat.id, self.message_id)
+            .reaction(reactions)
     }
 }

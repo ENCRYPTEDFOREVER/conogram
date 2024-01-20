@@ -39,6 +39,7 @@ impl ReplyParameters {
     pub fn new_current_chat(message_id: impl Into<i64>) -> Self {
         Self {
             message_id: message_id.into(),
+            allow_sending_without_reply: true,
             ..Default::default()
         }
     }
@@ -47,6 +48,7 @@ impl ReplyParameters {
         Self {
             message_id: message_id.into(),
             chat_id: Some(chat_id.into()),
+            allow_sending_without_reply: true,
             ..Default::default()
         }
     }
@@ -59,9 +61,5 @@ impl ReplyParameters {
     pub fn chat(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.chat_id = Some(chat_id.into());
         self
-    }
-
-    pub fn quote(mut self, quote: impl Into<String>) -> Self {
-        todo!()
     }
 }

@@ -328,17 +328,22 @@ impl FormattedText {
     }
 
     pub fn mention(self, text: impl ToString, user_id: impl Into<i64>) -> Self {
-        self.push_entity_extended(
-            text.to_string(),
-            MessageEntityType::TextMention,
-            None,
-            Some(User {
-                id: user_id.into(),
-                ..Default::default()
-            }),
-            None,
-            None,
-        )
+        let user_id = user_id.into();
+        if user_id > 0 {
+            self.push_entity_extended(
+                text.to_string(),
+                MessageEntityType::TextMention,
+                None,
+                Some(User {
+                    id: user_id.into(),
+                    ..Default::default()
+                }),
+                None,
+                None,
+            )
+        } else {
+            self
+        }
     }
 
     pub fn code_block(self, text: impl ToString) -> Self {

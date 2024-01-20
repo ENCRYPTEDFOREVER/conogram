@@ -47,3 +47,8 @@ pub enum StickerSetStickerType {
     CustomEmoji,
 }
 // Divider: all content below this line will be preserved after code regen
+impl StickerSet {
+    pub fn get_url(&self) -> String {
+        format!("https://t.me/addstickers/{}", self.name)
+    }
+}
