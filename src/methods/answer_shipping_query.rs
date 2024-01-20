@@ -68,8 +68,11 @@ impl<'a> AnswerShippingQueryRequest<'a> {
     }
 
     ///Required if *ok* is *True*. A JSON-serialized array of available shipping options.
-    pub fn shipping_options(mut self, shipping_options: impl Into<Vec<ShippingOption>>) -> Self {
-        self.params.shipping_options = shipping_options.into();
+    pub fn shipping_options(
+        mut self,
+        shipping_options: impl IntoIterator<Item = ShippingOption>,
+    ) -> Self {
+        self.params.shipping_options = shipping_options.into_iter().collect();
         self
     }
 

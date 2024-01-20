@@ -176,8 +176,8 @@ impl<'a> SendInvoiceRequest<'a> {
     }
 
     ///Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.)
-    pub fn prices(mut self, prices: impl Into<Vec<LabeledPrice>>) -> Self {
-        self.params.prices = prices.into();
+    pub fn prices(mut self, prices: impl IntoIterator<Item = LabeledPrice>) -> Self {
+        self.params.prices = prices.into_iter().collect();
         self
     }
 
@@ -188,8 +188,11 @@ impl<'a> SendInvoiceRequest<'a> {
     }
 
     ///A JSON-serialized array of suggested amounts of tips in the *smallest units* of the currency (integer, **not** float/double). At most 4 suggested tip amounts can be specified. The suggested tip amounts must be positive, passed in a strictly increased order and must not exceed *max\_tip\_amount*.
-    pub fn suggested_tip_amounts(mut self, suggested_tip_amounts: impl Into<Vec<i64>>) -> Self {
-        self.params.suggested_tip_amounts = suggested_tip_amounts.into();
+    pub fn suggested_tip_amounts(
+        mut self,
+        suggested_tip_amounts: impl IntoIterator<Item = i64>,
+    ) -> Self {
+        self.params.suggested_tip_amounts = suggested_tip_amounts.into_iter().collect();
         self
     }
 

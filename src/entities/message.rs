@@ -1,5 +1,3 @@
-use std::ops::Range;
-
 use crate::entities::animation::Animation;
 use crate::entities::audio::Audio;
 use crate::entities::chat::Chat;
@@ -366,6 +364,7 @@ use crate::methods::get_custom_emoji_stickers::GetCustomEmojiStickersRequest;
 use crate::methods::send_document::SendDocumentRequest;
 use crate::methods::send_message::SendMessageRequest;
 use crate::methods::set_message_reaction::SetMessageReactionRequest;
+use std::ops::Range;
 
 impl From<MaybeInaccessibleMessage> for Option<Message> {
     fn from(value: MaybeInaccessibleMessage) -> Self {
@@ -578,7 +577,7 @@ impl Message {
         &'a self,
         api: &'a API,
         text: impl Into<String>,
-        entities: impl Into<Vec<MessageEntity>>,
+        entities: impl IntoIterator<Item = MessageEntity>,
     ) -> SendMessageRequest {
         self.reply(api, text).entities(entities)
     }
@@ -609,7 +608,7 @@ impl Message {
         &'a self,
         api: &'a API,
         text: impl Into<String>,
-        entities: impl Into<Vec<MessageEntity>>,
+        entities: impl IntoIterator<Item = MessageEntity>,
     ) -> SendMessageRequest {
         self.answer(api, text).entities(entities)
     }
@@ -659,12 +658,20 @@ impl Message {
         api.copy_message(chat_id, self.chat.id, self.message_id)
     }
 
-    pub fn set_reaction<'a>(
+    pub fn set_reactions<'a>(
         &'a self,
         api: &'a API,
-        reactions: impl Into<Vec<ReactionType>>,
+        reactions: impl IntoIterator<Item = ReactionType>,
     ) -> SetMessageReactionRequest {
         api.set_message_reaction(self.chat.id, self.message_id)
             .reaction(reactions)
+    }
+
+    pub fn react<'a>(
+        &'a self,
+        api: &'a API,
+        reaction: impl Into<ReactionType>,
+    ) -> SetMessageReactionRequest {
+        self.set_reactions(api, [reaction.into()])
     }
 }

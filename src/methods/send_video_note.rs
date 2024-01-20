@@ -26,7 +26,7 @@ pub struct SendVideoNoteParams {
     pub duration: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub length: Option<i64>,
-    #[serde(skip_serializing_if = "Option::is_none", skip)]
+    #[serde(skip, skip_serializing_if = "Option::is_none")]
     pub thumbnail: Option<InputFile>,
     #[serde(skip_serializing_if = "is_false", default)]
     pub disable_notification: bool,

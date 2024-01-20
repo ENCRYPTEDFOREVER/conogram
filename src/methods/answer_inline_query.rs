@@ -75,8 +75,8 @@ impl<'a> AnswerInlineQueryRequest<'a> {
     }
 
     ///A JSON-serialized array of results for the inline query
-    pub fn results(mut self, results: impl Into<Vec<InlineQueryResult>>) -> Self {
-        self.params.results = results.into();
+    pub fn results(mut self, results: impl IntoIterator<Item = InlineQueryResult>) -> Self {
+        self.params.results = results.into_iter().collect();
         self
     }
 

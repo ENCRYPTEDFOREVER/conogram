@@ -86,8 +86,8 @@ impl<'a> ForwardMessagesRequest<'a> {
     }
 
     ///Identifiers of 1-100 messages in the chat *from\_chat\_id* to forward. The identifiers must be specified in a strictly increasing order.
-    pub fn message_ids(mut self, message_ids: impl Into<Vec<i64>>) -> Self {
-        self.params.message_ids = message_ids.into();
+    pub fn message_ids(mut self, message_ids: impl IntoIterator<Item = i64>) -> Self {
+        self.params.message_ids = message_ids.into_iter().collect();
         self
     }
 

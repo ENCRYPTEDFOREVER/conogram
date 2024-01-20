@@ -23,7 +23,7 @@ pub struct SendDocumentParams {
     pub message_thread_id: Option<i64>,
     #[serde(skip)]
     pub document: InputFile,
-    #[serde(skip_serializing_if = "Option::is_none", skip)]
+    #[serde(skip, skip_serializing_if = "Option::is_none")]
     pub thumbnail: Option<InputFile>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption: Option<String>,
@@ -136,8 +136,11 @@ impl<'a> SendDocumentRequest<'a> {
     }
 
     ///A JSON-serialized list of special entities that appear in the caption, which can be specified instead of *parse\_mode*
-    pub fn caption_entities(mut self, caption_entities: impl Into<Vec<MessageEntity>>) -> Self {
-        self.params.caption_entities = caption_entities.into();
+    pub fn caption_entities(
+        mut self,
+        caption_entities: impl IntoIterator<Item = MessageEntity>,
+    ) -> Self {
+        self.params.caption_entities = caption_entities.into_iter().collect();
         self
     }
 

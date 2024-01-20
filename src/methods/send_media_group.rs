@@ -95,8 +95,8 @@ impl<'a> SendMediaGroupRequest<'a> {
     }
 
     ///A JSON-serialized array describing messages to be sent, must include 2-10 items
-    pub fn media(mut self, media: impl Into<Vec<InputMedia>>) -> Self {
-        self.params.media = media.into();
+    pub fn media(mut self, media: impl IntoIterator<Item = InputMedia>) -> Self {
+        self.params.media = media.into_iter().collect();
         self
     }
 

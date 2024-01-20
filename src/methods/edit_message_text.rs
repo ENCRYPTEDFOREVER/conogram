@@ -103,8 +103,8 @@ impl<'a> EditMessageTextRequest<'a> {
     }
 
     ///A JSON-serialized list of special entities that appear in message text, which can be specified instead of *parse\_mode*
-    pub fn entities(mut self, entities: impl Into<Vec<MessageEntity>>) -> Self {
-        self.params.entities = entities.into();
+    pub fn entities(mut self, entities: impl IntoIterator<Item = MessageEntity>) -> Self {
+        self.params.entities = entities.into_iter().collect();
         self
     }
 

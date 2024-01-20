@@ -101,8 +101,8 @@ impl<'a> CreateNewStickerSetRequest<'a> {
     }
 
     ///A JSON-serialized list of 1-50 initial stickers to be added to the sticker set
-    pub fn stickers(mut self, stickers: impl Into<Vec<InputSticker>>) -> Self {
-        self.params.stickers = stickers.into();
+    pub fn stickers(mut self, stickers: impl IntoIterator<Item = InputSticker>) -> Self {
+        self.params.stickers = stickers.into_iter().collect();
         self
     }
 

@@ -55,8 +55,8 @@ impl<'a> SetMyCommandsRequest<'a> {
     }
 
     ///A JSON-serialized list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified.
-    pub fn commands(mut self, commands: impl Into<Vec<BotCommand>>) -> Self {
-        self.params.commands = commands.into();
+    pub fn commands(mut self, commands: impl IntoIterator<Item = BotCommand>) -> Self {
+        self.params.commands = commands.into_iter().collect();
         self
     }
 

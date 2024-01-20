@@ -21,7 +21,7 @@ pub struct SendPollParams {
     pub options: Vec<String>,
     #[serde(skip_serializing_if = "is_false", default)]
     pub is_anonymous: bool,
-    #[serde(skip_serializing_if = "Option::is_none", rename = "type")]
+    #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
     pub type_: Option<SendPollType>,
     #[serde(skip_serializing_if = "is_false", default)]
     pub allows_multiple_answers: bool,
@@ -125,8 +125,8 @@ impl<'a> SendPollRequest<'a> {
     }
 
     ///A JSON-serialized list of answer options, 2-10 strings 1-100 characters each
-    pub fn options(mut self, options: impl Into<Vec<String>>) -> Self {
-        self.params.options = options.into();
+    pub fn options(mut self, options: impl IntoIterator<Item = String>) -> Self {
+        self.params.options = options.into_iter().collect();
         self
     }
 
@@ -168,9 +168,9 @@ impl<'a> SendPollRequest<'a> {
     ///A JSON-serialized list of special entities that appear in the poll explanation, which can be specified instead of *parse\_mode*
     pub fn explanation_entities(
         mut self,
-        explanation_entities: impl Into<Vec<MessageEntity>>,
+        explanation_entities: impl IntoIterator<Item = MessageEntity>,
     ) -> Self {
-        self.params.explanation_entities = explanation_entities.into();
+        self.params.explanation_entities = explanation_entities.into_iter().collect();
         self
     }
 
