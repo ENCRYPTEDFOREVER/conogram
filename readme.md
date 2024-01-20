@@ -1,8 +1,8 @@
 
 <div align="center">
     <h1><b>Conogram: async Telegram Bot API client written in Rust</b></h1>
-    <a href="https://core.telegram.org/bots/api#september-22-2023">
-        <img src="https://img.shields.io/badge/Bot%20API%20version-6.9-brightgreen?style=for-the-badge">
+    <a href="https://core.telegram.org/bots/api#december-29-2023">
+        <img src="https://img.shields.io/badge/Bot%20API%20version-7.0-brightgreen?style=for-the-badge">
     </a>
     <a href="https://crates.io/crates/conogram">
         <img src="https://img.shields.io/crates/v/conogram.svg?style=for-the-badge">
@@ -22,7 +22,8 @@
 # Features
 - Fully async
 - Utility extension methods for _(not all yet)_ API entities _(e.g. ``message.reply`` method)_
-- Ability to set default request params _(e.g. ``parse_mode`` or ``allow_sending_without_reply``)_
+<!-- Removed, needs to be updated to include recursive serialization shit -->
+<!-- - Ability to set default request params _(e.g. ``parse_mode`` or ``allow_sending_without_reply``)_ -->
 - Can be used in multithreaded context
 - Full control over update handling
 
@@ -89,8 +90,8 @@
     }
 ```
 
-## FAQ
+## Mini-FAQ
 **Q: Is it production-ready?**<br>
-A: It may be, or may be not. The library is not thoroughly tested, some stuff may be broken.<br><br>
+A: It may be, or may be not. The library is not thoroughly tested, some stuff may be broken, unconventional or unusable for you. The reason is I'm developing it for my personal use. But if you're using it too, suggestions on improvement are welcome<br><br>
 **Q: Are there any bots made with it?**<br>
-A: I developed this library to be used by [@hintorbot](https://t.me/hintorbot), so at least this one. If you want to list your bot here, contact me in tg: [@encrypted_for](https://t.me/encrypted_for)
+A: At least a couple of my bots, for example [@hintorbot](https://t.me/hintorbot)
