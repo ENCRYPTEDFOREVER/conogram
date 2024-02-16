@@ -112,16 +112,45 @@ pub enum MessageEntityType {
 // Divider: all content below this line will be preserved after code regen
 
 impl MessageEntity {
-    // Experimental
     pub fn get_text(&self, text: impl AsRef<str>) -> String {
         if self.offset < 0 || self.length < 0 {
             String::new()
         } else {
-            text.as_ref()
-                .chars()
-                .skip(self.offset as usize)
-                .take(self.length as usize)
-                .collect()
+            let text = text.as_ref();
+            let (start, end) = (
+                text.utf16_offset_to_char_index(self.offset as usize),
+                text.utf16_offset_to_char_index((self.offset + self.length) as usize),
+            );
+
+            text.chars().skip(start).take(end - start).collect()
         }
+    }
+}
+
+pub trait Utf16Tools {
+    /// Returns nearest char's index corresponding to provided offset in utf16 codeunits
+    fn utf16_offset_to_char_index(&self, utf16_codeunit_offset: usize) -> usize;
+}
+
+impl<T: AsRef<str>> Utf16Tools for T {
+    fn utf16_offset_to_char_index(&self, utf16_codeunit_offset: usize) -> usize {
+        if utf16_codeunit_offset == 0 {
+            return 0;
+        }
+
+        let text = self.as_ref();
+
+        let mut utf8_char_index = 0;
+        let mut utf16_len = 0;
+
+        for char in text.chars() {
+            utf16_len += char.len_utf16();
+            utf8_char_index += 1;
+            if utf16_len >= utf16_codeunit_offset {
+                break;
+            }
+        }
+
+        utf8_char_index
     }
 }

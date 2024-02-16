@@ -216,6 +216,22 @@ impl API {
         result
     }
 
+    /// Internal conogram method. Returns `Ok(false)`` instead of `Err` if on or more of the messages can't be deleted
+    pub async fn delete_messages_exp(
+        &self,
+        chat_id: impl Into<ChatId>,
+        message_ids: impl IntoIterator<Item = impl Into<i64>>,
+    ) -> Result<bool, ConogramError> {
+        let ids = message_ids.into_iter().map(Into::into).collect::<Vec<_>>();
+        let result = Self::request(self.delete_messages(chat_id, ids)).await;
+        if let Err(err) = &result {
+            if let ConogramErrorType::ApiError(_) = &err.error {
+                return Ok(false);
+            }
+        }
+        result
+    }
+
     /// Poll the server for pending updates
     pub async fn poll_once(&self) -> Result<Vec<Update>, ConogramError> {
         let offset = self

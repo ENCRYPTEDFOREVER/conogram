@@ -21,7 +21,7 @@ pub struct SendPollParams {
     pub options: Vec<String>,
     #[serde(default, skip_serializing_if = "is_false")]
     pub is_anonymous: bool,
-    #[serde(skip_serializing_if = "Option::is_none", rename = "type")]
+    #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
     pub type_: Option<SendPollType>,
     #[serde(default, skip_serializing_if = "is_false")]
     pub allows_multiple_answers: bool,

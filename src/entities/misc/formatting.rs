@@ -3,10 +3,34 @@ use std::{
     ops::{Range, RangeBounds},
 };
 
-use crate::entities::{
-    message_entity::{MessageEntity, MessageEntityType},
-    user::User,
+use crate::{
+    entities::{
+        chat::Chat,
+        message_entity::{MessageEntity, MessageEntityType},
+        user::User,
+    },
+    impl_trait,
 };
+
+pub trait FormatMention {
+    fn mention(&self, ft: FormattedText) -> FormattedText;
+}
+
+impl_trait!(
+    FormatMention for User {
+        fn mention(&self, ft: FormattedText) -> FormattedText {
+            ft.mention_user(self.full_name(), self.id)
+        }
+    }
+);
+
+impl_trait!(
+    FormatMention for Chat {
+        fn mention(&self, ft: FormattedText) -> FormattedText {
+            ft.url(self.full_name(), self.get_url())
+        }
+    }
+);
 
 fn ranges_intersect<T1, T2>(one: Range<T1>, two: Range<T2>) -> bool
 where
@@ -17,15 +41,21 @@ where
 }
 
 pub trait Utf16Len {
+    /// Returns a count of utf16 code units in the string
+    ///
+    /// https://core.telegram.org/api/entities#computing-entity-length
     fn utf16_codeunits(&self) -> i64;
 }
 
 impl<T: AsRef<str>> Utf16Len for T {
     fn utf16_codeunits(&self) -> i64 {
+        // self.as_ref().chars().map(|c| c.len_utf16()).sum::<usize>() as i64
         let mut len = 0;
 
         for byte in self.as_ref().bytes() {
+            // if byte does not start with 0b10
             if (byte & 0xc0) != 0x80 {
+                // if byte starts with 0b11110 (i.e. marks the beginning of a 32-bit UTF-8 code unit)
                 if byte >= 0xf0 {
                     len += 2;
                 } else {
@@ -44,11 +74,15 @@ pub struct FormattedText {
     len: i64,
     entities: Vec<MessageEntity>,
 
-    trim_spaces: bool,
-    use_last_offsets: bool,
+    /// Ignore trailing and preceding whitespace chars when calculating entities' length
+    pub trim_spaces: bool,
 
-    last_offset: i64,
-    last_len: i64,
+    /// Uses offsets from last pushed text for all new ones and ignores new text content while the flag is set.
+    pub use_last_offsets: bool,
+    /// Last entity offset, used for ulo-mode
+    last_ent_offset: i64,
+    /// Last entity offset, used for ulo-mode
+    last_ent_len: i64,
 }
 
 impl PartialEq for FormattedText {
@@ -65,8 +99,8 @@ impl FormattedText {
             entities: Vec::new(),
             trim_spaces: true,
             use_last_offsets: false,
-            last_offset: 0,
-            last_len: 0,
+            last_ent_offset: 0,
+            last_ent_len: 0,
         }
     }
 
@@ -80,8 +114,8 @@ impl FormattedText {
             entities: entities.into(),
             trim_spaces: true,
             use_last_offsets: false,
-            last_offset: 0,
-            last_len: len,
+            last_ent_offset: 0,
+            last_ent_len: len,
         }
     }
 
@@ -117,6 +151,33 @@ impl FormattedText {
         Self::new(new_text, new_entities)
     }
 
+    /// Concats `other` to this instance
+    pub fn concat(mut self, other: impl Into<FormattedText>) -> Self {
+        let other: FormattedText = other.into();
+
+        let added_entities = other.entities.into_iter().map(|mut ent| {
+            ent.offset += self.len;
+            ent
+        });
+
+        self.entities.extend(added_entities);
+        self.text.push_str(&other.text);
+        self.len += other.len;
+
+        self.last_ent_offset = 0;
+        self.last_ent_len = 0;
+        self
+    }
+
+    pub fn get_entities(&self) -> &Vec<MessageEntity> {
+        &self.entities
+    }
+
+    pub fn get_text(&self) -> &String {
+        &self.text
+    }
+
+    /// Ignore trailing and preceding whitespace chars when calculating entities' length
     pub fn trim_spaces(mut self, trim: bool) -> Self {
         self.trim_spaces = trim;
         self
@@ -126,6 +187,10 @@ impl FormattedText {
     pub fn ulo(mut self, use_last_offsets: bool) -> Self {
         self.use_last_offsets = use_last_offsets;
         self
+    }
+
+    pub fn is_ulo(&self) -> bool {
+        self.use_last_offsets
     }
 
     fn calc_entity_len_offset(&self, text: &str) -> (i64, i64, i64) {
@@ -159,8 +224,8 @@ impl FormattedText {
         if self.use_last_offsets {
             let entity = MessageEntity {
                 type_: entity_type,
-                offset: self.last_offset,
-                length: self.last_len,
+                offset: self.last_ent_offset,
+                length: self.last_ent_len,
                 url: url.into(),
                 user: user.into(),
                 language: pre_lang.into(),
@@ -183,8 +248,8 @@ impl FormattedText {
                 custom_emoji_id: custom_emoji_id.into(),
             };
 
-            self.last_offset = entity_offset;
-            self.last_len = entity_len;
+            self.last_ent_offset = entity_offset;
+            self.last_ent_len = entity_len;
 
             self.entities.push(entity);
             self.text.push_str(text);
@@ -198,8 +263,8 @@ impl FormattedText {
         if self.use_last_offsets {
             let entity = MessageEntity {
                 type_: entity_type,
-                offset: self.last_offset,
-                length: self.last_len,
+                offset: self.last_ent_offset,
+                length: self.last_ent_len,
                 ..Default::default()
             };
 
@@ -216,8 +281,8 @@ impl FormattedText {
                 ..Default::default()
             };
 
-            self.last_offset = entity_offset;
-            self.last_len = entity_len;
+            self.last_ent_offset = entity_offset;
+            self.last_ent_len = entity_len;
 
             self.entities.push(entity);
             self.text.push_str(text);
@@ -234,8 +299,8 @@ impl FormattedText {
         if self.use_last_offsets {
             let entities = entity_types.into_iter().map(|t| MessageEntity {
                 type_: t,
-                offset: self.last_offset,
-                length: self.last_len,
+                offset: self.last_ent_offset,
+                length: self.last_ent_len,
                 ..Default::default()
             });
             self.entities.extend(entities);
@@ -251,8 +316,8 @@ impl FormattedText {
                 ..Default::default()
             });
 
-            self.last_offset = entity_offset;
-            self.last_len = entity_len;
+            self.last_ent_offset = entity_offset;
+            self.last_ent_len = entity_len;
 
             self.entities.extend(entities);
             self.text.push_str(text);
@@ -266,8 +331,8 @@ impl FormattedText {
         let (text_len, entity_offset, entity_len) = self.calc_entity_len_offset(text_ref);
 
         if !self.use_last_offsets {
-            self.last_offset = entity_offset;
-            self.last_len = entity_len;
+            self.last_ent_offset = entity_offset;
+            self.last_ent_len = entity_len;
         }
 
         self.text.push_str(text_ref);
@@ -276,7 +341,7 @@ impl FormattedText {
     }
 
     pub fn nl(mut self) -> Self {
-        // newlines don't count in entity borders, os no special handling for
+        // newlines don't count in entity borders, so no special handling for
         // self.use_last_entities_offset
 
         self.text.push('\n');
@@ -327,8 +392,9 @@ impl FormattedText {
         )
     }
 
-    pub fn mention(self, text: impl ToString, user_id: impl Into<i64>) -> Self {
+    pub fn mention_user(self, text: impl ToString, user_id: impl Into<i64>) -> Self {
         let user_id = user_id.into();
+
         if user_id > 0 {
             self.push_entity_extended(
                 text.to_string(),
@@ -341,9 +407,19 @@ impl FormattedText {
                 None,
                 None,
             )
+        // Attempt to handle user error...
+        } else if user_id < -9999 {
+            self.url(
+                text,
+                format!("https://t.me/c/{}", &user_id.to_string()[4..]),
+            )
         } else {
             self
         }
+    }
+
+    pub fn mention(self, mention: impl FormatMention) -> Self {
+        mention.mention(self)
     }
 
     pub fn code_block(self, text: impl ToString) -> Self {
@@ -386,5 +462,31 @@ impl Default for FormattedText {
 impl Display for FormattedText {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str(&self.text)
+    }
+}
+
+impl From<String> for FormattedText {
+    fn from(value: String) -> Self {
+        let len = value.utf16_codeunits();
+        Self {
+            text: value,
+            len,
+
+            trim_spaces: true,
+            ..Default::default()
+        }
+    }
+}
+
+impl From<&str> for FormattedText {
+    fn from(value: &str) -> Self {
+        let len = value.utf16_codeunits();
+        Self {
+            text: value.to_owned(),
+            len,
+
+            trim_spaces: true,
+            ..Default::default()
+        }
     }
 }

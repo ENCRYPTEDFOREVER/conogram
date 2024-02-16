@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::entities::chat::Chat;
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq, Hash)]
 #[serde(untagged)]
 pub enum ChatId {
     /// @channel_username

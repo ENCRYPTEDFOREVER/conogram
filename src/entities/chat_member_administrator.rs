@@ -15,7 +15,7 @@ pub struct ChatMemberAdministrator {
     ///*True*, if the user's presence in the chat is hidden
     pub is_anonymous: bool,
 
-    ///*True*, if the administrator can access the chat event log, boost list in channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
+    ///*True*, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
     pub can_manage_chat: bool,
 
     ///*True*, if the administrator can delete messages of other users
@@ -36,6 +36,15 @@ pub struct ChatMemberAdministrator {
     ///*True*, if the user is allowed to invite new users to the chat
     pub can_invite_users: bool,
 
+    ///*True*, if the administrator can post stories to the chat
+    pub can_post_stories: bool,
+
+    ///*True*, if the administrator can edit stories posted by other users
+    pub can_edit_stories: bool,
+
+    ///*True*, if the administrator can delete stories posted by other users
+    pub can_delete_stories: bool,
+
     ///*Optional*. *True*, if the administrator can post messages in the channel, or access channel statistics; channels only
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_post_messages: bool,
@@ -47,18 +56,6 @@ pub struct ChatMemberAdministrator {
     ///*Optional*. *True*, if the user is allowed to pin messages; groups and supergroups only
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_pin_messages: bool,
-
-    ///*Optional*. *True*, if the administrator can post stories in the channel; channels only
-    #[serde(default, skip_serializing_if = "is_false")]
-    pub can_post_stories: bool,
-
-    ///*Optional*. *True*, if the administrator can edit stories posted by other users; channels only
-    #[serde(default, skip_serializing_if = "is_false")]
-    pub can_edit_stories: bool,
-
-    ///*Optional*. *True*, if the administrator can delete stories posted by other users; channels only
-    #[serde(default, skip_serializing_if = "is_false")]
-    pub can_delete_stories: bool,
 
     ///*Optional*. *True*, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only
     #[serde(default, skip_serializing_if = "is_false")]

@@ -19,14 +19,14 @@ use serde::{Deserialize, Serialize};
 ///API Reference: [link](https://core.telegram.org/bots/api/#update)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Update {
-    ///The update's unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you're using [webhooks](https://core.telegram.org/bots/api/#setwebhook), since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
+    ///The update's unique identifier. Update identifiers start from a certain positive number and increase sequentially. This identifier becomes especially handy if you're using [webhooks](https://core.telegram.org/bots/api/#setwebhook), since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
     pub update_id: i64,
 
     ///*Optional*. New incoming message of any kind - text, photo, sticker, etc.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<Box<Message>>,
 
-    ///*Optional*. New version of a message that is known to the bot and was edited
+    ///*Optional*. New version of a message that is known to the bot and was edited. This update may at times be triggered by changes to message fields that are either unavailable or not actively used by your bot.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub edited_message: Option<Box<Message>>,
 
@@ -34,7 +34,7 @@ pub struct Update {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_post: Option<Box<Message>>,
 
-    ///*Optional*. New version of a channel post that is known to the bot and was edited
+    ///*Optional*. New version of a channel post that is known to the bot and was edited. This update may at times be triggered by changes to message fields that are either unavailable or not actively used by your bot.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub edited_channel_post: Option<Box<Message>>,
 
@@ -42,7 +42,7 @@ pub struct Update {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_reaction: Option<MessageReactionUpdated>,
 
-    ///*Optional*. Reactions to a message with anonymous reactions were changed. The bot must be an administrator in the chat and must explicitly specify `"message_reaction_count"` in the list of *allowed\_updates* to receive these updates.
+    ///*Optional*. Reactions to a message with anonymous reactions were changed. The bot must be an administrator in the chat and must explicitly specify `"message_reaction_count"` in the list of *allowed\_updates* to receive these updates. The updates are grouped and can be sent with delay up to a few minutes.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_reaction_count: Option<MessageReactionCountUpdated>,
 
@@ -66,7 +66,7 @@ pub struct Update {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pre_checkout_query: Option<PreCheckoutQuery>,
 
-    ///*Optional*. New poll state. Bots receive only updates about stopped polls and polls, which are sent by the bot
+    ///*Optional*. New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot
     #[serde(skip_serializing_if = "Option::is_none")]
     pub poll: Option<Poll>,
 

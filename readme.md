@@ -1,8 +1,8 @@
 
 <div align="center">
     <h1><b>Conogram: async Telegram Bot API client written in Rust</b></h1>
-    <a href="https://core.telegram.org/bots/api#december-29-2023">
-        <img src="https://img.shields.io/badge/Bot%20API%20version-7.0-brightgreen?style=for-the-badge">
+    <a href="https://core.telegram.org/bots/api#february-16-2024">
+        <img src="https://img.shields.io/badge/Bot%20API%20version-7.1-brightgreen?style=for-the-badge">
     </a>
     <a href="https://crates.io/crates/conogram">
         <img src="https://img.shields.io/crates/v/conogram.svg?style=for-the-badge">
@@ -90,8 +90,6 @@
     }
 ```
 
-## Mini-FAQ
+## Very-Mini-FAQ
 **Q: Is it production-ready?**<br>
-A: It may be, or may be not. The library is not thoroughly tested, some stuff may be broken, unconventional or unusable for you. The reason is I'm developing it for my personal use. But if you're using it too, suggestions on improvement are welcome<br><br>
-**Q: Are there any bots made with it?**<br>
-A: At least a couple of my bots, for example [@hintorbot](https://t.me/hintorbot)
+A: The library is not thoroughly tested, some stuff may be broken, unconventional or unusable for you. The reason is I'm developing it for my personal use. But if you're using it too, suggestions on improvement are welcome<br><br>

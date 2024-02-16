@@ -18,6 +18,7 @@ pub mod callback_query;
 pub mod chat;
 pub mod chat_administrator_rights;
 pub mod chat_boost;
+pub mod chat_boost_added;
 pub mod chat_boost_removed;
 pub mod chat_boost_source;
 pub mod chat_boost_source_gift_code;
