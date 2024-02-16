@@ -11,7 +11,7 @@ pub struct ChatBoostUpdated {
     #[serde(deserialize_with = "deserialize_boxed")]
     pub chat: Box<Chat>,
 
-    ///Infomation about the chat boost
+    ///Information about the chat boost
     pub boost: ChatBoost,
 }
 // Divider: all content below this line will be preserved after code regen

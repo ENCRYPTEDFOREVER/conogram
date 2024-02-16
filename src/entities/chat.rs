@@ -109,9 +109,13 @@ pub struct Chat {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub permissions: Option<ChatPermissions>,
 
-    ///*Optional*. For supergroups, the minimum allowed delay between consecutive messages sent by each unpriviledged user; in seconds. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
+    ///*Optional*. For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user; in seconds. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub slow_mode_delay: Option<i64>,
+
+    ///*Optional*. For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unrestrict_boost_count: Option<i64>,
 
     ///*Optional*. The time after which all messages sent to the chat will be automatically deleted; in seconds. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -140,6 +144,10 @@ pub struct Chat {
     ///*Optional*. *True*, if the bot can change the group sticker set. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_set_sticker_set: bool,
+
+    ///*Optional*. For supergroups, the name of the group's custom emoji sticker set. Custom emoji from this set can be used by all users and bots in the group. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_emoji_sticker_set_name: Option<String>,
 
     ///*Optional*. Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -204,6 +212,14 @@ impl Chat {
 }
 
 impl Chat {
+    pub fn get_url(&self) -> String {
+        if let Some(username) = &self.username {
+            format!("https://t.me/{username}")
+        } else {
+            format!("https://t.me/c/{}", &self.id.to_string()[4..])
+        }
+    }
+
     pub fn unpin_all_messages<'a>(
         &'a self,
         api: &'a API,

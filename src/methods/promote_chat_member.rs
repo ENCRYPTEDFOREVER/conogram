@@ -29,17 +29,17 @@ pub struct PromoteChatMemberParams {
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_invite_users: bool,
     #[serde(default, skip_serializing_if = "is_false")]
-    pub can_post_messages: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
-    pub can_edit_messages: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
-    pub can_pin_messages: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
     pub can_post_stories: bool,
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_edit_stories: bool,
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_delete_stories: bool,
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub can_post_messages: bool,
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub can_edit_messages: bool,
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub can_pin_messages: bool,
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_manage_topics: bool,
 }
@@ -84,12 +84,12 @@ impl<'a> PromoteChatMemberRequest<'a> {
                 can_promote_members: bool::default(),
                 can_change_info: bool::default(),
                 can_invite_users: bool::default(),
-                can_post_messages: bool::default(),
-                can_edit_messages: bool::default(),
-                can_pin_messages: bool::default(),
                 can_post_stories: bool::default(),
                 can_edit_stories: bool::default(),
                 can_delete_stories: bool::default(),
+                can_post_messages: bool::default(),
+                can_edit_messages: bool::default(),
+                can_pin_messages: bool::default(),
                 can_manage_topics: bool::default(),
             },
         }
@@ -113,7 +113,7 @@ impl<'a> PromoteChatMemberRequest<'a> {
         self
     }
 
-    ///Pass *True* if the administrator can access the chat event log, boost list in channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
+    ///Pass *True* if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
     pub fn can_manage_chat(mut self, can_manage_chat: impl Into<bool>) -> Self {
         self.params.can_manage_chat = can_manage_chat.into();
         self
@@ -155,6 +155,24 @@ impl<'a> PromoteChatMemberRequest<'a> {
         self
     }
 
+    ///Pass *True* if the administrator can post stories to the chat
+    pub fn can_post_stories(mut self, can_post_stories: impl Into<bool>) -> Self {
+        self.params.can_post_stories = can_post_stories.into();
+        self
+    }
+
+    ///Pass *True* if the administrator can edit stories posted by other users
+    pub fn can_edit_stories(mut self, can_edit_stories: impl Into<bool>) -> Self {
+        self.params.can_edit_stories = can_edit_stories.into();
+        self
+    }
+
+    ///Pass *True* if the administrator can delete stories posted by other users
+    pub fn can_delete_stories(mut self, can_delete_stories: impl Into<bool>) -> Self {
+        self.params.can_delete_stories = can_delete_stories.into();
+        self
+    }
+
     ///Pass *True* if the administrator can post messages in the channel, or access channel statistics; channels only
     pub fn can_post_messages(mut self, can_post_messages: impl Into<bool>) -> Self {
         self.params.can_post_messages = can_post_messages.into();
@@ -170,24 +188,6 @@ impl<'a> PromoteChatMemberRequest<'a> {
     ///Pass *True* if the administrator can pin messages, supergroups only
     pub fn can_pin_messages(mut self, can_pin_messages: impl Into<bool>) -> Self {
         self.params.can_pin_messages = can_pin_messages.into();
-        self
-    }
-
-    ///Pass *True* if the administrator can post stories in the channel; channels only
-    pub fn can_post_stories(mut self, can_post_stories: impl Into<bool>) -> Self {
-        self.params.can_post_stories = can_post_stories.into();
-        self
-    }
-
-    ///Pass *True* if the administrator can edit stories posted by other users; channels only
-    pub fn can_edit_stories(mut self, can_edit_stories: impl Into<bool>) -> Self {
-        self.params.can_edit_stories = can_edit_stories.into();
-        self
-    }
-
-    ///Pass *True* if the administrator can delete stories posted by other users; channels only
-    pub fn can_delete_stories(mut self, can_delete_stories: impl Into<bool>) -> Self {
-        self.params.can_delete_stories = can_delete_stories.into();
         self
     }
 

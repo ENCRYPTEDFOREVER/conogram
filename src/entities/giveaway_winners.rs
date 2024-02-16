@@ -12,7 +12,7 @@ pub struct GiveawayWinners {
     #[serde(deserialize_with = "deserialize_boxed")]
     pub chat: Box<Chat>,
 
-    ///Identifier of the messsage with the giveaway in the chat
+    ///Identifier of the message with the giveaway in the chat
     pub giveaway_message_id: i64,
 
     ///Point in time (Unix timestamp) when winners of the giveaway were selected

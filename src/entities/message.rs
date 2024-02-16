@@ -1,6 +1,7 @@
 use crate::entities::animation::Animation;
 use crate::entities::audio::Audio;
 use crate::entities::chat::Chat;
+use crate::entities::chat_boost_added::ChatBoostAdded;
 use crate::entities::chat_shared::ChatShared;
 use crate::entities::contact::Contact;
 use crate::entities::dice::Dice;
@@ -68,6 +69,10 @@ pub struct Message {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sender_chat: Option<Box<Chat>>,
 
+    ///*Optional*. If the sender of the message boosted the chat, the number of boosts added by the user
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sender_boost_count: Option<i64>,
+
     ///Date the message was sent in Unix time. It is always a positive number, representing a valid date.
     pub date: i64,
 
@@ -98,6 +103,10 @@ pub struct Message {
     ///*Optional*. For replies that quote part of the original message, the quoted part of the message
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quote: Option<TextQuote>,
+
+    ///*Optional*. For replies to a story, the original story
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reply_to_story: Option<Story>,
 
     ///*Optional*. Bot through which the message was sent
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -283,6 +292,10 @@ pub struct Message {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub proximity_alert_triggered: Option<ProximityAlertTriggered>,
 
+    ///*Optional*. Service message: user boosted the chat
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub boost_added: Option<ChatBoostAdded>,
+
     ///*Optional*. Service message: forum topic created
     #[serde(skip_serializing_if = "Option::is_none")]
     pub forum_topic_created: Option<ForumTopicCreated>,
@@ -366,6 +379,29 @@ use crate::methods::send_message::SendMessageRequest;
 use crate::methods::set_message_reaction::SetMessageReactionRequest;
 use std::ops::Range;
 
+pub enum InputMessageText {
+    String(String),
+    FormattedText(FormattedText),
+}
+
+impl From<&str> for InputMessageText {
+    fn from(value: &str) -> Self {
+        Self::String(value.to_owned())
+    }
+}
+
+impl From<String> for InputMessageText {
+    fn from(value: String) -> Self {
+        Self::String(value)
+    }
+}
+
+impl From<FormattedText> for InputMessageText {
+    fn from(value: FormattedText) -> Self {
+        Self::FormattedText(value)
+    }
+}
+
 impl From<MaybeInaccessibleMessage> for Option<Message> {
     fn from(value: MaybeInaccessibleMessage) -> Self {
         match value {
@@ -385,19 +421,7 @@ impl<'a> From<&'a MaybeInaccessibleMessage> for Option<&'a Message> {
 }
 
 impl Message {
-    pub fn sender_mention_html(&self) -> String {
-        if let Some(sender_chat) = &self.sender_chat {
-            sender_chat.mention_html()
-        } else if let Some(user) = &self.from {
-            user.mention_html()
-        } else if let Some(signature) = &self.author_signature {
-            signature.clone()
-        } else {
-            // TODO: Channels or smth, idk if even possible...
-            panic!("Can't create mention from message {self:?}")
-        }
-    }
-
+    /// Static version of get_url()
     pub fn make_url(chat_id: impl Into<ChatId>, message_id: impl Into<i64>) -> String {
         format!(
             "https://t.me/c/{}/{}",
@@ -567,16 +591,24 @@ impl Message {
         })
     }
 
-    pub fn reply<'a>(&'a self, api: &'a API, text: impl Into<String>) -> SendMessageRequest {
-        api.send_message(self.chat.id, text)
-            .reply_parameters(ReplyParameters::new_current_chat(self.message_id))
+    pub fn reply<'a>(
+        &'a self,
+        api: &'a API,
+        text: impl Into<InputMessageText>,
+    ) -> SendMessageRequest {
+        match text.into() {
+            InputMessageText::String(v) => api
+                .send_message(self.chat.id, v)
+                .reply_parameters(ReplyParameters::new_current_chat(self.message_id)),
+            InputMessageText::FormattedText(ft) => self.reply_formatted(api, ft),
+        }
     }
 
     /// The same as Message::reply().entities()
     pub fn reply_entities<'a>(
         &'a self,
         api: &'a API,
-        text: impl Into<String>,
+        text: impl Into<InputMessageText>,
         entities: impl IntoIterator<Item = MessageEntity>,
     ) -> SendMessageRequest {
         self.reply(api, text).entities(entities)

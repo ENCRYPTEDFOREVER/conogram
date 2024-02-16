@@ -126,19 +126,19 @@ pub enum SendDiceEmoji {
     #[default]
     /// "🎲"
     #[serde(rename = "🎲")]
-    Dice,
+    GameDie,
 
     /// "🎯"
     #[serde(rename = "🎯")]
-    Dart,
+    Bullseye,
 
     /// "🏀"
     #[serde(rename = "🏀")]
-    BasketBall,
+    Basketball,
 
     /// "⚽"
     #[serde(rename = "⚽")]
-    FootBall,
+    SoccerBall,
 
     /// "🎳"
     #[serde(rename = "🎳")]

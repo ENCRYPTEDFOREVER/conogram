@@ -30,3 +30,19 @@ pub struct ChatJoinRequest {
     pub invite_link: Option<ChatInviteLink>,
 }
 // Divider: all content below this line will be preserved after code regen
+
+use crate::api::API;
+use crate::methods::{
+    approve_chat_join_request::ApproveChatJoinRequestRequest,
+    decline_chat_join_request::DeclineChatJoinRequestRequest,
+};
+
+impl ChatJoinRequest {
+    pub fn approve<'a>(&'a self, api: &'a API) -> ApproveChatJoinRequestRequest<'a> {
+        api.approve_chat_join_request(self.chat.id, self.from.id)
+    }
+
+    pub fn decline<'a>(&'a self, api: &'a API) -> DeclineChatJoinRequestRequest<'a> {
+        api.decline_chat_join_request(self.chat.id, self.from.id)
+    }
+}

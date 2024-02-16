@@ -191,7 +191,7 @@ pub enum ReactionTypeEmojiEmoji {
 
     /// "👨‍💻"
     #[serde(rename = "👨‍💻")]
-    ManTechnolodyst,
+    ManTechnologist,
 
     /// "👀"
     #[serde(rename = "👀")]
