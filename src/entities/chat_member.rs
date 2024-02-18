@@ -99,4 +99,16 @@ impl ChatMember {
             _ => false,
         }
     }
+
+    pub fn get_until_date(&self) -> Option<i64> {
+        if let ChatMember::Banned(m) = &self {
+            Some(m.until_date)
+        } else {
+            None
+        }
+    }
+
+    pub fn is_banned(&self) -> bool {
+        matches!(self, ChatMember::Banned(_))
+    }
 }
