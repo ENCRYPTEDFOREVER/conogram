@@ -216,7 +216,8 @@ impl Chat {
         if let Some(username) = &self.username {
             format!("https://t.me/{username}")
         } else {
-            format!("https://t.me/c/{}", &self.id.to_string()[4..])
+            // message_id 999999999 is used to allow the link to work in all clients
+            format!("https://t.me/c/{}/999999999", &self.id.to_string()[4..])
         }
     }
 
