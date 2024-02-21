@@ -73,54 +73,63 @@ impl<'a> EditMessageLiveLocationRequest<'a> {
     }
 
     ///Required if *inline\_message\_id* is not specified. Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = Some(chat_id.into());
         self
     }
 
     ///Required if *inline\_message\_id* is not specified. Identifier of the message to edit
+    #[must_use]
     pub fn message_id(mut self, message_id: impl Into<i64>) -> Self {
         self.params.message_id = Some(message_id.into());
         self
     }
 
     ///Required if *chat\_id* and *message\_id* are not specified. Identifier of the inline message
+    #[must_use]
     pub fn inline_message_id(mut self, inline_message_id: impl Into<String>) -> Self {
         self.params.inline_message_id = Some(inline_message_id.into());
         self
     }
 
     ///Latitude of new location
+    #[must_use]
     pub fn latitude(mut self, latitude: impl Into<f64>) -> Self {
         self.params.latitude = latitude.into();
         self
     }
 
     ///Longitude of new location
+    #[must_use]
     pub fn longitude(mut self, longitude: impl Into<f64>) -> Self {
         self.params.longitude = longitude.into();
         self
     }
 
     ///The radius of uncertainty for the location, measured in meters; 0-1500
+    #[must_use]
     pub fn horizontal_accuracy(mut self, horizontal_accuracy: impl Into<f64>) -> Self {
         self.params.horizontal_accuracy = Some(horizontal_accuracy.into());
         self
     }
 
     ///Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.
+    #[must_use]
     pub fn heading(mut self, heading: impl Into<i64>) -> Self {
         self.params.heading = Some(heading.into());
         self
     }
 
     ///The maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.
+    #[must_use]
     pub fn proximity_alert_radius(mut self, proximity_alert_radius: impl Into<i64>) -> Self {
         self.params.proximity_alert_radius = Some(proximity_alert_radius.into());
         self
     }
 
     ///A JSON-serialized object for a new [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards).
+    #[must_use]
     pub fn reply_markup(mut self, reply_markup: impl Into<InlineKeyboardMarkup>) -> Self {
         self.params.reply_markup = Some(reply_markup.into());
         self

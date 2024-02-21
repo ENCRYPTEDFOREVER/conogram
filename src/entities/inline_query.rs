@@ -58,15 +58,12 @@ use crate::api::API;
 use crate::methods::answer_inline_query::AnswerInlineQueryRequest;
 
 impl InlineQuery {
-    pub fn answer<'a, T: Into<InlineQueryResult>>(
+    pub fn answer<'a>(
         &'a self,
         api: &'a API,
-        results: impl IntoIterator<Item = T>,
+        results: impl IntoIterator<Item = impl Into<InlineQueryResult>>,
     ) -> AnswerInlineQueryRequest {
-        api.answer_inline_query(
-            &self.id,
-            results.into_iter().map(|v| v.into()).collect::<Vec<_>>(),
-        )
+        api.answer_inline_query(&self.id, results)
     }
 
     // Answer with no results

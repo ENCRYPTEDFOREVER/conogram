@@ -454,7 +454,7 @@ impl Message {
     }
 
     /// Returns `text` or `caption` if `text` is empty
-    pub fn get_text(&self) -> &Option<String> {
+    pub const fn get_text(&self) -> &Option<String> {
         if self.text.is_some() {
             &self.text
         } else {

@@ -77,42 +77,42 @@ use super::user::User;
 
 impl ChatMember {
     /// Returns a User object from underlying value
-    pub fn user(&self) -> &User {
+    pub const fn user(&self) -> &User {
         match self {
-            ChatMember::Owner(m) => &m.user,
-            ChatMember::Administrator(m) => &m.user,
-            ChatMember::Member(m) => &m.user,
-            ChatMember::Restricted(m) => &m.user,
-            ChatMember::Left(m) => &m.user,
-            ChatMember::Banned(m) => &m.user,
+            Self::Owner(m) => &m.user,
+            Self::Administrator(m) => &m.user,
+            Self::Member(m) => &m.user,
+            Self::Restricted(m) => &m.user,
+            Self::Left(m) => &m.user,
+            Self::Banned(m) => &m.user,
         }
     }
 
-    pub fn is_admin(&self) -> bool {
-        matches!(self, ChatMember::Owner(_) | ChatMember::Administrator(_))
+    pub const fn is_admin(&self) -> bool {
+        matches!(self, Self::Owner(_) | Self::Administrator(_))
     }
 
-    pub fn is_in_chat(&self) -> bool {
+    pub const fn is_in_chat(&self) -> bool {
         match self {
-            ChatMember::Owner(_) | ChatMember::Administrator(_) | ChatMember::Member(_) => true,
-            ChatMember::Restricted(m) => m.is_member,
+            Self::Owner(_) | Self::Administrator(_) | Self::Member(_) => true,
+            Self::Restricted(m) => m.is_member,
             _ => false,
         }
     }
 
-    pub fn get_until_date(&self) -> Option<i64> {
-        if let ChatMember::Banned(m) = &self {
+    pub const fn get_until_date(&self) -> Option<i64> {
+        if let Self::Banned(m) = &self {
             Some(m.until_date)
         } else {
             None
         }
     }
 
-    pub fn is_banned(&self) -> bool {
-        matches!(self, ChatMember::Banned(_))
+    pub const fn is_banned(&self) -> bool {
+        matches!(self, Self::Banned(_))
     }
 
-    pub fn is_restricted(&self) -> bool {
-        matches!(self, ChatMember::Restricted(_))
+    pub const fn is_restricted(&self) -> bool {
+        matches!(self, Self::Restricted(_))
     }
 }

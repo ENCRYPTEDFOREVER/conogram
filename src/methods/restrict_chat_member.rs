@@ -65,24 +65,28 @@ impl<'a> RestrictChatMemberRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///Unique identifier of the target user
+    #[must_use]
     pub fn user_id(mut self, user_id: impl Into<i64>) -> Self {
         self.params.user_id = user_id.into();
         self
     }
 
     ///A JSON-serialized object for new user permissions
+    #[must_use]
     pub fn permissions(mut self, permissions: impl Into<ChatPermissions>) -> Self {
         self.params.permissions = permissions.into();
         self
     }
 
     ///Pass *True* if chat permissions are set independently. Otherwise, the *can\_send\_other\_messages* and *can\_add\_web\_page\_previews* permissions will imply the *can\_send\_messages*, *can\_send\_audios*, *can\_send\_documents*, *can\_send\_photos*, *can\_send\_videos*, *can\_send\_video\_notes*, and *can\_send\_voice\_notes* permissions; the *can\_send\_polls* permission will imply the *can\_send\_messages* permission.
+    #[must_use]
     pub fn use_independent_chat_permissions(
         mut self,
         use_independent_chat_permissions: impl Into<bool>,
@@ -92,6 +96,7 @@ impl<'a> RestrictChatMemberRequest<'a> {
     }
 
     ///Date when restrictions will be lifted for the user; Unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever
+    #[must_use]
     pub fn until_date(mut self, until_date: impl Into<i64>) -> Self {
         self.params.until_date = Some(until_date.into());
         self

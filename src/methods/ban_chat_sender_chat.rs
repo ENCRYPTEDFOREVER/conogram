@@ -50,12 +50,14 @@ impl<'a> BanChatSenderChatRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///Unique identifier of the target sender chat
+    #[must_use]
     pub fn sender_chat_id(mut self, sender_chat_id: impl Into<i64>) -> Self {
         self.params.sender_chat_id = sender_chat_id.into();
         self

@@ -56,12 +56,14 @@ impl<'a> SetPassportDataErrorsRequest<'a> {
     }
 
     ///User identifier
+    #[must_use]
     pub fn user_id(mut self, user_id: impl Into<i64>) -> Self {
         self.params.user_id = user_id.into();
         self
     }
 
     ///A JSON-serialized array describing the errors
+    #[must_use]
     pub fn errors(
         mut self,
         errors: impl IntoIterator<Item = impl Into<PassportElementError>>,

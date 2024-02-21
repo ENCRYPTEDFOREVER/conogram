@@ -56,18 +56,21 @@ impl<'a> AnswerPreCheckoutQueryRequest<'a> {
     }
 
     ///Unique identifier for the query to be answered
+    #[must_use]
     pub fn pre_checkout_query_id(mut self, pre_checkout_query_id: impl Into<String>) -> Self {
         self.params.pre_checkout_query_id = pre_checkout_query_id.into();
         self
     }
 
     ///Specify *True* if everything is alright (goods are available, etc.) and the bot is ready to proceed with the order. Use *False* if there are any problems.
+    #[must_use]
     pub fn ok(mut self, ok: impl Into<bool>) -> Self {
         self.params.ok = ok.into();
         self
     }
 
     ///Required if *ok* is *False*. Error message in human readable form that explains the reason for failure to proceed with the checkout (e.g. "Sorry, somebody just bought the last of our amazing black T-shirts while you were busy filling out your payment details. Please choose a different color or garment!"). Telegram will display this message to the user.
+    #[must_use]
     pub fn error_message(mut self, error_message: impl Into<String>) -> Self {
         self.params.error_message = Some(error_message.into());
         self

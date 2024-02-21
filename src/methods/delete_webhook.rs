@@ -49,6 +49,7 @@ impl<'a> DeleteWebhookRequest<'a> {
     }
 
     ///Pass *True* to drop all pending updates
+    #[must_use]
     pub fn drop_pending_updates(mut self, drop_pending_updates: impl Into<bool>) -> Self {
         self.params.drop_pending_updates = drop_pending_updates.into();
         self

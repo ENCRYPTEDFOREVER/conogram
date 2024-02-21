@@ -59,18 +59,21 @@ impl<'a> SetChatPermissionsRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///A JSON-serialized object for new default chat permissions
+    #[must_use]
     pub fn permissions(mut self, permissions: impl Into<ChatPermissions>) -> Self {
         self.params.permissions = permissions.into();
         self
     }
 
     ///Pass *True* if chat permissions are set independently. Otherwise, the *can\_send\_other\_messages* and *can\_add\_web\_page\_previews* permissions will imply the *can\_send\_messages*, *can\_send\_audios*, *can\_send\_documents*, *can\_send\_photos*, *can\_send\_videos*, *can\_send\_video\_notes*, and *can\_send\_voice\_notes* permissions; the *can\_send\_polls* permission will imply the *can\_send\_messages* permission.
+    #[must_use]
     pub fn use_independent_chat_permissions(
         mut self,
         use_independent_chat_permissions: impl Into<bool>,

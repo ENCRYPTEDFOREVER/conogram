@@ -53,12 +53,14 @@ impl<'a> SetStickerEmojiListRequest<'a> {
     }
 
     ///File identifier of the sticker
+    #[must_use]
     pub fn sticker(mut self, sticker: impl Into<String>) -> Self {
         self.params.sticker = sticker.into();
         self
     }
 
     ///A JSON-serialized list of 1-20 emoji associated with the sticker
+    #[must_use]
     pub fn emoji_list(mut self, emoji_list: impl IntoIterator<Item = impl Into<String>>) -> Self {
         self.params.emoji_list = emoji_list.into_iter().map(Into::into).collect();
         self

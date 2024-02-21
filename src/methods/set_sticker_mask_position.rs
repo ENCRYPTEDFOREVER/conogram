@@ -51,12 +51,14 @@ impl<'a> SetStickerMaskPositionRequest<'a> {
     }
 
     ///File identifier of the sticker
+    #[must_use]
     pub fn sticker(mut self, sticker: impl Into<String>) -> Self {
         self.params.sticker = sticker.into();
         self
     }
 
     ///A JSON-serialized object with the position where the mask should be placed on faces. Omit the parameter to remove the mask position.
+    #[must_use]
     pub fn mask_position(mut self, mask_position: impl Into<MaskPosition>) -> Self {
         self.params.mask_position = Some(mask_position.into());
         self

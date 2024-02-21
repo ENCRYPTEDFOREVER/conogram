@@ -32,7 +32,7 @@ pub struct SendMediaGroupParams {
 impl GetFiles for SendMediaGroupParams {
     fn get_files(&self) -> HashMap<Moose, &InputFile> {
         let mut map = HashMap::new();
-        for media in self.media.iter() {
+        for media in &self.media {
             map.extend(media.get_files());
         }
         map
@@ -83,36 +83,42 @@ impl<'a> SendMediaGroupRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+    #[must_use]
     pub fn message_thread_id(mut self, message_thread_id: impl Into<i64>) -> Self {
         self.params.message_thread_id = Some(message_thread_id.into());
         self
     }
 
     ///A JSON-serialized array describing messages to be sent, must include 2-10 items
+    #[must_use]
     pub fn media(mut self, media: impl IntoIterator<Item = impl Into<InputMedia>>) -> Self {
         self.params.media = media.into_iter().map(Into::into).collect();
         self
     }
 
     ///Sends messages [silently](https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
+    #[must_use]
     pub fn disable_notification(mut self, disable_notification: impl Into<bool>) -> Self {
         self.params.disable_notification = disable_notification.into();
         self
     }
 
     ///Protects the contents of the sent messages from forwarding and saving
+    #[must_use]
     pub fn protect_content(mut self, protect_content: impl Into<bool>) -> Self {
         self.params.protect_content = protect_content.into();
         self
     }
 
     ///Description of the message to reply to
+    #[must_use]
     pub fn reply_parameters(mut self, reply_parameters: impl Into<ReplyParameters>) -> Self {
         self.params.reply_parameters = Some(reply_parameters.into());
         self

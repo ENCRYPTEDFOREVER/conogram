@@ -54,18 +54,21 @@ impl<'a> GetUserProfilePhotosRequest<'a> {
     }
 
     ///Unique identifier of the target user
+    #[must_use]
     pub fn user_id(mut self, user_id: impl Into<i64>) -> Self {
         self.params.user_id = user_id.into();
         self
     }
 
     ///Sequential number of the first photo to be returned. By default, all photos are returned.
+    #[must_use]
     pub fn offset(mut self, offset: impl Into<i64>) -> Self {
         self.params.offset = Some(offset.into());
         self
     }
 
     ///Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100.
+    #[must_use]
     pub fn limit(mut self, limit: impl Into<i64>) -> Self {
         self.params.limit = Some(limit.into());
         self

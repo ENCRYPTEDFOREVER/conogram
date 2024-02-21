@@ -62,12 +62,14 @@ impl<'a> SetChatPhotoRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///New chat photo, uploaded using multipart/form-data
+    #[must_use]
     pub fn photo(mut self, photo: impl Into<InputFile>) -> Self {
         self.params.photo = photo.into();
         self

@@ -51,12 +51,14 @@ impl<'a> GetChatMemberRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target supergroup or channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///Unique identifier of the target user
+    #[must_use]
     pub fn user_id(mut self, user_id: impl Into<i64>) -> Self {
         self.params.user_id = user_id.into();
         self

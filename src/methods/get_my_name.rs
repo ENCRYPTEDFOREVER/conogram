@@ -49,6 +49,7 @@ impl<'a> GetMyNameRequest<'a> {
     }
 
     ///A two-letter ISO 639-1 language code or an empty string
+    #[must_use]
     pub fn language_code(mut self, language_code: impl Into<String>) -> Self {
         self.params.language_code = Some(language_code.into());
         self

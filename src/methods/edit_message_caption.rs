@@ -70,36 +70,42 @@ impl<'a> EditMessageCaptionRequest<'a> {
     }
 
     ///Required if *inline\_message\_id* is not specified. Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = Some(chat_id.into());
         self
     }
 
     ///Required if *inline\_message\_id* is not specified. Identifier of the message to edit
+    #[must_use]
     pub fn message_id(mut self, message_id: impl Into<i64>) -> Self {
         self.params.message_id = Some(message_id.into());
         self
     }
 
     ///Required if *chat\_id* and *message\_id* are not specified. Identifier of the inline message
+    #[must_use]
     pub fn inline_message_id(mut self, inline_message_id: impl Into<String>) -> Self {
         self.params.inline_message_id = Some(inline_message_id.into());
         self
     }
 
     ///New caption of the message, 0-1024 characters after entities parsing
+    #[must_use]
     pub fn caption(mut self, caption: impl Into<String>) -> Self {
         self.params.caption = Some(caption.into());
         self
     }
 
     ///Mode for parsing entities in the message caption. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details.
+    #[must_use]
     pub fn parse_mode(mut self, parse_mode: impl Into<String>) -> Self {
         self.params.parse_mode = Some(parse_mode.into());
         self
     }
 
     ///A JSON-serialized list of special entities that appear in the caption, which can be specified instead of *parse\_mode*
+    #[must_use]
     pub fn caption_entities(
         mut self,
         caption_entities: impl IntoIterator<Item = impl Into<MessageEntity>>,
@@ -109,6 +115,7 @@ impl<'a> EditMessageCaptionRequest<'a> {
     }
 
     ///A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards).
+    #[must_use]
     pub fn reply_markup(mut self, reply_markup: impl Into<InlineKeyboardMarkup>) -> Self {
         self.params.reply_markup = Some(reply_markup.into());
         self

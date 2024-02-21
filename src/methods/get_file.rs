@@ -48,6 +48,7 @@ impl<'a> GetFileRequest<'a> {
     }
 
     ///File identifier to get information about
+    #[must_use]
     pub fn file_id(mut self, file_id: impl Into<String>) -> Self {
         self.params.file_id = file_id.into();
         self

@@ -94,36 +94,42 @@ impl<'a> SendPhotoRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+    #[must_use]
     pub fn message_thread_id(mut self, message_thread_id: impl Into<i64>) -> Self {
         self.params.message_thread_id = Some(message_thread_id.into());
         self
     }
 
     ///Photo to send. Pass a file\_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20. [More information on Sending Files »](https://core.telegram.org/bots/api/#sending-files)
+    #[must_use]
     pub fn photo(mut self, photo: impl Into<InputFile>) -> Self {
         self.params.photo = photo.into();
         self
     }
 
     ///Photo caption (may also be used when resending photos by *file\_id*), 0-1024 characters after entities parsing
+    #[must_use]
     pub fn caption(mut self, caption: impl Into<String>) -> Self {
         self.params.caption = Some(caption.into());
         self
     }
 
     ///Mode for parsing entities in the photo caption. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details.
+    #[must_use]
     pub fn parse_mode(mut self, parse_mode: impl Into<String>) -> Self {
         self.params.parse_mode = Some(parse_mode.into());
         self
     }
 
     ///A JSON-serialized list of special entities that appear in the caption, which can be specified instead of *parse\_mode*
+    #[must_use]
     pub fn caption_entities(
         mut self,
         caption_entities: impl IntoIterator<Item = impl Into<MessageEntity>>,
@@ -133,30 +139,35 @@ impl<'a> SendPhotoRequest<'a> {
     }
 
     ///Pass *True* if the photo needs to be covered with a spoiler animation
+    #[must_use]
     pub fn has_spoiler(mut self, has_spoiler: impl Into<bool>) -> Self {
         self.params.has_spoiler = has_spoiler.into();
         self
     }
 
     ///Sends the message [silently](https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
+    #[must_use]
     pub fn disable_notification(mut self, disable_notification: impl Into<bool>) -> Self {
         self.params.disable_notification = disable_notification.into();
         self
     }
 
     ///Protects the contents of the sent message from forwarding and saving
+    #[must_use]
     pub fn protect_content(mut self, protect_content: impl Into<bool>) -> Self {
         self.params.protect_content = protect_content.into();
         self
     }
 
     ///Description of the message to reply to
+    #[must_use]
     pub fn reply_parameters(mut self, reply_parameters: impl Into<ReplyParameters>) -> Self {
         self.params.reply_parameters = Some(reply_parameters.into());
         self
     }
 
     ///Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a reply from the user.
+    #[must_use]
     pub fn reply_markup(mut self, reply_markup: impl Into<ReplyMarkup>) -> Self {
         self.params.reply_markup = Some(reply_markup.into());
         self

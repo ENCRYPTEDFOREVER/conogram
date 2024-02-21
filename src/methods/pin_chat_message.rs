@@ -54,18 +54,21 @@ impl<'a> PinChatMessageRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///Identifier of a message to pin
+    #[must_use]
     pub fn message_id(mut self, message_id: impl Into<i64>) -> Self {
         self.params.message_id = message_id.into();
         self
     }
 
     ///Pass *True* if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats.
+    #[must_use]
     pub fn disable_notification(mut self, disable_notification: impl Into<bool>) -> Self {
         self.params.disable_notification = disable_notification.into();
         self

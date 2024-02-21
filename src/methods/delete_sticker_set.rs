@@ -45,6 +45,7 @@ impl<'a> DeleteStickerSetRequest<'a> {
     }
 
     ///Sticker set name
+    #[must_use]
     pub fn name(mut self, name: impl Into<String>) -> Self {
         self.params.name = name.into();
         self

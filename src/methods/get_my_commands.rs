@@ -53,12 +53,14 @@ impl<'a> GetMyCommandsRequest<'a> {
     }
 
     ///A JSON-serialized object, describing scope of users. Defaults to [BotCommandScopeDefault](https://core.telegram.org/bots/api/#botcommandscopedefault).
+    #[must_use]
     pub fn scope(mut self, scope: impl Into<BotCommandScope>) -> Self {
         self.params.scope = Some(scope.into());
         self
     }
 
     ///A two-letter ISO 639-1 language code or an empty string
+    #[must_use]
     pub fn language_code(mut self, language_code: impl Into<String>) -> Self {
         self.params.language_code = Some(language_code.into());
         self

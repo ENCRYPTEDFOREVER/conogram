@@ -46,6 +46,7 @@ impl<'a> GetStickerSetRequest<'a> {
     }
 
     ///Name of the sticker set
+    #[must_use]
     pub fn name(mut self, name: impl Into<String>) -> Self {
         self.params.name = name.into();
         self

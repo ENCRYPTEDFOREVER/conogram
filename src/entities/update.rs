@@ -154,25 +154,26 @@ impl AllowedUpdates {
 impl ToString for AllowedUpdates {
     fn to_string(&self) -> String {
         match self {
-            AllowedUpdates::Message => "message".into(),
-            AllowedUpdates::EditedMessage => "edited_message".into(),
-            AllowedUpdates::MessageReaction => "message_reaction".into(),
-            AllowedUpdates::MessageReactionCount => "message_reaction_count".into(),
-            AllowedUpdates::ChannelPost => "channel_post".into(),
-            AllowedUpdates::EditedChannelPost => "edited_channel_post".into(),
-            AllowedUpdates::InlineQuery => "inline_query".into(),
-            AllowedUpdates::ChosenInlineResult => "chosen_inline_result".into(),
-            AllowedUpdates::CallbackQuery => "callback_query".into(),
-            AllowedUpdates::ShippingQuery => "shipping_query".into(),
-            AllowedUpdates::PreCheckoutQuery => "pre_checkout_query".into(),
-            AllowedUpdates::Poll => "poll".into(),
-            AllowedUpdates::PollAnswer => "poll_answer".into(),
-            AllowedUpdates::MyChatMember => "my_chat_member".into(),
-            AllowedUpdates::ChatMember => "chat_member".into(),
-            AllowedUpdates::ChatJoinRequest => "chat_join_request".into(),
+            Self::Message => "message",
+            Self::EditedMessage => "edited_message",
+            Self::MessageReaction => "message_reaction",
+            Self::MessageReactionCount => "message_reaction_count",
+            Self::ChannelPost => "channel_post",
+            Self::EditedChannelPost => "edited_channel_post",
+            Self::InlineQuery => "inline_query",
+            Self::ChosenInlineResult => "chosen_inline_result",
+            Self::CallbackQuery => "callback_query",
+            Self::ShippingQuery => "shipping_query",
+            Self::PreCheckoutQuery => "pre_checkout_query",
+            Self::Poll => "poll",
+            Self::PollAnswer => "poll_answer",
+            Self::MyChatMember => "my_chat_member",
+            Self::ChatMember => "chat_member",
+            Self::ChatJoinRequest => "chat_join_request",
 
-            AllowedUpdates::ChatBoost => "chat_boost".into(),
-            AllowedUpdates::RemovedChatBoost => "removed_chat_boost".into(),
+            Self::ChatBoost => "chat_boost",
+            Self::RemovedChatBoost => "removed_chat_boost",
         }
+        .into()
     }
 }

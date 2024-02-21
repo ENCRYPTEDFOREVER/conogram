@@ -86,13 +86,13 @@ impl From<BotCommandScopeChatMember> for BotCommandScope {
 impl ToString for BotCommandScope {
     fn to_string(&self) -> String {
         match self {
-            BotCommandScope::Default(_) => "default",
-            BotCommandScope::AllPrivateChats(_) => "all_private_chats",
-            BotCommandScope::AllGroupChats(_) => "all_group_chats",
-            BotCommandScope::AllChatAdministrators(_) => "all_chat_administrators",
-            BotCommandScope::Chat(_) => "chat",
-            BotCommandScope::ChatAdministrators(_) => "chat_administrators",
-            BotCommandScope::ChatMember(_) => "ChatMember",
+            Self::Default(_) => "default",
+            Self::AllPrivateChats(_) => "all_private_chats",
+            Self::AllGroupChats(_) => "all_group_chats",
+            Self::AllChatAdministrators(_) => "all_chat_administrators",
+            Self::Chat(_) => "chat",
+            Self::ChatAdministrators(_) => "chat_administrators",
+            Self::ChatMember(_) => "ChatMember",
         }
         .to_string()
     }

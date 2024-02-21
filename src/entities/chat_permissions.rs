@@ -69,7 +69,7 @@ impl ChatPermissions {
     }
 
     /// An instance with **all** permissions
-    pub fn all() -> Self {
+    pub const fn all() -> Self {
         Self {
             can_send_messages: true,
             can_send_audios: true,

@@ -50,6 +50,7 @@ impl<'a> GetMyDefaultAdministratorRightsRequest<'a> {
     }
 
     ///Pass *True* to get default administrator rights of the bot in channels. Otherwise, default administrator rights of the bot for groups and supergroups will be returned.
+    #[must_use]
     pub fn for_channels(mut self, for_channels: impl Into<bool>) -> Self {
         self.params.for_channels = for_channels.into();
         self

@@ -53,11 +53,13 @@ impl ReplyParameters {
         }
     }
 
-    pub fn allow_sending_without_reply(mut self, allow_sending_without_reply: bool) -> Self {
+    #[must_use]
+    pub const fn allow_sending_without_reply(mut self, allow_sending_without_reply: bool) -> Self {
         self.allow_sending_without_reply = allow_sending_without_reply;
         self
     }
 
+    #[must_use]
     pub fn chat(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.chat_id = Some(chat_id.into());
         self

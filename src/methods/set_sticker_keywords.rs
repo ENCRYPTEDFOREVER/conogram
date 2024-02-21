@@ -50,12 +50,14 @@ impl<'a> SetStickerKeywordsRequest<'a> {
     }
 
     ///File identifier of the sticker
+    #[must_use]
     pub fn sticker(mut self, sticker: impl Into<String>) -> Self {
         self.params.sticker = sticker.into();
         self
     }
 
     ///A JSON-serialized list of 0-20 search keywords for the sticker with total length of up to 64 characters
+    #[must_use]
     pub fn keywords(mut self, keywords: impl IntoIterator<Item = impl Into<String>>) -> Self {
         self.params.keywords = keywords.into_iter().map(Into::into).collect();
         self

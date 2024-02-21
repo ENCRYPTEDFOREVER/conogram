@@ -73,11 +73,11 @@ impl GetFiles for InputMedia {
         &super::misc::input_file::InputFile,
     > {
         match self {
-            InputMedia::Animation(m) => m.get_files(),
-            InputMedia::Document(m) => m.get_files(),
-            InputMedia::Audio(m) => m.get_files(),
-            InputMedia::Photo(m) => m.get_files(),
-            InputMedia::Video(m) => m.get_files(),
+            Self::Animation(m) => m.get_files(),
+            Self::Document(m) => m.get_files(),
+            Self::Audio(m) => m.get_files(),
+            Self::Photo(m) => m.get_files(),
+            Self::Video(m) => m.get_files(),
         }
     }
 }

@@ -47,7 +47,7 @@ impl ReplyMarkup {
     ) -> Self {
         Self::ForceReply(ForceReply {
             force_reply: true,
-            input_field_placeholder: input_field_placeholder.map(|p| p.into()),
+            input_field_placeholder: input_field_placeholder.map(Into::into),
             selective,
         })
     }
@@ -67,7 +67,7 @@ impl ReplyMarkup {
             is_persistent,
             resize_keyboard,
             one_time_keyboard,
-            input_field_placeholder: input_field_placeholder.map(|p| p.into()),
+            input_field_placeholder: input_field_placeholder.map(Into::into),
             selective,
         })
     }
@@ -82,7 +82,7 @@ impl ReplyMarkup {
 
     ///Upon receiving a message with this object, Telegram clients will remove the current custom keyboard and display the default letter-keyboard. By default, custom keyboards are displayed until a new keyboard is sent by a bot. An exception is made for one-time keyboards that are hidden immediately after the user presses a button (see [ReplyKeyboardMarkup](https://core.telegram.org/bots/api/#replykeyboardmarkup)).
     ///API Reference: [link](https://core.telegram.org/bots/api/#replykeyboardremove)
-    pub fn remove(remove_keyboard: bool, selective: bool) -> Self {
+    pub const fn remove(remove_keyboard: bool, selective: bool) -> Self {
         Self::Remove(ReplyKeyboardRemove {
             remove_keyboard,
             selective,

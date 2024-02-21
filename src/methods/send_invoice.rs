@@ -134,60 +134,70 @@ impl<'a> SendInvoiceRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+    #[must_use]
     pub fn message_thread_id(mut self, message_thread_id: impl Into<i64>) -> Self {
         self.params.message_thread_id = Some(message_thread_id.into());
         self
     }
 
     ///Product name, 1-32 characters
+    #[must_use]
     pub fn title(mut self, title: impl Into<String>) -> Self {
         self.params.title = title.into();
         self
     }
 
     ///Product description, 1-255 characters
+    #[must_use]
     pub fn description(mut self, description: impl Into<String>) -> Self {
         self.params.description = description.into();
         self
     }
 
     ///Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.
+    #[must_use]
     pub fn payload(mut self, payload: impl Into<String>) -> Self {
         self.params.payload = payload.into();
         self
     }
 
     ///Payment provider token, obtained via [@BotFather](https://t.me/botfather)
+    #[must_use]
     pub fn provider_token(mut self, provider_token: impl Into<String>) -> Self {
         self.params.provider_token = provider_token.into();
         self
     }
 
     ///Three-letter ISO 4217 currency code, see [more on currencies](https://core.telegram.org/bots/payments#supported-currencies)
+    #[must_use]
     pub fn currency(mut self, currency: impl Into<String>) -> Self {
         self.params.currency = currency.into();
         self
     }
 
     ///Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.)
+    #[must_use]
     pub fn prices(mut self, prices: impl IntoIterator<Item = impl Into<LabeledPrice>>) -> Self {
         self.params.prices = prices.into_iter().map(Into::into).collect();
         self
     }
 
     ///The maximum accepted amount for tips in the *smallest units* of the currency (integer, **not** float/double). For example, for a maximum tip of `US$ 1.45` pass `max_tip_amount = 145`. See the *exp* parameter in [currencies.json](https://core.telegram.org/bots/payments/currencies.json), it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0
+    #[must_use]
     pub fn max_tip_amount(mut self, max_tip_amount: impl Into<i64>) -> Self {
         self.params.max_tip_amount = Some(max_tip_amount.into());
         self
     }
 
     ///A JSON-serialized array of suggested amounts of tips in the *smallest units* of the currency (integer, **not** float/double). At most 4 suggested tip amounts can be specified. The suggested tip amounts must be positive, passed in a strictly increased order and must not exceed *max\_tip\_amount*.
+    #[must_use]
     pub fn suggested_tip_amounts(
         mut self,
         suggested_tip_amounts: impl IntoIterator<Item = impl Into<i64>>,
@@ -198,66 +208,77 @@ impl<'a> SendInvoiceRequest<'a> {
     }
 
     ///Unique deep-linking parameter. If left empty, **forwarded copies** of the sent message will have a *Pay* button, allowing multiple users to pay directly from the forwarded message, using the same invoice. If non-empty, forwarded copies of the sent message will have a *URL* button with a deep link to the bot (instead of a *Pay* button), with the value used as the start parameter
+    #[must_use]
     pub fn start_parameter(mut self, start_parameter: impl Into<String>) -> Self {
         self.params.start_parameter = Some(start_parameter.into());
         self
     }
 
     ///JSON-serialized data about the invoice, which will be shared with the payment provider. A detailed description of required fields should be provided by the payment provider.
+    #[must_use]
     pub fn provider_data(mut self, provider_data: impl Into<String>) -> Self {
         self.params.provider_data = Some(provider_data.into());
         self
     }
 
     ///URL of the product photo for the invoice. Can be a photo of the goods or a marketing image for a service. People like it better when they see what they are paying for.
+    #[must_use]
     pub fn photo_url(mut self, photo_url: impl Into<String>) -> Self {
         self.params.photo_url = Some(photo_url.into());
         self
     }
 
     ///Photo size in bytes
+    #[must_use]
     pub fn photo_size(mut self, photo_size: impl Into<i64>) -> Self {
         self.params.photo_size = Some(photo_size.into());
         self
     }
 
     ///Photo width
+    #[must_use]
     pub fn photo_width(mut self, photo_width: impl Into<i64>) -> Self {
         self.params.photo_width = Some(photo_width.into());
         self
     }
 
     ///Photo height
+    #[must_use]
     pub fn photo_height(mut self, photo_height: impl Into<i64>) -> Self {
         self.params.photo_height = Some(photo_height.into());
         self
     }
 
     ///Pass *True* if you require the user's full name to complete the order
+    #[must_use]
     pub fn need_name(mut self, need_name: impl Into<bool>) -> Self {
         self.params.need_name = need_name.into();
         self
     }
 
     ///Pass *True* if you require the user's phone number to complete the order
+    #[must_use]
     pub fn need_phone_number(mut self, need_phone_number: impl Into<bool>) -> Self {
         self.params.need_phone_number = need_phone_number.into();
         self
     }
 
     ///Pass *True* if you require the user's email address to complete the order
+    #[must_use]
     pub fn need_email(mut self, need_email: impl Into<bool>) -> Self {
         self.params.need_email = need_email.into();
         self
     }
 
     ///Pass *True* if you require the user's shipping address to complete the order
+    #[must_use]
     pub fn need_shipping_address(mut self, need_shipping_address: impl Into<bool>) -> Self {
         self.params.need_shipping_address = need_shipping_address.into();
         self
     }
 
     ///Pass *True* if the user's phone number should be sent to provider
+    #[must_use]
     pub fn send_phone_number_to_provider(
         mut self,
         send_phone_number_to_provider: impl Into<bool>,
@@ -267,36 +288,42 @@ impl<'a> SendInvoiceRequest<'a> {
     }
 
     ///Pass *True* if the user's email address should be sent to provider
+    #[must_use]
     pub fn send_email_to_provider(mut self, send_email_to_provider: impl Into<bool>) -> Self {
         self.params.send_email_to_provider = send_email_to_provider.into();
         self
     }
 
     ///Pass *True* if the final price depends on the shipping method
+    #[must_use]
     pub fn is_flexible(mut self, is_flexible: impl Into<bool>) -> Self {
         self.params.is_flexible = is_flexible.into();
         self
     }
 
     ///Sends the message [silently](https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
+    #[must_use]
     pub fn disable_notification(mut self, disable_notification: impl Into<bool>) -> Self {
         self.params.disable_notification = disable_notification.into();
         self
     }
 
     ///Protects the contents of the sent message from forwarding and saving
+    #[must_use]
     pub fn protect_content(mut self, protect_content: impl Into<bool>) -> Self {
         self.params.protect_content = protect_content.into();
         self
     }
 
     ///Description of the message to reply to
+    #[must_use]
     pub fn reply_parameters(mut self, reply_parameters: impl Into<ReplyParameters>) -> Self {
         self.params.reply_parameters = Some(reply_parameters.into());
         self
     }
 
     ///A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards). If empty, one 'Pay `total price`' button will be shown. If not empty, the first button must be a Pay button.
+    #[must_use]
     pub fn reply_markup(mut self, reply_markup: impl Into<InlineKeyboardMarkup>) -> Self {
         self.params.reply_markup = Some(reply_markup.into());
         self

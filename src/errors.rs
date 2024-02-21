@@ -65,11 +65,13 @@ pub enum ConogramErrorType {
     IO(#[from] std::io::Error),
 }
 
+#[allow(clippy::fallible_impl_from)]
 impl<ReturnType> From<ApiResponse<ReturnType>> for Result<ReturnType, ConogramErrorType> {
     fn from(value: ApiResponse<ReturnType>) -> Self {
-        match value.ok {
-            true => Ok(value.result.unwrap()),
-            false => Err(ConogramErrorType::ApiError(TgApiError::from(value))),
+        if value.ok {
+            Ok(value.result.unwrap())
+        } else {
+            Err(ConogramErrorType::ApiError(TgApiError::from(value)))
         }
     }
 }
@@ -140,7 +142,11 @@ impl<T> From<ApiResponse<T>> for GenericApiErrorParams {
     fn from(value: ApiResponse<T>) -> Self {
         Self {
             error_code: value.error_code.unwrap_or_default(),
-            description: Some(value.description.unwrap_or("No decsription".to_owned())),
+            description: Some(
+                value
+                    .description
+                    .unwrap_or_else(|| "No decsription".to_owned()),
+            ),
             parameters: value.parameters,
         }
     }

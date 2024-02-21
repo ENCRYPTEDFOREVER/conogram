@@ -43,7 +43,7 @@ where
 pub trait Utf16Len {
     /// Returns a count of utf16 code units in the string
     ///
-    /// https://core.telegram.org/api/entities#computing-entity-length
+    /// <https://core.telegram.org/api/entities#computing-entity-length>
     fn utf16_codeunits(&self) -> i64;
 }
 
@@ -119,6 +119,7 @@ impl FormattedText {
         }
     }
 
+    #[must_use]
     pub fn slice(&self, range: impl Into<Range<usize>>) -> Self {
         let mut range: Range<usize> = range.into();
         range.end = std::cmp::min(range.end, self.len as usize);
@@ -140,7 +141,7 @@ impl FormattedText {
             .cloned()
             .collect::<Vec<_>>();
 
-        for ent in new_entities.iter_mut() {
+        for ent in &mut new_entities {
             let offset = std::cmp::max(ent.offset, range.start as i64);
             let end = std::cmp::min(ent.offset + ent.length, range.end as i64);
 
@@ -152,8 +153,8 @@ impl FormattedText {
     }
 
     /// Concats `other` to this instance
-    pub fn concat(&mut self, other: impl Into<FormattedText>) -> &mut Self {
-        let other: FormattedText = other.into();
+    pub fn concat(&mut self, other: impl Into<Self>) -> &mut Self {
+        let other: Self = other.into();
 
         let added_entities = other.entities.into_iter().map(|mut ent| {
             ent.offset += self.len;
@@ -169,11 +170,11 @@ impl FormattedText {
         self
     }
 
-    pub fn get_entities(&self) -> &Vec<MessageEntity> {
+    pub const fn get_entities(&self) -> &Vec<MessageEntity> {
         &self.entities
     }
 
-    pub fn get_text(&self) -> &String {
+    pub const fn get_text(&self) -> &String {
         &self.text
     }
 
@@ -189,7 +190,7 @@ impl FormattedText {
         self
     }
 
-    pub fn is_ulo(&self) -> bool {
+    pub const fn is_ulo(&self) -> bool {
         self.use_last_offsets
     }
 
@@ -197,17 +198,16 @@ impl FormattedText {
         let text_len = text.utf16_codeunits();
 
         let entity_offset;
-        let entity_len;
-        if self.trim_spaces {
+        let entity_len = if self.trim_spaces {
             let l_trim = text.trim_start();
             let l_trim_len = l_trim.utf16_codeunits();
 
             entity_offset = self.len + (text_len - l_trim_len);
-            entity_len = l_trim.trim_end().utf16_codeunits();
+            l_trim.trim_end().utf16_codeunits()
         } else {
             entity_offset = self.len;
-            entity_len = text_len;
-        }
+            text_len
+        };
 
         (text_len, entity_offset, entity_len)
     }
@@ -233,7 +233,6 @@ impl FormattedText {
             };
 
             self.entities.push(entity);
-            self
         } else {
             let text = text.as_ref();
             let (text_len, entity_offset, entity_len) = self.calc_entity_len_offset(text);
@@ -254,9 +253,9 @@ impl FormattedText {
             self.entities.push(entity);
             self.text.push_str(text);
             self.len += text_len;
-
-            self
         }
+
+        self
     }
 
     fn push_entity_simple(
@@ -273,7 +272,6 @@ impl FormattedText {
             };
 
             self.entities.push(entity);
-            self
         } else {
             let text = text.as_ref();
             let (text_len, entity_offset, entity_len) = self.calc_entity_len_offset(text);
@@ -291,8 +289,9 @@ impl FormattedText {
             self.entities.push(entity);
             self.text.push_str(text);
             self.len += text_len;
-            self
         }
+
+        self
     }
 
     pub fn entities(
@@ -353,41 +352,41 @@ impl FormattedText {
         self
     }
 
-    pub fn bold(&mut self, text: impl ToString) -> &mut Self {
-        self.push_entity_simple(text.to_string(), MessageEntityType::Bold)
+    pub fn bold(&mut self, text: impl AsRef<str>) -> &mut Self {
+        self.push_entity_simple(text, MessageEntityType::Bold)
     }
 
-    pub fn italic(&mut self, text: impl ToString) -> &mut Self {
-        self.push_entity_simple(text.to_string(), MessageEntityType::Italic)
+    pub fn italic(&mut self, text: impl AsRef<str>) -> &mut Self {
+        self.push_entity_simple(text, MessageEntityType::Italic)
     }
 
-    pub fn strikethrough(&mut self, text: impl ToString) -> &mut Self {
-        self.push_entity_simple(text.to_string(), MessageEntityType::Strikethrough)
+    pub fn strikethrough(&mut self, text: impl AsRef<str>) -> &mut Self {
+        self.push_entity_simple(text, MessageEntityType::Strikethrough)
     }
 
-    pub fn underline(&mut self, text: impl ToString) -> &mut Self {
-        self.push_entity_simple(text.to_string(), MessageEntityType::Underline)
+    pub fn underline(&mut self, text: impl AsRef<str>) -> &mut Self {
+        self.push_entity_simple(text, MessageEntityType::Underline)
     }
 
-    pub fn spoiler(&mut self, text: impl ToString) -> &mut Self {
-        self.push_entity_simple(text.to_string(), MessageEntityType::Spoiler)
+    pub fn spoiler(&mut self, text: impl AsRef<str>) -> &mut Self {
+        self.push_entity_simple(text, MessageEntityType::Spoiler)
     }
 
-    pub fn monowidth(&mut self, text: impl ToString) -> &mut Self {
+    pub fn monowidth(&mut self, text: impl AsRef<str>) -> &mut Self {
         self.code(text)
     }
 
-    pub fn code(&mut self, text: impl ToString) -> &mut Self {
-        self.push_entity_simple(text.to_string(), MessageEntityType::Code)
+    pub fn code(&mut self, text: impl AsRef<str>) -> &mut Self {
+        self.push_entity_simple(text, MessageEntityType::Code)
     }
 
-    pub fn pre(&mut self, text: impl ToString) -> &mut Self {
+    pub fn pre(&mut self, text: impl AsRef<str>) -> &mut Self {
         self.code_block(text)
     }
 
-    pub fn url(&mut self, text: impl ToString, url: impl Into<String>) -> &mut Self {
+    pub fn url(&mut self, text: impl AsRef<str>, url: impl Into<String>) -> &mut Self {
         self.push_entity_extended(
-            text.to_string(),
+            text,
             MessageEntityType::TextLink,
             Some(url.into()),
             None,
@@ -396,12 +395,12 @@ impl FormattedText {
         )
     }
 
-    pub fn mention_user(&mut self, text: impl ToString, user_id: impl Into<i64>) -> &mut Self {
+    pub fn mention_user(&mut self, text: impl AsRef<str>, user_id: impl Into<i64>) -> &mut Self {
         let user_id = user_id.into();
 
         if user_id > 0 {
             self.push_entity_extended(
-                text.to_string(),
+                text,
                 MessageEntityType::TextMention,
                 None,
                 Some(User {
@@ -415,24 +414,28 @@ impl FormattedText {
         } else if user_id < -9999 {
             self.url(
                 text,
-                format!("https://t.me/c/{}", &user_id.to_string()[4..]),
+                &format!("https://t.me/c/{}", &user_id.to_string()[4..]),
             )
         } else {
             self
         }
     }
 
-    pub fn mention(&mut self, mention: impl FormatMention) -> &mut Self {
+    pub fn mention(&mut self, mention: &impl FormatMention) -> &mut Self {
         mention.mention(self)
     }
 
-    pub fn code_block(&mut self, text: impl ToString) -> &mut Self {
-        self.push_entity_simple(text.to_string(), MessageEntityType::Pre)
+    pub fn code_block(&mut self, text: impl AsRef<str>) -> &mut Self {
+        self.push_entity_simple(text, MessageEntityType::Pre)
     }
 
-    pub fn code_block_in(&mut self, text: impl ToString, language: impl Into<String>) -> &mut Self {
+    pub fn code_block_in(
+        &mut self,
+        text: impl Into<String>,
+        language: impl Into<String>,
+    ) -> &mut Self {
         self.push_entity_extended(
-            text.to_string(),
+            text.into(),
             MessageEntityType::Pre,
             None,
             None,
@@ -443,11 +446,11 @@ impl FormattedText {
 
     pub fn custom_emoji(
         &mut self,
-        text: impl ToString,
+        text: impl Into<String>,
         custom_emoji_id: impl Into<String>,
     ) -> &mut Self {
         self.push_entity_extended(
-            text.to_string(),
+            text.into(),
             MessageEntityType::CustomEmoji,
             None,
             None,

@@ -49,12 +49,14 @@ impl<'a> SetStickerSetTitleRequest<'a> {
     }
 
     ///Sticker set name
+    #[must_use]
     pub fn name(mut self, name: impl Into<String>) -> Self {
         self.params.name = name.into();
         self
     }
 
     ///Sticker set title, 1-64 characters
+    #[must_use]
     pub fn title(mut self, title: impl Into<String>) -> Self {
         self.params.title = title.into();
         self

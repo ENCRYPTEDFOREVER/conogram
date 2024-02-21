@@ -54,12 +54,14 @@ impl<'a> SetChatStickerSetRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///Name of the sticker set to be set as the group sticker set
+    #[must_use]
     pub fn sticker_set_name(mut self, sticker_set_name: impl Into<String>) -> Self {
         self.params.sticker_set_name = sticker_set_name.into();
         self

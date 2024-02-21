@@ -39,12 +39,12 @@ impl GetFiles for InputMediaDocument {
     fn get_files(&self) -> HashMap<Moose, &InputFile> {
         let mut map = HashMap::new();
         map.insert(
-            Moose::Owned(self.media.get_uuid().unwrap_or("media".into())),
+            Moose::Owned(self.media.get_uuid().unwrap_or_else(|| "media".into())),
             &self.media,
         );
         if let Some(thumb) = &self.thumbnail {
             map.insert(
-                Moose::Owned(thumb.get_uuid().unwrap_or("thumbnail".into())),
+                Moose::Owned(thumb.get_uuid().unwrap_or_else(|| "thumbnail".into())),
                 thumb,
             );
         }

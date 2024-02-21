@@ -51,12 +51,14 @@ impl<'a> RevokeChatInviteLinkRequest<'a> {
     }
 
     ///Unique identifier of the target chat or username of the target channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///The invite link to revoke
+    #[must_use]
     pub fn invite_link(mut self, invite_link: impl Into<String>) -> Self {
         self.params.invite_link = invite_link.into();
         self
