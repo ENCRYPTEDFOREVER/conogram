@@ -98,7 +98,7 @@ impl<'a> API {
         sticker: impl Into<InputFile>,
         sticker_format: impl Into<UploadStickerFileStickerFormat>,
     ) -> UploadStickerFileRequest {
-        UploadStickerFileRequest::new(self, user_id.into(), sticker.into(), sticker_format.into())
+        UploadStickerFileRequest::new(self, user_id, sticker, sticker_format)
     }
 }
 

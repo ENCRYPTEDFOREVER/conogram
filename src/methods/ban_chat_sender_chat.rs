@@ -69,7 +69,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         sender_chat_id: impl Into<i64>,
     ) -> BanChatSenderChatRequest {
-        BanChatSenderChatRequest::new(self, chat_id.into(), sender_chat_id.into())
+        BanChatSenderChatRequest::new(self, chat_id, sender_chat_id)
     }
 }
 

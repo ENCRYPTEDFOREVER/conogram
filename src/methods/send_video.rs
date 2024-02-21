@@ -218,7 +218,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         video: impl Into<InputFile>,
     ) -> SendVideoRequest {
-        SendVideoRequest::new(self, chat_id.into(), video.into())
+        SendVideoRequest::new(self, chat_id, video)
     }
 }
 

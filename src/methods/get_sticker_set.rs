@@ -55,7 +55,7 @@ impl<'a> GetStickerSetRequest<'a> {
 impl<'a> API {
     ///Use this method to get a sticker set. On success, a [StickerSet](https://core.telegram.org/bots/api/#stickerset) object is returned.
     pub fn get_sticker_set(&'a self, name: impl Into<String>) -> GetStickerSetRequest {
-        GetStickerSetRequest::new(self, name.into())
+        GetStickerSetRequest::new(self, name)
     }
 }
 

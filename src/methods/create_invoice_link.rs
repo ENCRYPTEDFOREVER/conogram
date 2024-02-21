@@ -79,7 +79,7 @@ impl<'a> CreateInvoiceLinkRequest<'a> {
         payload: impl Into<String>,
         provider_token: impl Into<String>,
         currency: impl Into<String>,
-        prices: impl Into<Vec<LabeledPrice>>,
+        prices: impl IntoIterator<Item = impl Into<LabeledPrice>>,
     ) -> Self {
         Self {
             api,
@@ -89,7 +89,7 @@ impl<'a> CreateInvoiceLinkRequest<'a> {
                 payload: payload.into(),
                 provider_token: provider_token.into(),
                 currency: currency.into(),
-                prices: prices.into(),
+                prices: prices.into_iter().map(Into::into).collect(),
                 max_tip_amount: Option::default(),
                 suggested_tip_amounts: Vec::default(),
                 provider_data: Option::default(),
@@ -245,16 +245,16 @@ impl<'a> API {
         payload: impl Into<String>,
         provider_token: impl Into<String>,
         currency: impl Into<String>,
-        prices: impl Into<Vec<LabeledPrice>>,
+        prices: impl IntoIterator<Item = impl Into<LabeledPrice>>,
     ) -> CreateInvoiceLinkRequest {
         CreateInvoiceLinkRequest::new(
             self,
-            title.into(),
-            description.into(),
-            payload.into(),
-            provider_token.into(),
-            currency.into(),
-            prices.into(),
+            title,
+            description,
+            payload,
+            provider_token,
+            currency,
+            prices,
         )
     }
 }

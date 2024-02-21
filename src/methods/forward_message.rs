@@ -112,7 +112,7 @@ impl<'a> API {
         from_chat_id: impl Into<ChatId>,
         message_id: impl Into<i64>,
     ) -> ForwardMessageRequest {
-        ForwardMessageRequest::new(self, chat_id.into(), from_chat_id.into(), message_id.into())
+        ForwardMessageRequest::new(self, chat_id, from_chat_id, message_id)
     }
 }
 

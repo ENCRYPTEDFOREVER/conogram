@@ -69,7 +69,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         title: impl Into<String>,
     ) -> SetChatTitleRequest {
-        SetChatTitleRequest::new(self, chat_id.into(), title.into())
+        SetChatTitleRequest::new(self, chat_id, title)
     }
 }
 

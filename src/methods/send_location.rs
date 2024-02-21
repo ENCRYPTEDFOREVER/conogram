@@ -168,7 +168,7 @@ impl<'a> API {
         latitude: impl Into<f64>,
         longitude: impl Into<f64>,
     ) -> SendLocationRequest {
-        SendLocationRequest::new(self, chat_id.into(), latitude.into(), longitude.into())
+        SendLocationRequest::new(self, chat_id, latitude, longitude)
     }
 }
 

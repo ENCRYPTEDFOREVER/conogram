@@ -59,7 +59,7 @@ impl<'a> API {
         &'a self,
         sticker: impl Into<String>,
     ) -> DeleteStickerFromSetRequest {
-        DeleteStickerFromSetRequest::new(self, sticker.into())
+        DeleteStickerFromSetRequest::new(self, sticker)
     }
 }
 

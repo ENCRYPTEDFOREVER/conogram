@@ -88,7 +88,7 @@ impl<'a> API {
     ///
     ///This method will currently return scores for the target user, plus two of their closest neighbors on each side. Will also return the top three users if the user and their neighbors are not among them. Please note that this behavior is subject to change.
     pub fn get_game_high_scores(&'a self, user_id: impl Into<i64>) -> GetGameHighScoresRequest {
-        GetGameHighScoresRequest::new(self, user_id.into())
+        GetGameHighScoresRequest::new(self, user_id)
     }
 }
 

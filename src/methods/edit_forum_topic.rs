@@ -91,7 +91,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         message_thread_id: impl Into<i64>,
     ) -> EditForumTopicRequest {
-        EditForumTopicRequest::new(self, chat_id.into(), message_thread_id.into())
+        EditForumTopicRequest::new(self, chat_id, message_thread_id)
     }
 }
 

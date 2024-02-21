@@ -81,7 +81,7 @@ impl<'a> API {
         pre_checkout_query_id: impl Into<String>,
         ok: impl Into<bool>,
     ) -> AnswerPreCheckoutQueryRequest {
-        AnswerPreCheckoutQueryRequest::new(self, pre_checkout_query_id.into(), ok.into())
+        AnswerPreCheckoutQueryRequest::new(self, pre_checkout_query_id, ok)
     }
 }
 

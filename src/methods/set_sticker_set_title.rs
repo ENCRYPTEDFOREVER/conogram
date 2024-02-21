@@ -68,7 +68,7 @@ impl<'a> API {
         name: impl Into<String>,
         title: impl Into<String>,
     ) -> SetStickerSetTitleRequest {
-        SetStickerSetTitleRequest::new(self, name.into(), title.into())
+        SetStickerSetTitleRequest::new(self, name, title)
     }
 }
 

@@ -170,7 +170,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         photo: impl Into<InputFile>,
     ) -> SendPhotoRequest {
-        SendPhotoRequest::new(self, chat_id.into(), photo.into())
+        SendPhotoRequest::new(self, chat_id, photo)
     }
 }
 

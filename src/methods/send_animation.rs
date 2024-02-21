@@ -209,7 +209,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         animation: impl Into<InputFile>,
     ) -> SendAnimationRequest {
-        SendAnimationRequest::new(self, chat_id.into(), animation.into())
+        SendAnimationRequest::new(self, chat_id, animation)
     }
 }
 

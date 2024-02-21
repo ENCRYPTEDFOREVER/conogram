@@ -88,7 +88,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         name: impl Into<String>,
     ) -> CreateForumTopicRequest {
-        CreateForumTopicRequest::new(self, chat_id.into(), name.into())
+        CreateForumTopicRequest::new(self, chat_id, name)
     }
 }
 

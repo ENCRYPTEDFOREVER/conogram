@@ -43,11 +43,11 @@ impl<'a> RequestT for SetMyCommandsRequest<'a> {
     }
 }
 impl<'a> SetMyCommandsRequest<'a> {
-    pub fn new(api: &'a API, commands: impl Into<Vec<BotCommand>>) -> Self {
+    pub fn new(api: &'a API, commands: impl IntoIterator<Item = impl Into<BotCommand>>) -> Self {
         Self {
             api,
             params: SetMyCommandsParams {
-                commands: commands.into(),
+                commands: commands.into_iter().map(Into::into).collect(),
                 scope: Option::default(),
                 language_code: Option::default(),
             },
@@ -75,8 +75,11 @@ impl<'a> SetMyCommandsRequest<'a> {
 
 impl<'a> API {
     ///Use this method to change the list of the bot's commands. See [this manual](https://core.telegram.org/bots/features#commands) for more details about bot commands. Returns *True* on success.
-    pub fn set_my_commands(&'a self, commands: impl Into<Vec<BotCommand>>) -> SetMyCommandsRequest {
-        SetMyCommandsRequest::new(self, commands.into())
+    pub fn set_my_commands(
+        &'a self,
+        commands: impl IntoIterator<Item = impl Into<BotCommand>>,
+    ) -> SetMyCommandsRequest {
+        SetMyCommandsRequest::new(self, commands)
     }
 }
 

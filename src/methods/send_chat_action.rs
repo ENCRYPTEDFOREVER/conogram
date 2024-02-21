@@ -90,7 +90,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         action: impl Into<SendChatActionAction>,
     ) -> SendChatActionRequest {
-        SendChatActionRequest::new(self, chat_id.into(), action.into())
+        SendChatActionRequest::new(self, chat_id, action)
     }
 }
 

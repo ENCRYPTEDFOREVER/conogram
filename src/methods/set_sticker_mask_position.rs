@@ -69,7 +69,7 @@ impl<'a> API {
         &'a self,
         sticker: impl Into<String>,
     ) -> SetStickerMaskPositionRequest {
-        SetStickerMaskPositionRequest::new(self, sticker.into())
+        SetStickerMaskPositionRequest::new(self, sticker)
     }
 }
 

@@ -134,7 +134,7 @@ impl<'a> API {
         latitude: impl Into<f64>,
         longitude: impl Into<f64>,
     ) -> EditMessageLiveLocationRequest {
-        EditMessageLiveLocationRequest::new(self, latitude.into(), longitude.into())
+        EditMessageLiveLocationRequest::new(self, latitude, longitude)
     }
 }
 

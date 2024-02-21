@@ -97,7 +97,7 @@ impl<'a> SendInvoiceRequest<'a> {
         payload: impl Into<String>,
         provider_token: impl Into<String>,
         currency: impl Into<String>,
-        prices: impl Into<Vec<LabeledPrice>>,
+        prices: impl IntoIterator<Item = impl Into<LabeledPrice>>,
     ) -> Self {
         Self {
             api,
@@ -108,7 +108,7 @@ impl<'a> SendInvoiceRequest<'a> {
                 payload: payload.into(),
                 provider_token: provider_token.into(),
                 currency: currency.into(),
-                prices: prices.into(),
+                prices: prices.into_iter().map(Into::into).collect(),
                 message_thread_id: Option::default(),
                 max_tip_amount: Option::default(),
                 suggested_tip_amounts: Vec::default(),
@@ -313,17 +313,17 @@ impl<'a> API {
         payload: impl Into<String>,
         provider_token: impl Into<String>,
         currency: impl Into<String>,
-        prices: impl Into<Vec<LabeledPrice>>,
+        prices: impl IntoIterator<Item = impl Into<LabeledPrice>>,
     ) -> SendInvoiceRequest {
         SendInvoiceRequest::new(
             self,
-            chat_id.into(),
-            title.into(),
-            description.into(),
-            payload.into(),
-            provider_token.into(),
-            currency.into(),
-            prices.into(),
+            chat_id,
+            title,
+            description,
+            payload,
+            provider_token,
+            currency,
+            prices,
         )
     }
 }

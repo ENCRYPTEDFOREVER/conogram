@@ -204,7 +204,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         audio: impl Into<InputFile>,
     ) -> SendAudioRequest {
-        SendAudioRequest::new(self, chat_id.into(), audio.into())
+        SendAudioRequest::new(self, chat_id, audio)
     }
 }
 

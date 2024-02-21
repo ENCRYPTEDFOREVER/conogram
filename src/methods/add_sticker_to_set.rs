@@ -94,7 +94,7 @@ impl<'a> API {
         name: impl Into<String>,
         sticker: impl Into<InputSticker>,
     ) -> AddStickerToSetRequest {
-        AddStickerToSetRequest::new(self, user_id.into(), name.into(), sticker.into())
+        AddStickerToSetRequest::new(self, user_id, name, sticker)
     }
 }
 

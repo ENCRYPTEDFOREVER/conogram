@@ -153,7 +153,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         text: impl Into<String>,
     ) -> SendMessageRequest {
-        SendMessageRequest::new(self, chat_id.into(), text.into())
+        SendMessageRequest::new(self, chat_id, text)
     }
 }
 

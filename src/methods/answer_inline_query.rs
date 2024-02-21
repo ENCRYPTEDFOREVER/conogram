@@ -53,13 +53,13 @@ impl<'a> AnswerInlineQueryRequest<'a> {
     pub fn new(
         api: &'a API,
         inline_query_id: impl Into<String>,
-        results: impl Into<Vec<InlineQueryResult>>,
+        results: impl IntoIterator<Item = impl Into<InlineQueryResult>>,
     ) -> Self {
         Self {
             api,
             params: AnswerInlineQueryParams {
                 inline_query_id: inline_query_id.into(),
-                results: results.into(),
+                results: results.into_iter().map(Into::into).collect(),
                 cache_time: Option::default(),
                 is_personal: bool::default(),
                 next_offset: Option::default(),
@@ -114,9 +114,9 @@ impl<'a> API {
     pub fn answer_inline_query(
         &'a self,
         inline_query_id: impl Into<String>,
-        results: impl Into<Vec<InlineQueryResult>>,
+        results: impl IntoIterator<Item = impl Into<InlineQueryResult>>,
     ) -> AnswerInlineQueryRequest {
-        AnswerInlineQueryRequest::new(self, inline_query_id.into(), results.into())
+        AnswerInlineQueryRequest::new(self, inline_query_id, results)
     }
 }
 

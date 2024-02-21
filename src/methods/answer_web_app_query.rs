@@ -74,7 +74,7 @@ impl<'a> API {
         web_app_query_id: impl Into<String>,
         result: impl Into<InlineQueryResult>,
     ) -> AnswerWebAppQueryRequest {
-        AnswerWebAppQueryRequest::new(self, web_app_query_id.into(), result.into())
+        AnswerWebAppQueryRequest::new(self, web_app_query_id, result)
     }
 }
 

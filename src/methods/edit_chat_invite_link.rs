@@ -107,7 +107,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         invite_link: impl Into<String>,
     ) -> EditChatInviteLinkRequest {
-        EditChatInviteLinkRequest::new(self, chat_id.into(), invite_link.into())
+        EditChatInviteLinkRequest::new(self, chat_id, invite_link)
     }
 }
 

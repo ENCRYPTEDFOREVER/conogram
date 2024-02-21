@@ -65,7 +65,7 @@ impl<'a> CreateNewStickerSetRequest<'a> {
         user_id: impl Into<i64>,
         name: impl Into<String>,
         title: impl Into<String>,
-        stickers: impl Into<Vec<InputSticker>>,
+        stickers: impl IntoIterator<Item = impl Into<InputSticker>>,
         sticker_format: impl Into<CreateNewStickerSetStickerFormat>,
     ) -> Self {
         Self {
@@ -74,7 +74,7 @@ impl<'a> CreateNewStickerSetRequest<'a> {
                 user_id: user_id.into(),
                 name: name.into(),
                 title: title.into(),
-                stickers: stickers.into(),
+                stickers: stickers.into_iter().map(Into::into).collect(),
                 sticker_format: sticker_format.into(),
                 sticker_type: Option::default(),
                 needs_repainting: bool::default(),
@@ -135,17 +135,10 @@ impl<'a> API {
         user_id: impl Into<i64>,
         name: impl Into<String>,
         title: impl Into<String>,
-        stickers: impl Into<Vec<InputSticker>>,
+        stickers: impl IntoIterator<Item = impl Into<InputSticker>>,
         sticker_format: impl Into<CreateNewStickerSetStickerFormat>,
     ) -> CreateNewStickerSetRequest {
-        CreateNewStickerSetRequest::new(
-            self,
-            user_id.into(),
-            name.into(),
-            title.into(),
-            stickers.into(),
-            sticker_format.into(),
-        )
+        CreateNewStickerSetRequest::new(self, user_id, name, title, stickers, sticker_format)
     }
 }
 

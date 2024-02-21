@@ -67,13 +67,13 @@ impl<'a> SendMediaGroupRequest<'a> {
     pub fn new(
         api: &'a API,
         chat_id: impl Into<ChatId>,
-        media: impl Into<Vec<InputMedia>>,
+        media: impl IntoIterator<Item = impl Into<InputMedia>>,
     ) -> Self {
         Self {
             api,
             params: SendMediaGroupParams {
                 chat_id: chat_id.into(),
-                media: media.into(),
+                media: media.into_iter().map(Into::into).collect(),
                 message_thread_id: Option::default(),
                 disable_notification: bool::default(),
                 protect_content: bool::default(),
@@ -124,9 +124,9 @@ impl<'a> API {
     pub fn send_media_group(
         &'a self,
         chat_id: impl Into<ChatId>,
-        media: impl Into<Vec<InputMedia>>,
+        media: impl IntoIterator<Item = impl Into<InputMedia>>,
     ) -> SendMediaGroupRequest {
-        SendMediaGroupRequest::new(self, chat_id.into(), media.into())
+        SendMediaGroupRequest::new(self, chat_id, media)
     }
 }
 

@@ -66,7 +66,7 @@ impl<'a> UnpinChatMessageRequest<'a> {
 impl<'a> API {
     ///Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can\_pin\_messages' administrator right in a supergroup or 'can\_edit\_messages' administrator right in a channel. Returns *True* on success.
     pub fn unpin_chat_message(&'a self, chat_id: impl Into<ChatId>) -> UnpinChatMessageRequest {
-        UnpinChatMessageRequest::new(self, chat_id.into())
+        UnpinChatMessageRequest::new(self, chat_id)
     }
 }
 

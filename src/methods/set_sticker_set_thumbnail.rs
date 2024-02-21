@@ -90,7 +90,7 @@ impl<'a> API {
         name: impl Into<String>,
         user_id: impl Into<i64>,
     ) -> SetStickerSetThumbnailRequest {
-        SetStickerSetThumbnailRequest::new(self, name.into(), user_id.into())
+        SetStickerSetThumbnailRequest::new(self, name, user_id)
     }
 }
 

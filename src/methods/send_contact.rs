@@ -150,7 +150,7 @@ impl<'a> API {
         phone_number: impl Into<String>,
         first_name: impl Into<String>,
     ) -> SendContactRequest {
-        SendContactRequest::new(self, chat_id.into(), phone_number.into(), first_name.into())
+        SendContactRequest::new(self, chat_id, phone_number, first_name)
     }
 }
 

@@ -68,7 +68,7 @@ impl<'a> API {
         sticker: impl Into<String>,
         position: impl Into<i64>,
     ) -> SetStickerPositionInSetRequest {
-        SetStickerPositionInSetRequest::new(self, sticker.into(), position.into())
+        SetStickerPositionInSetRequest::new(self, sticker, position)
     }
 }
 

@@ -102,7 +102,7 @@ impl<'a> API {
         &'a self,
         callback_query_id: impl Into<String>,
     ) -> AnswerCallbackQueryRequest {
-        AnswerCallbackQueryRequest::new(self, callback_query_id.into())
+        AnswerCallbackQueryRequest::new(self, callback_query_id)
     }
 }
 

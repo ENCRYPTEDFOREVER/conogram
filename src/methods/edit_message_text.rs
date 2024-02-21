@@ -130,7 +130,7 @@ impl<'a> EditMessageTextRequest<'a> {
 impl<'a> API {
     ///Use this method to edit text and [game](https://core.telegram.org/bots/api/#games) messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned.
     pub fn edit_message_text(&'a self, text: impl Into<String>) -> EditMessageTextRequest {
-        EditMessageTextRequest::new(self, text.into())
+        EditMessageTextRequest::new(self, text)
     }
 }
 

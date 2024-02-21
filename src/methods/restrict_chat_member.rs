@@ -106,7 +106,7 @@ impl<'a> API {
         user_id: impl Into<i64>,
         permissions: impl Into<ChatPermissions>,
     ) -> RestrictChatMemberRequest {
-        RestrictChatMemberRequest::new(self, chat_id.into(), user_id.into(), permissions.into())
+        RestrictChatMemberRequest::new(self, chat_id, user_id, permissions)
     }
 }
 

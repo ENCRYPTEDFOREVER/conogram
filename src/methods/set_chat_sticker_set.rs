@@ -73,7 +73,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         sticker_set_name: impl Into<String>,
     ) -> SetChatStickerSetRequest {
-        SetChatStickerSetRequest::new(self, chat_id.into(), sticker_set_name.into())
+        SetChatStickerSetRequest::new(self, chat_id, sticker_set_name)
     }
 }
 

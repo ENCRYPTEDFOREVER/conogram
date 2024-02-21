@@ -69,7 +69,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         user_id: impl Into<i64>,
     ) -> ApproveChatJoinRequestRequest {
-        ApproveChatJoinRequestRequest::new(self, chat_id.into(), user_id.into())
+        ApproveChatJoinRequestRequest::new(self, chat_id, user_id)
     }
 }
 

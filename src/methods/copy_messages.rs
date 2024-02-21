@@ -54,14 +54,14 @@ impl<'a> CopyMessagesRequest<'a> {
         api: &'a API,
         chat_id: impl Into<ChatId>,
         from_chat_id: impl Into<ChatId>,
-        message_ids: impl Into<Vec<i64>>,
+        message_ids: impl IntoIterator<Item = impl Into<i64>>,
     ) -> Self {
         Self {
             api,
             params: CopyMessagesParams {
                 chat_id: chat_id.into(),
                 from_chat_id: from_chat_id.into(),
-                message_ids: message_ids.into(),
+                message_ids: message_ids.into_iter().map(Into::into).collect(),
                 message_thread_id: Option::default(),
                 disable_notification: bool::default(),
                 protect_content: bool::default(),
@@ -119,14 +119,9 @@ impl<'a> API {
         &'a self,
         chat_id: impl Into<ChatId>,
         from_chat_id: impl Into<ChatId>,
-        message_ids: impl Into<Vec<i64>>,
+        message_ids: impl IntoIterator<Item = impl Into<i64>>,
     ) -> CopyMessagesRequest {
-        CopyMessagesRequest::new(
-            self,
-            chat_id.into(),
-            from_chat_id.into(),
-            message_ids.into(),
-        )
+        CopyMessagesRequest::new(self, chat_id, from_chat_id, message_ids)
     }
 }
 

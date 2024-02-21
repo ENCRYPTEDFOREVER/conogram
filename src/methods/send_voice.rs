@@ -170,7 +170,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         voice: impl Into<InputFile>,
     ) -> SendVoiceRequest {
-        SendVoiceRequest::new(self, chat_id.into(), voice.into())
+        SendVoiceRequest::new(self, chat_id, voice)
     }
 }
 

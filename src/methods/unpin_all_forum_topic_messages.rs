@@ -73,7 +73,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         message_thread_id: impl Into<i64>,
     ) -> UnpinAllForumTopicMessagesRequest {
-        UnpinAllForumTopicMessagesRequest::new(self, chat_id.into(), message_thread_id.into())
+        UnpinAllForumTopicMessagesRequest::new(self, chat_id, message_thread_id)
     }
 }
 

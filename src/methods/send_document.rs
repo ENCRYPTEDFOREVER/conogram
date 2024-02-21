@@ -185,7 +185,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         document: impl Into<InputFile>,
     ) -> SendDocumentRequest {
-        SendDocumentRequest::new(self, chat_id.into(), document.into())
+        SendDocumentRequest::new(self, chat_id, document)
     }
 }
 

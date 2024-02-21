@@ -60,7 +60,7 @@ impl<'a> API {
         &'a self,
         chat_id: impl Into<ChatId>,
     ) -> DeleteChatStickerSetRequest {
-        DeleteChatStickerSetRequest::new(self, chat_id.into())
+        DeleteChatStickerSetRequest::new(self, chat_id)
     }
 }
 

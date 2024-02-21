@@ -98,7 +98,7 @@ impl<'a> API {
         &'a self,
         chat_id: impl Into<ChatId>,
     ) -> CreateChatInviteLinkRequest {
-        CreateChatInviteLinkRequest::new(self, chat_id.into())
+        CreateChatInviteLinkRequest::new(self, chat_id)
     }
 }
 

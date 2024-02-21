@@ -90,7 +90,7 @@ impl<'a> API {
         shipping_query_id: impl Into<String>,
         ok: impl Into<bool>,
     ) -> AnswerShippingQueryRequest {
-        AnswerShippingQueryRequest::new(self, shipping_query_id.into(), ok.into())
+        AnswerShippingQueryRequest::new(self, shipping_query_id, ok)
     }
 }
 

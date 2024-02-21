@@ -132,7 +132,7 @@ impl<'a> API {
     ///
     ///If you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter *secret\_token*. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the secret token as content.
     pub fn set_webhook(&'a self, url: impl Into<String>) -> SetWebhookRequest {
-        SetWebhookRequest::new(self, url.into())
+        SetWebhookRequest::new(self, url)
     }
 }
 

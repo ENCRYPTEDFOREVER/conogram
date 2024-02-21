@@ -78,7 +78,7 @@ impl<'a> API {
         &'a self,
         user_id: impl Into<i64>,
     ) -> GetUserProfilePhotosRequest {
-        GetUserProfilePhotosRequest::new(self, user_id.into())
+        GetUserProfilePhotosRequest::new(self, user_id)
     }
 }
 

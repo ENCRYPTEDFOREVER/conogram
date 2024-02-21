@@ -44,13 +44,13 @@ impl<'a> SetPassportDataErrorsRequest<'a> {
     pub fn new(
         api: &'a API,
         user_id: impl Into<i64>,
-        errors: impl Into<Vec<PassportElementError>>,
+        errors: impl IntoIterator<Item = impl Into<PassportElementError>>,
     ) -> Self {
         Self {
             api,
             params: SetPassportDataErrorsParams {
                 user_id: user_id.into(),
-                errors: errors.into(),
+                errors: errors.into_iter().map(Into::into).collect(),
             },
         }
     }
@@ -78,9 +78,9 @@ impl<'a> API {
     pub fn set_passport_data_errors(
         &'a self,
         user_id: impl Into<i64>,
-        errors: impl Into<Vec<PassportElementError>>,
+        errors: impl IntoIterator<Item = impl Into<PassportElementError>>,
     ) -> SetPassportDataErrorsRequest {
-        SetPassportDataErrorsRequest::new(self, user_id.into(), errors.into())
+        SetPassportDataErrorsRequest::new(self, user_id, errors)
     }
 }
 

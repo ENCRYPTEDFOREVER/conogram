@@ -89,7 +89,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         message_id: impl Into<i64>,
     ) -> SetMessageReactionRequest {
-        SetMessageReactionRequest::new(self, chat_id.into(), message_id.into())
+        SetMessageReactionRequest::new(self, chat_id, message_id)
     }
 }
 

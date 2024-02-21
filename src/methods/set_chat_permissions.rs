@@ -87,7 +87,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         permissions: impl Into<ChatPermissions>,
     ) -> SetChatPermissionsRequest {
-        SetChatPermissionsRequest::new(self, chat_id.into(), permissions.into())
+        SetChatPermissionsRequest::new(self, chat_id, permissions)
     }
 }
 

@@ -188,14 +188,7 @@ impl<'a> API {
         title: impl Into<String>,
         address: impl Into<String>,
     ) -> SendVenueRequest {
-        SendVenueRequest::new(
-            self,
-            chat_id.into(),
-            latitude.into(),
-            longitude.into(),
-            title.into(),
-            address.into(),
-        )
+        SendVenueRequest::new(self, chat_id, latitude, longitude, title, address)
     }
 }
 

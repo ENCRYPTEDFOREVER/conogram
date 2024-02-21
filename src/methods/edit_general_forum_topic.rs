@@ -69,7 +69,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         name: impl Into<String>,
     ) -> EditGeneralForumTopicRequest {
-        EditGeneralForumTopicRequest::new(self, chat_id.into(), name.into())
+        EditGeneralForumTopicRequest::new(self, chat_id, name)
     }
 }
 

@@ -139,7 +139,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         sticker: impl Into<InputFile>,
     ) -> SendStickerRequest {
-        SendStickerRequest::new(self, chat_id.into(), sticker.into())
+        SendStickerRequest::new(self, chat_id, sticker)
     }
 }
 

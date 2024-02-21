@@ -60,7 +60,7 @@ impl<'a> API {
         &'a self,
         chat_id: impl Into<ChatId>,
     ) -> UnpinAllGeneralForumTopicMessagesRequest {
-        UnpinAllGeneralForumTopicMessagesRequest::new(self, chat_id.into())
+        UnpinAllGeneralForumTopicMessagesRequest::new(self, chat_id)
     }
 }
 

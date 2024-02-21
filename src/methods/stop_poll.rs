@@ -80,7 +80,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         message_id: impl Into<i64>,
     ) -> StopPollRequest {
-        StopPollRequest::new(self, chat_id.into(), message_id.into())
+        StopPollRequest::new(self, chat_id, message_id)
     }
 }
 

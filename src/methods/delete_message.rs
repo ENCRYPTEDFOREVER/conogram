@@ -87,7 +87,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         message_id: impl Into<i64>,
     ) -> DeleteMessageRequest {
-        DeleteMessageRequest::new(self, chat_id.into(), message_id.into())
+        DeleteMessageRequest::new(self, chat_id, message_id)
     }
 }
 

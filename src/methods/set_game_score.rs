@@ -115,7 +115,7 @@ impl<'a> API {
         user_id: impl Into<i64>,
         score: impl Into<i64>,
     ) -> SetGameScoreRequest {
-        SetGameScoreRequest::new(self, user_id.into(), score.into())
+        SetGameScoreRequest::new(self, user_id, score)
     }
 }
 

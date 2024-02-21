@@ -60,7 +60,7 @@ impl<'a> API {
         &'a self,
         chat_id: impl Into<ChatId>,
     ) -> UnhideGeneralForumTopicRequest {
-        UnhideGeneralForumTopicRequest::new(self, chat_id.into())
+        UnhideGeneralForumTopicRequest::new(self, chat_id)
     }
 }
 

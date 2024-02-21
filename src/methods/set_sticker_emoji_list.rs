@@ -41,13 +41,13 @@ impl<'a> SetStickerEmojiListRequest<'a> {
     pub fn new(
         api: &'a API,
         sticker: impl Into<String>,
-        emoji_list: impl Into<Vec<String>>,
+        emoji_list: impl IntoIterator<Item = impl Into<String>>,
     ) -> Self {
         Self {
             api,
             params: SetStickerEmojiListParams {
                 sticker: sticker.into(),
-                emoji_list: emoji_list.into(),
+                emoji_list: emoji_list.into_iter().map(Into::into).collect(),
             },
         }
     }
@@ -70,9 +70,9 @@ impl<'a> API {
     pub fn set_sticker_emoji_list(
         &'a self,
         sticker: impl Into<String>,
-        emoji_list: impl Into<Vec<String>>,
+        emoji_list: impl IntoIterator<Item = impl Into<String>>,
     ) -> SetStickerEmojiListRequest {
-        SetStickerEmojiListRequest::new(self, sticker.into(), emoji_list.into())
+        SetStickerEmojiListRequest::new(self, sticker, emoji_list)
     }
 }
 

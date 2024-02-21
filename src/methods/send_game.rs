@@ -117,7 +117,7 @@ impl<'a> API {
         chat_id: impl Into<i64>,
         game_short_name: impl Into<String>,
     ) -> SendGameRequest {
-        SendGameRequest::new(self, chat_id.into(), game_short_name.into())
+        SendGameRequest::new(self, chat_id, game_short_name)
     }
 }
 

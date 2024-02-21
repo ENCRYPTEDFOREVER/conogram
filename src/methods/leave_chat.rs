@@ -57,7 +57,7 @@ impl<'a> LeaveChatRequest<'a> {
 impl<'a> API {
     ///Use this method for your bot to leave a group, supergroup or channel. Returns *True* on success.
     pub fn leave_chat(&'a self, chat_id: impl Into<ChatId>) -> LeaveChatRequest {
-        LeaveChatRequest::new(self, chat_id.into())
+        LeaveChatRequest::new(self, chat_id)
     }
 }
 

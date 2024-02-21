@@ -60,7 +60,7 @@ impl<'a> API {
         &'a self,
         chat_id: impl Into<ChatId>,
     ) -> UnpinAllChatMessagesRequest {
-        UnpinAllChatMessagesRequest::new(self, chat_id.into())
+        UnpinAllChatMessagesRequest::new(self, chat_id)
     }
 }
 

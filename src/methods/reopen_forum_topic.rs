@@ -73,7 +73,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         message_thread_id: impl Into<i64>,
     ) -> ReopenForumTopicRequest {
-        ReopenForumTopicRequest::new(self, chat_id.into(), message_thread_id.into())
+        ReopenForumTopicRequest::new(self, chat_id, message_thread_id)
     }
 }
 

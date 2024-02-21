@@ -70,7 +70,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         invite_link: impl Into<String>,
     ) -> RevokeChatInviteLinkRequest {
-        RevokeChatInviteLinkRequest::new(self, chat_id.into(), invite_link.into())
+        RevokeChatInviteLinkRequest::new(self, chat_id, invite_link)
     }
 }
 

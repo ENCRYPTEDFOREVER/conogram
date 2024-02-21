@@ -39,12 +39,16 @@ impl<'a> RequestT for DeleteMessagesRequest<'a> {
     }
 }
 impl<'a> DeleteMessagesRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, message_ids: impl Into<Vec<i64>>) -> Self {
+    pub fn new(
+        api: &'a API,
+        chat_id: impl Into<ChatId>,
+        message_ids: impl IntoIterator<Item = impl Into<i64>>,
+    ) -> Self {
         Self {
             api,
             params: DeleteMessagesParams {
                 chat_id: chat_id.into(),
-                message_ids: message_ids.into(),
+                message_ids: message_ids.into_iter().map(Into::into).collect(),
             },
         }
     }
@@ -67,9 +71,9 @@ impl<'a> API {
     pub fn delete_messages(
         &'a self,
         chat_id: impl Into<ChatId>,
-        message_ids: impl Into<Vec<i64>>,
+        message_ids: impl IntoIterator<Item = impl Into<i64>>,
     ) -> DeleteMessagesRequest {
-        DeleteMessagesRequest::new(self, chat_id.into(), message_ids.into())
+        DeleteMessagesRequest::new(self, chat_id, message_ids)
     }
 }
 

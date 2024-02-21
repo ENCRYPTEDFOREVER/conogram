@@ -160,7 +160,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         video_note: impl Into<InputFile>,
     ) -> SendVideoNoteRequest {
-        SendVideoNoteRequest::new(self, chat_id.into(), video_note.into())
+        SendVideoNoteRequest::new(self, chat_id, video_note)
     }
 }
 

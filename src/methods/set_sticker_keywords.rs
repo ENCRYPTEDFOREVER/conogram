@@ -65,7 +65,7 @@ impl<'a> SetStickerKeywordsRequest<'a> {
 impl<'a> API {
     ///Use this method to change search keywords assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns *True* on success.
     pub fn set_sticker_keywords(&'a self, sticker: impl Into<String>) -> SetStickerKeywordsRequest {
-        SetStickerKeywordsRequest::new(self, sticker.into())
+        SetStickerKeywordsRequest::new(self, sticker)
     }
 }
 

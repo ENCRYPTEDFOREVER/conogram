@@ -79,14 +79,14 @@ impl<'a> SendPollRequest<'a> {
         api: &'a API,
         chat_id: impl Into<ChatId>,
         question: impl Into<String>,
-        options: impl Into<Vec<String>>,
+        options: impl IntoIterator<Item = impl Into<String>>,
     ) -> Self {
         Self {
             api,
             params: SendPollParams {
                 chat_id: chat_id.into(),
                 question: question.into(),
-                options: options.into(),
+                options: options.into_iter().map(Into::into).collect(),
                 message_thread_id: Option::default(),
                 is_anonymous: bool::default(),
                 type_: Option::default(),
@@ -224,9 +224,9 @@ impl<'a> API {
         &'a self,
         chat_id: impl Into<ChatId>,
         question: impl Into<String>,
-        options: impl Into<Vec<String>>,
+        options: impl IntoIterator<Item = impl Into<String>>,
     ) -> SendPollRequest {
-        SendPollRequest::new(self, chat_id.into(), question.into(), options.into())
+        SendPollRequest::new(self, chat_id, question, options)
     }
 }
 

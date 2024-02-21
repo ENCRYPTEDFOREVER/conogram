@@ -79,7 +79,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         message_id: impl Into<i64>,
     ) -> PinChatMessageRequest {
-        PinChatMessageRequest::new(self, chat_id.into(), message_id.into())
+        PinChatMessageRequest::new(self, chat_id, message_id)
     }
 }
 

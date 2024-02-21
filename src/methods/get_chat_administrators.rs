@@ -61,7 +61,7 @@ impl<'a> API {
         &'a self,
         chat_id: impl Into<ChatId>,
     ) -> GetChatAdministratorsRequest {
-        GetChatAdministratorsRequest::new(self, chat_id.into())
+        GetChatAdministratorsRequest::new(self, chat_id)
     }
 }
 

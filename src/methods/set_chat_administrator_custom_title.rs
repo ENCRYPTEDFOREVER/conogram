@@ -83,12 +83,7 @@ impl<'a> API {
         user_id: impl Into<i64>,
         custom_title: impl Into<String>,
     ) -> SetChatAdministratorCustomTitleRequest {
-        SetChatAdministratorCustomTitleRequest::new(
-            self,
-            chat_id.into(),
-            user_id.into(),
-            custom_title.into(),
-        )
+        SetChatAdministratorCustomTitleRequest::new(self, chat_id, user_id, custom_title)
     }
 }
 

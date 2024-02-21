@@ -60,7 +60,7 @@ impl<'a> API {
         &'a self,
         chat_id: impl Into<ChatId>,
     ) -> ReopenGeneralForumTopicRequest {
-        ReopenGeneralForumTopicRequest::new(self, chat_id.into())
+        ReopenGeneralForumTopicRequest::new(self, chat_id)
     }
 }
 

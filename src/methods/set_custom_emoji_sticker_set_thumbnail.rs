@@ -68,7 +68,7 @@ impl<'a> API {
         &'a self,
         name: impl Into<String>,
     ) -> SetCustomEmojiStickerSetThumbnailRequest {
-        SetCustomEmojiStickerSetThumbnailRequest::new(self, name.into())
+        SetCustomEmojiStickerSetThumbnailRequest::new(self, name)
     }
 }
 

@@ -60,7 +60,7 @@ impl<'a> API {
         &'a self,
         chat_id: impl Into<ChatId>,
     ) -> ExportChatInviteLinkRequest {
-        ExportChatInviteLinkRequest::new(self, chat_id.into())
+        ExportChatInviteLinkRequest::new(self, chat_id)
     }
 }
 
