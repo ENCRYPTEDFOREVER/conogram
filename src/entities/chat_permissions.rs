@@ -88,3 +88,64 @@ impl ChatPermissions {
         }
     }
 }
+
+macro_rules! impl_chat_permissions_bitops {
+    ($struct: ty => {$($trait: ident => $func: ident),*}, {$($trait_assign: ident => $func_assign: ident),*}) => {
+        $(
+            impl std::ops::$trait for $struct {
+                type Output = Self;
+                fn $func(self, rhs: Self) -> Self::Output {
+                    Self {
+                        can_send_messages: self.can_send_messages.$func(rhs.can_send_messages),
+                        can_send_audios: self.can_send_audios.$func(rhs.can_send_audios),
+                        can_send_documents: self.can_send_documents.$func(rhs.can_send_documents),
+                        can_send_photos: self.can_send_photos.$func(rhs.can_send_photos),
+                        can_send_videos: self.can_send_videos.$func(rhs.can_send_videos),
+                        can_send_video_notes: self.can_send_video_notes.$func(rhs.can_send_video_notes),
+                        can_send_voice_notes: self.can_send_voice_notes.$func(rhs.can_send_voice_notes),
+                        can_send_polls: self.can_send_polls.$func(rhs.can_send_polls),
+                        can_send_other_messages: self.can_send_other_messages.$func(rhs.can_send_other_messages),
+                        can_add_web_page_previews: self.can_add_web_page_previews.$func(rhs.can_add_web_page_previews),
+                        can_change_info: self.can_change_info.$func(rhs.can_change_info),
+                        can_invite_users: self.can_invite_users.$func(rhs.can_invite_users),
+                        can_pin_messages: self.can_pin_messages.$func(rhs.can_pin_messages),
+                        can_manage_topics: self.can_manage_topics.$func(rhs.can_manage_topics),
+                    }
+                }
+            }
+        )*
+        $(
+            impl std::ops::$trait_assign for $struct {
+                fn $func_assign(&mut self, rhs: Self) {
+                    self.can_send_messages.$func_assign(rhs.can_send_messages);
+                    self.can_send_audios.$func_assign(rhs.can_send_audios);
+                    self.can_send_documents.$func_assign(rhs.can_send_documents);
+                    self.can_send_photos.$func_assign(rhs.can_send_photos);
+                    self.can_send_videos.$func_assign(rhs.can_send_videos);
+                    self.can_send_video_notes.$func_assign(rhs.can_send_video_notes);
+                    self.can_send_voice_notes.$func_assign(rhs.can_send_voice_notes);
+                    self.can_send_polls.$func_assign(rhs.can_send_polls);
+                    self.can_send_other_messages.$func_assign(rhs.can_send_other_messages);
+                    self.can_add_web_page_previews.$func_assign(rhs.can_add_web_page_previews);
+                    self.can_change_info.$func_assign(rhs.can_change_info);
+                    self.can_invite_users.$func_assign(rhs.can_invite_users);
+                    self.can_pin_messages.$func_assign(rhs.can_pin_messages);
+                    self.can_manage_topics.$func_assign(rhs.can_manage_topics);
+                }
+            }
+        )*
+    };
+}
+
+impl_chat_permissions_bitops!(ChatPermissions =>
+    {
+        BitAnd => bitand,
+        BitOr => bitor,
+        BitXor => bitxor
+    },
+    {
+        BitAndAssign => bitand_assign,
+        BitOrAssign => bitor_assign,
+        BitXorAssign => bitxor_assign
+    }
+);

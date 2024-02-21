@@ -13,12 +13,12 @@ use crate::{
 };
 
 pub trait FormatMention {
-    fn mention(&self, ft: FormattedText) -> FormattedText;
+    fn mention<'a>(&self, ft: &'a mut FormattedText) -> &'a mut FormattedText;
 }
 
 impl_trait!(
     FormatMention for User {
-        fn mention(&self, ft: FormattedText) -> FormattedText {
+        fn mention<'a>(&self, ft: &'a mut FormattedText) -> &'a mut FormattedText {
             ft.mention_user(self.full_name(), self.id)
         }
     }
@@ -26,7 +26,7 @@ impl_trait!(
 
 impl_trait!(
     FormatMention for Chat {
-        fn mention(&self, ft: FormattedText) -> FormattedText {
+        fn mention<'a>(&self, ft: &'a mut FormattedText) -> &'a mut FormattedText {
             ft.url(self.full_name(), self.get_url())
         }
     }
@@ -152,7 +152,7 @@ impl FormattedText {
     }
 
     /// Concats `other` to this instance
-    pub fn concat(mut self, other: impl Into<FormattedText>) -> Self {
+    pub fn concat(&mut self, other: impl Into<FormattedText>) -> &mut Self {
         let other: FormattedText = other.into();
 
         let added_entities = other.entities.into_iter().map(|mut ent| {
@@ -178,13 +178,13 @@ impl FormattedText {
     }
 
     /// Ignore trailing and preceding whitespace chars when calculating entities' length
-    pub fn trim_spaces(mut self, trim: bool) -> Self {
+    pub fn trim_spaces(&mut self, trim: bool) -> &mut Self {
         self.trim_spaces = trim;
         self
     }
 
     /// Uses offsets from last pushed text for all new ones and ignores new text content while the flag is set.
-    pub fn ulo(mut self, use_last_offsets: bool) -> Self {
+    pub fn ulo(&mut self, use_last_offsets: bool) -> &mut Self {
         self.use_last_offsets = use_last_offsets;
         self
     }
@@ -213,14 +213,14 @@ impl FormattedText {
     }
 
     fn push_entity_extended(
-        mut self,
+        &mut self,
         text: impl AsRef<str>,
         entity_type: MessageEntityType,
         url: impl Into<Option<String>>,
         user: impl Into<Option<User>>,
         pre_lang: impl Into<Option<String>>,
         custom_emoji_id: impl Into<Option<String>>,
-    ) -> Self {
+    ) -> &mut Self {
         if self.use_last_offsets {
             let entity = MessageEntity {
                 type_: entity_type,
@@ -259,7 +259,11 @@ impl FormattedText {
         }
     }
 
-    fn push_entity_simple(mut self, text: impl AsRef<str>, entity_type: MessageEntityType) -> Self {
+    fn push_entity_simple(
+        &mut self,
+        text: impl AsRef<str>,
+        entity_type: MessageEntityType,
+    ) -> &mut Self {
         if self.use_last_offsets {
             let entity = MessageEntity {
                 type_: entity_type,
@@ -292,10 +296,10 @@ impl FormattedText {
     }
 
     pub fn entities(
-        mut self,
+        &mut self,
         text: impl AsRef<str>,
         entity_types: impl IntoIterator<Item = MessageEntityType>,
-    ) -> Self {
+    ) -> &mut Self {
         if self.use_last_offsets {
             let entities = entity_types.into_iter().map(|t| MessageEntity {
                 type_: t,
@@ -326,7 +330,7 @@ impl FormattedText {
         }
     }
 
-    pub fn text(mut self, text: impl AsRef<str>) -> Self {
+    pub fn text(&mut self, text: impl AsRef<str>) -> &mut Self {
         let text_ref = text.as_ref();
         let (text_len, entity_offset, entity_len) = self.calc_entity_len_offset(text_ref);
 
@@ -340,7 +344,7 @@ impl FormattedText {
         self
     }
 
-    pub fn nl(mut self) -> Self {
+    pub fn nl(&mut self) -> &mut Self {
         // newlines don't count in entity borders, so no special handling for
         // self.use_last_entities_offset
 
@@ -349,39 +353,39 @@ impl FormattedText {
         self
     }
 
-    pub fn bold(self, text: impl ToString) -> Self {
+    pub fn bold(&mut self, text: impl ToString) -> &mut Self {
         self.push_entity_simple(text.to_string(), MessageEntityType::Bold)
     }
 
-    pub fn italic(self, text: impl ToString) -> Self {
+    pub fn italic(&mut self, text: impl ToString) -> &mut Self {
         self.push_entity_simple(text.to_string(), MessageEntityType::Italic)
     }
 
-    pub fn strikethrough(self, text: impl ToString) -> Self {
+    pub fn strikethrough(&mut self, text: impl ToString) -> &mut Self {
         self.push_entity_simple(text.to_string(), MessageEntityType::Strikethrough)
     }
 
-    pub fn underline(self, text: impl ToString) -> Self {
+    pub fn underline(&mut self, text: impl ToString) -> &mut Self {
         self.push_entity_simple(text.to_string(), MessageEntityType::Underline)
     }
 
-    pub fn spoiler(self, text: impl ToString) -> Self {
+    pub fn spoiler(&mut self, text: impl ToString) -> &mut Self {
         self.push_entity_simple(text.to_string(), MessageEntityType::Spoiler)
     }
 
-    pub fn monowidth(self, text: impl ToString) -> Self {
+    pub fn monowidth(&mut self, text: impl ToString) -> &mut Self {
         self.code(text)
     }
 
-    pub fn code(self, text: impl ToString) -> Self {
+    pub fn code(&mut self, text: impl ToString) -> &mut Self {
         self.push_entity_simple(text.to_string(), MessageEntityType::Code)
     }
 
-    pub fn pre(self, text: impl ToString) -> Self {
+    pub fn pre(&mut self, text: impl ToString) -> &mut Self {
         self.code_block(text)
     }
 
-    pub fn url(self, text: impl ToString, url: impl Into<String>) -> Self {
+    pub fn url(&mut self, text: impl ToString, url: impl Into<String>) -> &mut Self {
         self.push_entity_extended(
             text.to_string(),
             MessageEntityType::TextLink,
@@ -392,7 +396,7 @@ impl FormattedText {
         )
     }
 
-    pub fn mention_user(self, text: impl ToString, user_id: impl Into<i64>) -> Self {
+    pub fn mention_user(&mut self, text: impl ToString, user_id: impl Into<i64>) -> &mut Self {
         let user_id = user_id.into();
 
         if user_id > 0 {
@@ -418,15 +422,15 @@ impl FormattedText {
         }
     }
 
-    pub fn mention(self, mention: impl FormatMention) -> Self {
+    pub fn mention(&mut self, mention: impl FormatMention) -> &mut Self {
         mention.mention(self)
     }
 
-    pub fn code_block(self, text: impl ToString) -> Self {
+    pub fn code_block(&mut self, text: impl ToString) -> &mut Self {
         self.push_entity_simple(text.to_string(), MessageEntityType::Pre)
     }
 
-    pub fn code_block_in(self, text: impl ToString, language: impl Into<String>) -> Self {
+    pub fn code_block_in(&mut self, text: impl ToString, language: impl Into<String>) -> &mut Self {
         self.push_entity_extended(
             text.to_string(),
             MessageEntityType::Pre,
@@ -437,7 +441,11 @@ impl FormattedText {
         )
     }
 
-    pub fn custom_emoji(self, text: impl ToString, custom_emoji_id: impl Into<String>) -> Self {
+    pub fn custom_emoji(
+        &mut self,
+        text: impl ToString,
+        custom_emoji_id: impl Into<String>,
+    ) -> &mut Self {
         self.push_entity_extended(
             text.to_string(),
             MessageEntityType::CustomEmoji,

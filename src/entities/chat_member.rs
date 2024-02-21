@@ -111,4 +111,8 @@ impl ChatMember {
     pub fn is_banned(&self) -> bool {
         matches!(self, ChatMember::Banned(_))
     }
+
+    pub fn is_restricted(&self) -> bool {
+        matches!(self, ChatMember::Restricted(_))
+    }
 }
