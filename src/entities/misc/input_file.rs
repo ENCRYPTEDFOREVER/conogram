@@ -11,7 +11,7 @@ use uuid::Uuid;
 
 ///This object represents the contents of a file to be uploaded. Must be posted using multipart/form-data in the usual way that files are uploaded via the browser.
 ///API Reference: [link](https://core.telegram.org/bots/api/#inputfile)
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum InputFile {
     File(LocalFile),
     FileIdOrURL(String),
@@ -20,7 +20,7 @@ pub enum InputFile {
 
 // TODO: rewrite to use borrowed data
 type FileContents = Vec<u8>;
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct InMemoryFile {
     filename: String,
     contents: FileContents,
@@ -44,12 +44,16 @@ impl InMemoryFile {
         self.uuid.to_string()
     }
 
-    pub async fn get_part(&self) -> Part {
+    pub fn get_part(&self) -> Part {
         Part::bytes(self.contents.clone()).file_name(self.filename.clone())
+    }
+
+    pub fn into_part(self) -> Part {
+        Part::bytes(self.contents).file_name(self.filename)
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LocalFile {
     filename: Option<String>,
     path: PathBuf,
@@ -134,7 +138,7 @@ impl InputFile {
 
     pub fn get_uuid(&self) -> Option<String> {
         match self {
-            InputFile::File(f) => Some(f.get_uuid_str()),
+            Self::File(f) => Some(f.get_uuid_str()),
             _ => None,
         }
     }
@@ -162,9 +166,9 @@ impl Serialize for InputFile {
         S: serde::Serializer,
     {
         match self {
-            InputFile::File(f) => serializer.serialize_str(&f.get_attach_name()),
-            InputFile::InMemory(f) => serializer.serialize_str(&f.get_attach_name()),
-            InputFile::FileIdOrURL(s) => serializer.serialize_str(s),
+            Self::File(f) => serializer.serialize_str(&f.get_attach_name()),
+            Self::InMemory(f) => serializer.serialize_str(&f.get_attach_name()),
+            Self::FileIdOrURL(s) => serializer.serialize_str(s),
         }
     }
 }

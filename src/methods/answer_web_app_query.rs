@@ -55,12 +55,14 @@ impl<'a> AnswerWebAppQueryRequest<'a> {
     }
 
     ///Unique identifier for the query to be answered
+    #[must_use]
     pub fn web_app_query_id(mut self, web_app_query_id: impl Into<String>) -> Self {
         self.params.web_app_query_id = web_app_query_id.into();
         self
     }
 
     ///A JSON-serialized object describing the message to be sent
+    #[must_use]
     pub fn result(mut self, result: impl Into<InlineQueryResult>) -> Self {
         self.params.result = result.into();
         self
@@ -74,7 +76,7 @@ impl<'a> API {
         web_app_query_id: impl Into<String>,
         result: impl Into<InlineQueryResult>,
     ) -> AnswerWebAppQueryRequest {
-        AnswerWebAppQueryRequest::new(self, web_app_query_id.into(), result.into())
+        AnswerWebAppQueryRequest::new(self, web_app_query_id, result)
     }
 }
 

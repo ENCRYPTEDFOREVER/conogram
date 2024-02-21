@@ -38,16 +38,20 @@ impl<'a> RequestT for GetCustomEmojiStickersRequest<'a> {
     }
 }
 impl<'a> GetCustomEmojiStickersRequest<'a> {
-    pub fn new(api: &'a API, custom_emoji_ids: impl Into<Vec<String>>) -> Self {
+    pub fn new(
+        api: &'a API,
+        custom_emoji_ids: impl IntoIterator<Item = impl Into<String>>,
+    ) -> Self {
         Self {
             api,
             params: GetCustomEmojiStickersParams {
-                custom_emoji_ids: custom_emoji_ids.into(),
+                custom_emoji_ids: custom_emoji_ids.into_iter().map(Into::into).collect(),
             },
         }
     }
 
     ///List of custom emoji identifiers. At most 200 custom emoji identifiers can be specified.
+    #[must_use]
     pub fn custom_emoji_ids(
         mut self,
         custom_emoji_ids: impl IntoIterator<Item = impl Into<String>>,
@@ -61,9 +65,9 @@ impl<'a> API {
     ///Use this method to get information about custom emoji stickers by their identifiers. Returns an Array of [Sticker](https://core.telegram.org/bots/api/#sticker) objects.
     pub fn get_custom_emoji_stickers(
         &'a self,
-        custom_emoji_ids: impl Into<Vec<String>>,
+        custom_emoji_ids: impl IntoIterator<Item = impl Into<String>>,
     ) -> GetCustomEmojiStickersRequest {
-        GetCustomEmojiStickersRequest::new(self, custom_emoji_ids.into())
+        GetCustomEmojiStickersRequest::new(self, custom_emoji_ids)
     }
 }
 

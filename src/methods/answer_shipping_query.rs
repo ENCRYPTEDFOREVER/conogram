@@ -56,18 +56,21 @@ impl<'a> AnswerShippingQueryRequest<'a> {
     }
 
     ///Unique identifier for the query to be answered
+    #[must_use]
     pub fn shipping_query_id(mut self, shipping_query_id: impl Into<String>) -> Self {
         self.params.shipping_query_id = shipping_query_id.into();
         self
     }
 
     ///Pass *True* if delivery to the specified address is possible and *False* if there are any problems (for example, if delivery to the specified address is not possible)
+    #[must_use]
     pub fn ok(mut self, ok: impl Into<bool>) -> Self {
         self.params.ok = ok.into();
         self
     }
 
     ///Required if *ok* is *True*. A JSON-serialized array of available shipping options.
+    #[must_use]
     pub fn shipping_options(
         mut self,
         shipping_options: impl IntoIterator<Item = impl Into<ShippingOption>>,
@@ -77,6 +80,7 @@ impl<'a> AnswerShippingQueryRequest<'a> {
     }
 
     ///Required if *ok* is *False*. Error message in human readable form that explains why it is impossible to complete the order (e.g. "Sorry, delivery to your desired address is unavailable'). Telegram will display this message to the user.
+    #[must_use]
     pub fn error_message(mut self, error_message: impl Into<String>) -> Self {
         self.params.error_message = Some(error_message.into());
         self
@@ -90,7 +94,7 @@ impl<'a> API {
         shipping_query_id: impl Into<String>,
         ok: impl Into<bool>,
     ) -> AnswerShippingQueryRequest {
-        AnswerShippingQueryRequest::new(self, shipping_query_id.into(), ok.into())
+        AnswerShippingQueryRequest::new(self, shipping_query_id, ok)
     }
 }
 

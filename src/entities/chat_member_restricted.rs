@@ -60,7 +60,7 @@ pub struct ChatMemberRestricted {
 use super::chat_permissions::ChatPermissions;
 
 impl ChatMemberRestricted {
-    pub fn permissions(&self) -> ChatPermissions {
+    pub const fn permissions(&self) -> ChatPermissions {
         ChatPermissions {
             can_send_messages: self.can_send_messages,
             can_send_audios: self.can_send_audios,

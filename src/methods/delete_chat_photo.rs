@@ -48,6 +48,7 @@ impl<'a> DeleteChatPhotoRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
@@ -57,7 +58,7 @@ impl<'a> DeleteChatPhotoRequest<'a> {
 impl<'a> API {
     ///Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
     pub fn delete_chat_photo(&'a self, chat_id: impl Into<ChatId>) -> DeleteChatPhotoRequest {
-        DeleteChatPhotoRequest::new(self, chat_id.into())
+        DeleteChatPhotoRequest::new(self, chat_id)
     }
 }
 

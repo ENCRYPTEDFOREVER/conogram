@@ -49,12 +49,14 @@ impl<'a> SetStickerPositionInSetRequest<'a> {
     }
 
     ///File identifier of the sticker
+    #[must_use]
     pub fn sticker(mut self, sticker: impl Into<String>) -> Self {
         self.params.sticker = sticker.into();
         self
     }
 
     ///New sticker position in the set, zero-based
+    #[must_use]
     pub fn position(mut self, position: impl Into<i64>) -> Self {
         self.params.position = position.into();
         self
@@ -68,7 +70,7 @@ impl<'a> API {
         sticker: impl Into<String>,
         position: impl Into<i64>,
     ) -> SetStickerPositionInSetRequest {
-        SetStickerPositionInSetRequest::new(self, sticker.into(), position.into())
+        SetStickerPositionInSetRequest::new(self, sticker, position)
     }
 }
 

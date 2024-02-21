@@ -45,7 +45,7 @@ macro_rules! set_default_param {
     }
 }
 
-/// Wraps API request into [API::request_ref(self)]
+/// Wraps API request into [``API::request_ref(self)``]
 pub trait WrapRequest {
     fn wrap<ReturnType>(
         &self,
@@ -66,19 +66,19 @@ pub struct APIConfig {
 }
 
 impl APIConfig {
-    pub fn new(bot_token: impl ToString, server_config: Option<ApiServerConfig>) -> Self {
+    pub fn new(bot_token: impl Into<String>, server_config: Option<ApiServerConfig>) -> Self {
         Self {
-            token: bot_token.to_string(),
-            server_config: server_config.unwrap_or(ApiServerConfig::remote(false)),
+            token: bot_token.into(),
+            server_config: server_config.unwrap_or_else(|| ApiServerConfig::remote(false)),
         }
     }
 
-    pub fn remote(bot_token: impl ToString, use_test_env: bool) -> Self {
+    pub fn remote(bot_token: impl Into<String>, use_test_env: bool) -> Self {
         Self::new(bot_token, Some(ApiServerConfig::remote(use_test_env)))
     }
 
     pub fn local(
-        bot_token: impl ToString,
+        bot_token: impl Into<String>,
         server_url: impl Into<String>,
         port: impl Into<u16>,
         use_test_env: bool,
@@ -111,7 +111,7 @@ impl Debug for API {
                 "token",
                 &format!("{}...", &token_splits.next().unwrap_or("Unknown")[..10]),
             )
-            .finish()
+            .finish_non_exhaustive()
     }
 }
 
@@ -197,11 +197,14 @@ impl API {
     }
 
     /// Set allowed update kinds list which will be later used in polling
-    pub fn set_allowed_updates(&mut self, allowed_updates: Vec<AllowedUpdates>) {
-        self.allowed_updates = allowed_updates.iter().map(|x| x.to_string()).collect();
+    pub fn set_allowed_updates(
+        &mut self,
+        allowed_updates: impl IntoIterator<Item = AllowedUpdates>,
+    ) {
+        self.allowed_updates = allowed_updates.into_iter().map(|x| x.to_string()).collect();
     }
 
-    /// Internal conogram method. Returns `Ok(false)`` instead of `Err` if the message can't be deleted
+    /// Internal conogram method. Returns ``Ok(false)`` instead of `Err` if the message can't be deleted
     pub async fn delete_message_exp(
         &self,
         chat_id: impl Into<ChatId>,
@@ -216,7 +219,7 @@ impl API {
         result
     }
 
-    /// Internal conogram method. Returns `Ok(false)`` instead of `Err` if on or more of the messages can't be deleted
+    /// Internal conogram method. Returns ``Ok(false)`` instead of `Err` if on or more of the messages can't be deleted
     pub async fn delete_messages_exp(
         &self,
         chat_id: impl Into<ChatId>,

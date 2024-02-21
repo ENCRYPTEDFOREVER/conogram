@@ -28,7 +28,7 @@ impl GetFiles for InputSticker {
     fn get_files(&self) -> std::collections::HashMap<super::misc::input_file::Moose, &InputFile> {
         let mut map = HashMap::new();
         map.insert(
-            Moose::Owned(self.sticker.get_uuid().unwrap_or("sticker".into())),
+            Moose::Owned(self.sticker.get_uuid().unwrap_or_else(|| "sticker".into())),
             &self.sticker,
         );
         map

@@ -53,12 +53,14 @@ impl<'a> SetMyDefaultAdministratorRightsRequest<'a> {
     }
 
     ///A JSON-serialized object describing new default administrator rights. If not specified, the default administrator rights will be cleared.
+    #[must_use]
     pub fn rights(mut self, rights: impl Into<ChatAdministratorRights>) -> Self {
         self.params.rights = Some(rights.into());
         self
     }
 
     ///Pass *True* to change the default administrator rights of the bot in channels. Otherwise, the default administrator rights of the bot for groups and supergroups will be changed.
+    #[must_use]
     pub fn for_channels(mut self, for_channels: impl Into<bool>) -> Self {
         self.params.for_channels = for_channels.into();
         self

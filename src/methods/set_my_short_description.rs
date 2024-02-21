@@ -51,12 +51,14 @@ impl<'a> SetMyShortDescriptionRequest<'a> {
     }
 
     ///New short description for the bot; 0-120 characters. Pass an empty string to remove the dedicated short description for the given language.
+    #[must_use]
     pub fn short_description(mut self, short_description: impl Into<String>) -> Self {
         self.params.short_description = Some(short_description.into());
         self
     }
 
     ///A two-letter ISO 639-1 language code. If empty, the short description will be applied to all users for whose language there is no dedicated short description.
+    #[must_use]
     pub fn language_code(mut self, language_code: impl Into<String>) -> Self {
         self.params.language_code = Some(language_code.into());
         self

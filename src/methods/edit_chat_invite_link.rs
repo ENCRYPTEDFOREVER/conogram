@@ -64,36 +64,42 @@ impl<'a> EditChatInviteLinkRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///The invite link to edit
+    #[must_use]
     pub fn invite_link(mut self, invite_link: impl Into<String>) -> Self {
         self.params.invite_link = invite_link.into();
         self
     }
 
     ///Invite link name; 0-32 characters
+    #[must_use]
     pub fn name(mut self, name: impl Into<String>) -> Self {
         self.params.name = Some(name.into());
         self
     }
 
     ///Point in time (Unix timestamp) when the link will expire
+    #[must_use]
     pub fn expire_date(mut self, expire_date: impl Into<i64>) -> Self {
         self.params.expire_date = Some(expire_date.into());
         self
     }
 
     ///The maximum number of users that can be members of the chat simultaneously after joining the chat via this invite link; 1-99999
+    #[must_use]
     pub fn member_limit(mut self, member_limit: impl Into<i64>) -> Self {
         self.params.member_limit = Some(member_limit.into());
         self
     }
 
     ///*True*, if users joining the chat via the link need to be approved by chat administrators. If *True*, *member\_limit* can't be specified
+    #[must_use]
     pub fn creates_join_request(mut self, creates_join_request: impl Into<bool>) -> Self {
         self.params.creates_join_request = creates_join_request.into();
         self
@@ -107,7 +113,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         invite_link: impl Into<String>,
     ) -> EditChatInviteLinkRequest {
-        EditChatInviteLinkRequest::new(self, chat_id.into(), invite_link.into())
+        EditChatInviteLinkRequest::new(self, chat_id, invite_link)
     }
 }
 

@@ -59,24 +59,28 @@ impl<'a> GetGameHighScoresRequest<'a> {
     }
 
     ///Target user id
+    #[must_use]
     pub fn user_id(mut self, user_id: impl Into<i64>) -> Self {
         self.params.user_id = user_id.into();
         self
     }
 
     ///Required if *inline\_message\_id* is not specified. Unique identifier for the target chat
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<i64>) -> Self {
         self.params.chat_id = Some(chat_id.into());
         self
     }
 
     ///Required if *inline\_message\_id* is not specified. Identifier of the sent message
+    #[must_use]
     pub fn message_id(mut self, message_id: impl Into<i64>) -> Self {
         self.params.message_id = Some(message_id.into());
         self
     }
 
     ///Required if *chat\_id* and *message\_id* are not specified. Identifier of the inline message
+    #[must_use]
     pub fn inline_message_id(mut self, inline_message_id: impl Into<String>) -> Self {
         self.params.inline_message_id = Some(inline_message_id.into());
         self
@@ -88,7 +92,7 @@ impl<'a> API {
     ///
     ///This method will currently return scores for the target user, plus two of their closest neighbors on each side. Will also return the top three users if the user and their neighbors are not among them. Please note that this behavior is subject to change.
     pub fn get_game_high_scores(&'a self, user_id: impl Into<i64>) -> GetGameHighScoresRequest {
-        GetGameHighScoresRequest::new(self, user_id.into())
+        GetGameHighScoresRequest::new(self, user_id)
     }
 }
 

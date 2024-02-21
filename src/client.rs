@@ -24,7 +24,7 @@ pub(crate) struct ApiResponse<ReturnValue> {
     pub result: Option<ReturnValue>,
 }
 
-pub struct ApiClient {
+pub(crate) struct ApiClient {
     base_url: String,
     http_client: Client,
     bot_config: APIConfig,
@@ -33,21 +33,22 @@ pub struct ApiClient {
 }
 
 impl ApiClient {
-    pub fn new(config: APIConfig) -> ApiClient {
+    pub fn new(config: APIConfig) -> Self {
         Self {
-            base_url: match config.server_config.use_test_env {
-                false => format!(
-                    "{url}:{port}/bot{token}",
-                    url = config.server_config.url,
-                    port = config.server_config.port,
-                    token = config.token
-                ),
-                true => format!(
+            base_url: if config.server_config.use_test_env {
+                format!(
                     "{url}:{port}/bot{token}/test",
                     url = config.server_config.url,
                     port = config.server_config.port,
                     token = config.token
-                ),
+                )
+            } else {
+                format!(
+                    "{url}:{port}/bot{token}",
+                    url = config.server_config.url,
+                    port = config.server_config.port,
+                    token = config.token
+                )
             },
             http_client: Client::new(),
             bot_config: config,
@@ -55,6 +56,8 @@ impl ApiClient {
         }
     }
 
+    /// # Errors
+    /// Fails on ``value`` serialization fail
     pub fn set_default_request_param(
         &mut self,
         method: impl Into<String>,
@@ -87,7 +90,7 @@ impl ApiClient {
     fn apply_default_params(&self, method: &str, value: &mut Value) {
         if let Some(method_entry) = self.default_params.get(method) {
             if let Value::Object(object) = value {
-                for (param_name, v) in method_entry.iter() {
+                for (param_name, v) in method_entry {
                     if !object.contains_key(param_name) {
                         log::debug!("Setting {param_name}={v} in {method}");
                         object.insert(param_name.clone(), v.clone());
@@ -173,7 +176,7 @@ impl ApiClient {
                         }
                         TgApiError::BadGateway(_) => log::warn!("[{method}] Got BadGateway"),
                         TgApiError::GatewayTimeout(_) => {
-                            log::warn!("[{method}] Got GatewayTimeout")
+                            log::warn!("[{method}] Got GatewayTimeout");
                         }
                         _ => {}
                     }
@@ -229,15 +232,17 @@ impl ApiClient {
                 log::debug!("Calling {method}({})", Self::value_to_string(&json_struct));
 
                 let mut form = Form::new();
-                for (key, value) in json_struct.as_object().unwrap() {
-                    let value = match value {
-                        Value::String(val) => val.to_string(),
-                        other => other.to_string(),
-                    };
-                    form = form.text(key.clone(), value);
+                if let Some(v) = json_struct.as_object() {
+                    for (key, value) in v {
+                        let value = match value {
+                            Value::String(val) => val.to_string(),
+                            other => other.to_string(),
+                        };
+                        form = form.text(key.clone(), value);
+                    }
                 }
 
-                for (key, file) in params.get_files().into_iter() {
+                for (key, file) in params.get_files() {
                     match file {
                         InputFile::File(f) => {
                             let part = match f.get_part().await {
@@ -258,9 +263,9 @@ impl ApiClient {
                         }
                         InputFile::InMemory(f) => {
                             if key == "media" {
-                                form = form.part(f.get_uuid_str(), f.get_part().await);
+                                form = form.part(f.get_uuid_str(), f.get_part());
                             } else {
-                                form = form.part(key, f.get_part().await);
+                                form = form.part(key, f.get_part());
                             }
                         }
                     }

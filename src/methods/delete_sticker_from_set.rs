@@ -47,6 +47,7 @@ impl<'a> DeleteStickerFromSetRequest<'a> {
     }
 
     ///File identifier of the sticker
+    #[must_use]
     pub fn sticker(mut self, sticker: impl Into<String>) -> Self {
         self.params.sticker = sticker.into();
         self
@@ -59,7 +60,7 @@ impl<'a> API {
         &'a self,
         sticker: impl Into<String>,
     ) -> DeleteStickerFromSetRequest {
-        DeleteStickerFromSetRequest::new(self, sticker.into())
+        DeleteStickerFromSetRequest::new(self, sticker)
     }
 }
 

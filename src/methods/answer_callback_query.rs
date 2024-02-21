@@ -62,18 +62,21 @@ impl<'a> AnswerCallbackQueryRequest<'a> {
     }
 
     ///Unique identifier for the query to be answered
+    #[must_use]
     pub fn callback_query_id(mut self, callback_query_id: impl Into<String>) -> Self {
         self.params.callback_query_id = callback_query_id.into();
         self
     }
 
     ///Text of the notification. If not specified, nothing will be shown to the user, 0-200 characters
+    #[must_use]
     pub fn text(mut self, text: impl Into<String>) -> Self {
         self.params.text = Some(text.into());
         self
     }
 
     ///If *True*, an alert will be shown by the client instead of a notification at the top of the chat screen. Defaults to *false*.
+    #[must_use]
     pub fn show_alert(mut self, show_alert: impl Into<bool>) -> Self {
         self.params.show_alert = show_alert.into();
         self
@@ -82,12 +85,14 @@ impl<'a> AnswerCallbackQueryRequest<'a> {
     ///URL that will be opened by the user's client. If you have created a [Game](https://core.telegram.org/bots/api/#game) and accepted the conditions via [@BotFather](https://t.me/botfather), specify the URL that opens your game - note that this will only work if the query comes from a [*callback\_game*](https://core.telegram.org/bots/api/#inlinekeyboardbutton) button.  
     ///
     ///Otherwise, you may use links like `t.me/your_bot?start=XXXX` that open your bot with a parameter.
+    #[must_use]
     pub fn url(mut self, url: impl Into<String>) -> Self {
         self.params.url = Some(url.into());
         self
     }
 
     ///The maximum amount of time in seconds that the result of the callback query may be cached client-side. Telegram apps will support caching starting in version 3.14. Defaults to 0.
+    #[must_use]
     pub fn cache_time(mut self, cache_time: impl Into<i64>) -> Self {
         self.params.cache_time = Some(cache_time.into());
         self
@@ -102,7 +107,7 @@ impl<'a> API {
         &'a self,
         callback_query_id: impl Into<String>,
     ) -> AnswerCallbackQueryRequest {
-        AnswerCallbackQueryRequest::new(self, callback_query_id.into())
+        AnswerCallbackQueryRequest::new(self, callback_query_id)
     }
 }
 

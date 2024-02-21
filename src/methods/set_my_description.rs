@@ -51,12 +51,14 @@ impl<'a> SetMyDescriptionRequest<'a> {
     }
 
     ///New bot description; 0-512 characters. Pass an empty string to remove the dedicated description for the given language.
+    #[must_use]
     pub fn description(mut self, description: impl Into<String>) -> Self {
         self.params.description = Some(description.into());
         self
     }
 
     ///A two-letter ISO 639-1 language code. If empty, the description will be applied to all users for whose language there is no dedicated description.
+    #[must_use]
     pub fn language_code(mut self, language_code: impl Into<String>) -> Self {
         self.params.language_code = Some(language_code.into());
         self

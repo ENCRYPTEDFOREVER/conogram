@@ -49,6 +49,7 @@ impl<'a> GetChatMenuButtonRequest<'a> {
     }
 
     ///Unique identifier for the target private chat. If not specified, default bot's menu button will be returned
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<i64>) -> Self {
         self.params.chat_id = Some(chat_id.into());
         self

@@ -58,24 +58,28 @@ impl<'a> SetMessageReactionRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///Identifier of the target message. If the message belongs to a media group, the reaction is set to the first non-deleted message in the group instead.
+    #[must_use]
     pub fn message_id(mut self, message_id: impl Into<i64>) -> Self {
         self.params.message_id = message_id.into();
         self
     }
 
     ///New list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators.
+    #[must_use]
     pub fn reaction(mut self, reaction: impl IntoIterator<Item = impl Into<ReactionType>>) -> Self {
         self.params.reaction = reaction.into_iter().map(Into::into).collect();
         self
     }
 
     ///Pass *True* to set the reaction with a big animation
+    #[must_use]
     pub fn is_big(mut self, is_big: impl Into<bool>) -> Self {
         self.params.is_big = is_big.into();
         self
@@ -89,7 +93,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         message_id: impl Into<i64>,
     ) -> SetMessageReactionRequest {
-        SetMessageReactionRequest::new(self, chat_id.into(), message_id.into())
+        SetMessageReactionRequest::new(self, chat_id, message_id)
     }
 }
 

@@ -50,12 +50,14 @@ impl<'a> SetCustomEmojiStickerSetThumbnailRequest<'a> {
     }
 
     ///Sticker set name
+    #[must_use]
     pub fn name(mut self, name: impl Into<String>) -> Self {
         self.params.name = name.into();
         self
     }
 
     ///Custom emoji identifier of a sticker from the sticker set; pass an empty string to drop the thumbnail and use the first sticker as the thumbnail.
+    #[must_use]
     pub fn custom_emoji_id(mut self, custom_emoji_id: impl Into<String>) -> Self {
         self.params.custom_emoji_id = Some(custom_emoji_id.into());
         self
@@ -68,7 +70,7 @@ impl<'a> API {
         &'a self,
         name: impl Into<String>,
     ) -> SetCustomEmojiStickerSetThumbnailRequest {
-        SetCustomEmojiStickerSetThumbnailRequest::new(self, name.into())
+        SetCustomEmojiStickerSetThumbnailRequest::new(self, name)
     }
 }
 

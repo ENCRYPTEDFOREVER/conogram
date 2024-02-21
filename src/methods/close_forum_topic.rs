@@ -54,12 +54,14 @@ impl<'a> CloseForumTopicRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///Unique identifier for the target message thread of the forum topic
+    #[must_use]
     pub fn message_thread_id(mut self, message_thread_id: impl Into<i64>) -> Self {
         self.params.message_thread_id = message_thread_id.into();
         self
@@ -73,7 +75,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         message_thread_id: impl Into<i64>,
     ) -> CloseForumTopicRequest {
-        CloseForumTopicRequest::new(self, chat_id.into(), message_thread_id.into())
+        CloseForumTopicRequest::new(self, chat_id, message_thread_id)
     }
 }
 

@@ -54,18 +54,21 @@ impl<'a> UnbanChatMemberRequest<'a> {
     }
 
     ///Unique identifier for the target group or username of the target supergroup or channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///Unique identifier of the target user
+    #[must_use]
     pub fn user_id(mut self, user_id: impl Into<i64>) -> Self {
         self.params.user_id = user_id.into();
         self
     }
 
     ///Do nothing if the user is not banned
+    #[must_use]
     pub fn only_if_banned(mut self, only_if_banned: impl Into<bool>) -> Self {
         self.params.only_if_banned = only_if_banned.into();
         self
@@ -79,7 +82,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         user_id: impl Into<i64>,
     ) -> UnbanChatMemberRequest {
-        UnbanChatMemberRequest::new(self, chat_id.into(), user_id.into())
+        UnbanChatMemberRequest::new(self, chat_id, user_id)
     }
 }
 

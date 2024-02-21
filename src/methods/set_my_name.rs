@@ -51,12 +51,14 @@ impl<'a> SetMyNameRequest<'a> {
     }
 
     ///New bot name; 0-64 characters. Pass an empty string to remove the dedicated name for the given language.
+    #[must_use]
     pub fn name(mut self, name: impl Into<String>) -> Self {
         self.params.name = Some(name.into());
         self
     }
 
     ///A two-letter ISO 639-1 language code. If empty, the name will be shown to all users for whose language there is no dedicated name.
+    #[must_use]
     pub fn language_code(mut self, language_code: impl Into<String>) -> Self {
         self.params.language_code = Some(language_code.into());
         self

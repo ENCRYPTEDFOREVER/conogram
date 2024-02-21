@@ -48,6 +48,7 @@ impl<'a> LeaveChatRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target supergroup or channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
@@ -57,7 +58,7 @@ impl<'a> LeaveChatRequest<'a> {
 impl<'a> API {
     ///Use this method for your bot to leave a group, supergroup or channel. Returns *True* on success.
     pub fn leave_chat(&'a self, chat_id: impl Into<ChatId>) -> LeaveChatRequest {
-        LeaveChatRequest::new(self, chat_id.into())
+        LeaveChatRequest::new(self, chat_id)
     }
 }
 

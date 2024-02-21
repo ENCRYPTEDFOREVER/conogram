@@ -94,84 +94,98 @@ impl<'a> SendVenueRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+    #[must_use]
     pub fn message_thread_id(mut self, message_thread_id: impl Into<i64>) -> Self {
         self.params.message_thread_id = Some(message_thread_id.into());
         self
     }
 
     ///Latitude of the venue
+    #[must_use]
     pub fn latitude(mut self, latitude: impl Into<f64>) -> Self {
         self.params.latitude = latitude.into();
         self
     }
 
     ///Longitude of the venue
+    #[must_use]
     pub fn longitude(mut self, longitude: impl Into<f64>) -> Self {
         self.params.longitude = longitude.into();
         self
     }
 
     ///Name of the venue
+    #[must_use]
     pub fn title(mut self, title: impl Into<String>) -> Self {
         self.params.title = title.into();
         self
     }
 
     ///Address of the venue
+    #[must_use]
     pub fn address(mut self, address: impl Into<String>) -> Self {
         self.params.address = address.into();
         self
     }
 
     ///Foursquare identifier of the venue
+    #[must_use]
     pub fn foursquare_id(mut self, foursquare_id: impl Into<String>) -> Self {
         self.params.foursquare_id = Some(foursquare_id.into());
         self
     }
 
     ///Foursquare type of the venue, if known. (For example, “arts\_entertainment/default”, “arts\_entertainment/aquarium” or “food/icecream”.)
+    #[must_use]
     pub fn foursquare_type(mut self, foursquare_type: impl Into<String>) -> Self {
         self.params.foursquare_type = Some(foursquare_type.into());
         self
     }
 
     ///Google Places identifier of the venue
+    #[must_use]
     pub fn google_place_id(mut self, google_place_id: impl Into<String>) -> Self {
         self.params.google_place_id = Some(google_place_id.into());
         self
     }
 
     ///Google Places type of the venue. (See [supported types](https://developers.google.com/places/web-service/supported_types).)
+    #[must_use]
     pub fn google_place_type(mut self, google_place_type: impl Into<String>) -> Self {
         self.params.google_place_type = Some(google_place_type.into());
         self
     }
 
     ///Sends the message [silently](https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
+    #[must_use]
     pub fn disable_notification(mut self, disable_notification: impl Into<bool>) -> Self {
         self.params.disable_notification = disable_notification.into();
         self
     }
 
     ///Protects the contents of the sent message from forwarding and saving
+    #[must_use]
     pub fn protect_content(mut self, protect_content: impl Into<bool>) -> Self {
         self.params.protect_content = protect_content.into();
         self
     }
 
     ///Description of the message to reply to
+    #[must_use]
     pub fn reply_parameters(mut self, reply_parameters: impl Into<ReplyParameters>) -> Self {
         self.params.reply_parameters = Some(reply_parameters.into());
         self
     }
 
     ///Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a reply from the user.
+    #[must_use]
     pub fn reply_markup(mut self, reply_markup: impl Into<ReplyMarkup>) -> Self {
         self.params.reply_markup = Some(reply_markup.into());
         self
@@ -188,14 +202,7 @@ impl<'a> API {
         title: impl Into<String>,
         address: impl Into<String>,
     ) -> SendVenueRequest {
-        SendVenueRequest::new(
-            self,
-            chat_id.into(),
-            latitude.into(),
-            longitude.into(),
-            title.into(),
-            address.into(),
-        )
+        SendVenueRequest::new(self, chat_id, latitude, longitude, title, address)
     }
 }
 

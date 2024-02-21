@@ -73,36 +73,42 @@ impl<'a> EditMessageTextRequest<'a> {
     }
 
     ///Required if *inline\_message\_id* is not specified. Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = Some(chat_id.into());
         self
     }
 
     ///Required if *inline\_message\_id* is not specified. Identifier of the message to edit
+    #[must_use]
     pub fn message_id(mut self, message_id: impl Into<i64>) -> Self {
         self.params.message_id = Some(message_id.into());
         self
     }
 
     ///Required if *chat\_id* and *message\_id* are not specified. Identifier of the inline message
+    #[must_use]
     pub fn inline_message_id(mut self, inline_message_id: impl Into<String>) -> Self {
         self.params.inline_message_id = Some(inline_message_id.into());
         self
     }
 
     ///New text of the message, 1-4096 characters after entities parsing
+    #[must_use]
     pub fn text(mut self, text: impl Into<String>) -> Self {
         self.params.text = text.into();
         self
     }
 
     ///Mode for parsing entities in the message text. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details.
+    #[must_use]
     pub fn parse_mode(mut self, parse_mode: impl Into<String>) -> Self {
         self.params.parse_mode = Some(parse_mode.into());
         self
     }
 
     ///A JSON-serialized list of special entities that appear in message text, which can be specified instead of *parse\_mode*
+    #[must_use]
     pub fn entities(
         mut self,
         entities: impl IntoIterator<Item = impl Into<MessageEntity>>,
@@ -112,6 +118,7 @@ impl<'a> EditMessageTextRequest<'a> {
     }
 
     ///Link preview generation options for the message
+    #[must_use]
     pub fn link_preview_options(
         mut self,
         link_preview_options: impl Into<LinkPreviewOptions>,
@@ -121,6 +128,7 @@ impl<'a> EditMessageTextRequest<'a> {
     }
 
     ///A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards).
+    #[must_use]
     pub fn reply_markup(mut self, reply_markup: impl Into<InlineKeyboardMarkup>) -> Self {
         self.params.reply_markup = Some(reply_markup.into());
         self
@@ -130,19 +138,21 @@ impl<'a> EditMessageTextRequest<'a> {
 impl<'a> API {
     ///Use this method to edit text and [game](https://core.telegram.org/bots/api/#games) messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned.
     pub fn edit_message_text(&'a self, text: impl Into<String>) -> EditMessageTextRequest {
-        EditMessageTextRequest::new(self, text.into())
+        EditMessageTextRequest::new(self, text)
     }
 }
 
 // Divider: all content below this line will be preserved after code regen
 
 impl EditMessageTextRequest<'_> {
+    #[must_use]
     pub fn remove_reply_markup(mut self) -> Self {
         self.params.reply_markup = None;
         self
     }
 
     /// For backwards compatibility (Bot API < 7.0)
+    #[must_use]
     pub fn disable_web_page_preview(self, disable: bool) -> Self {
         self.link_preview_options(LinkPreviewOptions {
             is_disabled: disable,

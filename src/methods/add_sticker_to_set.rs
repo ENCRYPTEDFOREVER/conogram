@@ -68,18 +68,21 @@ impl<'a> AddStickerToSetRequest<'a> {
     }
 
     ///User identifier of sticker set owner
+    #[must_use]
     pub fn user_id(mut self, user_id: impl Into<i64>) -> Self {
         self.params.user_id = user_id.into();
         self
     }
 
     ///Sticker set name
+    #[must_use]
     pub fn name(mut self, name: impl Into<String>) -> Self {
         self.params.name = name.into();
         self
     }
 
     ///A JSON-serialized object with information about the added sticker. If exactly the same sticker had already been added to the set, then the set isn't changed.
+    #[must_use]
     pub fn sticker(mut self, sticker: impl Into<InputSticker>) -> Self {
         self.params.sticker = sticker.into();
         self
@@ -94,7 +97,7 @@ impl<'a> API {
         name: impl Into<String>,
         sticker: impl Into<InputSticker>,
     ) -> AddStickerToSetRequest {
-        AddStickerToSetRequest::new(self, user_id.into(), name.into(), sticker.into())
+        AddStickerToSetRequest::new(self, user_id, name, sticker)
     }
 }
 

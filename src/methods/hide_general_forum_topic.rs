@@ -48,6 +48,7 @@ impl<'a> HideGeneralForumTopicRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
@@ -60,7 +61,7 @@ impl<'a> API {
         &'a self,
         chat_id: impl Into<ChatId>,
     ) -> HideGeneralForumTopicRequest {
-        HideGeneralForumTopicRequest::new(self, chat_id.into())
+        HideGeneralForumTopicRequest::new(self, chat_id)
     }
 }
 

@@ -39,23 +39,29 @@ impl<'a> RequestT for DeleteMessagesRequest<'a> {
     }
 }
 impl<'a> DeleteMessagesRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, message_ids: impl Into<Vec<i64>>) -> Self {
+    pub fn new(
+        api: &'a API,
+        chat_id: impl Into<ChatId>,
+        message_ids: impl IntoIterator<Item = impl Into<i64>>,
+    ) -> Self {
         Self {
             api,
             params: DeleteMessagesParams {
                 chat_id: chat_id.into(),
-                message_ids: message_ids.into(),
+                message_ids: message_ids.into_iter().map(Into::into).collect(),
             },
         }
     }
 
     ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///Identifiers of 1-100 messages to delete. See [deleteMessage](https://core.telegram.org/bots/api/#deletemessage) for limitations on which messages can be deleted
+    #[must_use]
     pub fn message_ids(mut self, message_ids: impl IntoIterator<Item = impl Into<i64>>) -> Self {
         self.params.message_ids = message_ids.into_iter().map(Into::into).collect();
         self
@@ -67,9 +73,9 @@ impl<'a> API {
     pub fn delete_messages(
         &'a self,
         chat_id: impl Into<ChatId>,
-        message_ids: impl Into<Vec<i64>>,
+        message_ids: impl IntoIterator<Item = impl Into<i64>>,
     ) -> DeleteMessagesRequest {
-        DeleteMessagesRequest::new(self, chat_id.into(), message_ids.into())
+        DeleteMessagesRequest::new(self, chat_id, message_ids)
     }
 }
 

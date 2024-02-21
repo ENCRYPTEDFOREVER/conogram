@@ -51,12 +51,14 @@ impl<'a> SetChatDescriptionRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///New chat description, 0-255 characters
+    #[must_use]
     pub fn description(mut self, description: impl Into<String>) -> Self {
         self.params.description = Some(description.into());
         self
@@ -66,7 +68,7 @@ impl<'a> SetChatDescriptionRequest<'a> {
 impl<'a> API {
     ///Use this method to change the description of a group, a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
     pub fn set_chat_description(&'a self, chat_id: impl Into<ChatId>) -> SetChatDescriptionRequest {
-        SetChatDescriptionRequest::new(self, chat_id.into())
+        SetChatDescriptionRequest::new(self, chat_id)
     }
 }
 

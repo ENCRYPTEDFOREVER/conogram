@@ -52,12 +52,14 @@ impl<'a> DeleteMyCommandsRequest<'a> {
     }
 
     ///A JSON-serialized object, describing scope of users for which the commands are relevant. Defaults to [BotCommandScopeDefault](https://core.telegram.org/bots/api/#botcommandscopedefault).
+    #[must_use]
     pub fn scope(mut self, scope: impl Into<BotCommandScope>) -> Self {
         self.params.scope = Some(scope.into());
         self
     }
 
     ///A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands
+    #[must_use]
     pub fn language_code(mut self, language_code: impl Into<String>) -> Self {
         self.params.language_code = Some(language_code.into());
         self

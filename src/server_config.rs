@@ -8,7 +8,7 @@ pub struct ApiServerConfig {
 }
 
 impl ApiServerConfig {
-    pub fn new(url: String, port: u16, use_test_env: bool) -> Self {
+    pub const fn new(url: String, port: u16, use_test_env: bool) -> Self {
         Self {
             url,
             port,
@@ -26,7 +26,7 @@ impl ApiServerConfig {
 
     pub fn local(url: Option<String>, port: Option<u16>, use_test_env: bool) -> Self {
         Self {
-            url: url.unwrap_or("http://localhost".to_string()),
+            url: url.unwrap_or_else(|| "http://localhost".to_string()),
             port: port.unwrap_or(80),
             use_test_env,
         }
@@ -35,6 +35,6 @@ impl ApiServerConfig {
 
 impl Default for ApiServerConfig {
     fn default() -> Self {
-        ApiServerConfig::remote(false)
+        Self::remote(false)
     }
 }

@@ -55,18 +55,21 @@ impl<'a> StopPollRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///Identifier of the original message with the poll
+    #[must_use]
     pub fn message_id(mut self, message_id: impl Into<i64>) -> Self {
         self.params.message_id = message_id.into();
         self
     }
 
     ///A JSON-serialized object for a new message [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards).
+    #[must_use]
     pub fn reply_markup(mut self, reply_markup: impl Into<InlineKeyboardMarkup>) -> Self {
         self.params.reply_markup = Some(reply_markup.into());
         self
@@ -80,7 +83,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         message_id: impl Into<i64>,
     ) -> StopPollRequest {
-        StopPollRequest::new(self, chat_id.into(), message_id.into())
+        StopPollRequest::new(self, chat_id, message_id)
     }
 }
 

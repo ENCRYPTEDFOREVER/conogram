@@ -52,12 +52,14 @@ impl<'a> SetChatMenuButtonRequest<'a> {
     }
 
     ///Unique identifier for the target private chat. If not specified, default bot's menu button will be changed
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<i64>) -> Self {
         self.params.chat_id = Some(chat_id.into());
         self
     }
 
     ///A JSON-serialized object for the bot's new menu button. Defaults to [MenuButtonDefault](https://core.telegram.org/bots/api/#menubuttondefault)
+    #[must_use]
     pub fn menu_button(mut self, menu_button: impl Into<MenuButton>) -> Self {
         self.params.menu_button = Some(menu_button.into());
         self

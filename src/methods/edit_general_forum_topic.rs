@@ -50,12 +50,14 @@ impl<'a> EditGeneralForumTopicRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///New topic name, 1-128 characters
+    #[must_use]
     pub fn name(mut self, name: impl Into<String>) -> Self {
         self.params.name = name.into();
         self
@@ -69,7 +71,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         name: impl Into<String>,
     ) -> EditGeneralForumTopicRequest {
-        EditGeneralForumTopicRequest::new(self, chat_id.into(), name.into())
+        EditGeneralForumTopicRequest::new(self, chat_id, name)
     }
 }
 

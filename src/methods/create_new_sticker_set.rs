@@ -28,7 +28,7 @@ pub struct CreateNewStickerSetParams {
 impl GetFiles for CreateNewStickerSetParams {
     fn get_files(&self) -> HashMap<Moose, &InputFile> {
         let mut map = HashMap::new();
-        for stickers in self.stickers.iter() {
+        for stickers in &self.stickers {
             map.extend(stickers.get_files());
         }
         map
@@ -65,7 +65,7 @@ impl<'a> CreateNewStickerSetRequest<'a> {
         user_id: impl Into<i64>,
         name: impl Into<String>,
         title: impl Into<String>,
-        stickers: impl Into<Vec<InputSticker>>,
+        stickers: impl IntoIterator<Item = impl Into<InputSticker>>,
         sticker_format: impl Into<CreateNewStickerSetStickerFormat>,
     ) -> Self {
         Self {
@@ -74,7 +74,7 @@ impl<'a> CreateNewStickerSetRequest<'a> {
                 user_id: user_id.into(),
                 name: name.into(),
                 title: title.into(),
-                stickers: stickers.into(),
+                stickers: stickers.into_iter().map(Into::into).collect(),
                 sticker_format: sticker_format.into(),
                 sticker_type: Option::default(),
                 needs_repainting: bool::default(),
@@ -83,30 +83,35 @@ impl<'a> CreateNewStickerSetRequest<'a> {
     }
 
     ///User identifier of created sticker set owner
+    #[must_use]
     pub fn user_id(mut self, user_id: impl Into<i64>) -> Self {
         self.params.user_id = user_id.into();
         self
     }
 
     ///Short name of sticker set, to be used in `t.me/addstickers/` URLs (e.g., *animals*). Can contain only English letters, digits and underscores. Must begin with a letter, can't contain consecutive underscores and must end in `"_by_<bot_username>"`. `<bot_username>` is case insensitive. 1-64 characters.
+    #[must_use]
     pub fn name(mut self, name: impl Into<String>) -> Self {
         self.params.name = name.into();
         self
     }
 
     ///Sticker set title, 1-64 characters
+    #[must_use]
     pub fn title(mut self, title: impl Into<String>) -> Self {
         self.params.title = title.into();
         self
     }
 
     ///A JSON-serialized list of 1-50 initial stickers to be added to the sticker set
+    #[must_use]
     pub fn stickers(mut self, stickers: impl IntoIterator<Item = impl Into<InputSticker>>) -> Self {
         self.params.stickers = stickers.into_iter().map(Into::into).collect();
         self
     }
 
     ///Format of stickers in the set, must be one of “static”, “animated”, “video”
+    #[must_use]
     pub fn sticker_format(
         mut self,
         sticker_format: impl Into<CreateNewStickerSetStickerFormat>,
@@ -116,12 +121,14 @@ impl<'a> CreateNewStickerSetRequest<'a> {
     }
 
     ///Type of stickers in the set, pass “regular”, “mask”, or “custom\_emoji”. By default, a regular sticker set is created.
+    #[must_use]
     pub fn sticker_type(mut self, sticker_type: impl Into<CreateNewStickerSetStickerType>) -> Self {
         self.params.sticker_type = Some(sticker_type.into());
         self
     }
 
     ///Pass *True* if stickers in the sticker set must be repainted to the color of text when used in messages, the accent color if used as emoji status, white on chat photos, or another appropriate color based on context; for custom emoji sticker sets only
+    #[must_use]
     pub fn needs_repainting(mut self, needs_repainting: impl Into<bool>) -> Self {
         self.params.needs_repainting = needs_repainting.into();
         self
@@ -135,17 +142,10 @@ impl<'a> API {
         user_id: impl Into<i64>,
         name: impl Into<String>,
         title: impl Into<String>,
-        stickers: impl Into<Vec<InputSticker>>,
+        stickers: impl IntoIterator<Item = impl Into<InputSticker>>,
         sticker_format: impl Into<CreateNewStickerSetStickerFormat>,
     ) -> CreateNewStickerSetRequest {
-        CreateNewStickerSetRequest::new(
-            self,
-            user_id.into(),
-            name.into(),
-            title.into(),
-            stickers.into(),
-            sticker_format.into(),
-        )
+        CreateNewStickerSetRequest::new(self, user_id, name, title, stickers, sticker_format)
     }
 }
 

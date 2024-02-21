@@ -25,8 +25,8 @@ impl ChatId {
 impl ToString for ChatId {
     fn to_string(&self) -> String {
         match self {
-            ChatId::Username(value) => value.to_string(),
-            ChatId::Id(value) => value.to_string(),
+            Self::Username(value) => value.to_string(),
+            Self::Id(value) => value.to_string(),
         }
     }
 }

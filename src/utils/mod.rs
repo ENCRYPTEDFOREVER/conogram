@@ -14,5 +14,3 @@ macro_rules! impl_trait {
         }
     };
 }
-
-pub use impl_trait;

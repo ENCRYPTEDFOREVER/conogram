@@ -60,24 +60,28 @@ impl<'a> EditForumTopicRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
     }
 
     ///Unique identifier for the target message thread of the forum topic
+    #[must_use]
     pub fn message_thread_id(mut self, message_thread_id: impl Into<i64>) -> Self {
         self.params.message_thread_id = message_thread_id.into();
         self
     }
 
     ///New topic name, 0-128 characters. If not specified or empty, the current name of the topic will be kept
+    #[must_use]
     pub fn name(mut self, name: impl Into<String>) -> Self {
         self.params.name = Some(name.into());
         self
     }
 
     ///New unique identifier of the custom emoji shown as the topic icon. Use [getForumTopicIconStickers](https://core.telegram.org/bots/api/#getforumtopiciconstickers) to get all allowed custom emoji identifiers. Pass an empty string to remove the icon. If not specified, the current icon will be kept
+    #[must_use]
     pub fn icon_custom_emoji_id(mut self, icon_custom_emoji_id: impl Into<String>) -> Self {
         self.params.icon_custom_emoji_id = Some(icon_custom_emoji_id.into());
         self
@@ -91,7 +95,7 @@ impl<'a> API {
         chat_id: impl Into<ChatId>,
         message_thread_id: impl Into<i64>,
     ) -> EditForumTopicRequest {
-        EditForumTopicRequest::new(self, chat_id.into(), message_thread_id.into())
+        EditForumTopicRequest::new(self, chat_id, message_thread_id)
     }
 }
 

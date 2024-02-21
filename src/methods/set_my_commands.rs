@@ -43,11 +43,11 @@ impl<'a> RequestT for SetMyCommandsRequest<'a> {
     }
 }
 impl<'a> SetMyCommandsRequest<'a> {
-    pub fn new(api: &'a API, commands: impl Into<Vec<BotCommand>>) -> Self {
+    pub fn new(api: &'a API, commands: impl IntoIterator<Item = impl Into<BotCommand>>) -> Self {
         Self {
             api,
             params: SetMyCommandsParams {
-                commands: commands.into(),
+                commands: commands.into_iter().map(Into::into).collect(),
                 scope: Option::default(),
                 language_code: Option::default(),
             },
@@ -55,18 +55,21 @@ impl<'a> SetMyCommandsRequest<'a> {
     }
 
     ///A JSON-serialized list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified.
+    #[must_use]
     pub fn commands(mut self, commands: impl IntoIterator<Item = impl Into<BotCommand>>) -> Self {
         self.params.commands = commands.into_iter().map(Into::into).collect();
         self
     }
 
     ///A JSON-serialized object, describing scope of users for which the commands are relevant. Defaults to [BotCommandScopeDefault](https://core.telegram.org/bots/api/#botcommandscopedefault).
+    #[must_use]
     pub fn scope(mut self, scope: impl Into<BotCommandScope>) -> Self {
         self.params.scope = Some(scope.into());
         self
     }
 
     ///A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands
+    #[must_use]
     pub fn language_code(mut self, language_code: impl Into<String>) -> Self {
         self.params.language_code = Some(language_code.into());
         self
@@ -75,8 +78,11 @@ impl<'a> SetMyCommandsRequest<'a> {
 
 impl<'a> API {
     ///Use this method to change the list of the bot's commands. See [this manual](https://core.telegram.org/bots/features#commands) for more details about bot commands. Returns *True* on success.
-    pub fn set_my_commands(&'a self, commands: impl Into<Vec<BotCommand>>) -> SetMyCommandsRequest {
-        SetMyCommandsRequest::new(self, commands.into())
+    pub fn set_my_commands(
+        &'a self,
+        commands: impl IntoIterator<Item = impl Into<BotCommand>>,
+    ) -> SetMyCommandsRequest {
+        SetMyCommandsRequest::new(self, commands)
     }
 }
 

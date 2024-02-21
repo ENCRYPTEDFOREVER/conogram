@@ -49,6 +49,7 @@ impl<'a> GetChatRequest<'a> {
     }
 
     ///Unique identifier for the target chat or username of the target supergroup or channel (in the format `@channelusername`)
+    #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
         self
@@ -58,7 +59,7 @@ impl<'a> GetChatRequest<'a> {
 impl<'a> API {
     ///Use this method to get up to date information about the chat. Returns a [Chat](https://core.telegram.org/bots/api/#chat) object on success.
     pub fn get_chat(&'a self, chat_id: impl Into<ChatId>) -> GetChatRequest {
-        GetChatRequest::new(self, chat_id.into())
+        GetChatRequest::new(self, chat_id)
     }
 }
 

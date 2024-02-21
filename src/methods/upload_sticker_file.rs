@@ -69,18 +69,21 @@ impl<'a> UploadStickerFileRequest<'a> {
     }
 
     ///User identifier of sticker file owner
+    #[must_use]
     pub fn user_id(mut self, user_id: impl Into<i64>) -> Self {
         self.params.user_id = user_id.into();
         self
     }
 
     ///A file with the sticker in .WEBP, .PNG, .TGS, or .WEBM format. See [https://core.telegram.org/stickers](https://core.telegram.org/stickers) for technical requirements. [More information on Sending Files »](https://core.telegram.org/bots/api/#sending-files)
+    #[must_use]
     pub fn sticker(mut self, sticker: impl Into<InputFile>) -> Self {
         self.params.sticker = sticker.into();
         self
     }
 
     ///Format of the sticker, must be one of “static”, “animated”, “video”
+    #[must_use]
     pub fn sticker_format(
         mut self,
         sticker_format: impl Into<UploadStickerFileStickerFormat>,
@@ -98,7 +101,7 @@ impl<'a> API {
         sticker: impl Into<InputFile>,
         sticker_format: impl Into<UploadStickerFileStickerFormat>,
     ) -> UploadStickerFileRequest {
-        UploadStickerFileRequest::new(self, user_id.into(), sticker.into(), sticker_format.into())
+        UploadStickerFileRequest::new(self, user_id, sticker, sticker_format)
     }
 }
 

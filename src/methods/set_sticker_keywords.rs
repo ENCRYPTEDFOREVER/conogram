@@ -50,12 +50,14 @@ impl<'a> SetStickerKeywordsRequest<'a> {
     }
 
     ///File identifier of the sticker
+    #[must_use]
     pub fn sticker(mut self, sticker: impl Into<String>) -> Self {
         self.params.sticker = sticker.into();
         self
     }
 
     ///A JSON-serialized list of 0-20 search keywords for the sticker with total length of up to 64 characters
+    #[must_use]
     pub fn keywords(mut self, keywords: impl IntoIterator<Item = impl Into<String>>) -> Self {
         self.params.keywords = keywords.into_iter().map(Into::into).collect();
         self
@@ -65,7 +67,7 @@ impl<'a> SetStickerKeywordsRequest<'a> {
 impl<'a> API {
     ///Use this method to change search keywords assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns *True* on success.
     pub fn set_sticker_keywords(&'a self, sticker: impl Into<String>) -> SetStickerKeywordsRequest {
-        SetStickerKeywordsRequest::new(self, sticker.into())
+        SetStickerKeywordsRequest::new(self, sticker)
     }
 }
 
