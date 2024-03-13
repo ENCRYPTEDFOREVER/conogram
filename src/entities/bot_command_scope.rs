@@ -92,7 +92,7 @@ impl ToString for BotCommandScope {
             Self::AllChatAdministrators(_) => "all_chat_administrators",
             Self::Chat(_) => "chat",
             Self::ChatAdministrators(_) => "chat_administrators",
-            Self::ChatMember(_) => "ChatMember",
+            Self::ChatMember(_) => "chat_member",
         }
         .to_string()
     }
