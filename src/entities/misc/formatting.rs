@@ -510,9 +510,9 @@ impl From<&str> for FormattedText {
     }
 }
 
-impl<A: Into<FormattedText>> FromIterator<A> for FormattedText {
+impl<A: Into<Self>> FromIterator<A> for FormattedText {
     fn from_iter<T: IntoIterator<Item = A>>(iter: T) -> Self {
-        let mut first = FormattedText::empty();
+        let mut first = Self::empty();
 
         for ft in iter {
             first.concat(ft.into());
