@@ -49,6 +49,15 @@ pub struct User {
 // Divider: all content below this line will be preserved after code regen
 
 impl User {
+    pub fn get_url(&self) -> String {
+        if let Some(username) = &self.username {
+            format!("https://t.me/{username}")
+        } else {
+            // Will only work in bot api
+            format!("tg://user?id={}", self.id)
+        }
+    }
+
     pub fn full_name(&self) -> String {
         match &self.last_name {
             Some(last) => format!("{} {}", self.first_name, last),

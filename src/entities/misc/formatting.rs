@@ -19,7 +19,7 @@ pub trait FormatMention {
 impl_trait!(
     FormatMention for User {
         fn mention<'a>(&self, ft: &'a mut FormattedText) -> &'a mut FormattedText {
-            ft.mention_user(self.full_name(), self.id)
+            ft.url(self.full_name(), self.get_url())
         }
     }
 );
@@ -168,6 +168,14 @@ impl FormattedText {
         self.last_ent_offset = 0;
         self.last_ent_len = 0;
         self
+    }
+
+    pub const fn is_empty(&self) -> bool {
+        self.len == 0
+    }
+
+    pub const fn len(&self) -> usize {
+        self.len as usize
     }
 
     pub const fn get_entities(&self) -> &Vec<MessageEntity> {
@@ -499,5 +507,17 @@ impl From<&str> for FormattedText {
             trim_spaces: true,
             ..Default::default()
         }
+    }
+}
+
+impl<A: Into<Self>> FromIterator<A> for FormattedText {
+    fn from_iter<T: IntoIterator<Item = A>>(iter: T) -> Self {
+        let mut first = Self::empty();
+
+        for ft in iter {
+            first.concat(ft.into());
+        }
+
+        first
     }
 }

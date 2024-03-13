@@ -100,6 +100,7 @@ pub struct API {
 
     allowed_updates: Vec<String>,
     get_updates_offset: AtomicI64,
+    polling_timeout: u64,
 }
 
 impl Debug for API {
@@ -123,6 +124,7 @@ impl API {
 
             allowed_updates: vec![],
             get_updates_offset: AtomicI64::new(0),
+            polling_timeout: 600,
         }
     }
 
@@ -154,6 +156,11 @@ impl API {
         );
 
         Ok(())
+    }
+
+    /// Sets the timeout for getUpdates request
+    pub fn set_polling_timeout(&mut self, timeout_secs: u64) {
+        self.polling_timeout = timeout_secs;
     }
 
     /// Set default value for particular request
@@ -244,7 +251,7 @@ impl API {
             .get_updates()
             .allowed_updates(self.allowed_updates.clone())
             .offset(offset)
-            .timeout(600);
+            .timeout(self.polling_timeout as i64);
 
         let updates = r.await?;
         if let Some(last_update) = updates.iter().max_by_key(|update| update.update_id) {

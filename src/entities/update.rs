@@ -96,6 +96,7 @@ pub struct Update {
 }
 // Divider: all content below this line will be preserved after code regen
 
+#[derive(Debug, Clone, Copy)]
 pub enum AllowedUpdates {
     Message,
     EditedMessage,
@@ -127,8 +128,8 @@ pub enum AllowedUpdates {
 
 impl AllowedUpdates {
     /// All existing updates
-    pub fn all() -> Vec<Self> {
-        vec![
+    pub const fn all() -> [Self; 18] {
+        [
             Self::Message,
             Self::EditedMessage,
             Self::MessageReaction,
