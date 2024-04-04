@@ -15,12 +15,6 @@ pub struct StickerSet {
     ///Type of stickers in the set, currently one of “regular”, “mask”, “custom\_emoji”
     pub sticker_type: StickerSetStickerType,
 
-    ///*True*, if the sticker set contains [animated stickers](https://telegram.org/blog/animated-stickers)
-    pub is_animated: bool,
-
-    ///*True*, if the sticker set contains [video stickers](https://telegram.org/blog/video-stickers-better-reactions)
-    pub is_video: bool,
-
     ///List of all set stickers
     pub stickers: Vec<Sticker>,
 

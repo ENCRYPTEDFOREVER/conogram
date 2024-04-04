@@ -91,7 +91,7 @@ impl<'a> CopyMessagesRequest<'a> {
         self
     }
 
-    ///Identifiers of 1-100 messages in the chat *from\_chat\_id* to copy. The identifiers must be specified in a strictly increasing order.
+    ///A JSON-serialized list of 1-100 identifiers of messages in the chat *from\_chat\_id* to copy. The identifiers must be specified in a strictly increasing order.
     #[must_use]
     pub fn message_ids(mut self, message_ids: impl IntoIterator<Item = impl Into<i64>>) -> Self {
         self.params.message_ids = message_ids.into_iter().map(Into::into).collect();

@@ -186,28 +186,28 @@ impl<'a> PromoteChatMemberRequest<'a> {
         self
     }
 
-    ///Pass *True* if the administrator can post messages in the channel, or access channel statistics; channels only
+    ///Pass *True* if the administrator can post messages in the channel, or access channel statistics; for channels only
     #[must_use]
     pub fn can_post_messages(mut self, can_post_messages: impl Into<bool>) -> Self {
         self.params.can_post_messages = can_post_messages.into();
         self
     }
 
-    ///Pass *True* if the administrator can edit messages of other users and can pin messages; channels only
+    ///Pass *True* if the administrator can edit messages of other users and can pin messages; for channels only
     #[must_use]
     pub fn can_edit_messages(mut self, can_edit_messages: impl Into<bool>) -> Self {
         self.params.can_edit_messages = can_edit_messages.into();
         self
     }
 
-    ///Pass *True* if the administrator can pin messages, supergroups only
+    ///Pass *True* if the administrator can pin messages; for supergroups only
     #[must_use]
     pub fn can_pin_messages(mut self, can_pin_messages: impl Into<bool>) -> Self {
         self.params.can_pin_messages = can_pin_messages.into();
         self
     }
 
-    ///Pass *True* if the user is allowed to create, rename, close, and reopen forum topics, supergroups only
+    ///Pass *True* if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
     #[must_use]
     pub fn can_manage_topics(mut self, can_manage_topics: impl Into<bool>) -> Self {
         self.params.can_manage_topics = can_manage_topics.into();

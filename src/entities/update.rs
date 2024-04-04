@@ -1,3 +1,5 @@
+use crate::entities::business_connection::BusinessConnection;
+use crate::entities::business_messages_deleted::BusinessMessagesDeleted;
 use crate::entities::callback_query::CallbackQuery;
 use crate::entities::chat_boost_removed::ChatBoostRemoved;
 use crate::entities::chat_boost_updated::ChatBoostUpdated;
@@ -37,6 +39,22 @@ pub struct Update {
     ///*Optional*. New version of a channel post that is known to the bot and was edited. This update may at times be triggered by changes to message fields that are either unavailable or not actively used by your bot.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub edited_channel_post: Option<Box<Message>>,
+
+    ///*Optional*. The bot was connected to or disconnected from a business account, or a user edited an existing connection with the bot
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub business_connection: Option<BusinessConnection>,
+
+    ///*Optional*. New non-service message from a connected business account
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub business_message: Option<Box<Message>>,
+
+    ///*Optional*. New version of a message from a connected business account
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub edited_business_message: Option<Box<Message>>,
+
+    ///*Optional*. Messages were deleted from a connected business account
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deleted_business_messages: Option<BusinessMessagesDeleted>,
 
     ///*Optional*. A reaction to a message was changed by a user. The bot must be an administrator in the chat and must explicitly specify `"message_reaction"` in the list of *allowed\_updates* to receive these updates. The update isn't received for reactions set by bots.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -104,6 +122,11 @@ pub enum AllowedUpdates {
     ChannelPost,
     EditedChannelPost,
 
+    BusinessConnection,
+    BusinessMessage,
+    EditedBusinessMessage,
+    DeletedBusinessMessages,
+
     MessageReaction,
     MessageReactionCount,
 
@@ -128,7 +151,7 @@ pub enum AllowedUpdates {
 
 impl AllowedUpdates {
     /// All existing updates
-    pub const fn all() -> [Self; 18] {
+    pub const fn all() -> [Self; 22] {
         [
             Self::Message,
             Self::EditedMessage,
@@ -136,6 +159,10 @@ impl AllowedUpdates {
             Self::MessageReactionCount,
             Self::ChannelPost,
             Self::EditedChannelPost,
+            Self::BusinessConnection,
+            Self::BusinessMessage,
+            Self::EditedBusinessMessage,
+            Self::DeletedBusinessMessages,
             Self::InlineQuery,
             Self::ChosenInlineResult,
             Self::CallbackQuery,
@@ -161,6 +188,10 @@ impl ToString for AllowedUpdates {
             Self::MessageReactionCount => "message_reaction_count",
             Self::ChannelPost => "channel_post",
             Self::EditedChannelPost => "edited_channel_post",
+            Self::BusinessConnection => "business_connection",
+            Self::BusinessMessage => "business_message",
+            Self::EditedBusinessMessage => "edited_business_message",
+            Self::DeletedBusinessMessages => "deleted_business_messages",
             Self::InlineQuery => "inline_query",
             Self::ChosenInlineResult => "chosen_inline_result",
             Self::CallbackQuery => "callback_query",

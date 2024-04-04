@@ -73,8 +73,16 @@ pub struct Message {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sender_boost_count: Option<i64>,
 
+    ///*Optional*. The bot that actually sent the message on behalf of the business account. Available only for outgoing messages sent on behalf of the connected business account.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sender_business_bot: Option<User>,
+
     ///Date the message was sent in Unix time. It is always a positive number, representing a valid date.
     pub date: i64,
+
+    ///*Optional*. Unique identifier of the business connection from which the message was received. If non-empty, the message belongs to a chat of the corresponding business account that is independent from any potential bot chat which might share the same identifier.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub business_connection_id: Option<String>,
 
     ///Chat the message belongs to
     #[serde(deserialize_with = "deserialize_boxed")]
@@ -119,6 +127,10 @@ pub struct Message {
     ///*Optional*. *True*, if the message can't be forwarded
     #[serde(default, skip_serializing_if = "is_false")]
     pub has_protected_content: bool,
+
+    ///*Optional*. True, if the message was sent by an implicit action, for example, as an away or a greeting business message, or as a scheduled message
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub is_from_offline: bool,
 
     ///*Optional*. The unique identifier of a media message group this message belongs to
     #[serde(skip_serializing_if = "Option::is_none")]

@@ -12,6 +12,8 @@ use std::pin::Pin;
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SendGameParams {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub business_connection_id: Option<String>,
     pub chat_id: i64,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_thread_id: Option<i64>,
@@ -58,6 +60,7 @@ impl<'a> SendGameRequest<'a> {
             params: SendGameParams {
                 chat_id: chat_id.into(),
                 game_short_name: game_short_name.into(),
+                business_connection_id: Option::default(),
                 message_thread_id: Option::default(),
                 disable_notification: bool::default(),
                 protect_content: bool::default(),
@@ -65,6 +68,13 @@ impl<'a> SendGameRequest<'a> {
                 reply_markup: Option::default(),
             },
         }
+    }
+
+    ///Unique identifier of the business connection on behalf of which the message will be sent
+    #[must_use]
+    pub fn business_connection_id(mut self, business_connection_id: impl Into<String>) -> Self {
+        self.params.business_connection_id = Some(business_connection_id.into());
+        self
     }
 
     ///Unique identifier for the target chat
@@ -109,7 +119,7 @@ impl<'a> SendGameRequest<'a> {
         self
     }
 
-    ///A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards). If empty, one 'Play game\_title' button will be shown. If not empty, the first button must launch the game.
+    ///A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards). If empty, one 'Play game\_title' button will be shown. If not empty, the first button must launch the game. Not supported for messages sent on behalf of a business account.
     #[must_use]
     pub fn reply_markup(mut self, reply_markup: impl Into<InlineKeyboardMarkup>) -> Self {
         self.params.reply_markup = Some(reply_markup.into());

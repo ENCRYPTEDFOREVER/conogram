@@ -60,7 +60,7 @@ impl<'a> DeleteMessagesRequest<'a> {
         self
     }
 
-    ///Identifiers of 1-100 messages to delete. See [deleteMessage](https://core.telegram.org/bots/api/#deletemessage) for limitations on which messages can be deleted
+    ///A JSON-serialized list of 1-100 identifiers of messages to delete. See [deleteMessage](https://core.telegram.org/bots/api/#deletemessage) for limitations on which messages can be deleted
     #[must_use]
     pub fn message_ids(mut self, message_ids: impl IntoIterator<Item = impl Into<i64>>) -> Self {
         self.params.message_ids = message_ids.into_iter().map(Into::into).collect();

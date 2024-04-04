@@ -9,6 +9,8 @@ use std::pin::Pin;
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SendChatActionParams {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub business_connection_id: Option<String>,
     pub chat_id: ChatId,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_thread_id: Option<i64>,
@@ -55,9 +57,17 @@ impl<'a> SendChatActionRequest<'a> {
             params: SendChatActionParams {
                 chat_id: chat_id.into(),
                 action: action.into(),
+                business_connection_id: Option::default(),
                 message_thread_id: Option::default(),
             },
         }
+    }
+
+    ///Unique identifier of the business connection on behalf of which the action will be sent
+    #[must_use]
+    pub fn business_connection_id(mut self, business_connection_id: impl Into<String>) -> Self {
+        self.params.business_connection_id = Some(business_connection_id.into());
+        self
     }
 
     ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
@@ -67,7 +77,7 @@ impl<'a> SendChatActionRequest<'a> {
         self
     }
 
-    ///Unique identifier for the target message thread; supergroups only
+    ///Unique identifier for the target message thread; for supergroups only
     #[must_use]
     pub fn message_thread_id(mut self, message_thread_id: impl Into<i64>) -> Self {
         self.params.message_thread_id = Some(message_thread_id.into());

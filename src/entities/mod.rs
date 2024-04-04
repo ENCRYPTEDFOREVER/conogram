@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 pub mod animation;
 pub mod audio;
+pub mod birthdate;
 pub mod bot_command;
 pub mod bot_command_scope;
 pub mod bot_command_scope_all_chat_administrators;
@@ -13,6 +14,12 @@ pub mod bot_command_scope_default;
 pub mod bot_description;
 pub mod bot_name;
 pub mod bot_short_description;
+pub mod business_connection;
+pub mod business_intro;
+pub mod business_location;
+pub mod business_messages_deleted;
+pub mod business_opening_hours;
+pub mod business_opening_hours_interval;
 pub mod callback_game;
 pub mod callback_query;
 pub mod chat;
@@ -155,6 +162,7 @@ pub mod reply_keyboard_remove;
 pub mod reply_parameters;
 pub mod response_parameters;
 pub mod sent_web_app_message;
+pub mod shared_user;
 pub mod shipping_address;
 pub mod shipping_option;
 pub mod shipping_query;

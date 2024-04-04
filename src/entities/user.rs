@@ -45,6 +45,10 @@ pub struct User {
     ///*Optional*. *True*, if the bot supports inline queries. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
     #[serde(default, skip_serializing_if = "is_false")]
     pub supports_inline_queries: bool,
+
+    ///*Optional*. *True*, if the bot can be connected to a Telegram Business account to receive its messages. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub can_connect_to_business: bool,
 }
 // Divider: all content below this line will be preserved after code regen
 

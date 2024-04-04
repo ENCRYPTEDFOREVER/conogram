@@ -16,6 +16,7 @@ pub struct SetStickerSetThumbnailParams {
     pub user_id: i64,
     #[serde(skip, skip_serializing_if = "Option::is_none")]
     pub thumbnail: Option<InputFile>,
+    pub format: SetStickerSetThumbnailFormat,
 }
 
 impl GetFiles for SetStickerSetThumbnailParams {
@@ -53,12 +54,18 @@ impl<'a> RequestT for SetStickerSetThumbnailRequest<'a> {
     }
 }
 impl<'a> SetStickerSetThumbnailRequest<'a> {
-    pub fn new(api: &'a API, name: impl Into<String>, user_id: impl Into<i64>) -> Self {
+    pub fn new(
+        api: &'a API,
+        name: impl Into<String>,
+        user_id: impl Into<i64>,
+        format: impl Into<SetStickerSetThumbnailFormat>,
+    ) -> Self {
         Self {
             api,
             params: SetStickerSetThumbnailParams {
                 name: name.into(),
                 user_id: user_id.into(),
+                format: format.into(),
                 thumbnail: Option::default(),
             },
         }
@@ -84,6 +91,13 @@ impl<'a> SetStickerSetThumbnailRequest<'a> {
         self.params.thumbnail = Some(thumbnail.into());
         self
     }
+
+    ///Format of the thumbnail, must be one of “static” for a **.WEBP** or **.PNG** image, “animated” for a **.TGS** animation, or “video” for a **WEBM** video
+    #[must_use]
+    pub fn format(mut self, format: impl Into<SetStickerSetThumbnailFormat>) -> Self {
+        self.params.format = format.into();
+        self
+    }
 }
 
 impl<'a> API {
@@ -92,9 +106,28 @@ impl<'a> API {
         &'a self,
         name: impl Into<String>,
         user_id: impl Into<i64>,
+        format: impl Into<SetStickerSetThumbnailFormat>,
     ) -> SetStickerSetThumbnailRequest {
-        SetStickerSetThumbnailRequest::new(self, name, user_id)
+        SetStickerSetThumbnailRequest::new(self, name, user_id, format)
     }
+}
+
+///Format of the thumbnail, must be one of “static” for a **.WEBP** or **.PNG** image, “animated” for a **.TGS** animation, or “video” for a **WEBM** video
+#[derive(Debug, Clone, Default, PartialEq, Serialize)]
+#[serde(rename = "format")]
+pub enum SetStickerSetThumbnailFormat {
+    #[default]
+    /// "static"
+    #[serde(rename = "static")]
+    Static,
+
+    /// "animated"
+    #[serde(rename = "animated")]
+    Animated,
+
+    /// "video"
+    #[serde(rename = "video")]
+    Video,
 }
 
 // Divider: all content below this line will be preserved after code regen

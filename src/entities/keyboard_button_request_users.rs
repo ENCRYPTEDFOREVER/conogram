@@ -1,7 +1,7 @@
 use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
-///This object defines the criteria used to request suitable users. The identifiers of the selected users will be shared with the bot when the corresponding button is pressed. [More about requesting users »](https://core.telegram.org/bots/features#chat-and-user-selection)
+///This object defines the criteria used to request suitable users. Information about the selected users will be shared with the bot when the corresponding button is pressed. [More about requesting users »](https://core.telegram.org/bots/features#chat-and-user-selection)
 ///API Reference: [link](https://core.telegram.org/bots/api/#keyboardbuttonrequestusers)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct KeyboardButtonRequestUsers {
@@ -19,5 +19,17 @@ pub struct KeyboardButtonRequestUsers {
     ///*Optional*. The maximum number of users to be selected; 1-10. Defaults to 1.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_quantity: Option<i64>,
+
+    ///*Optional*. Pass *True* to request the users' first and last name
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub request_name: bool,
+
+    ///*Optional*. Pass *True* to request the users' username
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub request_username: bool,
+
+    ///*Optional*. Pass *True* to request the users' photo
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub request_photo: bool,
 }
 // Divider: all content below this line will be preserved after code regen

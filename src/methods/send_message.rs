@@ -15,6 +15,8 @@ use std::pin::Pin;
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SendMessageParams {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub business_connection_id: Option<String>,
     pub chat_id: ChatId,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_thread_id: Option<i64>,
@@ -67,6 +69,7 @@ impl<'a> SendMessageRequest<'a> {
             params: SendMessageParams {
                 chat_id: chat_id.into(),
                 text: text.into(),
+                business_connection_id: Option::default(),
                 message_thread_id: Option::default(),
                 parse_mode: Option::default(),
                 entities: Vec::default(),
@@ -77,6 +80,13 @@ impl<'a> SendMessageRequest<'a> {
                 reply_markup: Option::default(),
             },
         }
+    }
+
+    ///Unique identifier of the business connection on behalf of which the message will be sent
+    #[must_use]
+    pub fn business_connection_id(mut self, business_connection_id: impl Into<String>) -> Self {
+        self.params.business_connection_id = Some(business_connection_id.into());
+        self
     }
 
     ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
@@ -148,7 +158,7 @@ impl<'a> SendMessageRequest<'a> {
         self
     }
 
-    ///Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a reply from the user.
+    ///Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
     #[must_use]
     pub fn reply_markup(mut self, reply_markup: impl Into<ReplyMarkup>) -> Self {
         self.params.reply_markup = Some(reply_markup.into());

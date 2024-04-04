@@ -18,7 +18,6 @@ pub struct CreateNewStickerSetParams {
     pub name: String,
     pub title: String,
     pub stickers: Vec<InputSticker>,
-    pub sticker_format: CreateNewStickerSetStickerFormat,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sticker_type: Option<CreateNewStickerSetStickerType>,
     #[serde(default, skip_serializing_if = "is_false")]
@@ -66,7 +65,6 @@ impl<'a> CreateNewStickerSetRequest<'a> {
         name: impl Into<String>,
         title: impl Into<String>,
         stickers: impl IntoIterator<Item = impl Into<InputSticker>>,
-        sticker_format: impl Into<CreateNewStickerSetStickerFormat>,
     ) -> Self {
         Self {
             api,
@@ -75,7 +73,6 @@ impl<'a> CreateNewStickerSetRequest<'a> {
                 name: name.into(),
                 title: title.into(),
                 stickers: stickers.into_iter().map(Into::into).collect(),
-                sticker_format: sticker_format.into(),
                 sticker_type: Option::default(),
                 needs_repainting: bool::default(),
             },
@@ -110,16 +107,6 @@ impl<'a> CreateNewStickerSetRequest<'a> {
         self
     }
 
-    ///Format of stickers in the set, must be one of “static”, “animated”, “video”
-    #[must_use]
-    pub fn sticker_format(
-        mut self,
-        sticker_format: impl Into<CreateNewStickerSetStickerFormat>,
-    ) -> Self {
-        self.params.sticker_format = sticker_format.into();
-        self
-    }
-
     ///Type of stickers in the set, pass “regular”, “mask”, or “custom\_emoji”. By default, a regular sticker set is created.
     #[must_use]
     pub fn sticker_type(mut self, sticker_type: impl Into<CreateNewStickerSetStickerType>) -> Self {
@@ -143,28 +130,9 @@ impl<'a> API {
         name: impl Into<String>,
         title: impl Into<String>,
         stickers: impl IntoIterator<Item = impl Into<InputSticker>>,
-        sticker_format: impl Into<CreateNewStickerSetStickerFormat>,
     ) -> CreateNewStickerSetRequest {
-        CreateNewStickerSetRequest::new(self, user_id, name, title, stickers, sticker_format)
+        CreateNewStickerSetRequest::new(self, user_id, name, title, stickers)
     }
-}
-
-///Format of stickers in the set, must be one of “static”, “animated”, “video”
-#[derive(Debug, Clone, Default, PartialEq, Serialize)]
-#[serde(rename = "sticker_format")]
-pub enum CreateNewStickerSetStickerFormat {
-    #[default]
-    /// "static"
-    #[serde(rename = "static")]
-    Static,
-
-    /// "animated"
-    #[serde(rename = "animated")]
-    Animated,
-
-    /// "video"
-    #[serde(rename = "video")]
-    Video,
 }
 
 ///Type of stickers in the set, pass “regular”, “mask”, or “custom\_emoji”. By default, a regular sticker set is created.

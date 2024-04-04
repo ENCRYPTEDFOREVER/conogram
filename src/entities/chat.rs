@@ -1,3 +1,7 @@
+use crate::entities::birthdate::Birthdate;
+use crate::entities::business_intro::BusinessIntro;
+use crate::entities::business_location::BusinessLocation;
+use crate::entities::business_opening_hours::BusinessOpeningHours;
 use crate::entities::chat_location::ChatLocation;
 use crate::entities::chat_permissions::ChatPermissions;
 use crate::entities::chat_photo::ChatPhoto;
@@ -44,6 +48,26 @@ pub struct Chat {
     ///*Optional*. If non-empty, the list of all [active chat usernames](https://telegram.org/blog/topics-in-groups-collectible-usernames#collectible-usernames); for private chats, supergroups and channels. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
     #[serde(default)]
     pub active_usernames: Vec<String>,
+
+    ///*Optional*. For private chats, the date of birth of the user. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub birthdate: Option<Birthdate>,
+
+    ///*Optional*. For private chats with business accounts, the intro of the business. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub business_intro: Option<BusinessIntro>,
+
+    ///*Optional*. For private chats with business accounts, the location of the business. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub business_location: Option<BusinessLocation>,
+
+    ///*Optional*. For private chats with business accounts, the opening hours of the business. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub business_opening_hours: Option<BusinessOpeningHours>,
+
+    ///*Optional*. For private chats, the personal channel of the user. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub personal_chat: Option<Box<Chat>>,
 
     ///*Optional*. List of available reactions allowed in the chat. If omitted, then all [emoji reactions](https://core.telegram.org/bots/api/#reactiontypeemoji) are allowed. Returned only in [getChat](https://core.telegram.org/bots/api/#getchat).
     #[serde(default)]

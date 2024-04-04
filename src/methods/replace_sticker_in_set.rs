@@ -12,33 +12,34 @@ use std::future::{Future, IntoFuture};
 use std::pin::Pin;
 
 #[derive(Debug, Clone, Serialize)]
-pub struct AddStickerToSetParams {
+pub struct ReplaceStickerInSetParams {
     pub user_id: i64,
     pub name: String,
+    pub old_sticker: String,
     pub sticker: InputSticker,
 }
 
-impl GetFiles for AddStickerToSetParams {
+impl GetFiles for ReplaceStickerInSetParams {
     fn get_files(&self) -> HashMap<Moose, &InputFile> {
         let mut map = HashMap::new();
         map.extend(self.sticker.get_files());
         map
     }
 }
-impl_into_future_multipart!(AddStickerToSetRequest<'a>);
+impl_into_future_multipart!(ReplaceStickerInSetRequest<'a>);
 
-///Use this method to add a new sticker to a set created by the bot. Emoji sticker sets can have up to 200 stickers. Other sticker sets can have up to 120 stickers. Returns *True* on success.
+///Use this method to replace an existing sticker in a sticker set with a new one. The method is equivalent to calling [deleteStickerFromSet](https://core.telegram.org/bots/api/#deletestickerfromset), then [addStickerToSet](https://core.telegram.org/bots/api/#addstickertoset), then [setStickerPositionInSet](https://core.telegram.org/bots/api/#setstickerpositioninset). Returns *True* on success.
 #[derive(Clone)]
-pub struct AddStickerToSetRequest<'a> {
+pub struct ReplaceStickerInSetRequest<'a> {
     api: &'a API,
-    params: AddStickerToSetParams,
+    params: ReplaceStickerInSetParams,
 }
 
-impl<'a> RequestT for AddStickerToSetRequest<'a> {
-    type ParamsType = AddStickerToSetParams;
+impl<'a> RequestT for ReplaceStickerInSetRequest<'a> {
+    type ParamsType = ReplaceStickerInSetParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
-        "addStickerToSet"
+        "replaceStickerInSet"
     }
     fn get_api_ref(&self) -> &API {
         self.api
@@ -50,24 +51,26 @@ impl<'a> RequestT for AddStickerToSetRequest<'a> {
         true
     }
 }
-impl<'a> AddStickerToSetRequest<'a> {
+impl<'a> ReplaceStickerInSetRequest<'a> {
     pub fn new(
         api: &'a API,
         user_id: impl Into<i64>,
         name: impl Into<String>,
+        old_sticker: impl Into<String>,
         sticker: impl Into<InputSticker>,
     ) -> Self {
         Self {
             api,
-            params: AddStickerToSetParams {
+            params: ReplaceStickerInSetParams {
                 user_id: user_id.into(),
                 name: name.into(),
+                old_sticker: old_sticker.into(),
                 sticker: sticker.into(),
             },
         }
     }
 
-    ///User identifier of sticker set owner
+    ///User identifier of the sticker set owner
     #[must_use]
     pub fn user_id(mut self, user_id: impl Into<i64>) -> Self {
         self.params.user_id = user_id.into();
@@ -81,7 +84,14 @@ impl<'a> AddStickerToSetRequest<'a> {
         self
     }
 
-    ///A JSON-serialized object with information about the added sticker. If exactly the same sticker had already been added to the set, then the set isn't changed.
+    ///File identifier of the replaced sticker
+    #[must_use]
+    pub fn old_sticker(mut self, old_sticker: impl Into<String>) -> Self {
+        self.params.old_sticker = old_sticker.into();
+        self
+    }
+
+    ///A JSON-serialized object with information about the added sticker. If exactly the same sticker had already been added to the set, then the set remains unchanged.
     #[must_use]
     pub fn sticker(mut self, sticker: impl Into<InputSticker>) -> Self {
         self.params.sticker = sticker.into();
@@ -90,14 +100,15 @@ impl<'a> AddStickerToSetRequest<'a> {
 }
 
 impl<'a> API {
-    ///Use this method to add a new sticker to a set created by the bot. Emoji sticker sets can have up to 200 stickers. Other sticker sets can have up to 120 stickers. Returns *True* on success.
-    pub fn add_sticker_to_set(
+    ///Use this method to replace an existing sticker in a sticker set with a new one. The method is equivalent to calling [deleteStickerFromSet](https://core.telegram.org/bots/api/#deletestickerfromset), then [addStickerToSet](https://core.telegram.org/bots/api/#addstickertoset), then [setStickerPositionInSet](https://core.telegram.org/bots/api/#setstickerpositioninset). Returns *True* on success.
+    pub fn replace_sticker_in_set(
         &'a self,
         user_id: impl Into<i64>,
         name: impl Into<String>,
+        old_sticker: impl Into<String>,
         sticker: impl Into<InputSticker>,
-    ) -> AddStickerToSetRequest {
-        AddStickerToSetRequest::new(self, user_id, name, sticker)
+    ) -> ReplaceStickerInSetRequest {
+        ReplaceStickerInSetRequest::new(self, user_id, name, old_sticker, sticker)
     }
 }
 
