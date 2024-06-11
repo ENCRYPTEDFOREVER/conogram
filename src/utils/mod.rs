@@ -1,7 +1,7 @@
 pub(crate) mod deserialize_utils;
 
 #[macro_export]
-///```no_run
+///```ignore
 ///Trait for Type {
 ///    // Code
 ///}
