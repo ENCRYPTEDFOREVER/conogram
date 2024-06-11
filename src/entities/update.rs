@@ -1,5 +1,3 @@
-use std::fmt::Display;
-
 use crate::entities::business_connection::BusinessConnection;
 use crate::entities::business_messages_deleted::BusinessMessagesDeleted;
 use crate::entities::callback_query::CallbackQuery;
@@ -46,7 +44,7 @@ pub struct Update {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub business_connection: Option<BusinessConnection>,
 
-    ///*Optional*. New non-service message from a connected business account
+    ///*Optional*. New message from a connected business account
     #[serde(skip_serializing_if = "Option::is_none")]
     pub business_message: Option<Box<Message>>,
 
@@ -115,6 +113,7 @@ pub struct Update {
     pub removed_chat_boost: Option<ChatBoostRemoved>,
 }
 // Divider: all content below this line will be preserved after code regen
+use std::fmt::Display;
 
 #[derive(Debug, Clone, Copy)]
 pub enum AllowedUpdates {

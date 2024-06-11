@@ -20,6 +20,8 @@ pub struct EditMessageLiveLocationParams {
     pub latitude: f64,
     pub longitude: f64,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub live_period: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub horizontal_accuracy: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub heading: Option<i64>,
@@ -64,6 +66,7 @@ impl<'a> EditMessageLiveLocationRequest<'a> {
                 chat_id: Option::default(),
                 message_id: Option::default(),
                 inline_message_id: Option::default(),
+                live_period: Option::default(),
                 horizontal_accuracy: Option::default(),
                 heading: Option::default(),
                 proximity_alert_radius: Option::default(),
@@ -104,6 +107,13 @@ impl<'a> EditMessageLiveLocationRequest<'a> {
     #[must_use]
     pub fn longitude(mut self, longitude: impl Into<f64>) -> Self {
         self.params.longitude = longitude.into();
+        self
+    }
+
+    ///New period in seconds during which the location can be updated, starting from the message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new value must not exceed the current *live\_period* by more than a day, and the live location expiration date must remain within the next 90 days. If not specified, then *live\_period* remains unchanged
+    #[must_use]
+    pub fn live_period(mut self, live_period: impl Into<i64>) -> Self {
+        self.params.live_period = Some(live_period.into());
         self
     }
 

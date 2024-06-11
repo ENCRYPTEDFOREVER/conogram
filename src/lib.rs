@@ -26,7 +26,11 @@
 
     // Nursery
     clippy::future_not_send,
-    clippy::option_if_let_else
+    clippy::option_if_let_else,
+
+    // Lol
+    clippy::unreadable_literal,
+    clippy::enum_clike_unportable_variant,
 )]
 
 extern crate core;

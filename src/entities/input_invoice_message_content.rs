@@ -15,16 +15,17 @@ pub struct InputInvoiceMessageContent {
     ///Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.
     pub payload: String,
 
-    ///Payment provider token, obtained via [@BotFather](https://t.me/botfather)
-    pub provider_token: String,
+    ///*Optional*. Payment provider token, obtained via [@BotFather](https://t.me/botfather). Pass an empty string for payments in [Telegram Stars](https://t.me/BotNews/90).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider_token: Option<String>,
 
-    ///Three-letter ISO 4217 currency code, see [more on currencies](https://core.telegram.org/bots/payments#supported-currencies)
+    ///Three-letter ISO 4217 currency code, see [more on currencies](https://core.telegram.org/bots/payments#supported-currencies). Pass “XTR” for payments in [Telegram Stars](https://t.me/BotNews/90).
     pub currency: String,
 
-    ///Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.)
+    ///Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in [Telegram Stars](https://t.me/BotNews/90).
     pub prices: Vec<LabeledPrice>,
 
-    ///*Optional*. The maximum accepted amount for tips in the *smallest units* of the currency (integer, **not** float/double). For example, for a maximum tip of `US$ 1.45` pass `max_tip_amount = 145`. See the *exp* parameter in [currencies.json](https://core.telegram.org/bots/payments/currencies.json), it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0
+    ///*Optional*. The maximum accepted amount for tips in the *smallest units* of the currency (integer, **not** float/double). For example, for a maximum tip of `US$ 1.45` pass `max_tip_amount = 145`. See the *exp* parameter in [currencies.json](https://core.telegram.org/bots/payments/currencies.json), it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0. Not supported for payments in [Telegram Stars](https://t.me/BotNews/90).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_tip_amount: Option<i64>,
 
@@ -52,31 +53,31 @@ pub struct InputInvoiceMessageContent {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub photo_height: Option<i64>,
 
-    ///*Optional*. Pass *True* if you require the user's full name to complete the order
+    ///*Optional*. Pass *True* if you require the user's full name to complete the order. Ignored for payments in [Telegram Stars](https://t.me/BotNews/90).
     #[serde(default, skip_serializing_if = "is_false")]
     pub need_name: bool,
 
-    ///*Optional*. Pass *True* if you require the user's phone number to complete the order
+    ///*Optional*. Pass *True* if you require the user's phone number to complete the order. Ignored for payments in [Telegram Stars](https://t.me/BotNews/90).
     #[serde(default, skip_serializing_if = "is_false")]
     pub need_phone_number: bool,
 
-    ///*Optional*. Pass *True* if you require the user's email address to complete the order
+    ///*Optional*. Pass *True* if you require the user's email address to complete the order. Ignored for payments in [Telegram Stars](https://t.me/BotNews/90).
     #[serde(default, skip_serializing_if = "is_false")]
     pub need_email: bool,
 
-    ///*Optional*. Pass *True* if you require the user's shipping address to complete the order
+    ///*Optional*. Pass *True* if you require the user's shipping address to complete the order. Ignored for payments in [Telegram Stars](https://t.me/BotNews/90).
     #[serde(default, skip_serializing_if = "is_false")]
     pub need_shipping_address: bool,
 
-    ///*Optional*. Pass *True* if the user's phone number should be sent to provider
+    ///*Optional*. Pass *True* if the user's phone number should be sent to the provider. Ignored for payments in [Telegram Stars](https://t.me/BotNews/90).
     #[serde(default, skip_serializing_if = "is_false")]
     pub send_phone_number_to_provider: bool,
 
-    ///*Optional*. Pass *True* if the user's email address should be sent to provider
+    ///*Optional*. Pass *True* if the user's email address should be sent to the provider. Ignored for payments in [Telegram Stars](https://t.me/BotNews/90).
     #[serde(default, skip_serializing_if = "is_false")]
     pub send_email_to_provider: bool,
 
-    ///*Optional*. Pass *True* if the final price depends on the shipping method
+    ///*Optional*. Pass *True* if the final price depends on the shipping method. Ignored for payments in [Telegram Stars](https://t.me/BotNews/90).
     #[serde(default, skip_serializing_if = "is_false")]
     pub is_flexible: bool,
 }

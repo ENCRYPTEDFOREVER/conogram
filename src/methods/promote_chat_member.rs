@@ -172,7 +172,7 @@ impl<'a> PromoteChatMemberRequest<'a> {
         self
     }
 
-    ///Pass *True* if the administrator can edit stories posted by other users
+    ///Pass *True* if the administrator can edit stories posted by other users, post stories to the chat page, pin chat stories, and access the chat's story archive
     #[must_use]
     pub fn can_edit_stories(mut self, can_edit_stories: impl Into<bool>) -> Self {
         self.params.can_edit_stories = can_edit_stories.into();

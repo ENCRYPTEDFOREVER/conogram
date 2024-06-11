@@ -20,7 +20,8 @@ pub struct SendInvoiceParams {
     pub title: String,
     pub description: String,
     pub payload: String,
-    pub provider_token: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider_token: Option<String>,
     pub currency: String,
     pub prices: Vec<LabeledPrice>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -57,6 +58,8 @@ pub struct SendInvoiceParams {
     pub disable_notification: bool,
     #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message_effect_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_parameters: Option<ReplyParameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -95,7 +98,6 @@ impl<'a> SendInvoiceRequest<'a> {
         title: impl Into<String>,
         description: impl Into<String>,
         payload: impl Into<String>,
-        provider_token: impl Into<String>,
         currency: impl Into<String>,
         prices: impl IntoIterator<Item = impl Into<LabeledPrice>>,
     ) -> Self {
@@ -106,10 +108,10 @@ impl<'a> SendInvoiceRequest<'a> {
                 title: title.into(),
                 description: description.into(),
                 payload: payload.into(),
-                provider_token: provider_token.into(),
                 currency: currency.into(),
                 prices: prices.into_iter().map(Into::into).collect(),
                 message_thread_id: Option::default(),
+                provider_token: Option::default(),
                 max_tip_amount: Option::default(),
                 suggested_tip_amounts: Vec::default(),
                 start_parameter: Option::default(),
@@ -127,6 +129,7 @@ impl<'a> SendInvoiceRequest<'a> {
                 is_flexible: bool::default(),
                 disable_notification: bool::default(),
                 protect_content: bool::default(),
+                message_effect_id: Option::default(),
                 reply_parameters: Option::default(),
                 reply_markup: Option::default(),
             },
@@ -168,28 +171,28 @@ impl<'a> SendInvoiceRequest<'a> {
         self
     }
 
-    ///Payment provider token, obtained via [@BotFather](https://t.me/botfather)
+    ///Payment provider token, obtained via [@BotFather](https://t.me/botfather). Pass an empty string for payments in [Telegram Stars](https://t.me/BotNews/90).
     #[must_use]
     pub fn provider_token(mut self, provider_token: impl Into<String>) -> Self {
-        self.params.provider_token = provider_token.into();
+        self.params.provider_token = Some(provider_token.into());
         self
     }
 
-    ///Three-letter ISO 4217 currency code, see [more on currencies](https://core.telegram.org/bots/payments#supported-currencies)
+    ///Three-letter ISO 4217 currency code, see [more on currencies](https://core.telegram.org/bots/payments#supported-currencies). Pass “XTR” for payments in [Telegram Stars](https://t.me/BotNews/90).
     #[must_use]
     pub fn currency(mut self, currency: impl Into<String>) -> Self {
         self.params.currency = currency.into();
         self
     }
 
-    ///Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.)
+    ///Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in [Telegram Stars](https://t.me/BotNews/90).
     #[must_use]
     pub fn prices(mut self, prices: impl IntoIterator<Item = impl Into<LabeledPrice>>) -> Self {
         self.params.prices = prices.into_iter().map(Into::into).collect();
         self
     }
 
-    ///The maximum accepted amount for tips in the *smallest units* of the currency (integer, **not** float/double). For example, for a maximum tip of `US$ 1.45` pass `max_tip_amount = 145`. See the *exp* parameter in [currencies.json](https://core.telegram.org/bots/payments/currencies.json), it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0
+    ///The maximum accepted amount for tips in the *smallest units* of the currency (integer, **not** float/double). For example, for a maximum tip of `US$ 1.45` pass `max_tip_amount = 145`. See the *exp* parameter in [currencies.json](https://core.telegram.org/bots/payments/currencies.json), it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0. Not supported for payments in [Telegram Stars](https://t.me/BotNews/90).
     #[must_use]
     pub fn max_tip_amount(mut self, max_tip_amount: impl Into<i64>) -> Self {
         self.params.max_tip_amount = Some(max_tip_amount.into());
@@ -249,35 +252,35 @@ impl<'a> SendInvoiceRequest<'a> {
         self
     }
 
-    ///Pass *True* if you require the user's full name to complete the order
+    ///Pass *True* if you require the user's full name to complete the order. Ignored for payments in [Telegram Stars](https://t.me/BotNews/90).
     #[must_use]
     pub fn need_name(mut self, need_name: impl Into<bool>) -> Self {
         self.params.need_name = need_name.into();
         self
     }
 
-    ///Pass *True* if you require the user's phone number to complete the order
+    ///Pass *True* if you require the user's phone number to complete the order. Ignored for payments in [Telegram Stars](https://t.me/BotNews/90).
     #[must_use]
     pub fn need_phone_number(mut self, need_phone_number: impl Into<bool>) -> Self {
         self.params.need_phone_number = need_phone_number.into();
         self
     }
 
-    ///Pass *True* if you require the user's email address to complete the order
+    ///Pass *True* if you require the user's email address to complete the order. Ignored for payments in [Telegram Stars](https://t.me/BotNews/90).
     #[must_use]
     pub fn need_email(mut self, need_email: impl Into<bool>) -> Self {
         self.params.need_email = need_email.into();
         self
     }
 
-    ///Pass *True* if you require the user's shipping address to complete the order
+    ///Pass *True* if you require the user's shipping address to complete the order. Ignored for payments in [Telegram Stars](https://t.me/BotNews/90).
     #[must_use]
     pub fn need_shipping_address(mut self, need_shipping_address: impl Into<bool>) -> Self {
         self.params.need_shipping_address = need_shipping_address.into();
         self
     }
 
-    ///Pass *True* if the user's phone number should be sent to provider
+    ///Pass *True* if the user's phone number should be sent to the provider. Ignored for payments in [Telegram Stars](https://t.me/BotNews/90).
     #[must_use]
     pub fn send_phone_number_to_provider(
         mut self,
@@ -287,14 +290,14 @@ impl<'a> SendInvoiceRequest<'a> {
         self
     }
 
-    ///Pass *True* if the user's email address should be sent to provider
+    ///Pass *True* if the user's email address should be sent to the provider. Ignored for payments in [Telegram Stars](https://t.me/BotNews/90).
     #[must_use]
     pub fn send_email_to_provider(mut self, send_email_to_provider: impl Into<bool>) -> Self {
         self.params.send_email_to_provider = send_email_to_provider.into();
         self
     }
 
-    ///Pass *True* if the final price depends on the shipping method
+    ///Pass *True* if the final price depends on the shipping method. Ignored for payments in [Telegram Stars](https://t.me/BotNews/90).
     #[must_use]
     pub fn is_flexible(mut self, is_flexible: impl Into<bool>) -> Self {
         self.params.is_flexible = is_flexible.into();
@@ -312,6 +315,13 @@ impl<'a> SendInvoiceRequest<'a> {
     #[must_use]
     pub fn protect_content(mut self, protect_content: impl Into<bool>) -> Self {
         self.params.protect_content = protect_content.into();
+        self
+    }
+
+    ///Unique identifier of the message effect to be added to the message; for private chats only
+    #[must_use]
+    pub fn message_effect_id(mut self, message_effect_id: impl Into<String>) -> Self {
+        self.params.message_effect_id = Some(message_effect_id.into());
         self
     }
 
@@ -338,20 +348,10 @@ impl<'a> API {
         title: impl Into<String>,
         description: impl Into<String>,
         payload: impl Into<String>,
-        provider_token: impl Into<String>,
         currency: impl Into<String>,
         prices: impl IntoIterator<Item = impl Into<LabeledPrice>>,
     ) -> SendInvoiceRequest {
-        SendInvoiceRequest::new(
-            self,
-            chat_id,
-            title,
-            description,
-            payload,
-            provider_token,
-            currency,
-            prices,
-        )
+        SendInvoiceRequest::new(self, chat_id, title, description, payload, currency, prices)
     }
 }
 

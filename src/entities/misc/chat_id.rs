@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use serde::{Deserialize, Serialize};
 
 use crate::entities::chat::Chat;
@@ -22,11 +24,11 @@ impl ChatId {
     }
 }
 
-impl ToString for ChatId {
-    fn to_string(&self) -> String {
+impl Display for ChatId {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::Username(value) => value.to_string(),
-            Self::Id(value) => value.to_string(),
+            Self::Username(value) => f.write_str(value),
+            Self::Id(value) => f.write_str(&value.to_string()),
         }
     }
 }

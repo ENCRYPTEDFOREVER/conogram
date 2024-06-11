@@ -29,6 +29,8 @@ pub struct SendContactParams {
     #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub message_effect_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_parameters: Option<ReplyParameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<ReplyMarkup>,
@@ -78,6 +80,7 @@ impl<'a> SendContactRequest<'a> {
                 vcard: Option::default(),
                 disable_notification: bool::default(),
                 protect_content: bool::default(),
+                message_effect_id: Option::default(),
                 reply_parameters: Option::default(),
                 reply_markup: Option::default(),
             },
@@ -147,6 +150,13 @@ impl<'a> SendContactRequest<'a> {
         self
     }
 
+    ///Unique identifier of the message effect to be added to the message; for private chats only
+    #[must_use]
+    pub fn message_effect_id(mut self, message_effect_id: impl Into<String>) -> Self {
+        self.params.message_effect_id = Some(message_effect_id.into());
+        self
+    }
+
     ///Description of the message to reply to
     #[must_use]
     pub fn reply_parameters(mut self, reply_parameters: impl Into<ReplyParameters>) -> Self {
@@ -154,7 +164,7 @@ impl<'a> SendContactRequest<'a> {
         self
     }
 
-    ///Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
+    ///Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a reply from the user
     #[must_use]
     pub fn reply_markup(mut self, reply_markup: impl Into<ReplyMarkup>) -> Self {
         self.params.reply_markup = Some(reply_markup.into());

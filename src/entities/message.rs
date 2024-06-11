@@ -1,6 +1,7 @@
 use crate::entities::animation::Animation;
 use crate::entities::audio::Audio;
 use crate::entities::chat::Chat;
+use crate::entities::chat_background::ChatBackground;
 use crate::entities::chat_boost_added::ChatBoostAdded;
 use crate::entities::chat_shared::ChatShared;
 use crate::entities::contact::Contact;
@@ -46,8 +47,6 @@ use crate::entities::video_note::VideoNote;
 use crate::entities::voice::Voice;
 use crate::entities::web_app_data::WebAppData;
 use crate::entities::write_access_allowed::WriteAccessAllowed;
-use crate::methods::send_photo::SendPhotoRequest;
-use crate::methods::send_sticker::SendStickerRequest;
 use crate::utils::deserialize_utils::deserialize_boxed;
 use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
@@ -154,6 +153,10 @@ pub struct Message {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub link_preview_options: Option<LinkPreviewOptions>,
 
+    ///*Optional*. Unique identifier of the message effect added to the message
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effect_id: Option<String>,
+
     ///*Optional*. Message is an animation, information about the animation. For backward compatibility, when this field is set, the *document* field will also be set
     #[serde(skip_serializing_if = "Option::is_none")]
     pub animation: Option<Animation>,
@@ -197,6 +200,10 @@ pub struct Message {
     ///*Optional*. For messages with a caption, special entities like usernames, URLs, bot commands, etc. that appear in the caption
     #[serde(default)]
     pub caption_entities: Vec<MessageEntity>,
+
+    ///*Optional*. True, if the caption must be shown above the message media
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub show_caption_above_media: bool,
 
     ///*Optional*. *True*, if the message media is covered by a spoiler animation
     #[serde(default, skip_serializing_if = "is_false")]
@@ -310,6 +317,10 @@ pub struct Message {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub boost_added: Option<ChatBoostAdded>,
 
+    ///*Optional*. Service message: chat background set
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chat_background_set: Option<ChatBackground>,
+
     ///*Optional*. Service message: forum topic created
     #[serde(skip_serializing_if = "Option::is_none")]
     pub forum_topic_created: Option<ForumTopicCreated>,
@@ -390,6 +401,8 @@ use crate::methods::edit_message_text::EditMessageTextRequest;
 use crate::methods::get_custom_emoji_stickers::GetCustomEmojiStickersRequest;
 use crate::methods::send_document::SendDocumentRequest;
 use crate::methods::send_message::SendMessageRequest;
+use crate::methods::send_photo::SendPhotoRequest;
+use crate::methods::send_sticker::SendStickerRequest;
 use crate::methods::set_message_reaction::SetMessageReactionRequest;
 use std::ops::Range;
 

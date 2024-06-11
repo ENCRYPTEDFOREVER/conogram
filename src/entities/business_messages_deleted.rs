@@ -13,7 +13,7 @@ pub struct BusinessMessagesDeleted {
     #[serde(deserialize_with = "deserialize_boxed")]
     pub chat: Box<Chat>,
 
-    ///A JSON-serialized list of identifiers of deleted messages in the chat of the business account
+    ///The list of identifiers of deleted messages in the chat of the business account
     pub message_ids: Vec<i64>,
 }
 // Divider: all content below this line will be preserved after code regen

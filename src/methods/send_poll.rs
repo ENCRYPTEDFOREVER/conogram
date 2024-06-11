@@ -1,4 +1,5 @@
 use crate::api::API;
+use crate::entities::input_poll_option::InputPollOption;
 use crate::entities::message::Message;
 use crate::entities::message_entity::MessageEntity;
 use crate::entities::misc::chat_id::ChatId;
@@ -20,7 +21,11 @@ pub struct SendPollParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_thread_id: Option<i64>,
     pub question: String,
-    pub options: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub question_parse_mode: Option<String>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub question_entities: Vec<MessageEntity>,
+    pub options: Vec<InputPollOption>,
     #[serde(default, skip_serializing_if = "is_false")]
     pub is_anonymous: bool,
     #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
@@ -45,6 +50,8 @@ pub struct SendPollParams {
     pub disable_notification: bool,
     #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message_effect_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_parameters: Option<ReplyParameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -81,7 +88,7 @@ impl<'a> SendPollRequest<'a> {
         api: &'a API,
         chat_id: impl Into<ChatId>,
         question: impl Into<String>,
-        options: impl IntoIterator<Item = impl Into<String>>,
+        options: impl IntoIterator<Item = impl Into<InputPollOption>>,
     ) -> Self {
         Self {
             api,
@@ -91,6 +98,8 @@ impl<'a> SendPollRequest<'a> {
                 options: options.into_iter().map(Into::into).collect(),
                 business_connection_id: Option::default(),
                 message_thread_id: Option::default(),
+                question_parse_mode: Option::default(),
+                question_entities: Vec::default(),
                 is_anonymous: bool::default(),
                 type_: Option::default(),
                 allows_multiple_answers: bool::default(),
@@ -103,6 +112,7 @@ impl<'a> SendPollRequest<'a> {
                 is_closed: bool::default(),
                 disable_notification: bool::default(),
                 protect_content: bool::default(),
+                message_effect_id: Option::default(),
                 reply_parameters: Option::default(),
                 reply_markup: Option::default(),
             },
@@ -137,9 +147,29 @@ impl<'a> SendPollRequest<'a> {
         self
     }
 
-    ///A JSON-serialized list of answer options, 2-10 strings 1-100 characters each
+    ///Mode for parsing entities in the question. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details. Currently, only custom emoji entities are allowed
     #[must_use]
-    pub fn options(mut self, options: impl IntoIterator<Item = impl Into<String>>) -> Self {
+    pub fn question_parse_mode(mut self, question_parse_mode: impl Into<String>) -> Self {
+        self.params.question_parse_mode = Some(question_parse_mode.into());
+        self
+    }
+
+    ///A JSON-serialized list of special entities that appear in the poll question. It can be specified instead of *question\_parse\_mode*
+    #[must_use]
+    pub fn question_entities(
+        mut self,
+        question_entities: impl IntoIterator<Item = impl Into<MessageEntity>>,
+    ) -> Self {
+        self.params.question_entities = question_entities.into_iter().map(Into::into).collect();
+        self
+    }
+
+    ///A JSON-serialized list of 2-10 answer options
+    #[must_use]
+    pub fn options(
+        mut self,
+        options: impl IntoIterator<Item = impl Into<InputPollOption>>,
+    ) -> Self {
         self.params.options = options.into_iter().map(Into::into).collect();
         self
     }
@@ -185,7 +215,7 @@ impl<'a> SendPollRequest<'a> {
         self
     }
 
-    ///A JSON-serialized list of special entities that appear in the poll explanation, which can be specified instead of *parse\_mode*
+    ///A JSON-serialized list of special entities that appear in the poll explanation. It can be specified instead of *explanation\_parse\_mode*
     #[must_use]
     pub fn explanation_entities(
         mut self,
@@ -231,6 +261,13 @@ impl<'a> SendPollRequest<'a> {
         self
     }
 
+    ///Unique identifier of the message effect to be added to the message; for private chats only
+    #[must_use]
+    pub fn message_effect_id(mut self, message_effect_id: impl Into<String>) -> Self {
+        self.params.message_effect_id = Some(message_effect_id.into());
+        self
+    }
+
     ///Description of the message to reply to
     #[must_use]
     pub fn reply_parameters(mut self, reply_parameters: impl Into<ReplyParameters>) -> Self {
@@ -238,7 +275,7 @@ impl<'a> SendPollRequest<'a> {
         self
     }
 
-    ///Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account
+    ///Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a reply from the user
     #[must_use]
     pub fn reply_markup(mut self, reply_markup: impl Into<ReplyMarkup>) -> Self {
         self.params.reply_markup = Some(reply_markup.into());
@@ -252,7 +289,7 @@ impl<'a> API {
         &'a self,
         chat_id: impl Into<ChatId>,
         question: impl Into<String>,
-        options: impl IntoIterator<Item = impl Into<String>>,
+        options: impl IntoIterator<Item = impl Into<InputPollOption>>,
     ) -> SendPollRequest {
         SendPollRequest::new(self, chat_id, question, options)
     }

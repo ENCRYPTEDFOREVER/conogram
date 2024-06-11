@@ -22,7 +22,7 @@ pub struct InlineQueryResultLocation {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub horizontal_accuracy: Option<f64>,
 
-    ///*Optional*. Period in seconds for which the location can be updated, should be between 60 and 86400.
+    ///*Optional*. Period in seconds during which the location can be updated, should be between 60 and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub live_period: Option<i64>,
 

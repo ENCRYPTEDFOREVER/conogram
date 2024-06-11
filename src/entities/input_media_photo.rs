@@ -22,6 +22,10 @@ pub struct InputMediaPhoto {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub caption_entities: Vec<MessageEntity>,
 
+    ///*Optional*. Pass *True*, if the caption must be shown above the message media
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub show_caption_above_media: bool,
+
     ///*Optional*. Pass *True* if the photo needs to be covered with a spoiler animation
     #[serde(default, skip_serializing_if = "is_false")]
     pub has_spoiler: bool,

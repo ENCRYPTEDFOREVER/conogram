@@ -5,7 +5,7 @@ use std::{
 
 use crate::{
     entities::{
-        chat::Chat,
+        chat::TgChat,
         message_entity::{MessageEntity, MessageEntityType},
         user::User,
     },
@@ -24,13 +24,11 @@ impl_trait!(
     }
 );
 
-impl_trait!(
-    FormatMention for Chat {
-        fn mention<'a>(&self, ft: &'a mut FormattedText) -> &'a mut FormattedText {
-            ft.url(self.full_name(), self.get_url())
-        }
+impl<T: TgChat> FormatMention for T {
+    fn mention<'a>(&self, ft: &'a mut FormattedText) -> &'a mut FormattedText {
+        ft.url(self.full_name(), self.get_url())
     }
-);
+}
 
 fn ranges_intersect<T1, T2>(one: Range<T1>, two: Range<T2>) -> bool
 where
@@ -378,6 +376,14 @@ impl FormattedText {
 
     pub fn spoiler(&mut self, text: impl AsRef<str>) -> &mut Self {
         self.push_entity_simple(text, MessageEntityType::Spoiler)
+    }
+
+    pub fn blockquote(&mut self, text: impl AsRef<str>) -> &mut Self {
+        self.push_entity_simple(text, MessageEntityType::Blockquote)
+    }
+
+    pub fn expandable_blockquote(&mut self, text: impl AsRef<str>) -> &mut Self {
+        self.push_entity_simple(text, MessageEntityType::ExpandableBlockquote)
     }
 
     pub fn monowidth(&mut self, text: impl AsRef<str>) -> &mut Self {

@@ -1,7 +1,7 @@
 use crate::entities::location::Location;
 use serde::{Deserialize, Serialize};
 
-///
+///Contains information about the location of a Telegram Business account.
 ///API Reference: [link](https://core.telegram.org/bots/api/#businesslocation)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct BusinessLocation {

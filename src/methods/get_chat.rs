@@ -1,5 +1,5 @@
 use crate::api::API;
-use crate::entities::chat::Chat;
+use crate::entities::chat_full_info::ChatFullInfo;
 use crate::entities::misc::chat_id::ChatId;
 use crate::errors::ConogramError;
 use crate::impl_into_future;
@@ -15,7 +15,7 @@ pub struct GetChatParams {
 
 impl_into_future!(GetChatRequest<'a>);
 
-///Use this method to get up to date information about the chat. Returns a [Chat](https://core.telegram.org/bots/api/#chat) object on success.
+///Use this method to get up-to-date information about the chat. Returns a [ChatFullInfo](https://core.telegram.org/bots/api/#chatfullinfo) object on success.
 #[derive(Clone)]
 pub struct GetChatRequest<'a> {
     api: &'a API,
@@ -24,7 +24,7 @@ pub struct GetChatRequest<'a> {
 
 impl<'a> RequestT for GetChatRequest<'a> {
     type ParamsType = GetChatParams;
-    type ReturnType = Chat;
+    type ReturnType = ChatFullInfo;
     fn get_name() -> &'static str {
         "getChat"
     }
@@ -57,7 +57,7 @@ impl<'a> GetChatRequest<'a> {
 }
 
 impl<'a> API {
-    ///Use this method to get up to date information about the chat. Returns a [Chat](https://core.telegram.org/bots/api/#chat) object on success.
+    ///Use this method to get up-to-date information about the chat. Returns a [ChatFullInfo](https://core.telegram.org/bots/api/#chatfullinfo) object on success.
     pub fn get_chat(&'a self, chat_id: impl Into<ChatId>) -> GetChatRequest {
         GetChatRequest::new(self, chat_id)
     }

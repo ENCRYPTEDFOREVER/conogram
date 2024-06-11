@@ -1,6 +1,7 @@
 use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
 use crate::entities::input_message_content::InputMessageContent;
 use crate::entities::message_entity::MessageEntity;
+use crate::utils::deserialize_utils::is_false;
 use serde::Serialize;
 
 ///Represents a link to a photo. By default, this photo will be sent by the user with optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the photo.
@@ -43,6 +44,10 @@ pub struct InlineQueryResultPhoto {
     ///*Optional*. List of special entities that appear in the caption, which can be specified instead of *parse\_mode*
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub caption_entities: Vec<MessageEntity>,
+
+    ///*Optional*. Pass *True*, if the caption must be shown above the message media
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub show_caption_above_media: bool,
 
     ///*Optional*. [Inline keyboard](https://core.telegram.org/bots/features#inline-keyboards) attached to the message
     #[serde(skip_serializing_if = "Option::is_none")]

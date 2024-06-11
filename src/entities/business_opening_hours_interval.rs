@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-///
+///Describes an interval of time during which a business is open.
 ///API Reference: [link](https://core.telegram.org/bots/api/#businessopeninghoursinterval)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct BusinessOpeningHoursInterval {

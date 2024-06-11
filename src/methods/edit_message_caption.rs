@@ -6,6 +6,7 @@ use crate::entities::misc::chat_id::ChatId;
 use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
+use crate::utils::deserialize_utils::is_false;
 use serde::Serialize;
 use std::future::{Future, IntoFuture};
 use std::pin::Pin;
@@ -24,6 +25,8 @@ pub struct EditMessageCaptionParams {
     pub parse_mode: Option<String>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub caption_entities: Vec<MessageEntity>,
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub show_caption_above_media: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<InlineKeyboardMarkup>,
 }
@@ -64,6 +67,7 @@ impl<'a> EditMessageCaptionRequest<'a> {
                 caption: Option::default(),
                 parse_mode: Option::default(),
                 caption_entities: Vec::default(),
+                show_caption_above_media: bool::default(),
                 reply_markup: Option::default(),
             },
         }
@@ -111,6 +115,13 @@ impl<'a> EditMessageCaptionRequest<'a> {
         caption_entities: impl IntoIterator<Item = impl Into<MessageEntity>>,
     ) -> Self {
         self.params.caption_entities = caption_entities.into_iter().map(Into::into).collect();
+        self
+    }
+
+    ///Pass *True*, if the caption must be shown above the message media. Supported only for animation, photo and video messages.
+    #[must_use]
+    pub fn show_caption_above_media(mut self, show_caption_above_media: impl Into<bool>) -> Self {
+        self.params.show_caption_above_media = show_caption_above_media.into();
         self
     }
 

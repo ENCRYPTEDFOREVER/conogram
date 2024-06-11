@@ -82,10 +82,11 @@ impl From<BotCommandScopeChatMember> for BotCommandScope {
     }
 }
 // Divider: all content below this line will be preserved after code regen
+use std::fmt::Display;
 
-impl ToString for BotCommandScope {
-    fn to_string(&self) -> String {
-        match self {
+impl Display for BotCommandScope {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(match self {
             Self::Default(_) => "default",
             Self::AllPrivateChats(_) => "all_private_chats",
             Self::AllGroupChats(_) => "all_group_chats",
@@ -93,8 +94,7 @@ impl ToString for BotCommandScope {
             Self::Chat(_) => "chat",
             Self::ChatAdministrators(_) => "chat_administrators",
             Self::ChatMember(_) => "chat_member",
-        }
-        .to_string()
+        })
     }
 }
 

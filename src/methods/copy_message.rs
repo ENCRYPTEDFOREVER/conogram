@@ -26,6 +26,8 @@ pub struct CopyMessageParams {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub caption_entities: Vec<MessageEntity>,
     #[serde(default, skip_serializing_if = "is_false")]
+    pub show_caption_above_media: bool,
+    #[serde(default, skip_serializing_if = "is_false")]
     pub disable_notification: bool,
     #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
@@ -77,6 +79,7 @@ impl<'a> CopyMessageRequest<'a> {
                 caption: Option::default(),
                 parse_mode: Option::default(),
                 caption_entities: Vec::default(),
+                show_caption_above_media: bool::default(),
                 disable_notification: bool::default(),
                 protect_content: bool::default(),
                 reply_parameters: Option::default(),
@@ -137,6 +140,13 @@ impl<'a> CopyMessageRequest<'a> {
         self
     }
 
+    ///Pass *True*, if the caption must be shown above the message media. Ignored if a new caption isn't specified.
+    #[must_use]
+    pub fn show_caption_above_media(mut self, show_caption_above_media: impl Into<bool>) -> Self {
+        self.params.show_caption_above_media = show_caption_above_media.into();
+        self
+    }
+
     ///Sends the message [silently](https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
     #[must_use]
     pub fn disable_notification(mut self, disable_notification: impl Into<bool>) -> Self {
@@ -158,7 +168,7 @@ impl<'a> CopyMessageRequest<'a> {
         self
     }
 
-    ///Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove reply keyboard or to force a reply from the user.
+    ///Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a reply from the user
     #[must_use]
     pub fn reply_markup(mut self, reply_markup: impl Into<ReplyMarkup>) -> Self {
         self.params.reply_markup = Some(reply_markup.into());

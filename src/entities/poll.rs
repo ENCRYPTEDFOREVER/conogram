@@ -12,6 +12,10 @@ pub struct Poll {
     ///Poll question, 1-300 characters
     pub question: String,
 
+    ///*Optional*. Special entities that appear in the *question*. Currently, only custom emoji entities are allowed in poll questions
+    #[serde(default)]
+    pub question_entities: Vec<MessageEntity>,
+
     ///List of poll options
     pub options: Vec<PollOption>,
 

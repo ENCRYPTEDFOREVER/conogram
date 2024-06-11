@@ -63,6 +63,7 @@ pub mod leave_chat;
 pub mod log_out;
 pub mod pin_chat_message;
 pub mod promote_chat_member;
+pub mod refund_star_payment;
 pub mod reopen_forum_topic;
 pub mod reopen_general_forum_topic;
 pub mod replace_sticker_in_set;

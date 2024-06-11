@@ -28,6 +28,8 @@ pub struct SendMediaGroupParams {
     #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub message_effect_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_parameters: Option<ReplyParameters>,
 }
 
@@ -80,6 +82,7 @@ impl<'a> SendMediaGroupRequest<'a> {
                 message_thread_id: Option::default(),
                 disable_notification: bool::default(),
                 protect_content: bool::default(),
+                message_effect_id: Option::default(),
                 reply_parameters: Option::default(),
             },
         }
@@ -124,6 +127,13 @@ impl<'a> SendMediaGroupRequest<'a> {
     #[must_use]
     pub fn protect_content(mut self, protect_content: impl Into<bool>) -> Self {
         self.params.protect_content = protect_content.into();
+        self
+    }
+
+    ///Unique identifier of the message effect to be added to the message; for private chats only
+    #[must_use]
+    pub fn message_effect_id(mut self, message_effect_id: impl Into<String>) -> Self {
+        self.params.message_effect_id = Some(message_effect_id.into());
         self
     }
 
