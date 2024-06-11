@@ -46,6 +46,8 @@ use crate::entities::video_note::VideoNote;
 use crate::entities::voice::Voice;
 use crate::entities::web_app_data::WebAppData;
 use crate::entities::write_access_allowed::WriteAccessAllowed;
+use crate::methods::send_photo::SendPhotoRequest;
+use crate::methods::send_sticker::SendStickerRequest;
 use crate::utils::deserialize_utils::deserialize_boxed;
 use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
@@ -517,6 +519,26 @@ impl Message {
         }
     }
 
+    pub fn file_id(&self) -> Option<String> {
+        if let Some(m) = self.photo.first() {
+            Some(m.file_id.clone())
+        } else if let Some(m) = &self.animation {
+            Some(m.file_id.clone())
+        } else if let Some(m) = &self.audio {
+            Some(m.file_id.clone())
+        } else if let Some(m) = &self.document {
+            Some(m.file_id.clone())
+        } else if let Some(m) = &self.video {
+            Some(m.file_id.clone())
+        } else if let Some(m) = &self.video_note {
+            Some(m.file_id.clone())
+        } else if let Some(m) = &self.voice {
+            Some(m.file_id.clone())
+        } else {
+            self.sticker.as_ref().map(|m| m.file_id.clone())
+        }
+    }
+
     pub fn get_formatted_text(&self) -> Option<FormattedText> {
         if let (Some(text), entities) = (self.get_text(), self.get_entities()) {
             Some(FormattedText::new(text.clone(), entities.clone()))
@@ -667,6 +689,19 @@ impl Message {
             .chat_id(self.chat.id)
     }
 
+    pub fn edit_text_formatted<'a>(
+        &'a self,
+        api: &'a API,
+        ft: impl Into<FormattedText>,
+    ) -> EditMessageTextRequest {
+        let (text, entities) = ft.into().build();
+        self.edit_text(api, text).entities(entities)
+    }
+
+    pub fn copy<'a>(&'a self, api: &'a API, chat_id: impl Into<ChatId>) -> CopyMessageRequest {
+        api.copy_message(chat_id, self.chat.id, self.message_id)
+    }
+
     pub fn edit_reply_markup<'a>(&'a self, api: &'a API) -> EditMessageReplyMarkupRequest {
         api.edit_message_reply_markup()
             .message_id(self.message_id)
@@ -689,12 +724,30 @@ impl Message {
         api.delete_message_exp(self.chat.id, self.message_id).await
     }
 
+    pub fn reply_photo<'a>(
+        &'a self,
+        api: &'a API,
+        photo: impl Into<InputFile>,
+    ) -> SendPhotoRequest {
+        api.send_photo(self.chat.id, photo)
+            .reply_parameters(ReplyParameters::new_current_chat(self.message_id))
+    }
+
     pub fn reply_document<'a>(
         &'a self,
         api: &'a API,
         document: impl Into<InputFile>,
     ) -> SendDocumentRequest {
         api.send_document(self.chat.id, document)
+            .reply_parameters(ReplyParameters::new_current_chat(self.message_id))
+    }
+
+    pub fn reply_sticker<'a>(
+        &'a self,
+        api: &'a API,
+        sticker: impl Into<InputFile>,
+    ) -> SendStickerRequest {
+        api.send_sticker(self.chat.id, sticker)
             .reply_parameters(ReplyParameters::new_current_chat(self.message_id))
     }
 

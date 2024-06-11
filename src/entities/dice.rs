@@ -11,3 +11,25 @@ pub struct Dice {
     pub value: i64,
 }
 // Divider: all content below this line will be preserved after code regen
+impl Dice {
+    ///  If dice animation suggests a win
+    pub fn is_winning(&self) -> bool {
+        match self.emoji.as_str() {
+            "🎰" => matches!(self.value, 1 | 22 | 43 | 64),
+            "🎳" | "🎲" | "🎯" => self.value == 6,
+            "⚽" => self.value >= 3,
+            "🏀" => self.value >= 4,
+            _ => false,
+        }
+    }
+
+    ///  If dice value is winning value
+    pub fn is_winning_canon(&self) -> bool {
+        match self.emoji.as_str() {
+            "🎰" => self.value == 64,
+            "🎳" | "🎲" | "🎯" => self.value == 6,
+            "⚽" | "🏀" => self.value == 5,
+            _ => false,
+        }
+    }
+}

@@ -29,7 +29,7 @@ pub(crate) struct ApiClient {
     http_client: Client,
     bot_config: APIConfig,
 
-    default_params: HashMap<String, HashMap<String, Value>>,
+    default_request_params: HashMap<String, HashMap<String, Value>>,
 }
 
 impl ApiClient {
@@ -52,7 +52,7 @@ impl ApiClient {
             },
             http_client: Client::new(),
             bot_config: config,
-            default_params: HashMap::new(),
+            default_request_params: HashMap::new(),
         }
     }
 
@@ -64,7 +64,10 @@ impl ApiClient {
         param_name: impl Into<String>,
         value: impl Serialize,
     ) -> Result<(), ConogramErrorType> {
-        let method_entry = self.default_params.entry(method.into()).or_default();
+        let method_entry = self
+            .default_request_params
+            .entry(method.into())
+            .or_default();
 
         match method_entry.entry(param_name.into()) {
             Entry::Occupied(mut v) => {
@@ -87,9 +90,9 @@ impl ApiClient {
         .unwrap()
     }
 
-    fn apply_default_params(&self, method: &str, value: &mut Value) {
-        if let Some(method_entry) = self.default_params.get(method) {
-            if let Value::Object(object) = value {
+    fn apply_default_params(&self, method: &str, default_value: &mut Value) {
+        if let Some(method_entry) = self.default_request_params.get(method) {
+            if let Value::Object(object) = default_value {
                 for (param_name, v) in method_entry {
                     if !object.contains_key(param_name) {
                         log::debug!("Setting {param_name}={v} in {method}");

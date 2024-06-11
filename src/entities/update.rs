@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use crate::entities::business_connection::BusinessConnection;
 use crate::entities::business_messages_deleted::BusinessMessagesDeleted;
 use crate::entities::callback_query::CallbackQuery;
@@ -179,9 +181,9 @@ impl AllowedUpdates {
     }
 }
 
-impl ToString for AllowedUpdates {
-    fn to_string(&self) -> String {
-        match self {
+impl Display for AllowedUpdates {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(match self {
             Self::Message => "message",
             Self::EditedMessage => "edited_message",
             Self::MessageReaction => "message_reaction",
@@ -205,7 +207,6 @@ impl ToString for AllowedUpdates {
 
             Self::ChatBoost => "chat_boost",
             Self::RemovedChatBoost => "removed_chat_boost",
-        }
-        .into()
+        })
     }
 }

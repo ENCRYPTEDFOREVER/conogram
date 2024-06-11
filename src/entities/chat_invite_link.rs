@@ -37,3 +37,17 @@ pub struct ChatInviteLink {
     pub pending_join_request_count: Option<i64>,
 }
 // Divider: all content below this line will be preserved after code regen
+
+use super::misc::chat_id::ChatId;
+use crate::api::API;
+use crate::methods::revoke_chat_invite_link::RevokeChatInviteLinkRequest;
+
+impl ChatInviteLink {
+    pub fn revoke<'a>(
+        &'a self,
+        api: &'a API,
+        chat_id: impl Into<ChatId>,
+    ) -> RevokeChatInviteLinkRequest {
+        api.revoke_chat_invite_link(chat_id.into(), &self.invite_link)
+    }
+}

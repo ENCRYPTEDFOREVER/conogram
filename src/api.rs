@@ -34,7 +34,7 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 
 macro_rules! set_default_param {
-    ($api_client: expr, $param_name: literal, $value: ident, [$($request: ty),*]) => {
+    ($api_client: expr, $param_name: literal, $value: ident, [$($request: ty),*] $(,)?) => {
         $(
             $api_client.set_default_request_param(
                 <$request>::get_name(),
@@ -55,6 +55,20 @@ pub trait WrapRequest {
         Self: Sized,
     {
         API::request_ref(self)
+    }
+
+    fn wrap_background<ReturnType>(self)
+    //-> impl std::future::Future<Output = Result<ReturnType, ConogramError>>
+    where
+        for<'a> &'a Self: IntoFuture<Output = Result<ReturnType, ConogramError>> + Send + Sync,
+        Self: IntoFuture<Output = Result<ReturnType, ConogramError>> + Send + Sync,
+        Self: Sized + Send + Sync + 'static,
+        ReturnType: Send,
+        for<'a> <&'a Self as IntoFuture>::IntoFuture: Send,
+    {
+        tokio::spawn(async move {
+            let _ = API::request(self).await;
+        });
     }
 }
 impl<T> WrapRequest for T {}
@@ -203,6 +217,23 @@ impl API {
         Ok(())
     }
 
+    /// Sets default `link_preview_options` for applicable requests
+    pub fn set_default_link_preview(
+        &mut self,
+        value: impl Into<crate::entities::link_preview_options::LinkPreviewOptions>,
+    ) -> Result<(), ConogramErrorType> {
+        let value = value.into();
+
+        set_default_param!(
+            self.api_client,
+            "link_preview_options",
+            value,
+            [SendMessageRequest, EditMessageTextRequest]
+        );
+
+        Ok(())
+    }
+
     /// Set allowed update kinds list which will be later used in polling
     pub fn set_allowed_updates(
         &mut self,
@@ -226,7 +257,7 @@ impl API {
         result
     }
 
-    /// Internal conogram method. Returns ``Ok(false)`` instead of `Err` if on or more of the messages can't be deleted
+    /// Internal conogram method. Returns ``Ok(false)`` instead of `Err` if one or more of the messages can't be deleted
     pub async fn delete_messages_exp(
         &self,
         chat_id: impl Into<ChatId>,
