@@ -69,6 +69,7 @@ impl<T: AsRef<str>> Utf16Len for T {
 #[derive(Debug, Clone)]
 pub struct FormattedText {
     text: String,
+    /// Length in utf-16 codeunits
     len: i64,
     entities: Vec<MessageEntity>,
 
@@ -172,6 +173,7 @@ impl FormattedText {
         self.len == 0
     }
 
+    /// Length in utf-16 codeunits
     pub const fn len(&self) -> usize {
         self.len as usize
     }
@@ -297,6 +299,11 @@ impl FormattedText {
             self.len += text_len;
         }
 
+        self
+    }
+
+    pub fn add_entity_uncheked(&mut self, entity: MessageEntity) -> &mut Self {
+        self.entities.push(entity);
         self
     }
 
