@@ -27,6 +27,7 @@ use crate::entities::maybe_inaccessible_message::MaybeInaccessibleMessage;
 use crate::entities::message_auto_delete_timer_changed::MessageAutoDeleteTimerChanged;
 use crate::entities::message_entity::MessageEntity;
 use crate::entities::message_origin::MessageOrigin;
+use crate::entities::paid_media_info::PaidMediaInfo;
 use crate::entities::passport_data::PassportData;
 use crate::entities::photo_size::PhotoSize;
 use crate::entities::poll::Poll;
@@ -169,6 +170,10 @@ pub struct Message {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document: Option<Document>,
 
+    ///*Optional*. Message contains paid media; information about the paid media
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub paid_media: Option<PaidMediaInfo>,
+
     ///*Optional*. Message is a photo, available sizes of the photo
     #[serde(default)]
     pub photo: Vec<PhotoSize>,
@@ -193,7 +198,7 @@ pub struct Message {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub voice: Option<Voice>,
 
-    ///*Optional*. Caption for the animation, audio, document, photo, video or voice
+    ///*Optional*. Caption for the animation, audio, document, paid media, photo, video or voice
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption: Option<String>,
 

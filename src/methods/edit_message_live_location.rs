@@ -12,6 +12,8 @@ use std::pin::Pin;
 #[derive(Debug, Clone, Serialize)]
 pub struct EditMessageLiveLocationParams {
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub business_connection_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub chat_id: Option<ChatId>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_id: Option<i64>,
@@ -63,6 +65,7 @@ impl<'a> EditMessageLiveLocationRequest<'a> {
             params: EditMessageLiveLocationParams {
                 latitude: latitude.into(),
                 longitude: longitude.into(),
+                business_connection_id: Option::default(),
                 chat_id: Option::default(),
                 message_id: Option::default(),
                 inline_message_id: Option::default(),
@@ -73,6 +76,13 @@ impl<'a> EditMessageLiveLocationRequest<'a> {
                 reply_markup: Option::default(),
             },
         }
+    }
+
+    ///Unique identifier of the business connection on behalf of which the message to be edited was sent
+    #[must_use]
+    pub fn business_connection_id(mut self, business_connection_id: impl Into<String>) -> Self {
+        self.params.business_connection_id = Some(business_connection_id.into());
+        self
     }
 
     ///Required if *inline\_message\_id* is not specified. Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)

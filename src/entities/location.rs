@@ -4,10 +4,10 @@ use serde::{Deserialize, Serialize};
 ///API Reference: [link](https://core.telegram.org/bots/api/#location)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Location {
-    ///Latitude as defined by sender
+    ///Latitude as defined by the sender
     pub latitude: f64,
 
-    ///Longitude as defined by sender
+    ///Longitude as defined by the sender
     pub longitude: f64,
 
     ///*Optional*. The radius of uncertainty for the location, measured in meters; 0-1500

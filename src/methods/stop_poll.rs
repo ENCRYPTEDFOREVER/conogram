@@ -11,6 +11,8 @@ use std::pin::Pin;
 
 #[derive(Debug, Clone, Serialize)]
 pub struct StopPollParams {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub business_connection_id: Option<String>,
     pub chat_id: ChatId,
     pub message_id: i64,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -49,9 +51,17 @@ impl<'a> StopPollRequest<'a> {
             params: StopPollParams {
                 chat_id: chat_id.into(),
                 message_id: message_id.into(),
+                business_connection_id: Option::default(),
                 reply_markup: Option::default(),
             },
         }
+    }
+
+    ///Unique identifier of the business connection on behalf of which the message to be edited was sent
+    #[must_use]
+    pub fn business_connection_id(mut self, business_connection_id: impl Into<String>) -> Self {
+        self.params.business_connection_id = Some(business_connection_id.into());
+        self
     }
 
     ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)

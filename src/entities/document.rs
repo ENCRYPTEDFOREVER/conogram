@@ -11,15 +11,15 @@ pub struct Document {
     ///Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
     pub file_unique_id: String,
 
-    ///*Optional*. Document thumbnail as defined by sender
+    ///*Optional*. Document thumbnail as defined by the sender
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thumbnail: Option<PhotoSize>,
 
-    ///*Optional*. Original filename as defined by sender
+    ///*Optional*. Original filename as defined by the sender
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_name: Option<String>,
 
-    ///*Optional*. MIME type of the file as defined by sender
+    ///*Optional*. MIME type of the file as defined by the sender
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mime_type: Option<String>,
 

@@ -11,10 +11,10 @@ pub struct VideoNote {
     ///Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
     pub file_unique_id: String,
 
-    ///Video width and height (diameter of the video message) as defined by sender
+    ///Video width and height (diameter of the video message) as defined by the sender
     pub length: i64,
 
-    ///Duration of the video in seconds as defined by sender
+    ///Duration of the video in seconds as defined by the sender
     pub duration: i64,
 
     ///*Optional*. Video thumbnail

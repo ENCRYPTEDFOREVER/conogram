@@ -1,24 +1,27 @@
 use crate::api::API;
+use crate::entities::input_paid_media::InputPaidMedia;
+use crate::entities::message::Message;
 use crate::entities::message_entity::MessageEntity;
-use crate::entities::message_id::MessageId;
 use crate::entities::misc::chat_id::ChatId;
+use crate::entities::misc::input_file::GetFiles;
+use crate::entities::misc::input_file::InputFile;
+use crate::entities::misc::input_file::Moose;
 use crate::entities::misc::reply_markup::ReplyMarkup;
 use crate::entities::reply_parameters::ReplyParameters;
 use crate::errors::ConogramError;
-use crate::impl_into_future;
+use crate::impl_into_future_multipart;
 use crate::request::RequestT;
 use crate::utils::deserialize_utils::is_false;
 use serde::Serialize;
+use std::collections::HashMap;
 use std::future::{Future, IntoFuture};
 use std::pin::Pin;
 
 #[derive(Debug, Clone, Serialize)]
-pub struct CopyMessageParams {
+pub struct SendPaidMediaParams {
     pub chat_id: ChatId,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub message_thread_id: Option<i64>,
-    pub from_chat_id: ChatId,
-    pub message_id: i64,
+    pub star_count: i64,
+    pub media: Vec<InputPaidMedia>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -37,20 +40,29 @@ pub struct CopyMessageParams {
     pub reply_markup: Option<ReplyMarkup>,
 }
 
-impl_into_future!(CopyMessageRequest<'a>);
+impl GetFiles for SendPaidMediaParams {
+    fn get_files(&self) -> HashMap<Moose, &InputFile> {
+        let mut map = HashMap::new();
+        for media in &self.media {
+            map.extend(media.get_files());
+        }
+        map
+    }
+}
+impl_into_future_multipart!(SendPaidMediaRequest<'a>);
 
-///Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz [poll](https://core.telegram.org/bots/api/#poll) can be copied only if the value of the field *correct\_option\_id* is known to the bot. The method is analogous to the method [forwardMessage](https://core.telegram.org/bots/api/#forwardmessage), but the copied message doesn't have a link to the original message. Returns the [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent message on success.
+///Use this method to send paid media to channel chats. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
 #[derive(Clone)]
-pub struct CopyMessageRequest<'a> {
+pub struct SendPaidMediaRequest<'a> {
     api: &'a API,
-    params: CopyMessageParams,
+    params: SendPaidMediaParams,
 }
 
-impl<'a> RequestT for CopyMessageRequest<'a> {
-    type ParamsType = CopyMessageParams;
-    type ReturnType = MessageId;
+impl<'a> RequestT for SendPaidMediaRequest<'a> {
+    type ParamsType = SendPaidMediaParams;
+    type ReturnType = Message;
     fn get_name() -> &'static str {
-        "copyMessage"
+        "sendPaidMedia"
     }
     fn get_api_ref(&self) -> &API {
         self.api
@@ -59,23 +71,22 @@ impl<'a> RequestT for CopyMessageRequest<'a> {
         &self.params
     }
     fn is_multipart() -> bool {
-        false
+        true
     }
 }
-impl<'a> CopyMessageRequest<'a> {
+impl<'a> SendPaidMediaRequest<'a> {
     pub fn new(
         api: &'a API,
         chat_id: impl Into<ChatId>,
-        from_chat_id: impl Into<ChatId>,
-        message_id: impl Into<i64>,
+        star_count: impl Into<i64>,
+        media: impl IntoIterator<Item = impl Into<InputPaidMedia>>,
     ) -> Self {
         Self {
             api,
-            params: CopyMessageParams {
+            params: SendPaidMediaParams {
                 chat_id: chat_id.into(),
-                from_chat_id: from_chat_id.into(),
-                message_id: message_id.into(),
-                message_thread_id: Option::default(),
+                star_count: star_count.into(),
+                media: media.into_iter().map(Into::into).collect(),
                 caption: Option::default(),
                 parse_mode: Option::default(),
                 caption_entities: Vec::default(),
@@ -95,42 +106,35 @@ impl<'a> CopyMessageRequest<'a> {
         self
     }
 
-    ///Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+    ///The number of Telegram Stars that must be paid to buy access to the media
     #[must_use]
-    pub fn message_thread_id(mut self, message_thread_id: impl Into<i64>) -> Self {
-        self.params.message_thread_id = Some(message_thread_id.into());
+    pub fn star_count(mut self, star_count: impl Into<i64>) -> Self {
+        self.params.star_count = star_count.into();
         self
     }
 
-    ///Unique identifier for the chat where the original message was sent (or channel username in the format `@channelusername`)
+    ///A JSON-serialized array describing the media to be sent; up to 10 items
     #[must_use]
-    pub fn from_chat_id(mut self, from_chat_id: impl Into<ChatId>) -> Self {
-        self.params.from_chat_id = from_chat_id.into();
+    pub fn media(mut self, media: impl IntoIterator<Item = impl Into<InputPaidMedia>>) -> Self {
+        self.params.media = media.into_iter().map(Into::into).collect();
         self
     }
 
-    ///Message identifier in the chat specified in *from\_chat\_id*
-    #[must_use]
-    pub fn message_id(mut self, message_id: impl Into<i64>) -> Self {
-        self.params.message_id = message_id.into();
-        self
-    }
-
-    ///New caption for media, 0-1024 characters after entities parsing. If not specified, the original caption is kept
+    ///Media caption, 0-1024 characters after entities parsing
     #[must_use]
     pub fn caption(mut self, caption: impl Into<String>) -> Self {
         self.params.caption = Some(caption.into());
         self
     }
 
-    ///Mode for parsing entities in the new caption. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details.
+    ///Mode for parsing entities in the media caption. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details.
     #[must_use]
     pub fn parse_mode(mut self, parse_mode: impl Into<String>) -> Self {
         self.params.parse_mode = Some(parse_mode.into());
         self
     }
 
-    ///A JSON-serialized list of special entities that appear in the new caption, which can be specified instead of *parse\_mode*
+    ///A JSON-serialized list of special entities that appear in the caption, which can be specified instead of *parse\_mode*
     #[must_use]
     pub fn caption_entities(
         mut self,
@@ -140,7 +144,7 @@ impl<'a> CopyMessageRequest<'a> {
         self
     }
 
-    ///Pass *True*, if the caption must be shown above the message media. Ignored if a new caption isn't specified.
+    ///Pass *True*, if the caption must be shown above the message media
     #[must_use]
     pub fn show_caption_above_media(mut self, show_caption_above_media: impl Into<bool>) -> Self {
         self.params.show_caption_above_media = show_caption_above_media.into();
@@ -177,14 +181,14 @@ impl<'a> CopyMessageRequest<'a> {
 }
 
 impl<'a> API {
-    ///Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz [poll](https://core.telegram.org/bots/api/#poll) can be copied only if the value of the field *correct\_option\_id* is known to the bot. The method is analogous to the method [forwardMessage](https://core.telegram.org/bots/api/#forwardmessage), but the copied message doesn't have a link to the original message. Returns the [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent message on success.
-    pub fn copy_message(
+    ///Use this method to send paid media to channel chats. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
+    pub fn send_paid_media(
         &'a self,
         chat_id: impl Into<ChatId>,
-        from_chat_id: impl Into<ChatId>,
-        message_id: impl Into<i64>,
-    ) -> CopyMessageRequest {
-        CopyMessageRequest::new(self, chat_id, from_chat_id, message_id)
+        star_count: impl Into<i64>,
+        media: impl IntoIterator<Item = impl Into<InputPaidMedia>>,
+    ) -> SendPaidMediaRequest {
+        SendPaidMediaRequest::new(self, chat_id, star_count, media)
     }
 }
 

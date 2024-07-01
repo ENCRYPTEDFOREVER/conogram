@@ -11,8 +11,6 @@ use crate::entities::reaction_type::ReactionType;
 use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
-use super::chat::ChatType;
-
 ///This object contains full information about a chat.
 ///API Reference: [link](https://core.telegram.org/bots/api/#chatfullinfo)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
@@ -138,6 +136,10 @@ pub struct ChatFullInfo {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub permissions: Option<ChatPermissions>,
 
+    ///*Optional*. *True*, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats.
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub can_send_paid_media: bool,
+
     ///*Optional*. For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user; in seconds
     #[serde(skip_serializing_if = "Option::is_none")]
     pub slow_mode_delay: Option<i64>,
@@ -188,3 +190,4 @@ pub struct ChatFullInfo {
 }
 
 // Divider: all content below this line will be preserved after code regen
+use super::chat::ChatType;

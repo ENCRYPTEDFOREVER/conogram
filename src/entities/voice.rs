@@ -10,10 +10,10 @@ pub struct Voice {
     ///Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
     pub file_unique_id: String,
 
-    ///Duration of the audio in seconds as defined by sender
+    ///Duration of the audio in seconds as defined by the sender
     pub duration: i64,
 
-    ///*Optional*. MIME type of the file as defined by sender
+    ///*Optional*. MIME type of the file as defined by the sender
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mime_type: Option<String>,
 

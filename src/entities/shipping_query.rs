@@ -12,7 +12,7 @@ pub struct ShippingQuery {
     ///User who sent the query
     pub from: User,
 
-    ///Bot specified invoice payload
+    ///Bot-specified invoice payload
     pub invoice_payload: String,
 
     ///User specified shipping address

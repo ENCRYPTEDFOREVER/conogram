@@ -16,7 +16,7 @@ pub struct InlineKeyboardButton {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
 
-    ///*Optional*. Data to be sent in a [callback query](https://core.telegram.org/bots/api/#callbackquery) to the bot when button is pressed, 1-64 bytes. Not supported for messages sent on behalf of a Telegram Business account.
+    ///*Optional*. Data to be sent in a [callback query](https://core.telegram.org/bots/api/#callbackquery) to the bot when the button is pressed, 1-64 bytes
     #[serde(skip_serializing_if = "Option::is_none")]
     pub callback_data: Option<String>,
 

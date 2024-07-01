@@ -11,6 +11,7 @@ use crate::entities::invoice::Invoice;
 use crate::entities::link_preview_options::LinkPreviewOptions;
 use crate::entities::location::Location;
 use crate::entities::message_origin::MessageOrigin;
+use crate::entities::paid_media_info::PaidMediaInfo;
 use crate::entities::photo_size::PhotoSize;
 use crate::entities::poll::Poll;
 use crate::entities::sticker::Sticker;
@@ -52,6 +53,10 @@ pub struct ExternalReplyInfo {
     ///*Optional*. Message is a general file, information about the file
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document: Option<Document>,
+
+    ///*Optional*. Message contains paid media; information about the paid media
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub paid_media: Option<PaidMediaInfo>,
 
     ///*Optional*. Message is a photo, available sizes of the photo
     #[serde(default)]
