@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 ///* [BackgroundTypeWallpaper](https://core.telegram.org/bots/api/#backgroundtypewallpaper)
 ///* [BackgroundTypePattern](https://core.telegram.org/bots/api/#backgroundtypepattern)
 ///* [BackgroundTypeChatTheme](https://core.telegram.org/bots/api/#backgroundtypechattheme)
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#backgroundtype)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]

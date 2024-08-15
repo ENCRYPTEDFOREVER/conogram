@@ -21,7 +21,7 @@ pub struct SetMessageReactionParams {
 
 impl_into_future!(SetMessageReactionRequest<'a>);
 
-///Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Returns *True* on success.
+///Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can't use paid reactions. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetMessageReactionRequest<'a> {
     api: &'a API,
@@ -71,7 +71,7 @@ impl<'a> SetMessageReactionRequest<'a> {
         self
     }
 
-    ///A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators.
+    ///A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators. Paid reactions can't be used by bots.
     #[must_use]
     pub fn reaction(mut self, reaction: impl IntoIterator<Item = impl Into<ReactionType>>) -> Self {
         self.params.reaction = reaction.into_iter().map(Into::into).collect();
@@ -87,7 +87,7 @@ impl<'a> SetMessageReactionRequest<'a> {
 }
 
 impl<'a> API {
-    ///Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Returns *True* on success.
+    ///Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can't use paid reactions. Returns *True* on success.
     pub fn set_message_reaction(
         &'a self,
         chat_id: impl Into<ChatId>,

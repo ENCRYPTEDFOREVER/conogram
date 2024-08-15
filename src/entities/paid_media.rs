@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 ///* [PaidMediaPreview](https://core.telegram.org/bots/api/#paidmediapreview)
 ///* [PaidMediaPhoto](https://core.telegram.org/bots/api/#paidmediaphoto)
 ///* [PaidMediaVideo](https://core.telegram.org/bots/api/#paidmediavideo)
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#paidmedia)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]

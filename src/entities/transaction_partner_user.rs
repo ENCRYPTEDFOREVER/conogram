@@ -1,3 +1,4 @@
+use crate::entities::paid_media::PaidMedia;
 use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
 
@@ -11,5 +12,9 @@ pub struct TransactionPartnerUser {
     ///*Optional*. Bot-specified invoice payload
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invoice_payload: Option<String>,
+
+    ///*Optional*. Information about the paid media bought by the user
+    #[serde(default)]
+    pub paid_media: Vec<PaidMedia>,
 }
 // Divider: all content below this line will be preserved after code regen

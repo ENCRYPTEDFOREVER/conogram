@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 ///* [TransactionPartnerFragment](https://core.telegram.org/bots/api/#transactionpartnerfragment)
 ///* [TransactionPartnerTelegramAds](https://core.telegram.org/bots/api/#transactionpartnertelegramads)
 ///* [TransactionPartnerOther](https://core.telegram.org/bots/api/#transactionpartnerother)
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#transactionpartner)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]

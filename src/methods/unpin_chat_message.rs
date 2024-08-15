@@ -9,6 +9,8 @@ use std::pin::Pin;
 
 #[derive(Debug, Clone, Serialize)]
 pub struct UnpinChatMessageParams {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub business_connection_id: Option<String>,
     pub chat_id: ChatId,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_id: Option<i64>,
@@ -45,9 +47,17 @@ impl<'a> UnpinChatMessageRequest<'a> {
             api,
             params: UnpinChatMessageParams {
                 chat_id: chat_id.into(),
+                business_connection_id: Option::default(),
                 message_id: Option::default(),
             },
         }
+    }
+
+    ///Unique identifier of the business connection on behalf of which the message will be unpinned
+    #[must_use]
+    pub fn business_connection_id(mut self, business_connection_id: impl Into<String>) -> Self {
+        self.params.business_connection_id = Some(business_connection_id.into());
+        self
     }
 
     ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
@@ -57,7 +67,7 @@ impl<'a> UnpinChatMessageRequest<'a> {
         self
     }
 
-    ///Identifier of a message to unpin. If not specified, the most recent pinned message (by sending date) will be unpinned.
+    ///Identifier of the message to unpin. Required if *business\_connection\_id* is specified. If not specified, the most recent pinned message (by sending date) will be unpinned.
     #[must_use]
     pub fn message_id(mut self, message_id: impl Into<i64>) -> Self {
         self.params.message_id = Some(message_id.into());

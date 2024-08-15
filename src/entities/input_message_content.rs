@@ -12,6 +12,7 @@ use serde::Serialize;
 ///* [InputVenueMessageContent](https://core.telegram.org/bots/api/#inputvenuemessagecontent)
 ///* [InputContactMessageContent](https://core.telegram.org/bots/api/#inputcontactmessagecontent)
 ///* [InputInvoiceMessageContent](https://core.telegram.org/bots/api/#inputinvoicemessagecontent)
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inputmessagecontent)
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]

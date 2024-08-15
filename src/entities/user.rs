@@ -49,6 +49,10 @@ pub struct User {
     ///*Optional*. *True*, if the bot can be connected to a Telegram Business account to receive its messages. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_connect_to_business: bool,
+
+    ///*Optional*. *True*, if the bot has a main Web App. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub has_main_web_app: bool,
 }
 // Divider: all content below this line will be preserved after code regen
 

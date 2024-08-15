@@ -16,6 +16,7 @@ use serde::{Deserialize, Serialize};
 ///* [BotCommandScopeChat](https://core.telegram.org/bots/api/#botcommandscopechat)
 ///* [BotCommandScopeChatAdministrators](https://core.telegram.org/bots/api/#botcommandscopechatadministrators)
 ///* [BotCommandScopeChatMember](https://core.telegram.org/bots/api/#botcommandscopechatmember)
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#botcommandscope)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]

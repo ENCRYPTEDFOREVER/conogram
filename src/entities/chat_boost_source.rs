@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 ///* [ChatBoostSourcePremium](https://core.telegram.org/bots/api/#chatboostsourcepremium)
 ///* [ChatBoostSourceGiftCode](https://core.telegram.org/bots/api/#chatboostsourcegiftcode)
 ///* [ChatBoostSourceGiveaway](https://core.telegram.org/bots/api/#chatboostsourcegiveaway)
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#chatboostsource)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "source")]

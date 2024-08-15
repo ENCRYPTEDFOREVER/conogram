@@ -14,6 +14,7 @@ use serde::{Deserialize, Serialize};
 ///* [ChatMemberRestricted](https://core.telegram.org/bots/api/#chatmemberrestricted)
 ///* [ChatMemberLeft](https://core.telegram.org/bots/api/#chatmemberleft)
 ///* [ChatMemberBanned](https://core.telegram.org/bots/api/#chatmemberbanned)
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#chatmember)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "status")]

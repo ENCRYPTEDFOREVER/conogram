@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 ///* [BackgroundFillSolid](https://core.telegram.org/bots/api/#backgroundfillsolid)
 ///* [BackgroundFillGradient](https://core.telegram.org/bots/api/#backgroundfillgradient)
 ///* [BackgroundFillFreeformGradient](https://core.telegram.org/bots/api/#backgroundfillfreeformgradient)
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#backgroundfill)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]

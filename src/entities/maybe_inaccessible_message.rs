@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 ///
 ///* [Message](https://core.telegram.org/bots/api/#message)
 ///* [InaccessibleMessage](https://core.telegram.org/bots/api/#inaccessiblemessage)
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#maybeinaccessiblemessage)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]

@@ -7,5 +7,9 @@ use serde::{Deserialize, Serialize};
 pub struct ChatMemberMember {
     ///Information about the user
     pub user: User,
+
+    ///*Optional*. Date when the user's subscription will expire; Unix time
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub until_date: Option<i64>,
 }
 // Divider: all content below this line will be preserved after code regen

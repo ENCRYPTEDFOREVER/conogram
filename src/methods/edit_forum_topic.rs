@@ -19,7 +19,7 @@ pub struct EditForumTopicParams {
 
 impl_into_future!(EditForumTopicRequest<'a>);
 
-///Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have *can\_manage\_topics* administrator rights, unless it is the creator of the topic. Returns *True* on success.
+///Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights, unless it is the creator of the topic. Returns *True* on success.
 #[derive(Clone)]
 pub struct EditForumTopicRequest<'a> {
     api: &'a API,
@@ -89,7 +89,7 @@ impl<'a> EditForumTopicRequest<'a> {
 }
 
 impl<'a> API {
-    ///Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have *can\_manage\_topics* administrator rights, unless it is the creator of the topic. Returns *True* on success.
+    ///Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights, unless it is the creator of the topic. Returns *True* on success.
     pub fn edit_forum_topic(
         &'a self,
         chat_id: impl Into<ChatId>,

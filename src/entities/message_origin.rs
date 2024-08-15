@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 ///* [MessageOriginHiddenUser](https://core.telegram.org/bots/api/#messageoriginhiddenuser)
 ///* [MessageOriginChat](https://core.telegram.org/bots/api/#messageoriginchat)
 ///* [MessageOriginChannel](https://core.telegram.org/bots/api/#messageoriginchannel)
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#messageorigin)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]

@@ -6,6 +6,7 @@ use serde::Serialize;
 ///
 ///* [InputPaidMediaPhoto](https://core.telegram.org/bots/api/#inputpaidmediaphoto)
 ///* [InputPaidMediaVideo](https://core.telegram.org/bots/api/#inputpaidmediavideo)
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inputpaidmedia)
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(tag = "type")]

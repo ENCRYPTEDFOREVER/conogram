@@ -19,6 +19,8 @@ use std::pin::Pin;
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SendPaidMediaParams {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub business_connection_id: Option<String>,
     pub chat_id: ChatId,
     pub star_count: i64,
     pub media: Vec<InputPaidMedia>,
@@ -51,7 +53,7 @@ impl GetFiles for SendPaidMediaParams {
 }
 impl_into_future_multipart!(SendPaidMediaRequest<'a>);
 
-///Use this method to send paid media to channel chats. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
+///Use this method to send paid media. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
 #[derive(Clone)]
 pub struct SendPaidMediaRequest<'a> {
     api: &'a API,
@@ -87,6 +89,7 @@ impl<'a> SendPaidMediaRequest<'a> {
                 chat_id: chat_id.into(),
                 star_count: star_count.into(),
                 media: media.into_iter().map(Into::into).collect(),
+                business_connection_id: Option::default(),
                 caption: Option::default(),
                 parse_mode: Option::default(),
                 caption_entities: Vec::default(),
@@ -99,7 +102,14 @@ impl<'a> SendPaidMediaRequest<'a> {
         }
     }
 
-    ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    ///Unique identifier of the business connection on behalf of which the message will be sent
+    #[must_use]
+    pub fn business_connection_id(mut self, business_connection_id: impl Into<String>) -> Self {
+        self.params.business_connection_id = Some(business_connection_id.into());
+        self
+    }
+
+    ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`). If the chat is a channel, all Telegram Star proceeds from this media will be credited to the chat's balance. Otherwise, they will be credited to the bot's balance.
     #[must_use]
     pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
         self.params.chat_id = chat_id.into();
@@ -181,7 +191,7 @@ impl<'a> SendPaidMediaRequest<'a> {
 }
 
 impl<'a> API {
-    ///Use this method to send paid media to channel chats. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
+    ///Use this method to send paid media. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_paid_media(
         &'a self,
         chat_id: impl Into<ChatId>,

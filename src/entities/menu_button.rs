@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 ///* [MenuButtonCommands](https://core.telegram.org/bots/api/#menubuttoncommands)
 ///* [MenuButtonWebApp](https://core.telegram.org/bots/api/#menubuttonwebapp)
 ///* [MenuButtonDefault](https://core.telegram.org/bots/api/#menubuttondefault)
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#menubutton)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]

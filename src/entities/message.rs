@@ -32,6 +32,7 @@ use crate::entities::passport_data::PassportData;
 use crate::entities::photo_size::PhotoSize;
 use crate::entities::poll::Poll;
 use crate::entities::proximity_alert_triggered::ProximityAlertTriggered;
+use crate::entities::refunded_payment::RefundedPayment;
 use crate::entities::sticker::Sticker;
 use crate::entities::story::Story;
 use crate::entities::successful_payment::SuccessfulPayment;
@@ -63,11 +64,11 @@ pub struct Message {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_thread_id: Option<i64>,
 
-    ///*Optional*. Sender of the message; empty for messages sent to channels. For backward compatibility, the field contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
+    ///*Optional*. Sender of the message; may be empty for messages sent to channels. For backward compatibility, if the message was sent on behalf of a chat, the field contains a fake sender user in non-channel chats
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from: Option<User>,
 
-    ///*Optional*. Sender of the message, sent on behalf of a chat. For example, the channel itself for channel posts, the supergroup itself for messages from anonymous group administrators, the linked channel for messages automatically forwarded to the discussion group. For backward compatibility, the field *from* contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
+    ///*Optional*. Sender of the message when sent on behalf of a chat. For example, the supergroup itself for messages sent by its anonymous administrators or a linked channel for messages automatically forwarded to the channel's discussion group. For backward compatibility, if the message was sent on behalf of a chat, the field *from* contains a fake sender user in non-channel chats.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sender_chat: Option<Box<Chat>>,
 
@@ -293,6 +294,10 @@ pub struct Message {
     ///*Optional*. Message is a service message about a successful payment, information about the payment. [More about payments »](https://core.telegram.org/bots/api/#payments)
     #[serde(skip_serializing_if = "Option::is_none")]
     pub successful_payment: Option<SuccessfulPayment>,
+
+    ///*Optional*. Message is a service message about a refunded payment, information about the payment. [More about payments »](https://core.telegram.org/bots/api/#payments)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub refunded_payment: Option<RefundedPayment>,
 
     ///*Optional*. Service message: users were shared with the bot
     #[serde(skip_serializing_if = "Option::is_none")]
