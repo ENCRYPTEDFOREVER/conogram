@@ -77,6 +77,8 @@ pub struct FormattedText {
     pub trim_spaces: bool,
 
     /// Uses offsets from last pushed text for all new ones and ignores new text content while the flag is set.
+    ///
+    /// This is needed for stacking entities for the text chunk that was last added
     pub use_last_offsets: bool,
     /// Last entity offset, used for ulo-mode
     last_ent_offset: i64,
@@ -160,12 +162,13 @@ impl FormattedText {
             ent
         });
 
+        self.last_ent_offset = self.len;
+        self.last_ent_len = other.len;
+
         self.entities.extend(added_entities);
         self.text.push_str(&other.text);
         self.len += other.len;
 
-        self.last_ent_offset = 0;
-        self.last_ent_len = 0;
         self
     }
 
@@ -202,6 +205,7 @@ impl FormattedText {
         self.use_last_offsets
     }
 
+    /// Calculates text length, entity lenght and offset in utf-16 codeunits needed to wrap provided text
     fn calc_entity_len_offset(&self, text: &str) -> (i64, i64, i64) {
         let text_len = text.utf16_codeunits();
 
@@ -342,16 +346,17 @@ impl FormattedText {
         }
     }
 
-    pub fn text(&mut self, text: impl AsRef<str>) -> &mut Self {
-        let text_ref = text.as_ref();
-        let (text_len, entity_offset, entity_len) = self.calc_entity_len_offset(text_ref);
+    pub fn text(&mut self, text: impl Display) -> &mut Self {
+        let text_ref = text.to_string();
+
+        let (text_len, entity_offset, entity_len) = self.calc_entity_len_offset(&text_ref);
 
         if !self.use_last_offsets {
             self.last_ent_offset = entity_offset;
             self.last_ent_len = entity_len;
         }
 
-        self.text.push_str(text_ref);
+        self.text.push_str(&text_ref);
         self.len += text_len;
         self
     }
@@ -523,12 +528,50 @@ impl From<&str> for FormattedText {
     }
 }
 
-impl<A: Into<Self>> FromIterator<A> for FormattedText {
-    fn from_iter<T: IntoIterator<Item = A>>(iter: T) -> Self {
+impl<Item: Into<Self>> FromIterator<Item> for FormattedText {
+    fn from_iter<T: IntoIterator<Item = Item>>(iter: T) -> Self {
         let mut first = Self::empty();
 
         for ft in iter {
-            first.concat(ft.into());
+            first.concat(ft);
+        }
+
+        first
+    }
+}
+
+pub trait JoinFormatted {
+    fn join_formatted<Separator: Into<FormattedText> + Clone>(
+        self,
+        sep: Separator,
+    ) -> FormattedText;
+}
+
+impl<Iter: IntoIterator<Item = impl Into<FormattedText>>> JoinFormatted for Iter {
+    fn join_formatted<Separator: Into<FormattedText> + Clone>(
+        self,
+        sep: Separator,
+    ) -> FormattedText {
+        let mut iter = self.into_iter();
+
+        let mut first = if let Some(v) = iter.next() {
+            v.into()
+        } else {
+            return FormattedText::empty();
+        };
+
+        let sep = if let Some(second) = iter.next() {
+            let sep = sep;
+            first.concat(sep.clone());
+            first.concat(second);
+            sep
+        } else {
+            return first;
+        };
+
+        for next in iter {
+            first.concat(sep.clone());
+            first.concat(next);
         }
 
         first
