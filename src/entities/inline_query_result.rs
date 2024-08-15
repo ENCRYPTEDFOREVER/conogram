@@ -42,6 +42,7 @@ use serde::Serialize;
 ///* [InlineQueryResultVenue](https://core.telegram.org/bots/api/#inlinequeryresultvenue)
 ///* [InlineQueryResultVideo](https://core.telegram.org/bots/api/#inlinequeryresultvideo)
 ///* [InlineQueryResultVoice](https://core.telegram.org/bots/api/#inlinequeryresultvoice)
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresult)
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(tag = "type")]
