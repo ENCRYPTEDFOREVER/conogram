@@ -1,5 +1,5 @@
 use crate::api::API;
-use crate::entities::star_transaction::StarTransaction;
+use crate::entities::star_transactions::StarTransactions;
 use crate::errors::ConogramError;
 use crate::impl_into_future;
 use crate::request::RequestT;
@@ -26,7 +26,7 @@ pub struct GetStarTransactionsRequest<'a> {
 
 impl<'a> RequestT for GetStarTransactionsRequest<'a> {
     type ParamsType = GetStarTransactionsParams;
-    type ReturnType = Vec<StarTransaction>;
+    type ReturnType = StarTransactions;
     fn get_name() -> &'static str {
         "getStarTransactions"
     }

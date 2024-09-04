@@ -1,9 +1,9 @@
-use super::chat::ChatType;
 use crate::entities::birthdate::Birthdate;
 use crate::entities::business_intro::BusinessIntro;
 use crate::entities::business_location::BusinessLocation;
 use crate::entities::business_opening_hours::BusinessOpeningHours;
 use crate::entities::chat::Chat;
+use crate::entities::chat::ChatType;
 use crate::entities::chat_location::ChatLocation;
 use crate::entities::chat_permissions::ChatPermissions;
 use crate::entities::chat_photo::ChatPhoto;
@@ -190,5 +190,4 @@ pub struct ChatFullInfo {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<ChatLocation>,
 }
-
 // Divider: all content below this line will be preserved after code regen
