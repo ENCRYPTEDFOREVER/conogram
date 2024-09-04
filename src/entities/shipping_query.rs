@@ -3,6 +3,7 @@ use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
 
 ///This object contains information about an incoming shipping query.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#shippingquery)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ShippingQuery {

@@ -5,6 +5,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::Serialize;
 
 ///Represents a link to a photo stored on the Telegram servers. By default, this photo will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the photo.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultcachedphoto)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
 pub struct InlineQueryResultCachedPhoto {

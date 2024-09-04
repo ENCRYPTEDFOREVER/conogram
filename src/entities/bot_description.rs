@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 ///This object represents the bot's description.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#botdescription)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct BotDescription {

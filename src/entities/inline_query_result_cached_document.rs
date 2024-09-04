@@ -4,6 +4,7 @@ use crate::entities::message_entity::MessageEntity;
 use serde::Serialize;
 
 ///Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the file.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultcacheddocument)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
 pub struct InlineQueryResultCachedDocument {

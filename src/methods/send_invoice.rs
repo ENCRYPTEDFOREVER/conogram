@@ -164,7 +164,7 @@ impl<'a> SendInvoiceRequest<'a> {
         self
     }
 
-    ///Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.
+    ///Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.
     #[must_use]
     pub fn payload(mut self, payload: impl Into<String>) -> Self {
         self.params.payload = payload.into();

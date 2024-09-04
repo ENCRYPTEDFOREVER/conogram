@@ -3,6 +3,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
 ///Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that has some additional privileges.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#chatmemberadministrator)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ChatMemberAdministrator {

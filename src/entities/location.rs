@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 ///This object represents a point on the map.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#location)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Location {

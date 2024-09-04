@@ -3,6 +3,7 @@ use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
 
 ///This object contains information about an incoming pre-checkout query.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#precheckoutquery)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct PreCheckoutQuery {

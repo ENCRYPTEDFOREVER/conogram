@@ -2,6 +2,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
 ///Represents the rights of an administrator in a chat.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#chatadministratorrights)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ChatAdministratorRights {

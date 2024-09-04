@@ -4,6 +4,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::Serialize;
 
 ///Represents a link to an article or web page.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultarticle)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
 pub struct InlineQueryResultArticle {

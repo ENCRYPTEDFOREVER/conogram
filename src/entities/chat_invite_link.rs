@@ -2,6 +2,7 @@ use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
 
 ///Represents an invite link for a chat.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#chatinvitelink)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ChatInviteLink {
@@ -35,6 +36,14 @@ pub struct ChatInviteLink {
     ///*Optional*. Number of pending join requests created using this link
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pending_join_request_count: Option<i64>,
+
+    ///*Optional*. The number of seconds the subscription will be active for before the next payment
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subscription_period: Option<i64>,
+
+    ///*Optional*. The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat using the link
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subscription_price: Option<i64>,
 }
 // Divider: all content below this line will be preserved after code regen
 

@@ -2,6 +2,7 @@ use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
 
 ///This object represents one row of the high scores table for a game.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#gamehighscore)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct GameHighScore {

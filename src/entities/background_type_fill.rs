@@ -2,6 +2,7 @@ use crate::entities::background_fill::BackgroundFill;
 use serde::{Deserialize, Serialize};
 
 ///The background is automatically filled based on the selected colors.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#backgroundtypefill)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct BackgroundTypeFill {

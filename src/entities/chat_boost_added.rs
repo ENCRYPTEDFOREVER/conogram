@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 ///This object represents a service message about a user boosting a chat.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#chatboostadded)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ChatBoostAdded {

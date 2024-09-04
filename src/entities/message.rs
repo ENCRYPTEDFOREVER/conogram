@@ -54,6 +54,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
 ///This object represents a message.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#message)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Message {

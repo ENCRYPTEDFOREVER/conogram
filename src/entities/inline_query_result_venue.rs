@@ -3,6 +3,7 @@ use crate::entities::input_message_content::InputMessageContent;
 use serde::Serialize;
 
 ///Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the venue.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultvenue)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
 pub struct InlineQueryResultVenue {

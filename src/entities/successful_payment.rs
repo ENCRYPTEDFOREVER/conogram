@@ -2,6 +2,7 @@ use crate::entities::order_info::OrderInfo;
 use serde::{Deserialize, Serialize};
 
 ///This object contains basic information about a successful payment.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#successfulpayment)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct SuccessfulPayment {

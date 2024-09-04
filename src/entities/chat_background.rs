@@ -2,6 +2,7 @@ use crate::entities::background_type::BackgroundType;
 use serde::{Deserialize, Serialize};
 
 ///This object represents a chat background.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#chatbackground)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ChatBackground {

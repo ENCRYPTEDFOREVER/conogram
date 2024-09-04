@@ -2,6 +2,7 @@ use crate::entities::photo_size::PhotoSize;
 use serde::{Deserialize, Serialize};
 
 ///This object contains information about a chat that was shared with the bot using a [KeyboardButtonRequestChat](https://core.telegram.org/bots/api/#keyboardbuttonrequestchat) button.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#chatshared)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ChatShared {

@@ -7,6 +7,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
 ///This object represents changes in the status of a chat member.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#chatmemberupdated)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ChatMemberUpdated {

@@ -2,6 +2,7 @@ use crate::entities::sticker::Sticker;
 use serde::{Deserialize, Serialize};
 
 ///Contains information about the start page settings of a Telegram Business account.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#businessintro)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct BusinessIntro {

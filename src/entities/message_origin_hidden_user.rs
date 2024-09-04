@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 ///The message was originally sent by an unknown user.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#messageoriginhiddenuser)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct MessageOriginHiddenUser {

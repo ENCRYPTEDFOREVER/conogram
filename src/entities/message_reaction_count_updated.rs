@@ -4,6 +4,7 @@ use crate::utils::deserialize_utils::deserialize_boxed;
 use serde::{Deserialize, Serialize};
 
 ///This object represents reaction changes on a message with anonymous reactions.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#messagereactioncountupdated)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct MessageReactionCountUpdated {

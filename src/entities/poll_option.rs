@@ -2,6 +2,7 @@ use crate::entities::message_entity::MessageEntity;
 use serde::{Deserialize, Serialize};
 
 ///This object contains information about one answer option in a poll.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#polloption)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct PollOption {

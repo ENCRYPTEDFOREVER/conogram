@@ -2,6 +2,7 @@ use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
 
 ///This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#messageentity)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct MessageEntity {

@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 ///Represents an issue with a document scan. The error is considered resolved when the file with the document scan changes.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrorfile)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct PassportElementErrorFile {

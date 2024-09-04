@@ -4,6 +4,7 @@ use crate::entities::message_entity::MessageEntity;
 use serde::Serialize;
 
 ///Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the file. Currently, only **.PDF** and **.ZIP** files can be sent using this method.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultdocument)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
 pub struct InlineQueryResultDocument {

@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 ///This object contains basic information about a refunded payment.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#refundedpayment)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct RefundedPayment {

@@ -3,6 +3,7 @@ use crate::entities::input_message_content::InputMessageContent;
 use serde::Serialize;
 
 ///Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the location.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultlocation)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
 pub struct InlineQueryResultLocation {

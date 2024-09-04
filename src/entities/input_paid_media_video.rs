@@ -3,6 +3,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::Serialize;
 
 ///The paid media to send is a video.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inputpaidmediavideo)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
 pub struct InputPaidMediaVideo {

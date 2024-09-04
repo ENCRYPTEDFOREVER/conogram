@@ -4,6 +4,7 @@ use crate::utils::deserialize_utils::deserialize_boxed;
 use serde::{Deserialize, Serialize};
 
 ///This object represents a boost added to a chat or changed.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#chatboostupdated)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ChatBoostUpdated {

@@ -5,6 +5,7 @@ use crate::utils::deserialize_utils::deserialize_boxed;
 use serde::{Deserialize, Serialize};
 
 ///This object represents a change of a reaction on a message performed by a user.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#messagereactionupdated)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct MessageReactionUpdated {

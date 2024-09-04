@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 ///The reaction is based on an emoji.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#reactiontypeemoji)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ReactionTypeEmoji {

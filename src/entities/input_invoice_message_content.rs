@@ -3,6 +3,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::Serialize;
 
 ///Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of an invoice message to be sent as the result of an inline query.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inputinvoicemessagecontent)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
 pub struct InputInvoiceMessageContent {
@@ -12,7 +13,7 @@ pub struct InputInvoiceMessageContent {
     ///Product description, 1-255 characters
     pub description: String,
 
-    ///Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.
+    ///Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.
     pub payload: String,
 
     ///*Optional*. Payment provider token, obtained via [@BotFather](https://t.me/botfather). Pass an empty string for payments in [Telegram Stars](https://t.me/BotNews/90).

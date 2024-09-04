@@ -2,6 +2,7 @@ use crate::entities::location::Location;
 use serde::{Deserialize, Serialize};
 
 ///Represents a location to which a chat is connected.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#chatlocation)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ChatLocation {

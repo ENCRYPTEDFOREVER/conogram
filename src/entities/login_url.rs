@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 ///Telegram apps support these buttons as of [version 5.7](https://telegram.org/blog/privacy-discussions-web-bots#meet-seamless-web-bots).
 ///
 ///Sample bot: [@discussbot](https://t.me/discussbot)
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#loginurl)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct LoginUrl {

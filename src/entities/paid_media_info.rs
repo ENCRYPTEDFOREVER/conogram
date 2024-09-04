@@ -2,6 +2,7 @@ use crate::entities::paid_media::PaidMedia;
 use serde::{Deserialize, Serialize};
 
 ///Describes the paid media added to a message.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#paidmediainfo)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct PaidMediaInfo {

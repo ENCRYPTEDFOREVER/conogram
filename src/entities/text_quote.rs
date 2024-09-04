@@ -3,6 +3,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
 ///This object contains information about the quoted part of a message that is replied to by the given message.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#textquote)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct TextQuote {

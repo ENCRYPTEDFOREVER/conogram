@@ -2,6 +2,7 @@ use crate::entities::business_opening_hours_interval::BusinessOpeningHoursInterv
 use serde::{Deserialize, Serialize};
 
 ///Describes the opening hours of a business.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#businessopeninghours)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct BusinessOpeningHours {

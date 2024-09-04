@@ -3,6 +3,7 @@ use crate::utils::deserialize_utils::deserialize_boxed;
 use serde::{Deserialize, Serialize};
 
 ///This object describes a message that was deleted or is otherwise inaccessible to the bot.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inaccessiblemessage)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct InaccessibleMessage {

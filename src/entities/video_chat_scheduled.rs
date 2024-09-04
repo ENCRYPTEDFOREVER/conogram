@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 ///This object represents a service message about a video chat scheduled in the chat.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#videochatscheduled)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct VideoChatScheduled {

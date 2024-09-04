@@ -3,6 +3,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
 ///The background is a wallpaper in the JPEG format.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#backgroundtypewallpaper)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct BackgroundTypeWallpaper {

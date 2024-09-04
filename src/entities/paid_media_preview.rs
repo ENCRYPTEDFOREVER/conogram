@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 ///The paid media isn't available before the payment.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#paidmediapreview)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct PaidMediaPreview {

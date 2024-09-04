@@ -2,6 +2,7 @@ use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
 
 ///Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that owns the chat and has all administrator privileges.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#chatmemberowner)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ChatMemberOwner {

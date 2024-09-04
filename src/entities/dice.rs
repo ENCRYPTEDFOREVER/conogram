@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 ///This object represents an animated emoji that displays a random value.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#dice)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Dice {

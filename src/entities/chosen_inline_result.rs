@@ -3,6 +3,7 @@ use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
 
 ///Represents a [result](https://core.telegram.org/bots/api/#inlinequeryresult) of an inline query that was chosen by the user and sent to their chat partner.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#choseninlineresult)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ChosenInlineResult {

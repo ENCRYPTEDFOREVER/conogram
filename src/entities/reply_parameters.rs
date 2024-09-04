@@ -4,6 +4,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
 ///Describes reply parameters for the message that is being sent.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#replyparameters)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ReplyParameters {

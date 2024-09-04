@@ -3,6 +3,7 @@ use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
 
 ///Describes a transaction with a user.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#transactionpartneruser)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct TransactionPartnerUser {

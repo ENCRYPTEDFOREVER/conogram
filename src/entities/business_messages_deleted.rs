@@ -3,6 +3,7 @@ use crate::utils::deserialize_utils::deserialize_boxed;
 use serde::{Deserialize, Serialize};
 
 ///This object is received when messages are deleted from a connected business account.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#businessmessagesdeleted)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct BusinessMessagesDeleted {

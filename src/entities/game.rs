@@ -4,6 +4,7 @@ use crate::entities::photo_size::PhotoSize;
 use serde::{Deserialize, Serialize};
 
 ///This object represents a game. Use BotFather to create and edit games, their short names will act as unique identifiers.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#game)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Game {

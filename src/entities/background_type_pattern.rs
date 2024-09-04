@@ -4,6 +4,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
 ///The background is a PNG or TGV (gzipped subset of SVG with MIME type “application/x-tgwallpattern”) pattern to be combined with the background fill chosen by the user.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#backgroundtypepattern)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct BackgroundTypePattern {

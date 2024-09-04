@@ -3,6 +3,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
 ///This object represents a message about a scheduled giveaway.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#giveaway)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Giveaway {

@@ -24,6 +24,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
 ///This object contains information about a message that is being replied to, which may come from another chat or forum topic.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#externalreplyinfo)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ExternalReplyInfo {

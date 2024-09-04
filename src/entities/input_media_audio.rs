@@ -3,6 +3,7 @@ use crate::entities::misc::input_file::InputFile;
 use serde::Serialize;
 
 ///Represents an audio file to be treated as music to be sent.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inputmediaaudio)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
 pub struct InputMediaAudio {

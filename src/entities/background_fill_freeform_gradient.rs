@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 ///The background is a freeform gradient that rotates after every message in the chat.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#backgroundfillfreeformgradient)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct BackgroundFillFreeformGradient {

@@ -2,6 +2,7 @@ use crate::entities::location::Location;
 use serde::{Deserialize, Serialize};
 
 ///This object represents a venue.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#venue)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Venue {

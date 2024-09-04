@@ -1,3 +1,4 @@
+use super::chat::ChatType;
 use crate::entities::birthdate::Birthdate;
 use crate::entities::business_intro::BusinessIntro;
 use crate::entities::business_location::BusinessLocation;
@@ -12,6 +13,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
 ///This object contains full information about a chat.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#chatfullinfo)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ChatFullInfo {
@@ -190,4 +192,3 @@ pub struct ChatFullInfo {
 }
 
 // Divider: all content below this line will be preserved after code regen
-use super::chat::ChatType;

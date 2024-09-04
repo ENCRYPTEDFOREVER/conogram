@@ -5,6 +5,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::Serialize;
 
 ///Represents a link to an animated GIF file stored on the Telegram servers. By default, this animated GIF file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with specified content instead of the animation.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultcachedgif)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
 pub struct InlineQueryResultCachedGif {

@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 ///Represents an issue with the front side of a document. The error is considered resolved when the file with the front side of the document changes.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrorfrontside)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct PassportElementErrorFrontSide {

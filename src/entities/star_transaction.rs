@@ -2,6 +2,7 @@ use crate::entities::transaction_partner::TransactionPartner;
 use serde::{Deserialize, Serialize};
 
 ///Describes a Telegram Star transaction.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#startransaction)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct StarTransaction {

@@ -2,6 +2,7 @@ use crate::entities::star_transaction::StarTransaction;
 use serde::{Deserialize, Serialize};
 
 ///Contains a list of Telegram Star transactions.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#startransactions)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct StarTransactions {

@@ -2,6 +2,7 @@ use crate::entities::web_app_info::WebAppInfo;
 use serde::Serialize;
 
 ///This object represents a button to be shown above inline query results. You **must** use exactly one of the optional fields.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultsbutton)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
 pub struct InlineQueryResultsButton {

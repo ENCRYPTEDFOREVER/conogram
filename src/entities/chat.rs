@@ -2,6 +2,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
 ///This object represents a chat.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#chat)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Chat {

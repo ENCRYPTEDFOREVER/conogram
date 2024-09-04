@@ -3,6 +3,7 @@ use crate::entities::misc::input_file::InputFile;
 use serde::Serialize;
 
 ///This object describes a sticker to be added to a sticker set.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inputsticker)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
 pub struct InputSticker {

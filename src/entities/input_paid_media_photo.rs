@@ -2,6 +2,7 @@ use crate::entities::misc::input_file::InputFile;
 use serde::Serialize;
 
 ///The paid media to send is a photo.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inputpaidmediaphoto)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
 pub struct InputPaidMediaPhoto {

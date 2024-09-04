@@ -2,6 +2,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
 ///Describes actions that a non-administrator user is allowed to take in a chat.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#chatpermissions)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ChatPermissions {

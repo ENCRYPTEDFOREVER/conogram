@@ -4,6 +4,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::Serialize;
 
 ///Represents a general file to be sent.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inputmediadocument)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
 pub struct InputMediaDocument {

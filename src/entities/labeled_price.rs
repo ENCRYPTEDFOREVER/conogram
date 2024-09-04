@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 ///This object represents a portion of the price for goods or services.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#labeledprice)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct LabeledPrice {

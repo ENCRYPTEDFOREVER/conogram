@@ -2,6 +2,7 @@ use crate::entities::labeled_price::LabeledPrice;
 use serde::{Deserialize, Serialize};
 
 ///This object represents one shipping option.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#shippingoption)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ShippingOption {

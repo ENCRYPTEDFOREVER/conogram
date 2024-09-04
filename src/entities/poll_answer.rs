@@ -3,6 +3,7 @@ use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
 
 ///This object represents an answer of a user in a non-anonymous poll.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#pollanswer)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct PollAnswer {

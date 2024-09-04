@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 ///The reaction is paid.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#reactiontypepaid)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ReactionTypePaid {}

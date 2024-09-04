@@ -6,6 +6,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
 ///This object represents one button of an inline keyboard. Exactly one of the optional fields must be used to specify type of the button.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inlinekeyboardbutton)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct InlineKeyboardButton {

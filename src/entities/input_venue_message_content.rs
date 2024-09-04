@@ -1,6 +1,7 @@
 use serde::Serialize;
 
 ///Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a venue message to be sent as the result of an inline query.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inputvenuemessagecontent)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
 pub struct InputVenueMessageContent {

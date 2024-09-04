@@ -3,6 +3,7 @@ use crate::utils::deserialize_utils::deserialize_boxed;
 use serde::{Deserialize, Serialize};
 
 ///The message was originally sent to a channel chat.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#messageoriginchannel)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct MessageOriginChannel {

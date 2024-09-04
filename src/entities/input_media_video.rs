@@ -4,6 +4,7 @@ use crate::utils::deserialize_utils::is_false;
 use serde::Serialize;
 
 ///Represents a video to be sent.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inputmediavideo)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
 pub struct InputMediaVideo {

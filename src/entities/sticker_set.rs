@@ -3,6 +3,7 @@ use crate::entities::sticker::Sticker;
 use serde::{Deserialize, Serialize};
 
 ///This object represents a sticker set.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#stickerset)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct StickerSet {

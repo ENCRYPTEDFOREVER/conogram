@@ -2,6 +2,7 @@ use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
 use serde::Serialize;
 
 ///Represents a [Game](https://core.telegram.org/bots/api/#games).
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultgame)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
 pub struct InlineQueryResultGame {

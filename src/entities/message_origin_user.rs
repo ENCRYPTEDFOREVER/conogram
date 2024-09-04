@@ -2,6 +2,7 @@ use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
 
 ///The message was originally sent by a known user.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#messageoriginuser)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct MessageOriginUser {

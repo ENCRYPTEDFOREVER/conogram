@@ -2,6 +2,7 @@ use crate::entities::video::Video;
 use serde::{Deserialize, Serialize};
 
 ///The paid media is a video.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#paidmediavideo)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct PaidMediaVideo {

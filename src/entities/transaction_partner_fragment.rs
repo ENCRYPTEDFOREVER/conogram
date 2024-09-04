@@ -2,6 +2,7 @@ use crate::entities::revenue_withdrawal_state::RevenueWithdrawalState;
 use serde::{Deserialize, Serialize};
 
 ///Describes a withdrawal transaction with Fragment.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#transactionpartnerfragment)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct TransactionPartnerFragment {

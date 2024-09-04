@@ -2,6 +2,7 @@ use crate::entities::message::Message;
 use serde::{Deserialize, Serialize};
 
 ///This object represents a service message about the completion of a giveaway without public winners.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#giveawaycompleted)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct GiveawayCompleted {

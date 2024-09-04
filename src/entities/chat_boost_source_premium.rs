@@ -2,6 +2,7 @@ use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
 
 ///The boost was obtained by subscribing to Telegram Premium or by gifting a Telegram Premium subscription to another user.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#chatboostsourcepremium)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ChatBoostSourcePremium {

@@ -2,6 +2,7 @@ use crate::entities::chat_boost::ChatBoost;
 use serde::{Deserialize, Serialize};
 
 ///This object represents a list of boosts added to a chat by a user.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#userchatboosts)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct UserChatBoosts {

@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 ///This object represents a service message about an edited forum topic.
+///
 ///API Reference: [link](https://core.telegram.org/bots/api/#forumtopicedited)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ForumTopicEdited {
