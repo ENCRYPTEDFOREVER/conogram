@@ -32,7 +32,11 @@ pub struct Giveaway {
     #[serde(default)]
     pub country_codes: Vec<String>,
 
-    ///*Optional*. The number of months the Telegram Premium subscription won from the giveaway will be active for
+    ///*Optional*. The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prize_star_count: Option<i64>,
+
+    ///*Optional*. The number of months the Telegram Premium subscription won from the giveaway will be active for; for Telegram Premium giveaways only
     #[serde(skip_serializing_if = "Option::is_none")]
     pub premium_subscription_month_count: Option<i64>,
 }

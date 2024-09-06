@@ -25,6 +25,8 @@ pub struct SendPaidMediaParams {
     pub star_count: i64,
     pub media: Vec<InputPaidMedia>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub payload: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub caption: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parse_mode: Option<String>,
@@ -90,6 +92,7 @@ impl<'a> SendPaidMediaRequest<'a> {
                 star_count: star_count.into(),
                 media: media.into_iter().map(Into::into).collect(),
                 business_connection_id: Option::default(),
+                payload: Option::default(),
                 caption: Option::default(),
                 parse_mode: Option::default(),
                 caption_entities: Vec::default(),
@@ -116,7 +119,7 @@ impl<'a> SendPaidMediaRequest<'a> {
         self
     }
 
-    ///The number of Telegram Stars that must be paid to buy access to the media
+    ///The number of Telegram Stars that must be paid to buy access to the media; 1-2500
     #[must_use]
     pub fn star_count(mut self, star_count: impl Into<i64>) -> Self {
         self.params.star_count = star_count.into();
@@ -127,6 +130,13 @@ impl<'a> SendPaidMediaRequest<'a> {
     #[must_use]
     pub fn media(mut self, media: impl IntoIterator<Item = impl Into<InputPaidMedia>>) -> Self {
         self.params.media = media.into_iter().map(Into::into).collect();
+        self
+    }
+
+    ///Bot-defined paid media payload, 0-128 bytes. This will not be displayed to the user, use it for your internal processes.
+    #[must_use]
+    pub fn payload(mut self, payload: impl Into<String>) -> Self {
+        self.params.payload = Some(payload.into());
         self
     }
 

@@ -10,6 +10,7 @@ use crate::entities::inline_query::InlineQuery;
 use crate::entities::message::Message;
 use crate::entities::message_reaction_count_updated::MessageReactionCountUpdated;
 use crate::entities::message_reaction_updated::MessageReactionUpdated;
+use crate::entities::paid_media_purchased::PaidMediaPurchased;
 use crate::entities::poll::Poll;
 use crate::entities::poll_answer::PollAnswer;
 use crate::entities::pre_checkout_query::PreCheckoutQuery;
@@ -85,6 +86,10 @@ pub struct Update {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pre_checkout_query: Option<PreCheckoutQuery>,
 
+    ///*Optional*. A user purchased paid media with a non-empty payload sent by the bot in a non-channel chat
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub purchased_paid_media: Option<PaidMediaPurchased>,
+
     ///*Optional*. New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot
     #[serde(skip_serializing_if = "Option::is_none")]
     pub poll: Option<Poll>,
@@ -139,6 +144,8 @@ pub enum AllowedUpdates {
     ShippingQuery,
     PreCheckoutQuery,
 
+    PurchasedPaidMedia,
+
     Poll,
     PollAnswer,
 
@@ -153,7 +160,7 @@ pub enum AllowedUpdates {
 
 impl AllowedUpdates {
     /// All existing updates
-    pub const fn all() -> [Self; 22] {
+    pub const fn all() -> [Self; 23] {
         [
             Self::Message,
             Self::EditedMessage,
@@ -170,6 +177,7 @@ impl AllowedUpdates {
             Self::CallbackQuery,
             Self::ShippingQuery,
             Self::PreCheckoutQuery,
+            Self::PurchasedPaidMedia,
             Self::Poll,
             Self::PollAnswer,
             Self::MyChatMember,
@@ -199,12 +207,12 @@ impl Display for AllowedUpdates {
             Self::CallbackQuery => "callback_query",
             Self::ShippingQuery => "shipping_query",
             Self::PreCheckoutQuery => "pre_checkout_query",
+            Self::PurchasedPaidMedia => "purchased_paid_media",
             Self::Poll => "poll",
             Self::PollAnswer => "poll_answer",
             Self::MyChatMember => "my_chat_member",
             Self::ChatMember => "chat_member",
             Self::ChatJoinRequest => "chat_join_request",
-
             Self::ChatBoost => "chat_boost",
             Self::RemovedChatBoost => "removed_chat_boost",
         })

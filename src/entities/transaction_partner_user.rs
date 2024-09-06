@@ -17,5 +17,9 @@ pub struct TransactionPartnerUser {
     ///*Optional*. Information about the paid media bought by the user
     #[serde(default)]
     pub paid_media: Vec<PaidMedia>,
+
+    ///*Optional*. Bot-specified paid media payload
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub paid_media_payload: Option<String>,
 }
 // Divider: all content below this line will be preserved after code regen
