@@ -103,10 +103,10 @@ impl<'a> RestrictChatMemberRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to work and must have the appropriate administrator rights. Pass *True* for all permissions to lift restrictions from a user. Returns *True* on success.
     pub fn restrict_chat_member(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         user_id: impl Into<i64>,
         permissions: impl Into<ChatPermissions>,

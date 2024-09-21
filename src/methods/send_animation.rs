@@ -247,10 +247,10 @@ impl<'a> SendAnimationRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
     pub fn send_animation(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         animation: impl Into<InputFile>,
     ) -> SendAnimationRequest {

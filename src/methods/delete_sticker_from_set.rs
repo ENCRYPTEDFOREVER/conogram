@@ -54,10 +54,10 @@ impl<'a> DeleteStickerFromSetRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to delete a sticker from a set created by the bot. Returns *True* on success.
     pub fn delete_sticker_from_set(
-        &'a self,
+        &self,
         sticker: impl Into<String>,
     ) -> DeleteStickerFromSetRequest {
         DeleteStickerFromSetRequest::new(self, sticker)

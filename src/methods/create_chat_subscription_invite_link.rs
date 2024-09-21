@@ -89,10 +89,10 @@ impl<'a> CreateChatSubscriptionInviteLinkRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to create a [subscription invite link](https://telegram.org/blog/superchannels-star-reactions-subscriptions#star-subscriptions) for a channel chat. The bot must have the *can\_invite\_users* administrator rights. The link can be edited using the method [editChatSubscriptionInviteLink](https://core.telegram.org/bots/api/#editchatsubscriptioninvitelink) or revoked using the method [revokeChatInviteLink](https://core.telegram.org/bots/api/#revokechatinvitelink). Returns the new invite link as a [ChatInviteLink](https://core.telegram.org/bots/api/#chatinvitelink) object.
     pub fn create_chat_subscription_invite_link(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         subscription_period: impl Into<i64>,
         subscription_price: impl Into<i64>,

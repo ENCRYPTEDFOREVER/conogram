@@ -76,10 +76,10 @@ impl<'a> SetMyCommandsRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to change the list of the bot's commands. See [this manual](https://core.telegram.org/bots/features#commands) for more details about bot commands. Returns *True* on success.
     pub fn set_my_commands(
-        &'a self,
+        &self,
         commands: impl IntoIterator<Item = impl Into<BotCommand>>,
     ) -> SetMyCommandsRequest {
         SetMyCommandsRequest::new(self, commands)

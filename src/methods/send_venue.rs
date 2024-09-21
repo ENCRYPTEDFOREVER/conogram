@@ -212,10 +212,10 @@ impl<'a> SendVenueRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to send information about a venue. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_venue(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         latitude: impl Into<f64>,
         longitude: impl Into<f64>,

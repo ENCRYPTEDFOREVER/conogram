@@ -65,9 +65,9 @@ impl<'a> SetChatDescriptionRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to change the description of a group, a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
-    pub fn set_chat_description(&'a self, chat_id: impl Into<ChatId>) -> SetChatDescriptionRequest {
+    pub fn set_chat_description(&self, chat_id: impl Into<ChatId>) -> SetChatDescriptionRequest {
         SetChatDescriptionRequest::new(self, chat_id)
     }
 }

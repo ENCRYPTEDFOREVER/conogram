@@ -65,10 +65,10 @@ impl<'a> GetUserChatBoostsRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat. Returns a [UserChatBoosts](https://core.telegram.org/bots/api/#userchatboosts) object.
     pub fn get_user_chat_boosts(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         user_id: impl Into<i64>,
     ) -> GetUserChatBoostsRequest {

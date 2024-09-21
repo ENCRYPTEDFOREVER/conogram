@@ -39,7 +39,7 @@ use crate::methods::answer_callback_query::AnswerCallbackQueryRequest;
 use super::message::Message;
 
 impl CallbackQuery {
-    pub fn answer<'a>(&'a self, api: &'a API) -> AnswerCallbackQueryRequest {
+    pub fn answer<'a>(&'a self, api: &'a API) -> AnswerCallbackQueryRequest<'a> {
         api.answer_callback_query(&self.id)
     }
 
@@ -48,7 +48,7 @@ impl CallbackQuery {
         &'a self,
         api: &'a API,
         text: impl Into<String>,
-    ) -> AnswerCallbackQueryRequest {
+    ) -> AnswerCallbackQueryRequest<'a> {
         api.answer_callback_query(&self.id)
             .show_alert(true)
             .text(text)
@@ -59,7 +59,7 @@ impl CallbackQuery {
         &'a self,
         api: &'a API,
         text: impl Into<String>,
-    ) -> AnswerCallbackQueryRequest {
+    ) -> AnswerCallbackQueryRequest<'a> {
         api.answer_callback_query(&self.id)
             .show_alert(false)
             .text(text)

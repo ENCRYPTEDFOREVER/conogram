@@ -99,10 +99,10 @@ impl<'a> ReplaceStickerInSetRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to replace an existing sticker in a sticker set with a new one. The method is equivalent to calling [deleteStickerFromSet](https://core.telegram.org/bots/api/#deletestickerfromset), then [addStickerToSet](https://core.telegram.org/bots/api/#addstickertoset), then [setStickerPositionInSet](https://core.telegram.org/bots/api/#setstickerpositioninset). Returns *True* on success.
     pub fn replace_sticker_in_set(
-        &'a self,
+        &self,
         user_id: impl Into<i64>,
         name: impl Into<String>,
         old_sticker: impl Into<String>,

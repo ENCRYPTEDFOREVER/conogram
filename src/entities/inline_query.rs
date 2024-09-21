@@ -63,12 +63,12 @@ impl InlineQuery {
         &'a self,
         api: &'a API,
         results: impl IntoIterator<Item = impl Into<InlineQueryResult>>,
-    ) -> AnswerInlineQueryRequest {
+    ) -> AnswerInlineQueryRequest<'a> {
         api.answer_inline_query(&self.id, results)
     }
 
     // Answer with no results
-    pub fn answer_empty<'a>(&'a self, api: &'a API) -> AnswerInlineQueryRequest {
+    pub fn answer_empty<'a>(&'a self, api: &'a API) -> AnswerInlineQueryRequest<'a> {
         api.answer_inline_query(&self.id, Vec::<InlineQueryResult>::new())
     }
 
@@ -77,7 +77,7 @@ impl InlineQuery {
         &'a self,
         api: &'a API,
         results: impl IntoIterator<Item = T>,
-    ) -> AnswerInlineQueryRequest {
+    ) -> AnswerInlineQueryRequest<'a> {
         self.answer(api, results).is_personal(true).cache_time(0)
     }
 }

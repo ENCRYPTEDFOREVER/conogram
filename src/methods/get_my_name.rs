@@ -56,9 +56,9 @@ impl<'a> GetMyNameRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to get the current bot name for the given user language. Returns [BotName](https://core.telegram.org/bots/api/#botname) on success.
-    pub fn get_my_name(&'a self) -> GetMyNameRequest {
+    pub fn get_my_name(&self) -> GetMyNameRequest {
         GetMyNameRequest::new(self)
     }
 }

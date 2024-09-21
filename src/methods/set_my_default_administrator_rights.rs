@@ -67,9 +67,9 @@ impl<'a> SetMyDefaultAdministratorRightsRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to change the default administrator rights requested by the bot when it's added as an administrator to groups or channels. These rights will be suggested to users, but they are free to modify the list before adding the bot. Returns *True* on success.
-    pub fn set_my_default_administrator_rights(&'a self) -> SetMyDefaultAdministratorRightsRequest {
+    pub fn set_my_default_administrator_rights(&self) -> SetMyDefaultAdministratorRightsRequest {
         SetMyDefaultAdministratorRightsRequest::new(self)
     }
 }

@@ -76,10 +76,10 @@ impl<'a> SetChatPhotoRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
     pub fn set_chat_photo(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         photo: impl Into<InputFile>,
     ) -> SetChatPhotoRequest {

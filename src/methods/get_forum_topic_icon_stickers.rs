@@ -44,9 +44,9 @@ impl<'a> GetForumTopicIconStickersRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to get custom emoji stickers, which can be used as a forum topic icon by any user. Requires no parameters. Returns an Array of [Sticker](https://core.telegram.org/bots/api/#sticker) objects.
-    pub fn get_forum_topic_icon_stickers(&'a self) -> GetForumTopicIconStickersRequest {
+    pub fn get_forum_topic_icon_stickers(&self) -> GetForumTopicIconStickersRequest {
         GetForumTopicIconStickersRequest::new(self)
     }
 }

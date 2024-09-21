@@ -91,9 +91,9 @@ impl<'a> GetUpdatesRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to receive incoming updates using long polling ([wiki](https://en.wikipedia.org/wiki/Push_technology#Long_polling)). Returns an Array of [Update](https://core.telegram.org/bots/api/#update) objects.
-    pub fn get_updates(&'a self) -> GetUpdatesRequest {
+    pub fn get_updates(&self) -> GetUpdatesRequest {
         GetUpdatesRequest::new(self)
     }
 }

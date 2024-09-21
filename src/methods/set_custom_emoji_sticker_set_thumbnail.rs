@@ -64,10 +64,10 @@ impl<'a> SetCustomEmojiStickerSetThumbnailRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to set the thumbnail of a custom emoji sticker set. Returns *True* on success.
     pub fn set_custom_emoji_sticker_set_thumbnail(
-        &'a self,
+        &self,
         name: impl Into<String>,
     ) -> SetCustomEmojiStickerSetThumbnailRequest {
         SetCustomEmojiStickerSetThumbnailRequest::new(self, name)

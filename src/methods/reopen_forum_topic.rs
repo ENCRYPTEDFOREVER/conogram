@@ -68,10 +68,10 @@ impl<'a> ReopenForumTopicRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights, unless it is the creator of the topic. Returns *True* on success.
     pub fn reopen_forum_topic(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         message_thread_id: impl Into<i64>,
     ) -> ReopenForumTopicRequest {

@@ -257,10 +257,10 @@ impl<'a> SendVideoRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as [Document](https://core.telegram.org/bots/api/#document)). On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
     pub fn send_video(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         video: impl Into<InputFile>,
     ) -> SendVideoRequest {

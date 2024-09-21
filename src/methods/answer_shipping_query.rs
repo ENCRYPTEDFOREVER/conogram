@@ -87,10 +87,10 @@ impl<'a> AnswerShippingQueryRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///If you sent an invoice requesting a shipping address and the parameter *is\_flexible* was specified, the Bot API will send an [Update](https://core.telegram.org/bots/api/#update) with a *shipping\_query* field to the bot. Use this method to reply to shipping queries. On success, *True* is returned.
     pub fn answer_shipping_query(
-        &'a self,
+        &self,
         shipping_query_id: impl Into<String>,
         ok: impl Into<bool>,
     ) -> AnswerShippingQueryRequest {

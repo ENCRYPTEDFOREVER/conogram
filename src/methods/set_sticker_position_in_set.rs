@@ -63,10 +63,10 @@ impl<'a> SetStickerPositionInSetRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to move a sticker in a set created by the bot to a specific position. Returns *True* on success.
     pub fn set_sticker_position_in_set(
-        &'a self,
+        &self,
         sticker: impl Into<String>,
         position: impl Into<i64>,
     ) -> SetStickerPositionInSetRequest {

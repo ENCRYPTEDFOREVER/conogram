@@ -75,12 +75,9 @@ impl<'a> GetUserProfilePhotosRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to get a list of profile pictures for a user. Returns a [UserProfilePhotos](https://core.telegram.org/bots/api/#userprofilephotos) object.
-    pub fn get_user_profile_photos(
-        &'a self,
-        user_id: impl Into<i64>,
-    ) -> GetUserProfilePhotosRequest {
+    pub fn get_user_profile_photos(&self, user_id: impl Into<i64>) -> GetUserProfilePhotosRequest {
         GetUserProfilePhotosRequest::new(self, user_id)
     }
 }

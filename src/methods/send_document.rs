@@ -210,10 +210,10 @@ impl<'a> SendDocumentRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to send general files. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
     pub fn send_document(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         document: impl Into<InputFile>,
     ) -> SendDocumentRequest {

@@ -56,9 +56,9 @@ impl<'a> GetMyShortDescriptionRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to get the current bot short description for the given user language. Returns [BotShortDescription](https://core.telegram.org/bots/api/#botshortdescription) on success.
-    pub fn get_my_short_description(&'a self) -> GetMyShortDescriptionRequest {
+    pub fn get_my_short_description(&self) -> GetMyShortDescriptionRequest {
         GetMyShortDescriptionRequest::new(self)
     }
 }

@@ -114,11 +114,11 @@ impl<'a> AnswerInlineQueryRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to send answers to an inline query. On success, *True* is returned.  
     ///No more than **50** results per query are allowed.
     pub fn answer_inline_query(
-        &'a self,
+        &self,
         inline_query_id: impl Into<String>,
         results: impl IntoIterator<Item = impl Into<InlineQueryResult>>,
     ) -> AnswerInlineQueryRequest {

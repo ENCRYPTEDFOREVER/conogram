@@ -64,10 +64,10 @@ impl<'a> EditGeneralForumTopicRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights. Returns *True* on success.
     pub fn edit_general_forum_topic(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         name: impl Into<String>,
     ) -> EditGeneralForumTopicRequest {

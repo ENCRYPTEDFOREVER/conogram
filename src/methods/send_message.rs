@@ -176,10 +176,10 @@ impl<'a> SendMessageRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to send text messages. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_message(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         text: impl Into<String>,
     ) -> SendMessageRequest {

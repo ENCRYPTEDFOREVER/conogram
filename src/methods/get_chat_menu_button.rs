@@ -56,9 +56,9 @@ impl<'a> GetChatMenuButtonRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to get the current value of the bot's menu button in a private chat, or the default menu button. Returns [MenuButton](https://core.telegram.org/bots/api/#menubutton) on success.
-    pub fn get_chat_menu_button(&'a self) -> GetChatMenuButtonRequest {
+    pub fn get_chat_menu_button(&self) -> GetChatMenuButtonRequest {
         GetChatMenuButtonRequest::new(self)
     }
 }

@@ -55,12 +55,9 @@ impl<'a> GetChatMemberCountRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to get the number of members in a chat. Returns *Int* on success.
-    pub fn get_chat_member_count(
-        &'a self,
-        chat_id: impl Into<ChatId>,
-    ) -> GetChatMemberCountRequest {
+    pub fn get_chat_member_count(&self, chat_id: impl Into<ChatId>) -> GetChatMemberCountRequest {
         GetChatMemberCountRequest::new(self, chat_id)
     }
 }

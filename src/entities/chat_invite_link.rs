@@ -56,7 +56,7 @@ impl ChatInviteLink {
         &'a self,
         api: &'a API,
         chat_id: impl Into<ChatId>,
-    ) -> RevokeChatInviteLinkRequest {
+    ) -> RevokeChatInviteLinkRequest<'a> {
         api.revoke_chat_invite_link(chat_id.into(), &self.invite_link)
     }
 }

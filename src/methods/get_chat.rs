@@ -56,9 +56,9 @@ impl<'a> GetChatRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to get up-to-date information about the chat. Returns a [ChatFullInfo](https://core.telegram.org/bots/api/#chatfullinfo) object on success.
-    pub fn get_chat(&'a self, chat_id: impl Into<ChatId>) -> GetChatRequest {
+    pub fn get_chat(&self, chat_id: impl Into<ChatId>) -> GetChatRequest {
         GetChatRequest::new(self, chat_id)
     }
 }

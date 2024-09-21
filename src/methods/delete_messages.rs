@@ -68,10 +68,10 @@ impl<'a> DeleteMessagesRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to delete multiple messages simultaneously. If some of the specified messages can't be found, they are skipped. Returns *True* on success.
     pub fn delete_messages(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         message_ids: impl IntoIterator<Item = impl Into<i64>>,
     ) -> DeleteMessagesRequest {

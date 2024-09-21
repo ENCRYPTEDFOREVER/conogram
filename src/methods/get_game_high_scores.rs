@@ -87,11 +87,11 @@ impl<'a> GetGameHighScoresRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to get data for high score tables. Will return the score of the specified user and several of their neighbors in a game. Returns an Array of [GameHighScore](https://core.telegram.org/bots/api/#gamehighscore) objects.
     ///
     ///This method will currently return scores for the target user, plus two of their closest neighbors on each side. Will also return the top three users if the user and their neighbors are not among them. Please note that this behavior is subject to change.
-    pub fn get_game_high_scores(&'a self, user_id: impl Into<i64>) -> GetGameHighScoresRequest {
+    pub fn get_game_high_scores(&self, user_id: impl Into<i64>) -> GetGameHighScoresRequest {
         GetGameHighScoresRequest::new(self, user_id)
     }
 }

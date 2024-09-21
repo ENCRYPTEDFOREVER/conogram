@@ -83,10 +83,10 @@ impl<'a> SetChatPermissionsRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to set default chat permissions for all members. The bot must be an administrator in the group or a supergroup for this to work and must have the *can\_restrict\_members* administrator rights. Returns *True* on success.
     pub fn set_chat_permissions(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         permissions: impl Into<ChatPermissions>,
     ) -> SetChatPermissionsRequest {

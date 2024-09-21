@@ -68,10 +68,10 @@ impl<'a> DeleteForumTopicRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to delete a forum topic along with all its messages in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_delete\_messages* administrator rights. Returns *True* on success.
     pub fn delete_forum_topic(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         message_thread_id: impl Into<i64>,
     ) -> DeleteForumTopicRequest {

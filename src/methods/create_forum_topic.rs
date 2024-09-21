@@ -85,10 +85,10 @@ impl<'a> CreateForumTopicRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights. Returns information about the created topic as a [ForumTopic](https://core.telegram.org/bots/api/#forumtopic) object.
     pub fn create_forum_topic(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         name: impl Into<String>,
     ) -> CreateForumTopicRequest {

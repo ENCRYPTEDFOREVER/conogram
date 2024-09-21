@@ -143,9 +143,9 @@ impl<'a> EditMessageCaptionRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within **48 hours** from the time they were sent.
-    pub fn edit_message_caption(&'a self) -> EditMessageCaptionRequest {
+    pub fn edit_message_caption(&self) -> EditMessageCaptionRequest {
         EditMessageCaptionRequest::new(self)
     }
 }

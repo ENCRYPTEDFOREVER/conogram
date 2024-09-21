@@ -68,10 +68,10 @@ impl<'a> SetChatStickerSetRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field *can\_set\_sticker\_set* optionally returned in [getChat](https://core.telegram.org/bots/api/#getchat) requests to check if the bot can use this method. Returns *True* on success.
     pub fn set_chat_sticker_set(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         sticker_set_name: impl Into<String>,
     ) -> SetChatStickerSetRequest {

@@ -67,9 +67,9 @@ impl<'a> GetMyCommandsRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to get the current list of the bot's commands for the given scope and user language. Returns an Array of [BotCommand](https://core.telegram.org/bots/api/#botcommand) objects. If commands aren't set, an empty list is returned.
-    pub fn get_my_commands(&'a self) -> GetMyCommandsRequest {
+    pub fn get_my_commands(&self) -> GetMyCommandsRequest {
         GetMyCommandsRequest::new(self)
     }
 }

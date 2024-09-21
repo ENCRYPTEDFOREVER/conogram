@@ -139,9 +139,9 @@ impl<'a> SendDiceRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to send an animated emoji that will display a random value. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
-    pub fn send_dice(&'a self, chat_id: impl Into<ChatId>) -> SendDiceRequest {
+    pub fn send_dice(&self, chat_id: impl Into<ChatId>) -> SendDiceRequest {
         SendDiceRequest::new(self, chat_id)
     }
 }

@@ -85,10 +85,10 @@ impl<'a> PinChatMessageRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can\_pin\_messages' administrator right in a supergroup or 'can\_edit\_messages' administrator right in a channel. Returns *True* on success.
     pub fn pin_chat_message(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         message_id: impl Into<i64>,
     ) -> PinChatMessageRequest {

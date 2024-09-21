@@ -183,10 +183,10 @@ impl<'a> SendVideoNoteRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///As of [v.4.0](https://telegram.org/blog/video-messages-and-telescope), Telegram clients support rounded square MPEG4 videos of up to 1 minute long. Use this method to send video messages. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_video_note(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         video_note: impl Into<InputFile>,
     ) -> SendVideoNoteRequest {

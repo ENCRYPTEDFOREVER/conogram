@@ -64,10 +64,10 @@ impl<'a> DeclineChatJoinRequestRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to decline a chat join request. The bot must be an administrator in the chat for this to work and must have the *can\_invite\_users* administrator right. Returns *True* on success.
     pub fn decline_chat_join_request(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         user_id: impl Into<i64>,
     ) -> DeclineChatJoinRequestRequest {

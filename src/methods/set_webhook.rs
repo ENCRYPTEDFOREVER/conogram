@@ -134,11 +134,11 @@ impl<'a> SetWebhookRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized [Update](https://core.telegram.org/bots/api/#update). In case of an unsuccessful request, we will give up after a reasonable amount of attempts. Returns *True* on success.
     ///
     ///If you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter *secret\_token*. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the secret token as content.
-    pub fn set_webhook(&'a self, url: impl Into<String>) -> SetWebhookRequest {
+    pub fn set_webhook(&self, url: impl Into<String>) -> SetWebhookRequest {
         SetWebhookRequest::new(self, url)
     }
 }

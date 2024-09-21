@@ -65,9 +65,9 @@ impl<'a> SetMyShortDescriptionRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot. Returns *True* on success.
-    pub fn set_my_short_description(&'a self) -> SetMyShortDescriptionRequest {
+    pub fn set_my_short_description(&self) -> SetMyShortDescriptionRequest {
         SetMyShortDescriptionRequest::new(self)
     }
 }

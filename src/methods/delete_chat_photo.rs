@@ -55,9 +55,9 @@ impl<'a> DeleteChatPhotoRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
-    pub fn delete_chat_photo(&'a self, chat_id: impl Into<ChatId>) -> DeleteChatPhotoRequest {
+    pub fn delete_chat_photo(&self, chat_id: impl Into<ChatId>) -> DeleteChatPhotoRequest {
         DeleteChatPhotoRequest::new(self, chat_id)
     }
 }

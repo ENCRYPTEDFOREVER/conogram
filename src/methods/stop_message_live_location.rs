@@ -98,9 +98,9 @@ impl<'a> StopMessageLiveLocationRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to stop updating a live location message before *live\_period* expires. On success, if the message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned.
-    pub fn stop_message_live_location(&'a self) -> StopMessageLiveLocationRequest {
+    pub fn stop_message_live_location(&self) -> StopMessageLiveLocationRequest {
         StopMessageLiveLocationRequest::new(self)
     }
 }

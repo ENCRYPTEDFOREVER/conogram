@@ -44,9 +44,9 @@ impl<'a> GetMeRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///A simple method for testing your bot's authentication token. Requires no parameters. Returns basic information about the bot in form of a [User](https://core.telegram.org/bots/api/#user) object.
-    pub fn get_me(&'a self) -> GetMeRequest {
+    pub fn get_me(&self) -> GetMeRequest {
         GetMeRequest::new(self)
     }
 }

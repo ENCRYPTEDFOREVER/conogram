@@ -56,9 +56,9 @@ impl<'a> DeleteWebhookRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to remove webhook integration if you decide to switch back to [getUpdates](https://core.telegram.org/bots/api/#getupdates). Returns *True* on success.
-    pub fn delete_webhook(&'a self) -> DeleteWebhookRequest {
+    pub fn delete_webhook(&self) -> DeleteWebhookRequest {
         DeleteWebhookRequest::new(self)
     }
 }

@@ -89,10 +89,10 @@ impl<'a> AddStickerToSetRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to add a new sticker to a set created by the bot. Emoji sticker sets can have up to 200 stickers. Other sticker sets can have up to 120 stickers. Returns *True* on success.
     pub fn add_sticker_to_set(
-        &'a self,
+        &self,
         user_id: impl Into<i64>,
         name: impl Into<String>,
         sticker: impl Into<InputSticker>,

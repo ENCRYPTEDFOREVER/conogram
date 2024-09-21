@@ -66,9 +66,9 @@ impl<'a> GetStarTransactionsRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Returns the bot's Telegram Star transactions in chronological order. On success, returns a [StarTransactions](https://core.telegram.org/bots/api/#startransactions) object.
-    pub fn get_star_transactions(&'a self) -> GetStarTransactionsRequest {
+    pub fn get_star_transactions(&self) -> GetStarTransactionsRequest {
         GetStarTransactionsRequest::new(self)
     }
 }

@@ -524,7 +524,10 @@ impl Message {
             .collect()
     }
 
-    pub fn get_custom_emoji_stickers<'a>(&'a self, api: &'a API) -> GetCustomEmojiStickersRequest {
+    pub fn get_custom_emoji_stickers<'a>(
+        &'a self,
+        api: &'a API,
+    ) -> GetCustomEmojiStickersRequest<'a> {
         api.get_custom_emoji_stickers(self.get_custom_emoji_ids())
     }
 
@@ -577,7 +580,11 @@ impl Message {
     }
 
     /// Quote entire message and reply in the same Chat
-    pub fn quote_reply<'a>(&'a self, api: &'a API, text: impl Into<String>) -> SendMessageRequest {
+    pub fn quote_reply<'a>(
+        &'a self,
+        api: &'a API,
+        text: impl Into<String>,
+    ) -> SendMessageRequest<'a> {
         self.quote_reply_args(api, text, Option::<Range<usize>>::None, Option::<i64>::None)
     }
 
@@ -587,7 +594,7 @@ impl Message {
         api: &'a API,
         text: impl Into<String>,
         quoting_range: impl Into<Range<usize>>,
-    ) -> SendMessageRequest {
+    ) -> SendMessageRequest<'a> {
         self.quote_reply_args(api, text, Some(quoting_range), Option::<i64>::None)
     }
 
@@ -597,7 +604,7 @@ impl Message {
         api: &'a API,
         text: impl Into<String>,
         chat_id: impl Into<ChatId>,
-    ) -> SendMessageRequest {
+    ) -> SendMessageRequest<'a> {
         self.quote_reply_args(api, text, Option::<Range<usize>>::None, Some(chat_id))
     }
 
@@ -658,7 +665,7 @@ impl Message {
         &'a self,
         api: &'a API,
         text: impl Into<InputMessageText>,
-    ) -> SendMessageRequest {
+    ) -> SendMessageRequest<'a> {
         match text.into() {
             InputMessageText::String(v) => api
                 .send_message(self.chat.id, v)
@@ -673,7 +680,7 @@ impl Message {
         api: &'a API,
         text: impl Into<InputMessageText>,
         entities: impl IntoIterator<Item = MessageEntity>,
-    ) -> SendMessageRequest {
+    ) -> SendMessageRequest<'a> {
         self.reply(api, text).entities(entities)
     }
 
@@ -681,13 +688,13 @@ impl Message {
         &'a self,
         api: &'a API,
         formatted_text: FormattedText,
-    ) -> SendMessageRequest {
+    ) -> SendMessageRequest<'a> {
         let (text, entities) = formatted_text.build();
         self.reply(api, text).entities(entities)
     }
 
     /// Sends message to the same chat and thread
-    pub fn answer<'a>(&'a self, api: &'a API, text: impl Into<String>) -> SendMessageRequest {
+    pub fn answer<'a>(&'a self, api: &'a API, text: impl Into<String>) -> SendMessageRequest<'a> {
         if self.is_topic_message {
             if let Some(thread_id) = self.message_thread_id {
                 return api
@@ -704,7 +711,7 @@ impl Message {
         api: &'a API,
         text: impl Into<String>,
         entities: impl IntoIterator<Item = MessageEntity>,
-    ) -> SendMessageRequest {
+    ) -> SendMessageRequest<'a> {
         self.answer(api, text).entities(entities)
     }
 
@@ -712,7 +719,7 @@ impl Message {
         &'a self,
         api: &'a API,
         text: impl Into<String>,
-    ) -> EditMessageTextRequest {
+    ) -> EditMessageTextRequest<'a> {
         api.edit_message_text(text.into())
             .message_id(self.message_id)
             .chat_id(self.chat.id)
@@ -722,29 +729,29 @@ impl Message {
         &'a self,
         api: &'a API,
         ft: impl Into<FormattedText>,
-    ) -> EditMessageTextRequest {
+    ) -> EditMessageTextRequest<'a> {
         let (text, entities) = ft.into().build();
         self.edit_text(api, text).entities(entities)
     }
 
-    pub fn copy<'a>(&'a self, api: &'a API, chat_id: impl Into<ChatId>) -> CopyMessageRequest {
+    pub fn copy<'a>(&'a self, api: &'a API, chat_id: impl Into<ChatId>) -> CopyMessageRequest<'a> {
         api.copy_message(chat_id, self.chat.id, self.message_id)
     }
 
-    pub fn edit_reply_markup<'a>(&'a self, api: &'a API) -> EditMessageReplyMarkupRequest {
+    pub fn edit_reply_markup<'a>(&'a self, api: &'a API) -> EditMessageReplyMarkupRequest<'a> {
         api.edit_message_reply_markup()
             .message_id(self.message_id)
             .chat_id(self.chat.id)
     }
 
-    pub fn delete_reply_markup<'a>(&'a self, api: &'a API) -> EditMessageReplyMarkupRequest {
+    pub fn delete_reply_markup<'a>(&'a self, api: &'a API) -> EditMessageReplyMarkupRequest<'a> {
         api.edit_message_reply_markup()
             .message_id(self.message_id)
             .chat_id(self.chat.id)
             .reply_markup(InlineKeyboardMarkup::empty())
     }
 
-    pub fn delete<'a>(&'a self, api: &'a API) -> DeleteMessageRequest {
+    pub fn delete<'a>(&'a self, api: &'a API) -> DeleteMessageRequest<'a> {
         api.delete_message(self.chat.id, self.message_id)
     }
 
@@ -757,7 +764,7 @@ impl Message {
         &'a self,
         api: &'a API,
         photo: impl Into<InputFile>,
-    ) -> SendPhotoRequest {
+    ) -> SendPhotoRequest<'a> {
         api.send_photo(self.chat.id, photo)
             .reply_parameters(ReplyParameters::new_current_chat(self.message_id))
     }
@@ -766,7 +773,7 @@ impl Message {
         &'a self,
         api: &'a API,
         document: impl Into<InputFile>,
-    ) -> SendDocumentRequest {
+    ) -> SendDocumentRequest<'a> {
         api.send_document(self.chat.id, document)
             .reply_parameters(ReplyParameters::new_current_chat(self.message_id))
     }
@@ -775,12 +782,16 @@ impl Message {
         &'a self,
         api: &'a API,
         sticker: impl Into<InputFile>,
-    ) -> SendStickerRequest {
+    ) -> SendStickerRequest<'a> {
         api.send_sticker(self.chat.id, sticker)
             .reply_parameters(ReplyParameters::new_current_chat(self.message_id))
     }
 
-    pub fn copy_to<'a>(&'a self, api: &'a API, chat_id: impl Into<ChatId>) -> CopyMessageRequest {
+    pub fn copy_to<'a>(
+        &'a self,
+        api: &'a API,
+        chat_id: impl Into<ChatId>,
+    ) -> CopyMessageRequest<'a> {
         api.copy_message(chat_id, self.chat.id, self.message_id)
     }
 
@@ -788,12 +799,12 @@ impl Message {
         &'a self,
         api: &'a API,
         reactions: impl IntoIterator<Item = impl Into<ReactionType>>,
-    ) -> SetMessageReactionRequest {
+    ) -> SetMessageReactionRequest<'a> {
         api.set_message_reaction(self.chat.id, self.message_id)
             .reaction(reactions)
     }
 
-    pub fn delete_reactions<'a>(&'a self, api: &'a API) -> SetMessageReactionRequest {
+    pub fn delete_reactions<'a>(&'a self, api: &'a API) -> SetMessageReactionRequest<'a> {
         let reactions: [ReactionType; 0] = [];
         self.set_reactions(api, reactions)
     }
@@ -803,7 +814,7 @@ impl Message {
         &'a self,
         api: &'a API,
         reaction: impl Into<ReactionType>,
-    ) -> SetMessageReactionRequest {
+    ) -> SetMessageReactionRequest<'a> {
         self.set_reactions(api, [reaction.into()])
     }
 }

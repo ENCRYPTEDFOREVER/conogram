@@ -92,14 +92,14 @@ impl<'a> SendChatActionRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns *True* on success.
     ///
     ///Example: The [ImageBot](https://t.me/imagebot) needs some time to process a request and upload the image. Instead of sending a text message along the lines of “Retrieving image, please wait…”, the bot may use [sendChatAction](https://core.telegram.org/bots/api/#sendchataction) with *action* = *upload\_photo*. The user will see a “sending photo” status for the bot.
     ///
     ///We only recommend using this method when a response from the bot will take a **noticeable** amount of time to arrive.
     pub fn send_chat_action(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         action: impl Into<SendChatActionAction>,
     ) -> SendChatActionRequest {

@@ -69,10 +69,10 @@ impl<'a> AnswerWebAppQueryRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to set the result of an interaction with a [Web App](https://core.telegram.org/bots/webapps) and send a corresponding message on behalf of the user to the chat from which the query originated. On success, a [SentWebAppMessage](https://core.telegram.org/bots/api/#sentwebappmessage) object is returned.
     pub fn answer_web_app_query(
-        &'a self,
+        &self,
         web_app_query_id: impl Into<String>,
         result: impl Into<InlineQueryResult>,
     ) -> AnswerWebAppQueryRequest {

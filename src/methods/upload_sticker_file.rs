@@ -93,10 +93,10 @@ impl<'a> UploadStickerFileRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to upload a file with a sticker for later use in the [createNewStickerSet](https://core.telegram.org/bots/api/#createnewstickerset), [addStickerToSet](https://core.telegram.org/bots/api/#addstickertoset), or [replaceStickerInSet](https://core.telegram.org/bots/api/#replacestickerinset) methods (the file can be used multiple times). Returns the uploaded [File](https://core.telegram.org/bots/api/#file) on success.
     pub fn upload_sticker_file(
-        &'a self,
+        &self,
         user_id: impl Into<i64>,
         sticker: impl Into<InputFile>,
         sticker_format: impl Into<UploadStickerFileStickerFormat>,

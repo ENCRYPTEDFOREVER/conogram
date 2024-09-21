@@ -115,10 +115,10 @@ impl<'a> SetGameScoreRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Returns an error, if the new score is not greater than the user's current score in the chat and *force* is *False*.
     pub fn set_game_score(
-        &'a self,
+        &self,
         user_id: impl Into<i64>,
         score: impl Into<i64>,
     ) -> SetGameScoreRequest {

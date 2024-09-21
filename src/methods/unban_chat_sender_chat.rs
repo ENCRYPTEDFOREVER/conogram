@@ -64,10 +64,10 @@ impl<'a> UnbanChatSenderChatRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to unban a previously banned channel chat in a supergroup or channel. The bot must be an administrator for this to work and must have the appropriate administrator rights. Returns *True* on success.
     pub fn unban_chat_sender_chat(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         sender_chat_id: impl Into<i64>,
     ) -> UnbanChatSenderChatRequest {

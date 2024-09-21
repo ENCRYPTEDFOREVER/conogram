@@ -156,10 +156,10 @@ impl<'a> EditMessageLiveLocationRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to edit live location messages. A location can be edited until its *live\_period* expires or editing is explicitly disabled by a call to [stopMessageLiveLocation](https://core.telegram.org/bots/api/#stopmessagelivelocation). On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned.
     pub fn edit_message_live_location(
-        &'a self,
+        &self,
         latitude: impl Into<f64>,
         longitude: impl Into<f64>,
     ) -> EditMessageLiveLocationRequest {

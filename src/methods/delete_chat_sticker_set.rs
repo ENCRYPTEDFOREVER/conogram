@@ -55,10 +55,10 @@ impl<'a> DeleteChatStickerSetRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to delete a group sticker set from a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field *can\_set\_sticker\_set* optionally returned in [getChat](https://core.telegram.org/bots/api/#getchat) requests to check if the bot can use this method. Returns *True* on success.
     pub fn delete_chat_sticker_set(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
     ) -> DeleteChatStickerSetRequest {
         DeleteChatStickerSetRequest::new(self, chat_id)

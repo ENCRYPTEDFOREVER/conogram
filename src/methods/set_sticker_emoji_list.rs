@@ -67,10 +67,10 @@ impl<'a> SetStickerEmojiListRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to change the list of emoji assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns *True* on success.
     pub fn set_sticker_emoji_list(
-        &'a self,
+        &self,
         sticker: impl Into<String>,
         emoji_list: impl IntoIterator<Item = impl Into<String>>,
     ) -> SetStickerEmojiListRequest {

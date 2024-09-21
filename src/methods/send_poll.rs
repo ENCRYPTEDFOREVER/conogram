@@ -283,10 +283,10 @@ impl<'a> SendPollRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to send a native poll. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_poll(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         question: impl Into<String>,
         options: impl IntoIterator<Item = impl Into<InputPollOption>>,

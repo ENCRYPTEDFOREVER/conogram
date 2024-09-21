@@ -78,10 +78,10 @@ impl<'a> SetChatAdministratorCustomTitleRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to set a custom title for an administrator in a supergroup promoted by the bot. Returns *True* on success.
     pub fn set_chat_administrator_custom_title(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         user_id: impl Into<i64>,
         custom_title: impl Into<String>,

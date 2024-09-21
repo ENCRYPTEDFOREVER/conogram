@@ -65,9 +65,9 @@ impl<'a> SetMyDescriptionRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty. Returns *True* on success.
-    pub fn set_my_description(&'a self) -> SetMyDescriptionRequest {
+    pub fn set_my_description(&self) -> SetMyDescriptionRequest {
         SetMyDescriptionRequest::new(self)
     }
 }

@@ -65,10 +65,10 @@ impl<'a> SetStickerMaskPositionRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to change the [mask position](https://core.telegram.org/bots/api/#maskposition) of a mask sticker. The sticker must belong to a sticker set that was created by the bot. Returns *True* on success.
     pub fn set_sticker_mask_position(
-        &'a self,
+        &self,
         sticker: impl Into<String>,
     ) -> SetStickerMaskPositionRequest {
         SetStickerMaskPositionRequest::new(self, sticker)

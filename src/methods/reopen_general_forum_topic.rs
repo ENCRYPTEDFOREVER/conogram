@@ -55,10 +55,10 @@ impl<'a> ReopenGeneralForumTopicRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights. The topic will be automatically unhidden if it was hidden. Returns *True* on success.
     pub fn reopen_general_forum_topic(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
     ) -> ReopenGeneralForumTopicRequest {
         ReopenGeneralForumTopicRequest::new(self, chat_id)

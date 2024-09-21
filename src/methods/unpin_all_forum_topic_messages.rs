@@ -68,10 +68,10 @@ impl<'a> UnpinAllForumTopicMessagesRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to clear the list of pinned messages in a forum topic. The bot must be an administrator in the chat for this to work and must have the *can\_pin\_messages* administrator right in the supergroup. Returns *True* on success.
     pub fn unpin_all_forum_topic_messages(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         message_thread_id: impl Into<i64>,
     ) -> UnpinAllForumTopicMessagesRequest {

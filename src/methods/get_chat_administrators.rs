@@ -56,10 +56,10 @@ impl<'a> GetChatAdministratorsRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to get a list of administrators in a chat, which aren't bots. Returns an Array of [ChatMember](https://core.telegram.org/bots/api/#chatmember) objects.
     pub fn get_chat_administrators(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
     ) -> GetChatAdministratorsRequest {
         GetChatAdministratorsRequest::new(self, chat_id)

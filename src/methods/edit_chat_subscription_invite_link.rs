@@ -75,10 +75,10 @@ impl<'a> EditChatSubscriptionInviteLinkRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to edit a subscription invite link created by the bot. The bot must have the *can\_invite\_users* administrator rights. Returns the edited invite link as a [ChatInviteLink](https://core.telegram.org/bots/api/#chatinvitelink) object.
     pub fn edit_chat_subscription_invite_link(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         invite_link: impl Into<String>,
     ) -> EditChatSubscriptionInviteLinkRequest {

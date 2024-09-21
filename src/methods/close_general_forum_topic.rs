@@ -55,10 +55,10 @@ impl<'a> CloseGeneralForumTopicRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to close an open 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights. Returns *True* on success.
     pub fn close_general_forum_topic(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
     ) -> CloseGeneralForumTopicRequest {
         CloseGeneralForumTopicRequest::new(self, chat_id)

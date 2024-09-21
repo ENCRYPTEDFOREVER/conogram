@@ -87,7 +87,7 @@ use crate::methods::get_sticker_set::GetStickerSetRequest;
 
 impl Sticker {
     /// Returns a [GetStickerSetRequest] if the sticker has a set, e.g. ([Sticker.set_name](Self::set_name) is `Some`)
-    pub fn get_sticker_set<'a>(&'a self, api: &'a API) -> Option<GetStickerSetRequest> {
+    pub fn get_sticker_set<'a>(&self, api: &'a API) -> Option<GetStickerSetRequest<'a>> {
         self.set_name
             .as_ref()
             .map(|set_name| api.get_sticker_set(set_name))

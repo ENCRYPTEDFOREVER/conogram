@@ -86,10 +86,10 @@ impl<'a> SetMessageReactionRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can't use paid reactions. Returns *True* on success.
     pub fn set_message_reaction(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         message_id: impl Into<i64>,
     ) -> SetMessageReactionRequest {

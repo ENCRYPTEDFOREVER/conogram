@@ -340,10 +340,10 @@ impl<'a> SendInvoiceRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to send invoices. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_invoice(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         title: impl Into<String>,
         description: impl Into<String>,

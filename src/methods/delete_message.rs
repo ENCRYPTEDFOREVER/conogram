@@ -73,7 +73,7 @@ impl<'a> DeleteMessageRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to delete a message, including service messages, with the following limitations:  
     ///\- A message can only be deleted if it was sent less than 48 hours ago.  
     ///\- Service messages about a supergroup, channel, or forum topic creation can't be deleted.  
@@ -85,7 +85,7 @@ impl<'a> API {
     ///\- If the bot has *can\_delete\_messages* permission in a supergroup or a channel, it can delete any message there.  
     ///Returns *True* on success.
     pub fn delete_message(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         message_id: impl Into<i64>,
     ) -> DeleteMessageRequest {

@@ -55,10 +55,10 @@ impl<'a> HideGeneralForumTopicRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights. The topic will be automatically closed if it was open. Returns *True* on success.
     pub fn hide_general_forum_topic(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
     ) -> HideGeneralForumTopicRequest {
         HideGeneralForumTopicRequest::new(self, chat_id)

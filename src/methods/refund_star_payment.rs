@@ -70,10 +70,10 @@ impl<'a> RefundStarPaymentRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Refunds a successful payment in [Telegram Stars](https://t.me/BotNews/90). Returns *True* on success.
     pub fn refund_star_payment(
-        &'a self,
+        &self,
         user_id: impl Into<i64>,
         telegram_payment_charge_id: impl Into<String>,
     ) -> RefundStarPaymentRequest {

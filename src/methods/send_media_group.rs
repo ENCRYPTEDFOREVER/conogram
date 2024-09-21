@@ -145,10 +145,10 @@ impl<'a> SendMediaGroupRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of [Messages](https://core.telegram.org/bots/api/#message) that were sent is returned.
     pub fn send_media_group(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         media: impl IntoIterator<Item = impl Into<InputMedia>>,
     ) -> SendMediaGroupRequest {

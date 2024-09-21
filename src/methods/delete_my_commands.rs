@@ -66,9 +66,9 @@ impl<'a> DeleteMyCommandsRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, [higher level commands](https://core.telegram.org/bots/api/#determining-list-of-commands) will be shown to affected users. Returns *True* on success.
-    pub fn delete_my_commands(&'a self) -> DeleteMyCommandsRequest {
+    pub fn delete_my_commands(&self) -> DeleteMyCommandsRequest {
         DeleteMyCommandsRequest::new(self)
     }
 }

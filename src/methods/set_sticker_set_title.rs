@@ -63,10 +63,10 @@ impl<'a> SetStickerSetTitleRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to set the title of a created sticker set. Returns *True* on success.
     pub fn set_sticker_set_title(
-        &'a self,
+        &self,
         name: impl Into<String>,
         title: impl Into<String>,
     ) -> SetStickerSetTitleRequest {

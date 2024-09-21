@@ -256,10 +256,10 @@ impl<'a> CreateInvoiceLinkRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to create a link for an invoice. Returns the created invoice link as *String* on success.
     pub fn create_invoice_link(
-        &'a self,
+        &self,
         title: impl Into<String>,
         description: impl Into<String>,
         payload: impl Into<String>,

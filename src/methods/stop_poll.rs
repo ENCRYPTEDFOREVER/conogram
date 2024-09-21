@@ -86,10 +86,10 @@ impl<'a> StopPollRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to stop a poll which was sent by the bot. On success, the stopped [Poll](https://core.telegram.org/bots/api/#poll) is returned.
     pub fn stop_poll(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         message_id: impl Into<i64>,
     ) -> StopPollRequest {

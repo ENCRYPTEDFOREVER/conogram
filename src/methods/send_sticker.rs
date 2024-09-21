@@ -160,10 +160,10 @@ impl<'a> SendStickerRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to send static .WEBP, [animated](https://telegram.org/blog/animated-stickers) .TGS, or [video](https://telegram.org/blog/video-stickers-better-reactions) .WEBM stickers. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_sticker(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         sticker: impl Into<InputFile>,
     ) -> SendStickerRequest {

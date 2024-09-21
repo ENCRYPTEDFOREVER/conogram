@@ -229,12 +229,12 @@ impl<'a> SendAudioRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
     ///
     ///For sending voice messages, use the [sendVoice](https://core.telegram.org/bots/api/#sendvoice) method instead.
     pub fn send_audio(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         audio: impl Into<InputFile>,
     ) -> SendAudioRequest {

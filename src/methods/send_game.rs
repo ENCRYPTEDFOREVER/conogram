@@ -137,10 +137,10 @@ impl<'a> SendGameRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to send a game. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_game(
-        &'a self,
+        &self,
         chat_id: impl Into<i64>,
         game_short_name: impl Into<String>,
     ) -> SendGameRequest {

@@ -64,10 +64,10 @@ impl<'a> SetChatTitleRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to change the title of a chat. Titles can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
     pub fn set_chat_title(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         title: impl Into<String>,
     ) -> SetChatTitleRequest {

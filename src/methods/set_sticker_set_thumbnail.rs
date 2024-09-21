@@ -100,10 +100,10 @@ impl<'a> SetStickerSetThumbnailRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to set the thumbnail of a regular or mask sticker set. The format of the thumbnail file must match the format of the stickers in the set. Returns *True* on success.
     pub fn set_sticker_set_thumbnail(
-        &'a self,
+        &self,
         name: impl Into<String>,
         user_id: impl Into<i64>,
         format: impl Into<SetStickerSetThumbnailFormat>,

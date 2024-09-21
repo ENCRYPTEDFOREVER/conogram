@@ -110,10 +110,10 @@ impl<'a> ForwardMessageRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn forward_message(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         from_chat_id: impl Into<ChatId>,
         message_id: impl Into<i64>,

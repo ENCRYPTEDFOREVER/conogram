@@ -192,10 +192,10 @@ impl<'a> SendLocationRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to send point on the map. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_location(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         latitude: impl Into<f64>,
         longitude: impl Into<f64>,

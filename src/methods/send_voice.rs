@@ -194,10 +194,10 @@ impl<'a> SendVoiceRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as [Audio](https://core.telegram.org/bots/api/#audio) or [Document](https://core.telegram.org/bots/api/#document)). On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
     pub fn send_voice(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         voice: impl Into<InputFile>,
     ) -> SendVoiceRequest {

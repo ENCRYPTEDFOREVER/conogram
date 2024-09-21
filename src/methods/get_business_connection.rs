@@ -55,10 +55,10 @@ impl<'a> GetBusinessConnectionRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to get information about the connection of the bot with a business account. Returns a [BusinessConnection](https://core.telegram.org/bots/api/#businessconnection) object on success.
     pub fn get_business_connection(
-        &'a self,
+        &self,
         business_connection_id: impl Into<String>,
     ) -> GetBusinessConnectionRequest {
         GetBusinessConnectionRequest::new(self, business_connection_id)

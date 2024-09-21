@@ -66,9 +66,9 @@ impl<'a> SetChatMenuButtonRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to change the bot's menu button in a private chat, or the default menu button. Returns *True* on success.
-    pub fn set_chat_menu_button(&'a self) -> SetChatMenuButtonRequest {
+    pub fn set_chat_menu_button(&self) -> SetChatMenuButtonRequest {
         SetChatMenuButtonRequest::new(self)
     }
 }

@@ -200,10 +200,10 @@ impl<'a> SendPaidMediaRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to send paid media. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_paid_media(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         star_count: impl Into<i64>,
         media: impl IntoIterator<Item = impl Into<InputPaidMedia>>,

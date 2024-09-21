@@ -122,10 +122,10 @@ impl<'a> CreateNewStickerSetRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to create a new sticker set owned by a user. The bot will be able to edit the sticker set thus created. Returns *True* on success.
     pub fn create_new_sticker_set(
-        &'a self,
+        &self,
         user_id: impl Into<i64>,
         name: impl Into<String>,
         title: impl Into<String>,

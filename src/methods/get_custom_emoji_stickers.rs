@@ -61,10 +61,10 @@ impl<'a> GetCustomEmojiStickersRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to get information about custom emoji stickers by their identifiers. Returns an Array of [Sticker](https://core.telegram.org/bots/api/#sticker) objects.
     pub fn get_custom_emoji_stickers(
-        &'a self,
+        &self,
         custom_emoji_ids: impl IntoIterator<Item = impl Into<String>>,
     ) -> GetCustomEmojiStickersRequest {
         GetCustomEmojiStickersRequest::new(self, custom_emoji_ids)

@@ -172,10 +172,10 @@ impl<'a> SendContactRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to send phone contacts. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_contact(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         phone_number: impl Into<String>,
         first_name: impl Into<String>,

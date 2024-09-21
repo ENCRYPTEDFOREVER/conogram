@@ -204,10 +204,10 @@ impl<'a> SendPhotoRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to send photos. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_photo(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         photo: impl Into<InputFile>,
     ) -> SendPhotoRequest {

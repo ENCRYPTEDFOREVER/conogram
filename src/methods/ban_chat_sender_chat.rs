@@ -64,10 +64,10 @@ impl<'a> BanChatSenderChatRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to ban a channel chat in a supergroup or a channel. Until the chat is [unbanned](https://core.telegram.org/bots/api/#unbanchatsenderchat), the owner of the banned chat won't be able to send messages on behalf of **any of their channels**. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights. Returns *True* on success.
     pub fn ban_chat_sender_chat(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         sender_chat_id: impl Into<i64>,
     ) -> BanChatSenderChatRequest {

@@ -65,10 +65,10 @@ impl<'a> GetChatMemberRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to get information about a member of a chat. The method is only guaranteed to work for other users if the bot is an administrator in the chat. Returns a [ChatMember](https://core.telegram.org/bots/api/#chatmember) object on success.
     pub fn get_chat_member(
-        &'a self,
+        &self,
         chat_id: impl Into<ChatId>,
         user_id: impl Into<i64>,
     ) -> GetChatMemberRequest {

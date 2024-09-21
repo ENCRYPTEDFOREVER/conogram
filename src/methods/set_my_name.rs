@@ -65,9 +65,9 @@ impl<'a> SetMyNameRequest<'a> {
     }
 }
 
-impl<'a> API {
+impl API {
     ///Use this method to change the bot's name. Returns *True* on success.
-    pub fn set_my_name(&'a self) -> SetMyNameRequest {
+    pub fn set_my_name(&self) -> SetMyNameRequest {
         SetMyNameRequest::new(self)
     }
 }
