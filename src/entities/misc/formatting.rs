@@ -437,11 +437,8 @@ impl FormattedText {
                 None,
             )
         // Attempt to handle user error...
-        } else if user_id < -9999 {
-            self.url(
-                text,
-                &format!("https://t.me/c/{}", &user_id.to_string()[4..]),
-            )
+        } else if user_id < -1000000000000 {
+            self.url(text, format!("https://t.me/c/{}", -user_id - 1000000000000))
         } else {
             self
         }

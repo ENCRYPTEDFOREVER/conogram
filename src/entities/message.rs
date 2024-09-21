@@ -461,11 +461,16 @@ impl<'a> From<&'a MaybeInaccessibleMessage> for Option<&'a Message> {
 impl Message {
     /// Static version of get_url()
     pub fn make_url(chat_id: impl Into<ChatId>, message_id: impl Into<i64>) -> String {
-        format!(
-            "https://t.me/c/{}/{}",
-            &chat_id.into().to_string()[4..],
-            message_id.into()
-        )
+        match chat_id.into() {
+            ChatId::Username(username) => {
+                format!("https://t.me/{username}/{}", message_id.into())
+            }
+            ChatId::Id(id) => format!(
+                "https://t.me/c/{}/{}",
+                -id - 1000000000000,
+                message_id.into()
+            ),
+        }
     }
 
     pub fn get_url(&self) -> String {
@@ -474,7 +479,7 @@ impl Message {
         } else {
             format!(
                 "https://t.me/c/{}/{}",
-                &self.chat.id.to_string()[4..],
+                -self.chat.id - 1000000000000,
                 self.message_id
             )
         }
