@@ -19,24 +19,24 @@ pub struct PassportElementErrorFile {
 /// The section of the user's Telegram Passport which has the issue, one of “utility\_bill”, “bank\_statement”, “rental\_agreement”, “passport\_registration”, “temporary\_registration”
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
 pub enum PassportElementErrorFileType {
-    /// "utility_bill"
+    /// `utility_bill`
     #[default]
     #[serde(rename = "utility_bill")]
     UtilityBill,
 
-    /// "bank_statement"
+    /// `bank_statement`
     #[serde(rename = "bank_statement")]
     BankStatement,
 
-    /// "rental_agreement"
+    /// `rental_agreement`
     #[serde(rename = "rental_agreement")]
     RentalAgreement,
 
-    /// "passport_registration"
+    /// `passport_registration`
     #[serde(rename = "passport_registration")]
     PassportRegistration,
 
-    /// "temporary_registration"
+    /// `temporary_registration`
     #[serde(rename = "temporary_registration")]
     TemporaryRegistration,
 }

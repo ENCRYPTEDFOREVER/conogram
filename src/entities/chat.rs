@@ -37,20 +37,20 @@ pub struct Chat {
 /// Type of the chat, can be either “private”, “group”, “supergroup” or “channel”
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
 pub enum ChatType {
-    /// "private"
-    #[serde(rename = "private")]
+    /// `private`
     #[default]
+    #[serde(rename = "private")]
     Private,
 
-    /// "group"
+    /// `group`
     #[serde(rename = "group")]
     Group,
 
-    /// "supergroup"
+    /// `supergroup`
     #[serde(rename = "supergroup")]
     Supergroup,
 
-    /// "channel"
+    /// `channel`
     #[serde(rename = "channel")]
     Channel,
 }

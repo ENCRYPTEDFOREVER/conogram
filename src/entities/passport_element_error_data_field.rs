@@ -22,28 +22,28 @@ pub struct PassportElementErrorDataField {
 /// The section of the user's Telegram Passport which has the error, one of “personal\_details”, “passport”, “driver\_license”, “identity\_card”, “internal\_passport”, “address”
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
 pub enum PassportElementErrorDataFieldType {
-    /// "personal_details"
+    /// `personal_details`
     #[default]
     #[serde(rename = "personal_details")]
     PersonalDetails,
 
-    /// "passport"
+    /// `passport`
     #[serde(rename = "passport")]
     Passport,
 
-    /// "driver_license"
+    /// `driver_license`
     #[serde(rename = "driver_license")]
     DriverLicense,
 
-    /// "identity_card"
+    /// `identity_card`
     #[serde(rename = "identity_card")]
     IdentityCard,
 
-    /// "internal_passport"
+    /// `internal_passport`
     #[serde(rename = "internal_passport")]
     InternalPassport,
 
-    /// "address"
+    /// `address`
     #[serde(rename = "address")]
     Address,
 }

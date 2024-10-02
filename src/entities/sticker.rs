@@ -67,16 +67,16 @@ pub struct Sticker {
 /// Type of the sticker, currently one of “regular”, “mask”, “custom\_emoji”. The type of the sticker is independent from its format, which is determined by the fields *is\_animated* and *is\_video*.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
 pub enum StickerType {
-    /// "regular"
+    /// `regular`
     #[default]
     #[serde(rename = "regular")]
     Regular,
 
-    /// "mask"
+    /// `mask`
     #[serde(rename = "mask")]
     Mask,
 
-    /// "custom_emoji"
+    /// `custom_emoji`
     #[serde(rename = "custom_emoji")]
     CustomEmoji,
 }

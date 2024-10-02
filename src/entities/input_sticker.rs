@@ -1,6 +1,9 @@
 use crate::entities::mask_position::MaskPosition;
+use crate::entities::misc::input_file::GetFiles;
 use crate::entities::misc::input_file::InputFile;
+use crate::entities::misc::input_file::Moose;
 use serde::Serialize;
+use std::collections::HashMap;
 
 /// This object describes a sticker to be added to a sticker set.
 ///
@@ -28,20 +31,27 @@ pub struct InputSticker {
 /// Format of the added sticker, must be one of “static” for a **.WEBP** or **.PNG** image, “animated” for a **.TGS** animation, “video” for a **WEBM** video
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize)]
 pub enum InputStickerFormat {
-    /// "static"
+    /// `static`
     #[serde(rename = "static")]
     #[default]
     Static,
 
-    /// "animated"
+    /// `animated`
     #[serde(rename = "animated")]
     Animated,
 
-    /// "video"
+    /// `video`
     #[serde(rename = "video")]
     Video,
 }
 
+impl GetFiles for InputSticker {
+    fn get_files(&self) -> HashMap<Moose, &InputFile> {
+        let mut map = HashMap::new();
+        /// self.sticker;
+        map
+    }
+}
 // Divider: all content below this line will be preserved after code regen
 use super::misc::input_file::{GetFiles, Moose};
 use std::collections::HashMap;

@@ -19,20 +19,20 @@ pub struct PassportElementErrorFrontSide {
 /// The section of the user's Telegram Passport which has the issue, one of “passport”, “driver\_license”, “identity\_card”, “internal\_passport”
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
 pub enum PassportElementErrorFrontSideType {
-    /// "passport"
-    #[serde(rename = "passport")]
+    /// `passport`
     #[default]
+    #[serde(rename = "passport")]
     Passport,
 
-    /// "driver_license"
+    /// `driver_license`
     #[serde(rename = "driver_license")]
     DriverLicense,
 
-    /// "identity_card"
+    /// `identity_card`
     #[serde(rename = "identity_card")]
     IdentityCard,
 
-    /// "internal_passport"
+    /// `internal_passport`
     #[serde(rename = "internal_passport")]
     InternalPassport,
 }

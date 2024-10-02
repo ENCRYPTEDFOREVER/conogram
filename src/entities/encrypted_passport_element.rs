@@ -49,56 +49,56 @@ pub struct EncryptedPassportElement {
 /// Element type. One of “personal\_details”, “passport”, “driver\_license”, “identity\_card”, “internal\_passport”, “address”, “utility\_bill”, “bank\_statement”, “rental\_agreement”, “passport\_registration”, “temporary\_registration”, “phone\_number”, “email”.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
 pub enum EncryptedPassportElementType {
-    /// "personal_details"
-    #[serde(rename = "personal_details")]
+    /// `personal_details`
     #[default]
+    #[serde(rename = "personal_details")]
     PersonalDetails,
 
-    /// "passport"
+    /// `passport`
     #[serde(rename = "passport")]
     Passport,
 
-    /// "driver_license"
+    /// `driver_license`
     #[serde(rename = "driver_license")]
     DriverLicense,
 
-    /// "identity_card"
+    /// `identity_card`
     #[serde(rename = "identity_card")]
     IdentityCard,
 
-    /// "internal_passport"
+    /// `internal_passport`
     #[serde(rename = "internal_passport")]
     InternalPassport,
 
-    /// "address"
+    /// `address`
     #[serde(rename = "address")]
     Address,
 
-    /// "utility_bill"
+    /// `utility_bill`
     #[serde(rename = "utility_bill")]
     UtilityBill,
 
-    /// "bank_statement"
+    /// `bank_statement`
     #[serde(rename = "bank_statement")]
     BankStatement,
 
-    /// "rental_agreement"
+    /// `rental_agreement`
     #[serde(rename = "rental_agreement")]
     RentalAgreement,
 
-    /// "passport_registration"
+    /// `passport_registration`
     #[serde(rename = "passport_registration")]
     PassportRegistration,
 
-    /// "temporary_registration"
+    /// `temporary_registration`
     #[serde(rename = "temporary_registration")]
     TemporaryRegistration,
 
-    /// "phone_number"
+    /// `phone_number`
     #[serde(rename = "phone_number")]
     PhoneNumber,
 
-    /// "email"
+    /// `email`
     #[serde(rename = "email")]
     Email,
 }

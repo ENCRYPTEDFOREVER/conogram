@@ -66,16 +66,16 @@ pub struct InlineQueryResultGif {
 /// *Optional*. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg”
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize)]
 pub enum ThumbnailMimeType {
-    /// "image/jpeg"
+    /// `image/jpeg`
     #[default]
     #[serde(rename = "image/jpeg")]
     ImageJpeg,
 
-    /// "image/gif"
+    /// `image/gif`
     #[serde(rename = "image/gif")]
     ImageGif,
 
-    /// "video/mp4"
+    /// `video/mp4`
     #[serde(rename = "video/mp4")]
     VideoMp4,
 }

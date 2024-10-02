@@ -19,12 +19,12 @@ pub struct PassportElementErrorReverseSide {
 /// The section of the user's Telegram Passport which has the issue, one of “driver\_license”, “identity\_card”
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
 pub enum PassportElementErrorReverseSideType {
-    /// "driver_license"
+    /// `driver_license`
     #[serde(rename = "driver_license")]
     #[default]
     DriverLicense,
 
-    /// "identity_card"
+    /// `identity_card`
     #[serde(rename = "identity_card")]
     IdentityCard,
 }
