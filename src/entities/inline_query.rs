@@ -32,8 +32,8 @@ pub struct InlineQuery {
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
 pub enum ChatType {
     /// `sender`
-    #[serde(rename = "sender")]
     #[default]
+    #[serde(rename = "sender")]
     Sender,
 
     /// `private`

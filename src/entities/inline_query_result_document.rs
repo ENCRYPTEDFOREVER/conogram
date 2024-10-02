@@ -61,8 +61,8 @@ pub struct InlineQueryResultDocument {
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize)]
 pub enum MimeType {
     /// `application/pdf`
-    #[serde(rename = "application/pdf")]
     #[default]
+    #[serde(rename = "application/pdf")]
     ApplicationPdf,
 
     /// `application/zip`

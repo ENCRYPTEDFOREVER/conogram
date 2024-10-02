@@ -22,8 +22,8 @@ pub struct MaskPosition {
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
 pub enum MaskPositionPoint {
     /// `forehead`
-    #[serde(rename = "forehead")]
     #[default]
+    #[serde(rename = "forehead")]
     Forehead,
 
     /// `eyes`

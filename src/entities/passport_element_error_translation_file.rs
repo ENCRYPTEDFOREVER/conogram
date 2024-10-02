@@ -20,8 +20,8 @@ pub struct PassportElementErrorTranslationFile {
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
 pub enum PassportElementErrorTranslationFileType {
     /// `passport`
-    #[serde(rename = "passport")]
     #[default]
+    #[serde(rename = "passport")]
     Passport,
 
     /// `driver_license`

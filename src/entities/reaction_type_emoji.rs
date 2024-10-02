@@ -13,8 +13,8 @@ pub struct ReactionTypeEmoji {
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
 pub enum ReactionTypeEmojiEmoji {
     /// `👍`
-    #[serde(rename = "👍")]
     #[default]
+    #[serde(rename = "👍")]
     ThumbsUp,
 
     /// `👎`

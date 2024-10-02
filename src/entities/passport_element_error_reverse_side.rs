@@ -20,8 +20,8 @@ pub struct PassportElementErrorReverseSide {
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
 pub enum PassportElementErrorReverseSideType {
     /// `driver_license`
-    #[serde(rename = "driver_license")]
     #[default]
+    #[serde(rename = "driver_license")]
     DriverLicense,
 
     /// `identity_card`

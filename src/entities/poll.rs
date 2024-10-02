@@ -61,8 +61,8 @@ pub struct Poll {
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
 pub enum PollType {
     /// `regular`
-    #[serde(rename = "regular")]
     #[default]
+    #[serde(rename = "regular")]
     Regular,
 
     /// `quiz`

@@ -71,8 +71,8 @@ pub struct InlineQueryResultVideo {
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize)]
 pub enum MimeType {
     /// `text/html`
-    #[serde(rename = "text/html")]
     #[default]
+    #[serde(rename = "text/html")]
     TextHtml,
 
     /// `video/mp4`
