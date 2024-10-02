@@ -1,28 +1,27 @@
 use serde::{Deserialize, Serialize};
 
-///Represents an issue with one of the files that constitute the translation of a document. The error is considered resolved when the file changes.
+/// Represents an issue with one of the files that constitute the translation of a document. The error is considered resolved when the file changes.
 ///
-///API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrortranslationfile)
+/// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrortranslationfile)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct PassportElementErrorTranslationFile {
-    ///Type of element of the user's Telegram Passport which has the issue, one of “passport”, “driver\_license”, “identity\_card”, “internal\_passport”, “utility\_bill”, “bank\_statement”, “rental\_agreement”, “passport\_registration”, “temporary\_registration”
+    /// Type of element of the user's Telegram Passport which has the issue, one of “passport”, “driver\_license”, “identity\_card”, “internal\_passport”, “utility\_bill”, “bank\_statement”, “rental\_agreement”, “passport\_registration”, “temporary\_registration”
     #[serde(rename = "type")]
     pub type_: PassportElementErrorTranslationFileType,
 
-    ///Base64-encoded file hash
+    /// Base64-encoded file hash
     pub file_hash: String,
 
-    ///Error message
+    /// Error message
     pub message: String,
 }
 
-///Type of element of the user's Telegram Passport which has the issue, one of “passport”, “driver\_license”, “identity\_card”, “internal\_passport”, “utility\_bill”, “bank\_statement”, “rental\_agreement”, “passport\_registration”, “temporary\_registration”
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
-#[serde(rename = "type")]
+/// Type of element of the user's Telegram Passport which has the issue, one of “passport”, “driver\_license”, “identity\_card”, “internal\_passport”, “utility\_bill”, “bank\_statement”, “rental\_agreement”, “passport\_registration”, “temporary\_registration”
+#[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
 pub enum PassportElementErrorTranslationFileType {
-    #[default]
     /// "passport"
     #[serde(rename = "passport")]
+    #[default]
     Passport,
 
     /// "driver_license"
@@ -57,4 +56,5 @@ pub enum PassportElementErrorTranslationFileType {
     #[serde(rename = "temporary_registration")]
     TemporaryRegistration,
 }
+
 // Divider: all content below this line will be preserved after code regen

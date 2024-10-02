@@ -5,34 +5,40 @@ use crate::entities::input_media_photo::InputMediaPhoto;
 use crate::entities::input_media_video::InputMediaVideo;
 use serde::Serialize;
 
-///This object represents the content of a media message to be sent. It should be one of
+/// This object represents the content of a media message to be sent. It should be one of
 ///
-///* [InputMediaAnimation](https://core.telegram.org/bots/api/#inputmediaanimation)
-///* [InputMediaDocument](https://core.telegram.org/bots/api/#inputmediadocument)
-///* [InputMediaAudio](https://core.telegram.org/bots/api/#inputmediaaudio)
-///* [InputMediaPhoto](https://core.telegram.org/bots/api/#inputmediaphoto)
-///* [InputMediaVideo](https://core.telegram.org/bots/api/#inputmediavideo)
+/// * [InputMediaAnimation](https://core.telegram.org/bots/api/#inputmediaanimation)
+/// * [InputMediaDocument](https://core.telegram.org/bots/api/#inputmediadocument)
+/// * [InputMediaAudio](https://core.telegram.org/bots/api/#inputmediaaudio)
+/// * [InputMediaPhoto](https://core.telegram.org/bots/api/#inputmediaphoto)
+/// * [InputMediaVideo](https://core.telegram.org/bots/api/#inputmediavideo)
 ///
-///API Reference: [link](https://core.telegram.org/bots/api/#inputmedia)
+/// API Reference: [link](https://core.telegram.org/bots/api/#inputmedia)
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(tag = "type")]
 pub enum InputMedia {
     #[serde(rename = "animation")]
     Animation(InputMediaAnimation),
+
     #[serde(rename = "document")]
     Document(InputMediaDocument),
+
     #[serde(rename = "audio")]
     Audio(InputMediaAudio),
+
     #[serde(rename = "photo")]
     Photo(InputMediaPhoto),
+
     #[serde(rename = "video")]
     Video(InputMediaVideo),
 }
+
 impl Default for InputMedia {
     fn default() -> Self {
         Self::Animation(InputMediaAnimation::default())
     }
 }
+
 impl From<InputMediaAnimation> for InputMedia {
     fn from(value: InputMediaAnimation) -> Self {
         Self::Animation(value)
@@ -62,6 +68,7 @@ impl From<InputMediaVideo> for InputMedia {
         Self::Video(value)
     }
 }
+
 // Divider: all content below this line will be preserved after code regen
 
 use super::misc::input_file::GetFiles;

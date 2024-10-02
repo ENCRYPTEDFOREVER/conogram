@@ -2,25 +2,28 @@ use crate::entities::input_paid_media_photo::InputPaidMediaPhoto;
 use crate::entities::input_paid_media_video::InputPaidMediaVideo;
 use serde::Serialize;
 
-///This object describes the paid media to be sent. Currently, it can be one of
+/// This object describes the paid media to be sent. Currently, it can be one of
 ///
-///* [InputPaidMediaPhoto](https://core.telegram.org/bots/api/#inputpaidmediaphoto)
-///* [InputPaidMediaVideo](https://core.telegram.org/bots/api/#inputpaidmediavideo)
+/// * [InputPaidMediaPhoto](https://core.telegram.org/bots/api/#inputpaidmediaphoto)
+/// * [InputPaidMediaVideo](https://core.telegram.org/bots/api/#inputpaidmediavideo)
 ///
-///API Reference: [link](https://core.telegram.org/bots/api/#inputpaidmedia)
+/// API Reference: [link](https://core.telegram.org/bots/api/#inputpaidmedia)
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(tag = "type")]
 pub enum InputPaidMedia {
     #[serde(rename = "photo")]
     Photo(InputPaidMediaPhoto),
+
     #[serde(rename = "video")]
     Video(InputPaidMediaVideo),
 }
+
 impl Default for InputPaidMedia {
     fn default() -> Self {
         Self::Photo(InputPaidMediaPhoto::default())
     }
 }
+
 impl From<InputPaidMediaPhoto> for InputPaidMedia {
     fn from(value: InputPaidMediaPhoto) -> Self {
         Self::Photo(value)
@@ -32,6 +35,7 @@ impl From<InputPaidMediaVideo> for InputPaidMedia {
         Self::Video(value)
     }
 }
+
 // Divider: all content below this line will be preserved after code regen
 
 use super::misc::input_file::GetFiles;

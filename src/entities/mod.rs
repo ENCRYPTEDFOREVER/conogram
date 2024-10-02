@@ -1,4 +1,3 @@
-#![allow(dead_code)]
 pub mod animation;
 pub mod audio;
 pub mod background_fill;

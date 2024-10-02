@@ -1,46 +1,45 @@
 use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
-///This object represents a chat.
+/// This object represents a chat.
 ///
-///API Reference: [link](https://core.telegram.org/bots/api/#chat)
+/// API Reference: [link](https://core.telegram.org/bots/api/#chat)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Chat {
-    ///Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+    /// Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
     pub id: i64,
 
-    ///Type of the chat, can be either “private”, “group”, “supergroup” or “channel”
+    /// Type of the chat, can be either “private”, “group”, “supergroup” or “channel”
     #[serde(rename = "type")]
     pub type_: ChatType,
 
-    ///*Optional*. Title, for supergroups, channels and group chats
-    #[serde(skip_serializing_if = "Option::is_none")]
+    /// *Optional*. Title, for supergroups, channels and group chats
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
 
-    ///*Optional*. Username, for private chats, supergroups and channels if available
-    #[serde(skip_serializing_if = "Option::is_none")]
+    /// *Optional*. Username, for private chats, supergroups and channels if available
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
 
-    ///*Optional*. First name of the other party in a private chat
-    #[serde(skip_serializing_if = "Option::is_none")]
+    /// *Optional*. First name of the other party in a private chat
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub first_name: Option<String>,
 
-    ///*Optional*. Last name of the other party in a private chat
-    #[serde(skip_serializing_if = "Option::is_none")]
+    /// *Optional*. Last name of the other party in a private chat
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub last_name: Option<String>,
 
-    ///*Optional*. *True*, if the supergroup chat is a forum (has [topics](https://telegram.org/blog/topics-in-groups-collectible-usernames#topics-in-groups) enabled)
+    /// *Optional*. *True*, if the supergroup chat is a forum (has [topics](https://telegram.org/blog/topics-in-groups-collectible-usernames#topics-in-groups) enabled)
     #[serde(default, skip_serializing_if = "is_false")]
     pub is_forum: bool,
 }
 
-///Type of the chat, can be either “private”, “group”, “supergroup” or “channel”
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
-#[serde(rename = "type")]
+/// Type of the chat, can be either “private”, “group”, “supergroup” or “channel”
+#[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
 pub enum ChatType {
-    #[default]
     /// "private"
     #[serde(rename = "private")]
+    #[default]
     Private,
 
     /// "group"
@@ -55,6 +54,7 @@ pub enum ChatType {
     #[serde(rename = "channel")]
     Channel,
 }
+
 // Divider: all content below this line will be preserved after code regen
 use super::chat_full_info::ChatFullInfo;
 use super::misc::input_file::InputFile;

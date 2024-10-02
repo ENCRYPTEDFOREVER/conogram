@@ -7,40 +7,48 @@ use crate::entities::bot_command_scope_chat_member::BotCommandScopeChatMember;
 use crate::entities::bot_command_scope_default::BotCommandScopeDefault;
 use serde::{Deserialize, Serialize};
 
-///This object represents the scope to which bot commands are applied. Currently, the following 7 scopes are supported:
+/// This object represents the scope to which bot commands are applied. Currently, the following 7 scopes are supported:
 ///
-///* [BotCommandScopeDefault](https://core.telegram.org/bots/api/#botcommandscopedefault)
-///* [BotCommandScopeAllPrivateChats](https://core.telegram.org/bots/api/#botcommandscopeallprivatechats)
-///* [BotCommandScopeAllGroupChats](https://core.telegram.org/bots/api/#botcommandscopeallgroupchats)
-///* [BotCommandScopeAllChatAdministrators](https://core.telegram.org/bots/api/#botcommandscopeallchatadministrators)
-///* [BotCommandScopeChat](https://core.telegram.org/bots/api/#botcommandscopechat)
-///* [BotCommandScopeChatAdministrators](https://core.telegram.org/bots/api/#botcommandscopechatadministrators)
-///* [BotCommandScopeChatMember](https://core.telegram.org/bots/api/#botcommandscopechatmember)
+/// * [BotCommandScopeDefault](https://core.telegram.org/bots/api/#botcommandscopedefault)
+/// * [BotCommandScopeAllPrivateChats](https://core.telegram.org/bots/api/#botcommandscopeallprivatechats)
+/// * [BotCommandScopeAllGroupChats](https://core.telegram.org/bots/api/#botcommandscopeallgroupchats)
+/// * [BotCommandScopeAllChatAdministrators](https://core.telegram.org/bots/api/#botcommandscopeallchatadministrators)
+/// * [BotCommandScopeChat](https://core.telegram.org/bots/api/#botcommandscopechat)
+/// * [BotCommandScopeChatAdministrators](https://core.telegram.org/bots/api/#botcommandscopechatadministrators)
+/// * [BotCommandScopeChatMember](https://core.telegram.org/bots/api/#botcommandscopechatmember)
 ///
-///API Reference: [link](https://core.telegram.org/bots/api/#botcommandscope)
+/// API Reference: [link](https://core.telegram.org/bots/api/#botcommandscope)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum BotCommandScope {
     #[serde(rename = "default")]
     Default(BotCommandScopeDefault),
+
     #[serde(rename = "all_private_chats")]
     AllPrivateChats(BotCommandScopeAllPrivateChats),
+
     #[serde(rename = "all_group_chats")]
     AllGroupChats(BotCommandScopeAllGroupChats),
+
     #[serde(rename = "all_chat_administrators")]
     AllChatAdministrators(BotCommandScopeAllChatAdministrators),
+
     #[serde(rename = "chat")]
     Chat(BotCommandScopeChat),
+
     #[serde(rename = "chat_administrators")]
     ChatAdministrators(BotCommandScopeChatAdministrators),
+
     #[serde(rename = "chat_member")]
     ChatMember(BotCommandScopeChatMember),
 }
+
 impl Default for BotCommandScope {
     fn default() -> Self {
         Self::Default(BotCommandScopeDefault::default())
     }
 }
+
 impl From<BotCommandScopeDefault> for BotCommandScope {
     fn from(value: BotCommandScopeDefault) -> Self {
         Self::Default(value)
@@ -82,6 +90,7 @@ impl From<BotCommandScopeChatMember> for BotCommandScope {
         Self::ChatMember(value)
     }
 }
+
 // Divider: all content below this line will be preserved after code regen
 use std::fmt::Display;
 
