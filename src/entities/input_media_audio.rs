@@ -1,6 +1,9 @@
 use crate::entities::message_entity::MessageEntity;
+use crate::entities::misc::input_file::GetFiles;
 use crate::entities::misc::input_file::InputFile;
+use crate::entities::misc::input_file::Moose;
 use serde::Serialize;
+use std::collections::HashMap;
 
 /// Represents an audio file to be treated as music to be sent.
 ///
@@ -39,11 +42,6 @@ pub struct InputMediaAudio {
     pub title: Option<String>,
 }
 
-// Divider: all content below this line will be preserved after code regen
-use super::misc::input_file::GetFiles;
-use super::misc::input_file::Moose;
-use std::collections::HashMap;
-
 impl GetFiles for InputMediaAudio {
     fn get_files(&self) -> HashMap<Moose, &InputFile> {
         let mut map = HashMap::new();
@@ -51,12 +49,13 @@ impl GetFiles for InputMediaAudio {
             Moose::Owned(self.media.get_uuid().unwrap_or_else(|| "media".into())),
             &self.media,
         );
-        if let Some(thumb) = &self.thumbnail {
+        if let Some(thumbnail) = &self.thumbnail {
             map.insert(
-                Moose::Owned(thumb.get_uuid().unwrap_or_else(|| "thumbnail".into())),
-                thumb,
+                Moose::Owned(thumbnail.get_uuid().unwrap_or_else(|| "thumbnail".into())),
+                thumbnail,
             );
         }
         map
     }
 }
+// Divider: all content below this line will be preserved after code regen

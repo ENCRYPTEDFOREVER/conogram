@@ -1,7 +1,10 @@
 use crate::entities::message_entity::MessageEntity;
+use crate::entities::misc::input_file::GetFiles;
 use crate::entities::misc::input_file::InputFile;
+use crate::entities::misc::input_file::Moose;
 use crate::utils::deserialize_utils::is_false;
 use serde::Serialize;
+use std::collections::HashMap;
 
 /// Represents a photo to be sent.
 ///
@@ -32,11 +35,6 @@ pub struct InputMediaPhoto {
     pub has_spoiler: bool,
 }
 
-// Divider: all content below this line will be preserved after code regen
-use super::misc::input_file::GetFiles;
-use super::misc::input_file::Moose;
-use std::collections::HashMap;
-
 impl GetFiles for InputMediaPhoto {
     fn get_files(&self) -> HashMap<Moose, &InputFile> {
         let mut map = HashMap::new();
@@ -47,3 +45,4 @@ impl GetFiles for InputMediaPhoto {
         map
     }
 }
+// Divider: all content below this line will be preserved after code regen

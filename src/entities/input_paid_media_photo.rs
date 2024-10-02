@@ -1,5 +1,8 @@
+use crate::entities::misc::input_file::GetFiles;
 use crate::entities::misc::input_file::InputFile;
+use crate::entities::misc::input_file::Moose;
 use serde::Serialize;
+use std::collections::HashMap;
 
 /// The paid media to send is a photo.
 ///
@@ -9,12 +12,6 @@ pub struct InputPaidMediaPhoto {
     /// File to send. Pass a file\_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://\<file\_attach\_name\>” to upload a new one using multipart/form-data under \<file\_attach\_name\> name. [More information on Sending Files »](https://core.telegram.org/bots/api/#sending-files)
     pub media: InputFile,
 }
-
-// Divider: all content below this line will be preserved after code regen
-
-use super::misc::input_file::GetFiles;
-use super::misc::input_file::Moose;
-use std::collections::HashMap;
 
 impl GetFiles for InputPaidMediaPhoto {
     fn get_files(&self) -> HashMap<Moose, &InputFile> {
@@ -26,3 +23,4 @@ impl GetFiles for InputPaidMediaPhoto {
         map
     }
 }
+// Divider: all content below this line will be preserved after code regen
