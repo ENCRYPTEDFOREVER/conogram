@@ -1,6 +1,10 @@
 use crate::entities::input_paid_media_photo::InputPaidMediaPhoto;
 use crate::entities::input_paid_media_video::InputPaidMediaVideo;
+use crate::entities::misc::input_file::GetFiles;
+use crate::entities::misc::input_file::InputFile;
+use crate::entities::misc::input_file::Moose;
 use serde::Serialize;
+use std::collections::HashMap;
 
 /// This object describes the paid media to be sent. Currently, it can be one of
 ///
@@ -36,20 +40,12 @@ impl From<InputPaidMediaVideo> for InputPaidMedia {
     }
 }
 
-// Divider: all content below this line will be preserved after code regen
-
-use super::misc::input_file::GetFiles;
-
 impl GetFiles for InputPaidMedia {
-    fn get_files(
-        &self,
-    ) -> std::collections::HashMap<
-        super::misc::input_file::Moose,
-        &super::misc::input_file::InputFile,
-    > {
+    fn get_files(&self) -> HashMap<Moose, &InputFile> {
         match self {
             Self::Photo(m) => m.get_files(),
             Self::Video(m) => m.get_files(),
         }
     }
 }
+// Divider: all content below this line will be preserved after code regen

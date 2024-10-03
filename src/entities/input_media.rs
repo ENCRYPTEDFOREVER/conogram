@@ -3,7 +3,11 @@ use crate::entities::input_media_audio::InputMediaAudio;
 use crate::entities::input_media_document::InputMediaDocument;
 use crate::entities::input_media_photo::InputMediaPhoto;
 use crate::entities::input_media_video::InputMediaVideo;
+use crate::entities::misc::input_file::GetFiles;
+use crate::entities::misc::input_file::InputFile;
+use crate::entities::misc::input_file::Moose;
 use serde::Serialize;
+use std::collections::HashMap;
 
 /// This object represents the content of a media message to be sent. It should be one of
 ///
@@ -69,23 +73,15 @@ impl From<InputMediaVideo> for InputMedia {
     }
 }
 
-// Divider: all content below this line will be preserved after code regen
-
-use super::misc::input_file::GetFiles;
-
 impl GetFiles for InputMedia {
-    fn get_files(
-        &self,
-    ) -> std::collections::HashMap<
-        super::misc::input_file::Moose,
-        &super::misc::input_file::InputFile,
-    > {
+    fn get_files(&self) -> HashMap<Moose, &InputFile> {
         match self {
             Self::Animation(m) => m.get_files(),
-            Self::Document(m) => m.get_files(),
             Self::Audio(m) => m.get_files(),
+            Self::Document(m) => m.get_files(),
             Self::Photo(m) => m.get_files(),
             Self::Video(m) => m.get_files(),
         }
     }
 }
+// Divider: all content below this line will be preserved after code regen
