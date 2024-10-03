@@ -1,11 +1,14 @@
-use crate::entities::bot_command_scope_all_chat_administrators::BotCommandScopeAllChatAdministrators;
-use crate::entities::bot_command_scope_all_group_chats::BotCommandScopeAllGroupChats;
-use crate::entities::bot_command_scope_all_private_chats::BotCommandScopeAllPrivateChats;
-use crate::entities::bot_command_scope_chat::BotCommandScopeChat;
-use crate::entities::bot_command_scope_chat_administrators::BotCommandScopeChatAdministrators;
-use crate::entities::bot_command_scope_chat_member::BotCommandScopeChatMember;
-use crate::entities::bot_command_scope_default::BotCommandScopeDefault;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{
+    bot_command_scope_all_chat_administrators::BotCommandScopeAllChatAdministrators,
+    bot_command_scope_all_group_chats::BotCommandScopeAllGroupChats,
+    bot_command_scope_all_private_chats::BotCommandScopeAllPrivateChats,
+    bot_command_scope_chat::BotCommandScopeChat,
+    bot_command_scope_chat_administrators::BotCommandScopeChatAdministrators,
+    bot_command_scope_chat_member::BotCommandScopeChatMember,
+    bot_command_scope_default::BotCommandScopeDefault,
+};
 
 /// This object represents the scope to which bot commands are applied. Currently, the following 7 scopes are supported:
 ///

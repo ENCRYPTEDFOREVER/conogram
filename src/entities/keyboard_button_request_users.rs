@@ -1,5 +1,6 @@
-use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
+
+use crate::utils::deserialize_utils::is_false;
 
 /// This object defines the criteria used to request suitable users. Information about the selected users will be shared with the bot when the corresponding button is pressed. [More about requesting users »](https://core.telegram.org/bots/features#chat-and-user-selection)
 ///

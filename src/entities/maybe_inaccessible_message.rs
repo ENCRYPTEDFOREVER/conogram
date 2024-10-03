@@ -1,6 +1,6 @@
-use crate::entities::inaccessible_message::InaccessibleMessage;
-use crate::entities::message::Message;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{inaccessible_message::InaccessibleMessage, message::Message};
 
 /// This object describes a message that can be inaccessible to the bot. It can be one of
 ///

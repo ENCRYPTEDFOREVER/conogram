@@ -1,5 +1,6 @@
-use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::user::User;
 
 /// Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that has no additional privileges or restrictions.
 ///

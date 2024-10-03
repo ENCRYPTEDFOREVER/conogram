@@ -1,8 +1,4 @@
-use std::io;
-use std::path::PathBuf;
-
-use std::borrow::Cow;
-use std::collections::HashMap;
+use std::{borrow::Cow, collections::HashMap, io, path::PathBuf};
 
 use reqwest::multipart::Part;
 use serde::Serialize;

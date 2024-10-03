@@ -1,10 +1,12 @@
-use crate::entities::input_paid_media_photo::InputPaidMediaPhoto;
-use crate::entities::input_paid_media_video::InputPaidMediaVideo;
-use crate::entities::misc::input_file::GetFiles;
-use crate::entities::misc::input_file::InputFile;
-use crate::entities::misc::input_file::Moose;
-use serde::Serialize;
 use std::collections::HashMap;
+
+use serde::Serialize;
+
+use crate::entities::{
+    input_paid_media_photo::InputPaidMediaPhoto,
+    input_paid_media_video::InputPaidMediaVideo,
+    misc::input_file::{GetFiles, InputFile, Moose},
+};
 
 /// This object describes the paid media to be sent. Currently, it can be one of
 ///

@@ -1,7 +1,9 @@
-use crate::entities::menu_button_commands::MenuButtonCommands;
-use crate::entities::menu_button_default::MenuButtonDefault;
-use crate::entities::menu_button_web_app::MenuButtonWebApp;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{
+    menu_button_commands::MenuButtonCommands, menu_button_default::MenuButtonDefault,
+    menu_button_web_app::MenuButtonWebApp,
+};
 
 /// This object describes the bot's menu button in a private chat. It should be one of
 ///

@@ -1,5 +1,6 @@
-use crate::entities::message_entity::MessageEntity;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::message_entity::MessageEntity;
 
 /// This object contains information about one answer option in a poll.
 ///

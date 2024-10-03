@@ -1,7 +1,9 @@
-use crate::entities::background_fill::BackgroundFill;
-use crate::entities::document::Document;
-use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
+
+use crate::{
+    entities::{background_fill::BackgroundFill, document::Document},
+    utils::deserialize_utils::is_false,
+};
 
 /// The background is a PNG or TGV (gzipped subset of SVG with MIME type “application/x-tgwallpattern”) pattern to be combined with the background fill chosen by the user.
 ///

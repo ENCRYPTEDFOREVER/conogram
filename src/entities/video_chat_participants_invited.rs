@@ -1,5 +1,6 @@
-use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::user::User;
 
 /// This object represents a service message about new members invited to a video chat.
 ///

@@ -1,7 +1,10 @@
-use crate::entities::chat_boost_source_gift_code::ChatBoostSourceGiftCode;
-use crate::entities::chat_boost_source_giveaway::ChatBoostSourceGiveaway;
-use crate::entities::chat_boost_source_premium::ChatBoostSourcePremium;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{
+    chat_boost_source_gift_code::ChatBoostSourceGiftCode,
+    chat_boost_source_giveaway::ChatBoostSourceGiveaway,
+    chat_boost_source_premium::ChatBoostSourcePremium,
+};
 
 /// This object describes the source of a chat boost. It can be one of
 ///

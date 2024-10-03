@@ -1,9 +1,12 @@
-use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
-use crate::entities::inline_query_result_gif::ThumbnailMimeType;
-use crate::entities::input_message_content::InputMessageContent;
-use crate::entities::message_entity::MessageEntity;
-use crate::utils::deserialize_utils::is_false;
 use serde::Serialize;
+
+use crate::{
+    entities::{
+        inline_keyboard_markup::InlineKeyboardMarkup, inline_query_result_gif::ThumbnailMimeType,
+        input_message_content::InputMessageContent, message_entity::MessageEntity,
+    },
+    utils::deserialize_utils::is_false,
+};
 
 /// Represents a link to a video animation (H.264/MPEG-4 AVC video without sound). By default, this animated MPEG-4 file will be sent by the user with optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the animation.
 ///

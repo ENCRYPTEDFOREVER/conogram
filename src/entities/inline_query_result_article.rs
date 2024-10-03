@@ -1,7 +1,11 @@
-use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
-use crate::entities::input_message_content::InputMessageContent;
-use crate::utils::deserialize_utils::is_false;
 use serde::Serialize;
+
+use crate::{
+    entities::{
+        inline_keyboard_markup::InlineKeyboardMarkup, input_message_content::InputMessageContent,
+    },
+    utils::deserialize_utils::is_false,
+};
 
 /// Represents a link to an article or web page.
 ///

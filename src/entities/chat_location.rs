@@ -1,5 +1,6 @@
-use crate::entities::location::Location;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::location::Location;
 
 /// Represents a location to which a chat is connected.
 ///

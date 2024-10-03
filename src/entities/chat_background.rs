@@ -1,5 +1,6 @@
-use crate::entities::background_type::BackgroundType;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::background_type::BackgroundType;
 
 /// This object represents a chat background.
 ///

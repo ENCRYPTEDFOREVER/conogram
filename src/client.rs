@@ -1,17 +1,19 @@
 #![allow(dead_code, unused_variables)]
 
-use reqwest::multipart::Form;
-use reqwest::{Client, RequestBuilder, Url};
-use serde::de::DeserializeOwned;
-use serde::{Deserialize, Serialize};
-use serde_json::Value;
-use std::collections::hash_map::Entry;
-use std::collections::HashMap;
-use std::str::FromStr;
+use std::{
+    collections::{hash_map::Entry, HashMap},
+    str::FromStr,
+};
 
-use crate::api::APIConfig;
-use crate::entities::misc::input_file::{GetFiles, InputFile};
-use crate::errors::{ConogramError, ConogramErrorType, TgApiError, TgApiErrorParams};
+use reqwest::{multipart::Form, Client, RequestBuilder, Url};
+use serde::{de::DeserializeOwned, Deserialize, Serialize};
+use serde_json::Value;
+
+use crate::{
+    api::APIConfig,
+    entities::misc::input_file::{GetFiles, InputFile},
+    errors::{ConogramError, ConogramErrorType, TgApiError, TgApiErrorParams},
+};
 
 #[derive(Deserialize, Debug)]
 pub(crate) struct ApiResponse<ReturnValue> {

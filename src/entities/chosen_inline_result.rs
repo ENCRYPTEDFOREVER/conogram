@@ -1,6 +1,6 @@
-use crate::entities::location::Location;
-use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{location::Location, user::User};
 
 /// Represents a [result](https://core.telegram.org/bots/api/#inlinequeryresult) of an inline query that was chosen by the user and sent to their chat partner.
 ///

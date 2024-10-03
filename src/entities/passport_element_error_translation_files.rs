@@ -1,5 +1,6 @@
-use crate::entities::passport_element_error_translation_file::PassportElementErrorTranslationFileType;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::passport_element_error_translation_file::PassportElementErrorTranslationFileType;
 
 /// Represents an issue with the translated version of a document. The error is considered resolved when a file with the document translation change.
 ///

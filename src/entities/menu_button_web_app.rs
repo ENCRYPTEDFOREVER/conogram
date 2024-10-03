@@ -1,5 +1,6 @@
-use crate::entities::web_app_info::WebAppInfo;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::web_app_info::WebAppInfo;
 
 /// Represents a menu button, which launches a [Web App](https://core.telegram.org/bots/webapps).
 ///

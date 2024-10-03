@@ -1,5 +1,6 @@
-use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
+
+use crate::utils::deserialize_utils::is_false;
 
 /// This object represents a Telegram user or bot.
 ///

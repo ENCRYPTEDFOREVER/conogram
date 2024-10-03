@@ -1,7 +1,9 @@
-use crate::entities::background_fill_freeform_gradient::BackgroundFillFreeformGradient;
-use crate::entities::background_fill_gradient::BackgroundFillGradient;
-use crate::entities::background_fill_solid::BackgroundFillSolid;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{
+    background_fill_freeform_gradient::BackgroundFillFreeformGradient,
+    background_fill_gradient::BackgroundFillGradient, background_fill_solid::BackgroundFillSolid,
+};
 
 /// This object describes the way a background is filled based on the selected colors. Currently, it can be one of
 ///

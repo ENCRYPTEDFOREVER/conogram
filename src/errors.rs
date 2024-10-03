@@ -1,9 +1,8 @@
 #![allow(dead_code)]
-use thiserror::Error;
-
 use std::fmt::{Debug, Display};
 
 use serde::Deserialize;
+use thiserror::Error;
 
 use crate::client::ApiResponse;
 

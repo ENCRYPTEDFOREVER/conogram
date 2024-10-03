@@ -1,6 +1,6 @@
-use crate::entities::order_info::OrderInfo;
-use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{order_info::OrderInfo, user::User};
 
 /// This object contains information about an incoming pre-checkout query.
 ///

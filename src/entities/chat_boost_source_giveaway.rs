@@ -1,6 +1,6 @@
-use crate::entities::user::User;
-use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
+
+use crate::{entities::user::User, utils::deserialize_utils::is_false};
 
 /// The boost was obtained by the creation of a Telegram Premium or a Telegram Star giveaway. This boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription for Telegram Premium giveaways and *prize\_star\_count* / 500 times for one year for Telegram Star giveaways.
 ///

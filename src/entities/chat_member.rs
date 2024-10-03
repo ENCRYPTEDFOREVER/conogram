@@ -1,10 +1,10 @@
-use crate::entities::chat_member_administrator::ChatMemberAdministrator;
-use crate::entities::chat_member_banned::ChatMemberBanned;
-use crate::entities::chat_member_left::ChatMemberLeft;
-use crate::entities::chat_member_member::ChatMemberMember;
-use crate::entities::chat_member_owner::ChatMemberOwner;
-use crate::entities::chat_member_restricted::ChatMemberRestricted;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{
+    chat_member_administrator::ChatMemberAdministrator, chat_member_banned::ChatMemberBanned,
+    chat_member_left::ChatMemberLeft, chat_member_member::ChatMemberMember,
+    chat_member_owner::ChatMemberOwner, chat_member_restricted::ChatMemberRestricted,
+};
 
 /// This object contains information about one member of a chat. Currently, the following 6 types of chat members are supported:
 ///

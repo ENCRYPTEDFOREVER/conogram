@@ -1,5 +1,6 @@
-use crate::entities::background_fill::BackgroundFill;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::background_fill::BackgroundFill;
 
 /// The background is automatically filled based on the selected colors.
 ///

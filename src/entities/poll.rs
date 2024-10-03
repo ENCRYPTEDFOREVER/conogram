@@ -1,6 +1,6 @@
-use crate::entities::message_entity::MessageEntity;
-use crate::entities::poll_option::PollOption;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{message_entity::MessageEntity, poll_option::PollOption};
 
 /// This object contains information about a poll.
 ///

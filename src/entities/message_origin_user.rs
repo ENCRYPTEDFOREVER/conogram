@@ -1,5 +1,6 @@
-use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::user::User;
 
 /// The message was originally sent by a known user.
 ///

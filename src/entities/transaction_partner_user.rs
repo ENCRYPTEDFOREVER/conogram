@@ -1,6 +1,6 @@
-use crate::entities::paid_media::PaidMedia;
-use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{paid_media::PaidMedia, user::User};
 
 /// Describes a transaction with a user.
 ///

@@ -1,7 +1,9 @@
-use crate::entities::reaction_type_custom_emoji::ReactionTypeCustomEmoji;
-use crate::entities::reaction_type_emoji::ReactionTypeEmoji;
-use crate::entities::reaction_type_paid::ReactionTypePaid;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{
+    reaction_type_custom_emoji::ReactionTypeCustomEmoji, reaction_type_emoji::ReactionTypeEmoji,
+    reaction_type_paid::ReactionTypePaid,
+};
 
 /// This object describes the type of a reaction. Currently, it can be one of
 ///

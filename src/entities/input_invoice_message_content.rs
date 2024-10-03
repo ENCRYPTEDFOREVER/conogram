@@ -1,6 +1,6 @@
-use crate::entities::labeled_price::LabeledPrice;
-use crate::utils::deserialize_utils::is_false;
 use serde::Serialize;
+
+use crate::{entities::labeled_price::LabeledPrice, utils::deserialize_utils::is_false};
 
 /// Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of an invoice message to be sent as the result of an inline query.
 ///

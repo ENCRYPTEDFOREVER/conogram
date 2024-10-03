@@ -1,7 +1,6 @@
-use crate::entities::chat::Chat;
-use crate::entities::reaction_type::ReactionType;
-use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{chat::Chat, reaction_type::ReactionType, user::User};
 
 /// This object represents a change of a reaction on a message performed by a user.
 ///

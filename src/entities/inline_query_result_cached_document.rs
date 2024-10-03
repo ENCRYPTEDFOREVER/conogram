@@ -1,7 +1,9 @@
-use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
-use crate::entities::input_message_content::InputMessageContent;
-use crate::entities::message_entity::MessageEntity;
 use serde::Serialize;
+
+use crate::entities::{
+    inline_keyboard_markup::InlineKeyboardMarkup, input_message_content::InputMessageContent,
+    message_entity::MessageEntity,
+};
 
 /// Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the file.
 ///

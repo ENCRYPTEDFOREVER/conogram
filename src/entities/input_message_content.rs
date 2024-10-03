@@ -1,9 +1,12 @@
-use crate::entities::input_contact_message_content::InputContactMessageContent;
-use crate::entities::input_invoice_message_content::InputInvoiceMessageContent;
-use crate::entities::input_location_message_content::InputLocationMessageContent;
-use crate::entities::input_text_message_content::InputTextMessageContent;
-use crate::entities::input_venue_message_content::InputVenueMessageContent;
 use serde::Serialize;
+
+use crate::entities::{
+    input_contact_message_content::InputContactMessageContent,
+    input_invoice_message_content::InputInvoiceMessageContent,
+    input_location_message_content::InputLocationMessageContent,
+    input_text_message_content::InputTextMessageContent,
+    input_venue_message_content::InputVenueMessageContent,
+};
 
 /// This object represents the content of a message to be sent as a result of an inline query. Telegram clients currently support the following 5 types:
 ///

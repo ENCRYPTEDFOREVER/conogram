@@ -1,56 +1,32 @@
-use crate::entities::animation::Animation;
-use crate::entities::audio::Audio;
-use crate::entities::chat::Chat;
-use crate::entities::chat_background::ChatBackground;
-use crate::entities::chat_boost_added::ChatBoostAdded;
-use crate::entities::chat_shared::ChatShared;
-use crate::entities::contact::Contact;
-use crate::entities::dice::Dice;
-use crate::entities::document::Document;
-use crate::entities::external_reply_info::ExternalReplyInfo;
-use crate::entities::forum_topic_closed::ForumTopicClosed;
-use crate::entities::forum_topic_created::ForumTopicCreated;
-use crate::entities::forum_topic_edited::ForumTopicEdited;
-use crate::entities::forum_topic_reopened::ForumTopicReopened;
-use crate::entities::game::Game;
-use crate::entities::general_forum_topic_hidden::GeneralForumTopicHidden;
-use crate::entities::general_forum_topic_unhidden::GeneralForumTopicUnhidden;
-use crate::entities::giveaway::Giveaway;
-use crate::entities::giveaway_completed::GiveawayCompleted;
-use crate::entities::giveaway_created::GiveawayCreated;
-use crate::entities::giveaway_winners::GiveawayWinners;
-use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
-use crate::entities::invoice::Invoice;
-use crate::entities::link_preview_options::LinkPreviewOptions;
-use crate::entities::location::Location;
-use crate::entities::maybe_inaccessible_message::MaybeInaccessibleMessage;
-use crate::entities::message_auto_delete_timer_changed::MessageAutoDeleteTimerChanged;
-use crate::entities::message_entity::MessageEntity;
-use crate::entities::message_origin::MessageOrigin;
-use crate::entities::paid_media_info::PaidMediaInfo;
-use crate::entities::passport_data::PassportData;
-use crate::entities::photo_size::PhotoSize;
-use crate::entities::poll::Poll;
-use crate::entities::proximity_alert_triggered::ProximityAlertTriggered;
-use crate::entities::refunded_payment::RefundedPayment;
-use crate::entities::sticker::Sticker;
-use crate::entities::story::Story;
-use crate::entities::successful_payment::SuccessfulPayment;
-use crate::entities::text_quote::TextQuote;
-use crate::entities::user::User;
-use crate::entities::users_shared::UsersShared;
-use crate::entities::venue::Venue;
-use crate::entities::video::Video;
-use crate::entities::video_chat_ended::VideoChatEnded;
-use crate::entities::video_chat_participants_invited::VideoChatParticipantsInvited;
-use crate::entities::video_chat_scheduled::VideoChatScheduled;
-use crate::entities::video_chat_started::VideoChatStarted;
-use crate::entities::video_note::VideoNote;
-use crate::entities::voice::Voice;
-use crate::entities::web_app_data::WebAppData;
-use crate::entities::write_access_allowed::WriteAccessAllowed;
-use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
+
+use crate::{
+    entities::{
+        animation::Animation, audio::Audio, chat::Chat, chat_background::ChatBackground,
+        chat_boost_added::ChatBoostAdded, chat_shared::ChatShared, contact::Contact, dice::Dice,
+        document::Document, external_reply_info::ExternalReplyInfo,
+        forum_topic_closed::ForumTopicClosed, forum_topic_created::ForumTopicCreated,
+        forum_topic_edited::ForumTopicEdited, forum_topic_reopened::ForumTopicReopened, game::Game,
+        general_forum_topic_hidden::GeneralForumTopicHidden,
+        general_forum_topic_unhidden::GeneralForumTopicUnhidden, giveaway::Giveaway,
+        giveaway_completed::GiveawayCompleted, giveaway_created::GiveawayCreated,
+        giveaway_winners::GiveawayWinners, inline_keyboard_markup::InlineKeyboardMarkup,
+        invoice::Invoice, link_preview_options::LinkPreviewOptions, location::Location,
+        maybe_inaccessible_message::MaybeInaccessibleMessage,
+        message_auto_delete_timer_changed::MessageAutoDeleteTimerChanged,
+        message_entity::MessageEntity, message_origin::MessageOrigin,
+        paid_media_info::PaidMediaInfo, passport_data::PassportData, photo_size::PhotoSize,
+        poll::Poll, proximity_alert_triggered::ProximityAlertTriggered,
+        refunded_payment::RefundedPayment, sticker::Sticker, story::Story,
+        successful_payment::SuccessfulPayment, text_quote::TextQuote, user::User,
+        users_shared::UsersShared, venue::Venue, video::Video, video_chat_ended::VideoChatEnded,
+        video_chat_participants_invited::VideoChatParticipantsInvited,
+        video_chat_scheduled::VideoChatScheduled, video_chat_started::VideoChatStarted,
+        video_note::VideoNote, voice::Voice, web_app_data::WebAppData,
+        write_access_allowed::WriteAccessAllowed,
+    },
+    utils::deserialize_utils::is_false,
+};
 
 /// This object represents a message.
 ///
@@ -397,24 +373,27 @@ pub struct Message {
 
 // Divider: all content below this line will be preserved after code regen
 
-use super::misc::formatting::FormattedText;
-use super::misc::input_file::InputFile;
-use super::reaction_type::ReactionType;
-use super::reply_parameters::ReplyParameters;
-use crate::api::API;
-use crate::entities::misc::chat_id::ChatId;
-use crate::errors::ConogramError;
-use crate::methods::copy_message::CopyMessageRequest;
-use crate::methods::delete_message::DeleteMessageRequest;
-use crate::methods::edit_message_reply_markup::EditMessageReplyMarkupRequest;
-use crate::methods::edit_message_text::EditMessageTextRequest;
-use crate::methods::get_custom_emoji_stickers::GetCustomEmojiStickersRequest;
-use crate::methods::send_document::SendDocumentRequest;
-use crate::methods::send_message::SendMessageRequest;
-use crate::methods::send_photo::SendPhotoRequest;
-use crate::methods::send_sticker::SendStickerRequest;
-use crate::methods::set_message_reaction::SetMessageReactionRequest;
 use std::ops::Range;
+
+use super::{
+    misc::{formatting::FormattedText, input_file::InputFile},
+    reaction_type::ReactionType,
+    reply_parameters::ReplyParameters,
+};
+use crate::{
+    api::API,
+    entities::misc::chat_id::ChatId,
+    errors::ConogramError,
+    methods::{
+        copy_message::CopyMessageRequest, delete_message::DeleteMessageRequest,
+        edit_message_reply_markup::EditMessageReplyMarkupRequest,
+        edit_message_text::EditMessageTextRequest,
+        get_custom_emoji_stickers::GetCustomEmojiStickersRequest,
+        send_document::SendDocumentRequest, send_message::SendMessageRequest,
+        send_photo::SendPhotoRequest, send_sticker::SendStickerRequest,
+        set_message_reaction::SetMessageReactionRequest,
+    },
+};
 
 pub enum InputMessageText {
     String(String),

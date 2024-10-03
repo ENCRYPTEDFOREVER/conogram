@@ -1,5 +1,6 @@
-use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::user::User;
 
 /// Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that isn't currently a member of the chat, but may join it themselves.
 ///

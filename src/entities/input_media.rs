@@ -1,13 +1,15 @@
-use crate::entities::input_media_animation::InputMediaAnimation;
-use crate::entities::input_media_audio::InputMediaAudio;
-use crate::entities::input_media_document::InputMediaDocument;
-use crate::entities::input_media_photo::InputMediaPhoto;
-use crate::entities::input_media_video::InputMediaVideo;
-use crate::entities::misc::input_file::GetFiles;
-use crate::entities::misc::input_file::InputFile;
-use crate::entities::misc::input_file::Moose;
-use serde::Serialize;
 use std::collections::HashMap;
+
+use serde::Serialize;
+
+use crate::entities::{
+    input_media_animation::InputMediaAnimation,
+    input_media_audio::InputMediaAudio,
+    input_media_document::InputMediaDocument,
+    input_media_photo::InputMediaPhoto,
+    input_media_video::InputMediaVideo,
+    misc::input_file::{GetFiles, InputFile, Moose},
+};
 
 /// This object represents the content of a media message to be sent. It should be one of
 ///

@@ -1,5 +1,6 @@
-use crate::entities::chat_boost_source::ChatBoostSource;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::chat_boost_source::ChatBoostSource;
 
 /// This object contains information about a chat boost.
 ///

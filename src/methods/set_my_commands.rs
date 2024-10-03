@@ -1,12 +1,17 @@
-use crate::api::API;
-use crate::entities::bot_command::BotCommand;
-use crate::entities::bot_command_scope::BotCommandScope;
-use crate::errors::ConogramError;
-use crate::impl_into_future;
-use crate::request::RequestT;
+use std::{
+    future::{Future, IntoFuture},
+    pin::Pin,
+};
+
 use serde::Serialize;
-use std::future::{Future, IntoFuture};
-use std::pin::Pin;
+
+use crate::{
+    api::API,
+    entities::{bot_command::BotCommand, bot_command_scope::BotCommandScope},
+    errors::ConogramError,
+    impl_into_future,
+    request::RequestT,
+};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SetMyCommandsParams {

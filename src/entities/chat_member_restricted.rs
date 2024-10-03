@@ -1,5 +1,6 @@
-use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::user::User;
 
 /// Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that is under certain restrictions in the chat. Supergroups only.
 ///

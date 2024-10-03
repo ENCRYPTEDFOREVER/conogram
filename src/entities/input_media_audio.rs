@@ -1,9 +1,11 @@
-use crate::entities::message_entity::MessageEntity;
-use crate::entities::misc::input_file::GetFiles;
-use crate::entities::misc::input_file::InputFile;
-use crate::entities::misc::input_file::Moose;
-use serde::Serialize;
 use std::collections::HashMap;
+
+use serde::Serialize;
+
+use crate::entities::{
+    message_entity::MessageEntity,
+    misc::input_file::{GetFiles, InputFile, Moose},
+};
 
 /// Represents an audio file to be treated as music to be sent.
 ///

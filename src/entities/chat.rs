@@ -1,5 +1,6 @@
-use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
+
+use crate::utils::deserialize_utils::is_false;
 
 /// This object represents a chat.
 ///
@@ -56,39 +57,35 @@ pub enum ChatType {
 }
 
 // Divider: all content below this line will be preserved after code regen
-use super::chat_full_info::ChatFullInfo;
-use super::misc::input_file::InputFile;
-use crate::api::API;
-use crate::entities::chat_permissions::ChatPermissions;
-use crate::impl_trait;
-
-use crate::methods::approve_chat_join_request::ApproveChatJoinRequestRequest;
-use crate::methods::ban_chat_member::BanChatMemberRequest;
-use crate::methods::ban_chat_sender_chat::BanChatSenderChatRequest;
-use crate::methods::create_chat_invite_link::CreateChatInviteLinkRequest;
-use crate::methods::decline_chat_join_request::DeclineChatJoinRequestRequest;
-use crate::methods::delete_chat_photo::DeleteChatPhotoRequest;
-use crate::methods::delete_chat_sticker_set::DeleteChatStickerSetRequest;
-use crate::methods::edit_chat_invite_link::EditChatInviteLinkRequest;
-use crate::methods::export_chat_invite_link::ExportChatInviteLinkRequest;
-use crate::methods::get_chat::GetChatRequest;
-use crate::methods::get_chat_administrators::GetChatAdministratorsRequest;
-use crate::methods::get_chat_member::GetChatMemberRequest;
-use crate::methods::get_chat_member_count::GetChatMemberCountRequest;
-use crate::methods::leave_chat::LeaveChatRequest;
-use crate::methods::promote_chat_member::PromoteChatMemberRequest;
-use crate::methods::restrict_chat_member::RestrictChatMemberRequest;
-use crate::methods::revoke_chat_invite_link::RevokeChatInviteLinkRequest;
-use crate::methods::send_chat_action::SendChatActionRequest;
-use crate::methods::set_chat_administrator_custom_title::SetChatAdministratorCustomTitleRequest;
-use crate::methods::set_chat_description::SetChatDescriptionRequest;
-use crate::methods::set_chat_permissions::SetChatPermissionsRequest;
-use crate::methods::set_chat_photo::SetChatPhotoRequest;
-use crate::methods::set_chat_sticker_set::SetChatStickerSetRequest;
-use crate::methods::set_chat_title::SetChatTitleRequest;
-use crate::methods::unban_chat_member::UnbanChatMemberRequest;
-use crate::methods::unban_chat_sender_chat::UnbanChatSenderChatRequest;
-use crate::methods::unpin_all_chat_messages::UnpinAllChatMessagesRequest;
+use super::{chat_full_info::ChatFullInfo, misc::input_file::InputFile};
+use crate::{
+    api::API,
+    entities::chat_permissions::ChatPermissions,
+    impl_trait,
+    methods::{
+        approve_chat_join_request::ApproveChatJoinRequestRequest,
+        ban_chat_member::BanChatMemberRequest, ban_chat_sender_chat::BanChatSenderChatRequest,
+        create_chat_invite_link::CreateChatInviteLinkRequest,
+        decline_chat_join_request::DeclineChatJoinRequestRequest,
+        delete_chat_photo::DeleteChatPhotoRequest,
+        delete_chat_sticker_set::DeleteChatStickerSetRequest,
+        edit_chat_invite_link::EditChatInviteLinkRequest,
+        export_chat_invite_link::ExportChatInviteLinkRequest, get_chat::GetChatRequest,
+        get_chat_administrators::GetChatAdministratorsRequest,
+        get_chat_member::GetChatMemberRequest, get_chat_member_count::GetChatMemberCountRequest,
+        leave_chat::LeaveChatRequest, promote_chat_member::PromoteChatMemberRequest,
+        restrict_chat_member::RestrictChatMemberRequest,
+        revoke_chat_invite_link::RevokeChatInviteLinkRequest,
+        send_chat_action::SendChatActionRequest,
+        set_chat_administrator_custom_title::SetChatAdministratorCustomTitleRequest,
+        set_chat_description::SetChatDescriptionRequest,
+        set_chat_permissions::SetChatPermissionsRequest, set_chat_photo::SetChatPhotoRequest,
+        set_chat_sticker_set::SetChatStickerSetRequest, set_chat_title::SetChatTitleRequest,
+        unban_chat_member::UnbanChatMemberRequest,
+        unban_chat_sender_chat::UnbanChatSenderChatRequest,
+        unpin_all_chat_messages::UnpinAllChatMessagesRequest,
+    },
+};
 
 impl Chat {
     // Returns Chat's title for groups and User::full_name for private chats

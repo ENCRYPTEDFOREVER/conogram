@@ -1,5 +1,6 @@
-use crate::entities::transaction_partner::TransactionPartner;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::transaction_partner::TransactionPartner;
 
 /// Describes a Telegram Star transaction.
 ///

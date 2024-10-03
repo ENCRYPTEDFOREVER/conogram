@@ -1,20 +1,28 @@
-use crate::api::API;
-use crate::entities::message::Message;
-use crate::entities::message_entity::MessageEntity;
-use crate::entities::misc::chat_id::ChatId;
-use crate::entities::misc::input_file::GetFiles;
-use crate::entities::misc::input_file::InputFile;
-use crate::entities::misc::input_file::Moose;
-use crate::entities::misc::reply_markup::ReplyMarkup;
-use crate::entities::reply_parameters::ReplyParameters;
-use crate::errors::ConogramError;
-use crate::impl_into_future_multipart;
-use crate::request::RequestT;
-use crate::utils::deserialize_utils::is_false;
+use std::{
+    collections::HashMap,
+    future::{Future, IntoFuture},
+    pin::Pin,
+};
+
 use serde::Serialize;
-use std::collections::HashMap;
-use std::future::{Future, IntoFuture};
-use std::pin::Pin;
+
+use crate::{
+    api::API,
+    entities::{
+        message::Message,
+        message_entity::MessageEntity,
+        misc::{
+            chat_id::ChatId,
+            input_file::{GetFiles, InputFile, Moose},
+            reply_markup::ReplyMarkup,
+        },
+        reply_parameters::ReplyParameters,
+    },
+    errors::ConogramError,
+    impl_into_future_multipart,
+    request::RequestT,
+    utils::deserialize_utils::is_false,
+};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SendAnimationParams {

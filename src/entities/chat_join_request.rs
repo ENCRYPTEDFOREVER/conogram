@@ -1,7 +1,6 @@
-use crate::entities::chat::Chat;
-use crate::entities::chat_invite_link::ChatInviteLink;
-use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{chat::Chat, chat_invite_link::ChatInviteLink, user::User};
 
 /// Represents a join request sent to a chat.
 ///
@@ -31,10 +30,12 @@ pub struct ChatJoinRequest {
 
 // Divider: all content below this line will be preserved after code regen
 
-use crate::api::API;
-use crate::methods::{
-    approve_chat_join_request::ApproveChatJoinRequestRequest,
-    decline_chat_join_request::DeclineChatJoinRequestRequest,
+use crate::{
+    api::API,
+    methods::{
+        approve_chat_join_request::ApproveChatJoinRequestRequest,
+        decline_chat_join_request::DeclineChatJoinRequestRequest,
+    },
 };
 
 impl ChatJoinRequest {

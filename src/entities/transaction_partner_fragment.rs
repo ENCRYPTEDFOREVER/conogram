@@ -1,5 +1,6 @@
-use crate::entities::revenue_withdrawal_state::RevenueWithdrawalState;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::revenue_withdrawal_state::RevenueWithdrawalState;
 
 /// Describes a withdrawal transaction with Fragment.
 ///

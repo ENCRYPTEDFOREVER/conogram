@@ -1,8 +1,12 @@
-use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
-use crate::entities::input_message_content::InputMessageContent;
-use crate::entities::message_entity::MessageEntity;
-use crate::utils::deserialize_utils::is_false;
 use serde::Serialize;
+
+use crate::{
+    entities::{
+        inline_keyboard_markup::InlineKeyboardMarkup, input_message_content::InputMessageContent,
+        message_entity::MessageEntity,
+    },
+    utils::deserialize_utils::is_false,
+};
 
 /// Represents a link to an animated GIF file. By default, this animated GIF file will be sent by the user with optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the animation.
 ///

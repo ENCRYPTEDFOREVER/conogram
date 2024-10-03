@@ -1,9 +1,10 @@
-use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
-use crate::entities::keyboard_button::KeyboardButton;
-use crate::entities::reply_keyboard_markup::ReplyKeyboardMarkup;
-use crate::entities::reply_keyboard_remove::ReplyKeyboardRemove;
-use crate::entities::{force_reply::ForceReply, inline_keyboard_button::InlineKeyboardButton};
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{
+    force_reply::ForceReply, inline_keyboard_button::InlineKeyboardButton,
+    inline_keyboard_markup::InlineKeyboardMarkup, keyboard_button::KeyboardButton,
+    reply_keyboard_markup::ReplyKeyboardMarkup, reply_keyboard_remove::ReplyKeyboardRemove,
+};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(untagged)]

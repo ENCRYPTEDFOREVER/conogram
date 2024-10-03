@@ -1,27 +1,16 @@
-use crate::entities::animation::Animation;
-use crate::entities::audio::Audio;
-use crate::entities::chat::Chat;
-use crate::entities::contact::Contact;
-use crate::entities::dice::Dice;
-use crate::entities::document::Document;
-use crate::entities::game::Game;
-use crate::entities::giveaway::Giveaway;
-use crate::entities::giveaway_winners::GiveawayWinners;
-use crate::entities::invoice::Invoice;
-use crate::entities::link_preview_options::LinkPreviewOptions;
-use crate::entities::location::Location;
-use crate::entities::message_origin::MessageOrigin;
-use crate::entities::paid_media_info::PaidMediaInfo;
-use crate::entities::photo_size::PhotoSize;
-use crate::entities::poll::Poll;
-use crate::entities::sticker::Sticker;
-use crate::entities::story::Story;
-use crate::entities::venue::Venue;
-use crate::entities::video::Video;
-use crate::entities::video_note::VideoNote;
-use crate::entities::voice::Voice;
-use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
+
+use crate::{
+    entities::{
+        animation::Animation, audio::Audio, chat::Chat, contact::Contact, dice::Dice,
+        document::Document, game::Game, giveaway::Giveaway, giveaway_winners::GiveawayWinners,
+        invoice::Invoice, link_preview_options::LinkPreviewOptions, location::Location,
+        message_origin::MessageOrigin, paid_media_info::PaidMediaInfo, photo_size::PhotoSize,
+        poll::Poll, sticker::Sticker, story::Story, venue::Venue, video::Video,
+        video_note::VideoNote, voice::Voice,
+    },
+    utils::deserialize_utils::is_false,
+};
 
 /// This object contains information about a message that is being replied to, which may come from another chat or forum topic.
 ///

@@ -1,5 +1,6 @@
-use crate::entities::labeled_price::LabeledPrice;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::labeled_price::LabeledPrice;
 
 /// This object represents one shipping option.
 ///

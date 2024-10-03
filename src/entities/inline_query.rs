@@ -1,6 +1,6 @@
-use crate::entities::location::Location;
-use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{location::Location, user::User};
 
 /// This object represents an incoming inline query. When the user sends an empty query, your bot could return some default or trending results.
 ///
@@ -55,8 +55,7 @@ pub enum ChatType {
 
 // Divider: all content below this line will be preserved after code regen
 use super::inline_query_result::InlineQueryResult;
-use crate::api::API;
-use crate::methods::answer_inline_query::AnswerInlineQueryRequest;
+use crate::{api::API, methods::answer_inline_query::AnswerInlineQueryRequest};
 
 impl InlineQuery {
     pub fn answer<'a>(

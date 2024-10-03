@@ -1,5 +1,6 @@
-use crate::entities::photo_size::PhotoSize;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::photo_size::PhotoSize;
 
 /// This object represents an audio file to be treated as music by the Telegram clients.
 ///

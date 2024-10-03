@@ -1,6 +1,6 @@
-use crate::entities::message::Message;
-use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
+
+use crate::{entities::message::Message, utils::deserialize_utils::is_false};
 
 /// This object represents a service message about the completion of a giveaway without public winners.
 ///

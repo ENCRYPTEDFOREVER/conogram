@@ -1,7 +1,9 @@
-use crate::entities::message_entity::MessageEntity;
-use crate::entities::misc::chat_id::ChatId;
-use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
+
+use crate::{
+    entities::{message_entity::MessageEntity, misc::chat_id::ChatId},
+    utils::deserialize_utils::is_false,
+};
 
 /// Describes reply parameters for the message that is being sent.
 ///

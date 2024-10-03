@@ -1,6 +1,9 @@
-use crate::entities::encrypted_credentials::EncryptedCredentials;
-use crate::entities::encrypted_passport_element::EncryptedPassportElement;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{
+    encrypted_credentials::EncryptedCredentials,
+    encrypted_passport_element::EncryptedPassportElement,
+};
 
 /// Describes Telegram Passport data shared with the bot by the user.
 ///

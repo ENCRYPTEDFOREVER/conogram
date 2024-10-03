@@ -1,5 +1,6 @@
-use crate::entities::sticker::Sticker;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::sticker::Sticker;
 
 /// Contains information about the start page settings of a Telegram Business account.
 ///

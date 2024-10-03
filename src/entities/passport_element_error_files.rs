@@ -1,5 +1,6 @@
-use crate::entities::passport_element_error_file::PassportElementErrorFileType;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::passport_element_error_file::PassportElementErrorFileType;
 
 /// Represents an issue with a list of scans. The error is considered resolved when the list of files containing the scans changes.
 ///

@@ -1,5 +1,6 @@
-use crate::entities::shared_user::SharedUser;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::shared_user::SharedUser;
 
 /// This object contains information about the users whose identifiers were shared with the bot using a [KeyboardButtonRequestUsers](https://core.telegram.org/bots/api/#keyboardbuttonrequestusers) button.
 ///

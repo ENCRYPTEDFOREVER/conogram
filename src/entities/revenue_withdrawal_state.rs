@@ -1,7 +1,10 @@
-use crate::entities::revenue_withdrawal_state_failed::RevenueWithdrawalStateFailed;
-use crate::entities::revenue_withdrawal_state_pending::RevenueWithdrawalStatePending;
-use crate::entities::revenue_withdrawal_state_succeeded::RevenueWithdrawalStateSucceeded;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{
+    revenue_withdrawal_state_failed::RevenueWithdrawalStateFailed,
+    revenue_withdrawal_state_pending::RevenueWithdrawalStatePending,
+    revenue_withdrawal_state_succeeded::RevenueWithdrawalStateSucceeded,
+};
 
 /// This object describes the state of a revenue withdrawal operation. Currently, it can be one of
 ///

@@ -1,7 +1,9 @@
-use crate::entities::paid_media_photo::PaidMediaPhoto;
-use crate::entities::paid_media_preview::PaidMediaPreview;
-use crate::entities::paid_media_video::PaidMediaVideo;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{
+    paid_media_photo::PaidMediaPhoto, paid_media_preview::PaidMediaPreview,
+    paid_media_video::PaidMediaVideo,
+};
 
 /// This object describes paid media. Currently, it can be one of
 ///

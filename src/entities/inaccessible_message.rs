@@ -1,5 +1,6 @@
-use crate::entities::chat::Chat;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::chat::Chat;
 
 /// This object describes a message that was deleted or is otherwise inaccessible to the bot.
 ///

@@ -1,5 +1,6 @@
-use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::user::User;
 
 /// The boost was obtained by subscribing to Telegram Premium or by gifting a Telegram Premium subscription to another user.
 ///

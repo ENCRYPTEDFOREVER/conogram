@@ -1,9 +1,12 @@
-use crate::entities::callback_game::CallbackGame;
-use crate::entities::login_url::LoginUrl;
-use crate::entities::switch_inline_query_chosen_chat::SwitchInlineQueryChosenChat;
-use crate::entities::web_app_info::WebAppInfo;
-use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
+
+use crate::{
+    entities::{
+        callback_game::CallbackGame, login_url::LoginUrl,
+        switch_inline_query_chosen_chat::SwitchInlineQueryChosenChat, web_app_info::WebAppInfo,
+    },
+    utils::deserialize_utils::is_false,
+};
 
 /// This object represents one button of an inline keyboard. Exactly one of the optional fields must be used to specify type of the button.
 ///

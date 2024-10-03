@@ -1,8 +1,9 @@
-use crate::entities::file::File;
-use crate::entities::mask_position::MaskPosition;
-use crate::entities::photo_size::PhotoSize;
-use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
+
+use crate::{
+    entities::{file::File, mask_position::MaskPosition, photo_size::PhotoSize},
+    utils::deserialize_utils::is_false,
+};
 
 /// This object represents a sticker.
 ///
@@ -82,8 +83,7 @@ pub enum StickerType {
 }
 
 // Divider: all content below this line will be preserved after code regen
-use crate::api::API;
-use crate::methods::get_sticker_set::GetStickerSetRequest;
+use crate::{api::API, methods::get_sticker_set::GetStickerSetRequest};
 
 impl Sticker {
     /// Returns a [GetStickerSetRequest] if the sticker has a set, e.g. ([Sticker.set_name](Self::set_name) is `Some`)

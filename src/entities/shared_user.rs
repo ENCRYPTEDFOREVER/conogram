@@ -1,5 +1,6 @@
-use crate::entities::photo_size::PhotoSize;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::photo_size::PhotoSize;
 
 /// This object contains information about a user that was shared with the bot using a [KeyboardButtonRequestUsers](https://core.telegram.org/bots/api/#keyboardbuttonrequestusers) button.
 ///

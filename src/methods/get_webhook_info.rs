@@ -1,11 +1,14 @@
-use crate::api::API;
-use crate::entities::webhook_info::WebhookInfo;
-use crate::errors::ConogramError;
-use crate::impl_into_future;
-use crate::request::RequestT;
+use std::{
+    future::{Future, IntoFuture},
+    pin::Pin,
+};
+
 use serde::Serialize;
-use std::future::{Future, IntoFuture};
-use std::pin::Pin;
+
+use crate::{
+    api::API, entities::webhook_info::WebhookInfo, errors::ConogramError, impl_into_future,
+    request::RequestT,
+};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct GetWebhookInfoParams {}

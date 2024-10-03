@@ -1,24 +1,26 @@
-use crate::entities::inline_query_result_article::InlineQueryResultArticle;
-use crate::entities::inline_query_result_audio::InlineQueryResultAudio;
-use crate::entities::inline_query_result_cached_audio::InlineQueryResultCachedAudio;
-use crate::entities::inline_query_result_cached_document::InlineQueryResultCachedDocument;
-use crate::entities::inline_query_result_cached_gif::InlineQueryResultCachedGif;
-use crate::entities::inline_query_result_cached_mpeg4_gif::InlineQueryResultCachedMpeg4Gif;
-use crate::entities::inline_query_result_cached_photo::InlineQueryResultCachedPhoto;
-use crate::entities::inline_query_result_cached_sticker::InlineQueryResultCachedSticker;
-use crate::entities::inline_query_result_cached_video::InlineQueryResultCachedVideo;
-use crate::entities::inline_query_result_cached_voice::InlineQueryResultCachedVoice;
-use crate::entities::inline_query_result_contact::InlineQueryResultContact;
-use crate::entities::inline_query_result_document::InlineQueryResultDocument;
-use crate::entities::inline_query_result_game::InlineQueryResultGame;
-use crate::entities::inline_query_result_gif::InlineQueryResultGif;
-use crate::entities::inline_query_result_location::InlineQueryResultLocation;
-use crate::entities::inline_query_result_mpeg4_gif::InlineQueryResultMpeg4Gif;
-use crate::entities::inline_query_result_photo::InlineQueryResultPhoto;
-use crate::entities::inline_query_result_venue::InlineQueryResultVenue;
-use crate::entities::inline_query_result_video::InlineQueryResultVideo;
-use crate::entities::inline_query_result_voice::InlineQueryResultVoice;
 use serde::Serialize;
+
+use crate::entities::{
+    inline_query_result_article::InlineQueryResultArticle,
+    inline_query_result_audio::InlineQueryResultAudio,
+    inline_query_result_cached_audio::InlineQueryResultCachedAudio,
+    inline_query_result_cached_document::InlineQueryResultCachedDocument,
+    inline_query_result_cached_gif::InlineQueryResultCachedGif,
+    inline_query_result_cached_mpeg4_gif::InlineQueryResultCachedMpeg4Gif,
+    inline_query_result_cached_photo::InlineQueryResultCachedPhoto,
+    inline_query_result_cached_sticker::InlineQueryResultCachedSticker,
+    inline_query_result_cached_video::InlineQueryResultCachedVideo,
+    inline_query_result_cached_voice::InlineQueryResultCachedVoice,
+    inline_query_result_contact::InlineQueryResultContact,
+    inline_query_result_document::InlineQueryResultDocument,
+    inline_query_result_game::InlineQueryResultGame, inline_query_result_gif::InlineQueryResultGif,
+    inline_query_result_location::InlineQueryResultLocation,
+    inline_query_result_mpeg4_gif::InlineQueryResultMpeg4Gif,
+    inline_query_result_photo::InlineQueryResultPhoto,
+    inline_query_result_venue::InlineQueryResultVenue,
+    inline_query_result_video::InlineQueryResultVideo,
+    inline_query_result_voice::InlineQueryResultVoice,
+};
 
 /// This object represents one result of an inline query. Telegram clients currently support results of the following 20 types:
 ///

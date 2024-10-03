@@ -1,13 +1,16 @@
-use crate::entities::passport_element_error_data_field::PassportElementErrorDataField;
-use crate::entities::passport_element_error_file::PassportElementErrorFile;
-use crate::entities::passport_element_error_files::PassportElementErrorFiles;
-use crate::entities::passport_element_error_front_side::PassportElementErrorFrontSide;
-use crate::entities::passport_element_error_reverse_side::PassportElementErrorReverseSide;
-use crate::entities::passport_element_error_selfie::PassportElementErrorSelfie;
-use crate::entities::passport_element_error_translation_file::PassportElementErrorTranslationFile;
-use crate::entities::passport_element_error_translation_files::PassportElementErrorTranslationFiles;
-use crate::entities::passport_element_error_unspecified::PassportElementErrorUnspecified;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{
+    passport_element_error_data_field::PassportElementErrorDataField,
+    passport_element_error_file::PassportElementErrorFile,
+    passport_element_error_files::PassportElementErrorFiles,
+    passport_element_error_front_side::PassportElementErrorFrontSide,
+    passport_element_error_reverse_side::PassportElementErrorReverseSide,
+    passport_element_error_selfie::PassportElementErrorSelfie,
+    passport_element_error_translation_file::PassportElementErrorTranslationFile,
+    passport_element_error_translation_files::PassportElementErrorTranslationFiles,
+    passport_element_error_unspecified::PassportElementErrorUnspecified,
+};
 
 /// This object represents an error in the Telegram Passport element which was submitted that should be resolved by the user. It should be one of:
 ///

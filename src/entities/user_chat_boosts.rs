@@ -1,5 +1,6 @@
-use crate::entities::chat_boost::ChatBoost;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::chat_boost::ChatBoost;
 
 /// This object represents a list of boosts added to a chat by a user.
 ///

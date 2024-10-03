@@ -1,5 +1,6 @@
-use crate::entities::shipping_address::ShippingAddress;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::shipping_address::ShippingAddress;
 
 /// This object represents information about an order.
 ///

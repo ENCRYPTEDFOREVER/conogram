@@ -1,13 +1,17 @@
-use crate::api::API;
-use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
-use crate::entities::misc::chat_id::ChatId;
-use crate::entities::poll::Poll;
-use crate::errors::ConogramError;
-use crate::impl_into_future;
-use crate::request::RequestT;
+use std::{
+    future::{Future, IntoFuture},
+    pin::Pin,
+};
+
 use serde::Serialize;
-use std::future::{Future, IntoFuture};
-use std::pin::Pin;
+
+use crate::{
+    api::API,
+    entities::{inline_keyboard_markup::InlineKeyboardMarkup, misc::chat_id::ChatId, poll::Poll},
+    errors::ConogramError,
+    impl_into_future,
+    request::RequestT,
+};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct StopPollParams {

@@ -1,5 +1,6 @@
-use crate::entities::video::Video;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::video::Video;
 
 /// The paid media is a video.
 ///

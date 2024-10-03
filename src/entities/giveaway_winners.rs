@@ -1,7 +1,9 @@
-use crate::entities::chat::Chat;
-use crate::entities::user::User;
-use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
+
+use crate::{
+    entities::{chat::Chat, user::User},
+    utils::deserialize_utils::is_false,
+};
 
 /// This object represents a message about the completion of a giveaway with public winners.
 ///

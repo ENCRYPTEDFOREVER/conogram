@@ -1,8 +1,9 @@
-use crate::entities::message_origin_channel::MessageOriginChannel;
-use crate::entities::message_origin_chat::MessageOriginChat;
-use crate::entities::message_origin_hidden_user::MessageOriginHiddenUser;
-use crate::entities::message_origin_user::MessageOriginUser;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{
+    message_origin_channel::MessageOriginChannel, message_origin_chat::MessageOriginChat,
+    message_origin_hidden_user::MessageOriginHiddenUser, message_origin_user::MessageOriginUser,
+};
 
 /// This object describes the origin of a message. It can be one of
 ///

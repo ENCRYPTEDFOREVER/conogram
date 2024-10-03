@@ -1,6 +1,6 @@
-use crate::entities::document::Document;
-use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
+
+use crate::{entities::document::Document, utils::deserialize_utils::is_false};
 
 /// The background is a wallpaper in the JPEG format.
 ///

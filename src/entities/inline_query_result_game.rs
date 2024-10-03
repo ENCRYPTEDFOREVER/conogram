@@ -1,5 +1,6 @@
-use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
 use serde::Serialize;
+
+use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
 
 /// Represents a [Game](https://core.telegram.org/bots/api/#games).
 ///

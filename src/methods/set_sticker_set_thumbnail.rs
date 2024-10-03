@@ -1,14 +1,18 @@
-use crate::api::API;
-use crate::entities::misc::input_file::GetFiles;
-use crate::entities::misc::input_file::InputFile;
-use crate::entities::misc::input_file::Moose;
-use crate::errors::ConogramError;
-use crate::impl_into_future_multipart;
-use crate::request::RequestT;
+use std::{
+    collections::HashMap,
+    future::{Future, IntoFuture},
+    pin::Pin,
+};
+
 use serde::Serialize;
-use std::collections::HashMap;
-use std::future::{Future, IntoFuture};
-use std::pin::Pin;
+
+use crate::{
+    api::API,
+    entities::misc::input_file::{GetFiles, InputFile, Moose},
+    errors::ConogramError,
+    impl_into_future_multipart,
+    request::RequestT,
+};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SetStickerSetThumbnailParams {

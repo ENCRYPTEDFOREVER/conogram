@@ -1,7 +1,6 @@
-use crate::entities::animation::Animation;
-use crate::entities::message_entity::MessageEntity;
-use crate::entities::photo_size::PhotoSize;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{animation::Animation, message_entity::MessageEntity, photo_size::PhotoSize};
 
 /// This object represents a game. Use BotFather to create and edit games, their short names will act as unique identifiers.
 ///

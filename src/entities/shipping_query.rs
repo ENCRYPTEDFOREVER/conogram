@@ -1,6 +1,6 @@
-use crate::entities::shipping_address::ShippingAddress;
-use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{shipping_address::ShippingAddress, user::User};
 
 /// This object contains information about an incoming shipping query.
 ///

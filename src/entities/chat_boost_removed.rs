@@ -1,6 +1,6 @@
-use crate::entities::chat::Chat;
-use crate::entities::chat_boost_source::ChatBoostSource;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{chat::Chat, chat_boost_source::ChatBoostSource};
 
 /// This object represents a boost removed from a chat.
 ///

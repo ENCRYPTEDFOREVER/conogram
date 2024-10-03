@@ -1,5 +1,6 @@
-use crate::entities::paid_media::PaidMedia;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::paid_media::PaidMedia;
 
 /// Describes the paid media added to a message.
 ///

@@ -1,21 +1,16 @@
-use crate::entities::business_connection::BusinessConnection;
-use crate::entities::business_messages_deleted::BusinessMessagesDeleted;
-use crate::entities::callback_query::CallbackQuery;
-use crate::entities::chat_boost_removed::ChatBoostRemoved;
-use crate::entities::chat_boost_updated::ChatBoostUpdated;
-use crate::entities::chat_join_request::ChatJoinRequest;
-use crate::entities::chat_member_updated::ChatMemberUpdated;
-use crate::entities::chosen_inline_result::ChosenInlineResult;
-use crate::entities::inline_query::InlineQuery;
-use crate::entities::message::Message;
-use crate::entities::message_reaction_count_updated::MessageReactionCountUpdated;
-use crate::entities::message_reaction_updated::MessageReactionUpdated;
-use crate::entities::paid_media_purchased::PaidMediaPurchased;
-use crate::entities::poll::Poll;
-use crate::entities::poll_answer::PollAnswer;
-use crate::entities::pre_checkout_query::PreCheckoutQuery;
-use crate::entities::shipping_query::ShippingQuery;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{
+    business_connection::BusinessConnection, business_messages_deleted::BusinessMessagesDeleted,
+    callback_query::CallbackQuery, chat_boost_removed::ChatBoostRemoved,
+    chat_boost_updated::ChatBoostUpdated, chat_join_request::ChatJoinRequest,
+    chat_member_updated::ChatMemberUpdated, chosen_inline_result::ChosenInlineResult,
+    inline_query::InlineQuery, message::Message,
+    message_reaction_count_updated::MessageReactionCountUpdated,
+    message_reaction_updated::MessageReactionUpdated, paid_media_purchased::PaidMediaPurchased,
+    poll::Poll, poll_answer::PollAnswer, pre_checkout_query::PreCheckoutQuery,
+    shipping_query::ShippingQuery,
+};
 
 /// This [object](https://core.telegram.org/bots/api/#available-types) represents an incoming update.  
 /// At most **one** of the optional parameters can be present in any given update.

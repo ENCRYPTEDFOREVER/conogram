@@ -1,5 +1,6 @@
-use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::user::User;
 
 /// This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
 ///

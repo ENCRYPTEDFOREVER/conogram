@@ -1,16 +1,20 @@
-use crate::entities::birthdate::Birthdate;
-use crate::entities::business_intro::BusinessIntro;
-use crate::entities::business_location::BusinessLocation;
-use crate::entities::business_opening_hours::BusinessOpeningHours;
-use crate::entities::chat::Chat;
-use crate::entities::chat::ChatType;
-use crate::entities::chat_location::ChatLocation;
-use crate::entities::chat_permissions::ChatPermissions;
-use crate::entities::chat_photo::ChatPhoto;
-use crate::entities::message::Message;
-use crate::entities::reaction_type::ReactionType;
-use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
+
+use crate::{
+    entities::{
+        birthdate::Birthdate,
+        business_intro::BusinessIntro,
+        business_location::BusinessLocation,
+        business_opening_hours::BusinessOpeningHours,
+        chat::{Chat, ChatType},
+        chat_location::ChatLocation,
+        chat_permissions::ChatPermissions,
+        chat_photo::ChatPhoto,
+        message::Message,
+        reaction_type::ReactionType,
+    },
+    utils::deserialize_utils::is_false,
+};
 
 /// This object contains full information about a chat.
 ///

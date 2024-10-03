@@ -1,9 +1,9 @@
-use crate::entities::chat::Chat;
-use crate::entities::chat_invite_link::ChatInviteLink;
-use crate::entities::chat_member::ChatMember;
-use crate::entities::user::User;
-use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
+
+use crate::{
+    entities::{chat::Chat, chat_invite_link::ChatInviteLink, chat_member::ChatMember, user::User},
+    utils::deserialize_utils::is_false,
+};
 
 /// This object represents changes in the status of a chat member.
 ///

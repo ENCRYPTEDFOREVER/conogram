@@ -1,5 +1,6 @@
-use crate::entities::passport_element_error_front_side::PassportElementErrorFrontSideType;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::passport_element_error_front_side::PassportElementErrorFrontSideType;
 
 /// Represents an issue with the selfie with a document. The error is considered resolved when the file with the selfie changes.
 ///

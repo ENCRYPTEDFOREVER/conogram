@@ -1,5 +1,6 @@
-use crate::entities::photo_size::PhotoSize;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::photo_size::PhotoSize;
 
 /// The paid media is a photo.
 ///

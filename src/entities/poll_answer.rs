@@ -1,6 +1,6 @@
-use crate::entities::chat::Chat;
-use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{chat::Chat, user::User};
 
 /// This object represents an answer of a user in a non-anonymous poll.
 ///

@@ -1,5 +1,6 @@
-use crate::entities::web_app_info::WebAppInfo;
 use serde::Serialize;
+
+use crate::entities::web_app_info::WebAppInfo;
 
 /// This object represents a button to be shown above inline query results. You **must** use exactly one of the optional fields.
 ///

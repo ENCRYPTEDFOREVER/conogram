@@ -1,5 +1,6 @@
-use crate::entities::inline_keyboard_button::InlineKeyboardButton;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::inline_keyboard_button::InlineKeyboardButton;
 
 /// This object represents an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards) that appears right next to the message it belongs to.
 ///

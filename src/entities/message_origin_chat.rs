@@ -1,5 +1,6 @@
-use crate::entities::chat::Chat;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::chat::Chat;
 
 /// The message was originally sent on behalf of a chat to a group chat.
 ///

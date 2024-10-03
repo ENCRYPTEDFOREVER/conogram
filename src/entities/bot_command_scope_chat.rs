@@ -1,5 +1,6 @@
-use crate::entities::misc::chat_id::ChatId;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::misc::chat_id::ChatId;
 
 /// Represents the [scope](https://core.telegram.org/bots/api/#botcommandscope) of bot commands, covering a specific chat.
 ///

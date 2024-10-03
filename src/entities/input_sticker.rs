@@ -1,9 +1,11 @@
-use crate::entities::mask_position::MaskPosition;
-use crate::entities::misc::input_file::GetFiles;
-use crate::entities::misc::input_file::InputFile;
-use crate::entities::misc::input_file::Moose;
-use serde::Serialize;
 use std::collections::HashMap;
+
+use serde::Serialize;
+
+use crate::entities::{
+    mask_position::MaskPosition,
+    misc::input_file::{GetFiles, InputFile, Moose},
+};
 
 /// This object describes a sticker to be added to a sticker set.
 ///

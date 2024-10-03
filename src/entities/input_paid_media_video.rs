@@ -1,9 +1,11 @@
-use crate::entities::misc::input_file::GetFiles;
-use crate::entities::misc::input_file::InputFile;
-use crate::entities::misc::input_file::Moose;
-use crate::utils::deserialize_utils::is_false;
-use serde::Serialize;
 use std::collections::HashMap;
+
+use serde::Serialize;
+
+use crate::{
+    entities::misc::input_file::{GetFiles, InputFile, Moose},
+    utils::deserialize_utils::is_false,
+};
 
 /// The paid media to send is a video.
 ///

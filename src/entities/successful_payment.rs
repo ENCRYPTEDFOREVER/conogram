@@ -1,5 +1,6 @@
-use crate::entities::order_info::OrderInfo;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::order_info::OrderInfo;
 
 /// This object contains basic information about a successful payment.
 ///

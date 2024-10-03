@@ -1,5 +1,6 @@
-use crate::entities::business_opening_hours_interval::BusinessOpeningHoursInterval;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::business_opening_hours_interval::BusinessOpeningHoursInterval;
 
 /// Describes the opening hours of a business.
 ///

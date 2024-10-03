@@ -1,7 +1,9 @@
-use crate::entities::photo_size::PhotoSize;
-use crate::entities::sticker::Sticker;
-use crate::entities::sticker::StickerType;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{
+    photo_size::PhotoSize,
+    sticker::{Sticker, StickerType},
+};
 
 /// This object represents a sticker set.
 ///

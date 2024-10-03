@@ -1,5 +1,6 @@
-use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::user::User;
 
 /// Represents an invite link for a chat.
 ///
@@ -49,8 +50,7 @@ pub struct ChatInviteLink {
 // Divider: all content below this line will be preserved after code regen
 
 use super::misc::chat_id::ChatId;
-use crate::api::API;
-use crate::methods::revoke_chat_invite_link::RevokeChatInviteLinkRequest;
+use crate::{api::API, methods::revoke_chat_invite_link::RevokeChatInviteLinkRequest};
 
 impl ChatInviteLink {
     pub fn revoke<'a>(

@@ -1,8 +1,8 @@
-use crate::entities::misc::input_file::GetFiles;
-use crate::entities::misc::input_file::InputFile;
-use crate::entities::misc::input_file::Moose;
-use serde::Serialize;
 use std::collections::HashMap;
+
+use serde::Serialize;
+
+use crate::entities::misc::input_file::{GetFiles, InputFile, Moose};
 
 /// The paid media to send is a photo.
 ///

@@ -1,6 +1,6 @@
-use crate::entities::chat::Chat;
-use crate::entities::reaction_count::ReactionCount;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{chat::Chat, reaction_count::ReactionCount};
 
 /// This object represents reaction changes on a message with anonymous reactions.
 ///

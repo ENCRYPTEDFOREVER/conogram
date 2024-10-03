@@ -1,6 +1,6 @@
-use crate::entities::message_entity::MessageEntity;
-use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
+
+use crate::{entities::message_entity::MessageEntity, utils::deserialize_utils::is_false};
 
 /// This object contains information about the quoted part of a message that is replied to by the given message.
 ///

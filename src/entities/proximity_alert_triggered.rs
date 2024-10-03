@@ -1,5 +1,6 @@
-use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::user::User;
 
 /// This object represents the content of a service message, sent whenever a user in the chat triggers a proximity alert set by another user.
 ///

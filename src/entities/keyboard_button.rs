@@ -1,9 +1,13 @@
-use crate::entities::keyboard_button_poll_type::KeyboardButtonPollType;
-use crate::entities::keyboard_button_request_chat::KeyboardButtonRequestChat;
-use crate::entities::keyboard_button_request_users::KeyboardButtonRequestUsers;
-use crate::entities::web_app_info::WebAppInfo;
-use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
+
+use crate::{
+    entities::{
+        keyboard_button_poll_type::KeyboardButtonPollType,
+        keyboard_button_request_chat::KeyboardButtonRequestChat,
+        keyboard_button_request_users::KeyboardButtonRequestUsers, web_app_info::WebAppInfo,
+    },
+    utils::deserialize_utils::is_false,
+};
 
 /// This object represents one button of the reply keyboard. At most one of the optional fields must be used to specify type of the button. For simple text buttons, *String* can be used instead of this object to specify the button text.
 ///

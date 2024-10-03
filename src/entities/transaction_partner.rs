@@ -1,8 +1,11 @@
-use crate::entities::transaction_partner_fragment::TransactionPartnerFragment;
-use crate::entities::transaction_partner_other::TransactionPartnerOther;
-use crate::entities::transaction_partner_telegram_ads::TransactionPartnerTelegramAds;
-use crate::entities::transaction_partner_user::TransactionPartnerUser;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{
+    transaction_partner_fragment::TransactionPartnerFragment,
+    transaction_partner_other::TransactionPartnerOther,
+    transaction_partner_telegram_ads::TransactionPartnerTelegramAds,
+    transaction_partner_user::TransactionPartnerUser,
+};
 
 /// This object describes the source of a transaction, or its recipient for outgoing transactions. Currently, it can be one of
 ///

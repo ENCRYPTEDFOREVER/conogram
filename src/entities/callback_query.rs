@@ -1,6 +1,6 @@
-use crate::entities::maybe_inaccessible_message::MaybeInaccessibleMessage;
-use crate::entities::user::User;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{maybe_inaccessible_message::MaybeInaccessibleMessage, user::User};
 
 /// This object represents an incoming callback query from a callback button in an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards). If the button that originated the query was attached to a message sent by the bot, the field *message* will be present. If the button was attached to a message sent via the bot (in [inline mode](https://core.telegram.org/bots/api/#inline-mode)), the field *inline\_message\_id* will be present. Exactly one of the fields *data* or *game\_short\_name* will be present.
 ///
@@ -34,10 +34,8 @@ pub struct CallbackQuery {
 }
 
 // Divider: all content below this line will be preserved after code regen
-use crate::api::API;
-use crate::methods::answer_callback_query::AnswerCallbackQueryRequest;
-
 use super::message::Message;
+use crate::{api::API, methods::answer_callback_query::AnswerCallbackQueryRequest};
 
 impl CallbackQuery {
     pub fn answer<'a>(&'a self, api: &'a API) -> AnswerCallbackQueryRequest<'a> {

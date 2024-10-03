@@ -1,5 +1,6 @@
-use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
+
+use crate::utils::deserialize_utils::is_false;
 
 /// Describes actions that a non-administrator user is allowed to take in a chat.
 ///

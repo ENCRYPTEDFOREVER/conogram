@@ -1,5 +1,6 @@
-use crate::entities::reaction_type::ReactionType;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::reaction_type::ReactionType;
 
 /// Represents a reaction added to a message along with the number of times it was added.
 ///

@@ -1,18 +1,26 @@
-use crate::api::API;
-use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
-use crate::entities::input_media::InputMedia;
-use crate::entities::message::Message;
-use crate::entities::misc::chat_id::ChatId;
-use crate::entities::misc::input_file::GetFiles;
-use crate::entities::misc::input_file::InputFile;
-use crate::entities::misc::input_file::Moose;
-use crate::errors::ConogramError;
-use crate::impl_into_future_multipart;
-use crate::request::RequestT;
+use std::{
+    collections::HashMap,
+    future::{Future, IntoFuture},
+    pin::Pin,
+};
+
 use serde::Serialize;
-use std::collections::HashMap;
-use std::future::{Future, IntoFuture};
-use std::pin::Pin;
+
+use crate::{
+    api::API,
+    entities::{
+        inline_keyboard_markup::InlineKeyboardMarkup,
+        input_media::InputMedia,
+        message::Message,
+        misc::{
+            chat_id::ChatId,
+            input_file::{GetFiles, InputFile, Moose},
+        },
+    },
+    errors::ConogramError,
+    impl_into_future_multipart,
+    request::RequestT,
+};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct EditMessageMediaParams {

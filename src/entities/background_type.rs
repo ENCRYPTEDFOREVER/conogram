@@ -1,8 +1,10 @@
-use crate::entities::background_type_chat_theme::BackgroundTypeChatTheme;
-use crate::entities::background_type_fill::BackgroundTypeFill;
-use crate::entities::background_type_pattern::BackgroundTypePattern;
-use crate::entities::background_type_wallpaper::BackgroundTypeWallpaper;
 use serde::{Deserialize, Serialize};
+
+use crate::entities::{
+    background_type_chat_theme::BackgroundTypeChatTheme, background_type_fill::BackgroundTypeFill,
+    background_type_pattern::BackgroundTypePattern,
+    background_type_wallpaper::BackgroundTypeWallpaper,
+};
 
 /// This object describes the type of a background. Currently, it can be one of
 ///

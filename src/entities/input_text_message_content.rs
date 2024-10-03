@@ -1,6 +1,6 @@
-use crate::entities::link_preview_options::LinkPreviewOptions;
-use crate::entities::message_entity::MessageEntity;
 use serde::Serialize;
+
+use crate::entities::{link_preview_options::LinkPreviewOptions, message_entity::MessageEntity};
 
 /// Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a text message to be sent as the result of an inline query.
 ///

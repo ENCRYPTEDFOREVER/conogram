@@ -1,6 +1,8 @@
-use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
-use crate::entities::input_message_content::InputMessageContent;
 use serde::Serialize;
+
+use crate::entities::{
+    inline_keyboard_markup::InlineKeyboardMarkup, input_message_content::InputMessageContent,
+};
 
 /// Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the contact.
 ///
