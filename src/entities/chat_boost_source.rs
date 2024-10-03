@@ -16,12 +16,21 @@ use crate::entities::{
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "source")]
 pub enum ChatBoostSource {
+    /// The boost was obtained by subscribing to Telegram Premium or by gifting a Telegram Premium subscription to another user.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#chatboostsourcepremium)
     #[serde(rename = "premium")]
     Premium(ChatBoostSourcePremium),
 
+    /// The boost was obtained by the creation of Telegram Premium gift codes to boost a chat. Each such code boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#chatboostsourcegiftcode)
     #[serde(rename = "gift_code")]
     GiftCode(ChatBoostSourceGiftCode),
 
+    /// The boost was obtained by the creation of a Telegram Premium or a Telegram Star giveaway. This boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription for Telegram Premium giveaways and *prize\_star\_count* / 500 times for one year for Telegram Star giveaways.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#chatboostsourcegiveaway)
     #[serde(rename = "giveaway")]
     Giveaway(ChatBoostSourceGiveaway),
 }

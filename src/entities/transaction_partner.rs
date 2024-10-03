@@ -18,15 +18,27 @@ use crate::entities::{
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum TransactionPartner {
+    /// Describes a transaction with a user.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartneruser)
     #[serde(rename = "user")]
     User(TransactionPartnerUser),
 
+    /// Describes a withdrawal transaction with Fragment.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartnerfragment)
     #[serde(rename = "fragment")]
     Fragment(TransactionPartnerFragment),
 
+    /// Describes a withdrawal transaction to the Telegram Ads platform.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartnertelegramads)
     #[serde(rename = "telegram_ads")]
     TelegramAds(TransactionPartnerTelegramAds),
 
+    /// Describes a transaction with an unknown source or recipient.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartnerother)
     #[serde(rename = "other")]
     Other(TransactionPartnerOther),
 }

@@ -23,18 +23,33 @@ use crate::entities::{
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(tag = "type")]
 pub enum InputMedia {
+    /// Represents an animation file (GIF or H.264/MPEG-4 AVC video without sound) to be sent.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediaanimation)
     #[serde(rename = "animation")]
     Animation(InputMediaAnimation),
 
+    /// Represents a general file to be sent.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediadocument)
     #[serde(rename = "document")]
     Document(InputMediaDocument),
 
+    /// Represents an audio file to be treated as music to be sent.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediaaudio)
     #[serde(rename = "audio")]
     Audio(InputMediaAudio),
 
+    /// Represents a photo to be sent.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediaphoto)
     #[serde(rename = "photo")]
     Photo(InputMediaPhoto),
 
+    /// Represents a video to be sent.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediavideo)
     #[serde(rename = "video")]
     Video(InputMediaVideo),
 }

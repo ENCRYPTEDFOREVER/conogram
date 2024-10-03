@@ -15,12 +15,21 @@ use crate::entities::{
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum BackgroundFill {
+    /// The background is filled using the selected color.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#backgroundfillsolid)
     #[serde(rename = "solid")]
     Solid(BackgroundFillSolid),
 
+    /// The background is a gradient fill.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#backgroundfillgradient)
     #[serde(rename = "gradient")]
     Gradient(BackgroundFillGradient),
 
+    /// The background is a freeform gradient that rotates after every message in the chat.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#backgroundfillfreeformgradient)
     #[serde(rename = "freeform_gradient")]
     FreeformGradient(BackgroundFillFreeformGradient),
 }

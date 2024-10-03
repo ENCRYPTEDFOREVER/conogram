@@ -20,14 +20,29 @@ use crate::entities::{
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 pub enum InputMessageContent {
+    /// Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a text message to be sent as the result of an inline query.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputtextmessagecontent)
     TextMessageContent(InputTextMessageContent),
 
+    /// Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a location message to be sent as the result of an inline query.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputlocationmessagecontent)
     LocationMessageContent(InputLocationMessageContent),
 
+    /// Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a venue message to be sent as the result of an inline query.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputvenuemessagecontent)
     VenueMessageContent(InputVenueMessageContent),
 
+    /// Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a contact message to be sent as the result of an inline query.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputcontactmessagecontent)
     ContactMessageContent(InputContactMessageContent),
 
+    /// Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of an invoice message to be sent as the result of an inline query.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputinvoicemessagecontent)
     InvoiceMessageContent(InputInvoiceMessageContent),
 }
 

@@ -19,21 +19,39 @@ use crate::entities::{
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "status")]
 pub enum ChatMember {
+    /// Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that owns the chat and has all administrator privileges.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#chatmemberowner)
     #[serde(rename = "creator")]
     Owner(ChatMemberOwner),
 
+    /// Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that has some additional privileges.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#chatmemberadministrator)
     #[serde(rename = "administrator")]
     Administrator(ChatMemberAdministrator),
 
+    /// Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that has no additional privileges or restrictions.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#chatmembermember)
     #[serde(rename = "member")]
     Member(ChatMemberMember),
 
+    /// Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that is under certain restrictions in the chat. Supergroups only.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#chatmemberrestricted)
     #[serde(rename = "restricted")]
     Restricted(ChatMemberRestricted),
 
+    /// Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that isn't currently a member of the chat, but may join it themselves.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#chatmemberleft)
     #[serde(rename = "left")]
     Left(ChatMemberLeft),
 
+    /// Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that was banned in the chat and can't return to the chat or view chat messages.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#chatmemberbanned)
     #[serde(rename = "kicked")]
     Banned(ChatMemberBanned),
 }

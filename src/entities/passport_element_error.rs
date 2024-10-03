@@ -28,30 +28,57 @@ use crate::entities::{
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "source")]
 pub enum PassportElementError {
+    /// Represents an issue in one of the data fields that was provided by the user. The error is considered resolved when the field's value changes.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrordatafield)
     #[serde(rename = "data")]
     DataField(PassportElementErrorDataField),
 
+    /// Represents an issue with the front side of a document. The error is considered resolved when the file with the front side of the document changes.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrorfrontside)
     #[serde(rename = "front_side")]
     FrontSide(PassportElementErrorFrontSide),
 
+    /// Represents an issue with the reverse side of a document. The error is considered resolved when the file with reverse side of the document changes.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrorreverseside)
     #[serde(rename = "reverse_side")]
     ReverseSide(PassportElementErrorReverseSide),
 
+    /// Represents an issue with the selfie with a document. The error is considered resolved when the file with the selfie changes.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrorselfie)
     #[serde(rename = "selfie")]
     Selfie(PassportElementErrorSelfie),
 
+    /// Represents an issue with a document scan. The error is considered resolved when the file with the document scan changes.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrorfile)
     #[serde(rename = "file")]
     File(PassportElementErrorFile),
 
+    /// Represents an issue with a list of scans. The error is considered resolved when the list of files containing the scans changes.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrorfiles)
     #[serde(rename = "files")]
     Files(PassportElementErrorFiles),
 
+    /// Represents an issue with one of the files that constitute the translation of a document. The error is considered resolved when the file changes.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrortranslationfile)
     #[serde(rename = "translation_file")]
     TranslationFile(PassportElementErrorTranslationFile),
 
+    /// Represents an issue with the translated version of a document. The error is considered resolved when a file with the document translation change.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrortranslationfiles)
     #[serde(rename = "translation_files")]
     TranslationFiles(PassportElementErrorTranslationFiles),
 
+    /// Represents an issue in an unspecified place. The error is considered resolved when new data is added.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrorunspecified)
     #[serde(rename = "unspecified")]
     Unspecified(PassportElementErrorUnspecified),
 }

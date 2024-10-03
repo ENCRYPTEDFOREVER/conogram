@@ -17,15 +17,27 @@ use crate::entities::{
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum BackgroundType {
+    /// The background is automatically filled based on the selected colors.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#backgroundtypefill)
     #[serde(rename = "fill")]
     Fill(BackgroundTypeFill),
 
+    /// The background is a wallpaper in the JPEG format.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#backgroundtypewallpaper)
     #[serde(rename = "wallpaper")]
     Wallpaper(BackgroundTypeWallpaper),
 
+    /// The background is a PNG or TGV (gzipped subset of SVG with MIME type “application/x-tgwallpattern”) pattern to be combined with the background fill chosen by the user.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#backgroundtypepattern)
     #[serde(rename = "pattern")]
     Pattern(BackgroundTypePattern),
 
+    /// The background is taken directly from a built-in chat theme.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#backgroundtypechattheme)
     #[serde(rename = "chat_theme")]
     ChatTheme(BackgroundTypeChatTheme),
 }

@@ -11,8 +11,14 @@ use crate::entities::{inaccessible_message::InaccessibleMessage, message::Messag
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum MaybeInaccessibleMessage {
+    /// This object represents a message.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#message)
     Message(Message),
 
+    /// This object describes a message that was deleted or is otherwise inaccessible to the bot.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inaccessiblemessage)
     InaccessibleMessage(InaccessibleMessage),
 }
 

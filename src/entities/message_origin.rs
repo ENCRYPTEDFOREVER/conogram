@@ -16,15 +16,27 @@ use crate::entities::{
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum MessageOrigin {
+    /// The message was originally sent by a known user.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#messageoriginuser)
     #[serde(rename = "user")]
     User(MessageOriginUser),
 
+    /// The message was originally sent by an unknown user.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#messageoriginhiddenuser)
     #[serde(rename = "hidden_user")]
     HiddenUser(MessageOriginHiddenUser),
 
+    /// The message was originally sent on behalf of a chat to a group chat.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#messageoriginchat)
     #[serde(rename = "chat")]
     Chat(MessageOriginChat),
 
+    /// The message was originally sent to a channel chat.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#messageoriginchannel)
     #[serde(rename = "channel")]
     Channel(MessageOriginChannel),
 }

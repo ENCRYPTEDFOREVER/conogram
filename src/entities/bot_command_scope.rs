@@ -24,24 +24,45 @@ use crate::entities::{
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum BotCommandScope {
+    /// Represents the default [scope](https://core.telegram.org/bots/api/#botcommandscope) of bot commands. Default commands are used if no commands with a [narrower scope](https://core.telegram.org/bots/api/#determining-list-of-commands) are specified for the user.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#botcommandscopedefault)
     #[serde(rename = "default")]
     Default(BotCommandScopeDefault),
 
+    /// Represents the [scope](https://core.telegram.org/bots/api/#botcommandscope) of bot commands, covering all private chats.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#botcommandscopeallprivatechats)
     #[serde(rename = "all_private_chats")]
     AllPrivateChats(BotCommandScopeAllPrivateChats),
 
+    /// Represents the [scope](https://core.telegram.org/bots/api/#botcommandscope) of bot commands, covering all group and supergroup chats.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#botcommandscopeallgroupchats)
     #[serde(rename = "all_group_chats")]
     AllGroupChats(BotCommandScopeAllGroupChats),
 
+    /// Represents the [scope](https://core.telegram.org/bots/api/#botcommandscope) of bot commands, covering all group and supergroup chat administrators.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#botcommandscopeallchatadministrators)
     #[serde(rename = "all_chat_administrators")]
     AllChatAdministrators(BotCommandScopeAllChatAdministrators),
 
+    /// Represents the [scope](https://core.telegram.org/bots/api/#botcommandscope) of bot commands, covering a specific chat.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#botcommandscopechat)
     #[serde(rename = "chat")]
     Chat(BotCommandScopeChat),
 
+    /// Represents the [scope](https://core.telegram.org/bots/api/#botcommandscope) of bot commands, covering all administrators of a specific group or supergroup chat.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#botcommandscopechatadministrators)
     #[serde(rename = "chat_administrators")]
     ChatAdministrators(BotCommandScopeChatAdministrators),
 
+    /// Represents the [scope](https://core.telegram.org/bots/api/#botcommandscope) of bot commands, covering a specific member of a group or supergroup chat.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#botcommandscopechatmember)
     #[serde(rename = "chat_member")]
     ChatMember(BotCommandScopeChatMember),
 }

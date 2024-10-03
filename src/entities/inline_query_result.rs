@@ -49,63 +49,125 @@ use crate::entities::{
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(tag = "type")]
 pub enum InlineQueryResult {
+    /// Represents a link to an MP3 audio file stored on the Telegram servers. By default, this audio file will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the audio.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultcachedaudio)
     #[serde(rename = "audio")]
     CachedAudio(InlineQueryResultCachedAudio),
 
+    /// Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the file.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultcacheddocument)
     #[serde(rename = "document")]
     CachedDocument(InlineQueryResultCachedDocument),
 
+    /// Represents a link to an animated GIF file stored on the Telegram servers. By default, this animated GIF file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with specified content instead of the animation.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultcachedgif)
     #[serde(rename = "gif")]
     CachedGif(InlineQueryResultCachedGif),
 
+    /// Represents a link to a video animation (H.264/MPEG-4 AVC video without sound) stored on the Telegram servers. By default, this animated MPEG-4 file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the animation.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultcachedmpeg4gif)
     #[serde(rename = "mpeg4_gif")]
     CachedMpeg4Gif(InlineQueryResultCachedMpeg4Gif),
 
+    /// Represents a link to a photo stored on the Telegram servers. By default, this photo will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the photo.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultcachedphoto)
     #[serde(rename = "photo")]
     CachedPhoto(InlineQueryResultCachedPhoto),
 
+    /// Represents a link to a sticker stored on the Telegram servers. By default, this sticker will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the sticker.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultcachedsticker)
     #[serde(rename = "sticker")]
     CachedSticker(InlineQueryResultCachedSticker),
 
+    /// Represents a link to a video file stored on the Telegram servers. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the video.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultcachedvideo)
     #[serde(rename = "video")]
     CachedVideo(InlineQueryResultCachedVideo),
 
+    /// Represents a link to a voice message stored on the Telegram servers. By default, this voice message will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the voice message.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultcachedvoice)
     #[serde(rename = "voice")]
     CachedVoice(InlineQueryResultCachedVoice),
 
+    /// Represents a link to an article or web page.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultarticle)
     #[serde(rename = "article")]
     Article(InlineQueryResultArticle),
 
+    /// Represents a link to an MP3 audio file. By default, this audio file will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the audio.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultaudio)
     #[serde(rename = "audio")]
     Audio(InlineQueryResultAudio),
 
+    /// Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the contact.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultcontact)
     #[serde(rename = "contact")]
     Contact(InlineQueryResultContact),
 
+    /// Represents a [Game](https://core.telegram.org/bots/api/#games).
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultgame)
     #[serde(rename = "game")]
     Game(InlineQueryResultGame),
 
+    /// Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the file. Currently, only **.PDF** and **.ZIP** files can be sent using this method.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultdocument)
     #[serde(rename = "document")]
     Document(InlineQueryResultDocument),
 
+    /// Represents a link to an animated GIF file. By default, this animated GIF file will be sent by the user with optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the animation.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultgif)
     #[serde(rename = "gif")]
     Gif(InlineQueryResultGif),
 
+    /// Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the location.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultlocation)
     #[serde(rename = "location")]
     Location(InlineQueryResultLocation),
 
+    /// Represents a link to a video animation (H.264/MPEG-4 AVC video without sound). By default, this animated MPEG-4 file will be sent by the user with optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the animation.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultmpeg4gif)
     #[serde(rename = "mpeg4_gif")]
     Mpeg4Gif(InlineQueryResultMpeg4Gif),
 
+    /// Represents a link to a photo. By default, this photo will be sent by the user with optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the photo.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultphoto)
     #[serde(rename = "photo")]
     Photo(InlineQueryResultPhoto),
 
+    /// Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the venue.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultvenue)
     #[serde(rename = "venue")]
     Venue(InlineQueryResultVenue),
 
+    /// Represents a link to a page containing an embedded video player or a video file. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the video.
+    ///
+    /// If an InlineQueryResultVideo message contains an embedded video (e.g., YouTube), you **must** replace its content using *input\_message\_content*.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultvideo)
     #[serde(rename = "video")]
     Video(InlineQueryResultVideo),
 
+    /// Represents a link to a voice recording in an .OGG container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use *input\_message\_content* to send a message with the specified content instead of the the voice message.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultvoice)
     #[serde(rename = "voice")]
     Voice(InlineQueryResultVoice),
 }
