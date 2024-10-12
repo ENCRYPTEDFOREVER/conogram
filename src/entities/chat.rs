@@ -106,12 +106,12 @@ impl Chat {
 
 pub trait TgChat {
     fn id(&self) -> i64;
-    fn full_name(&self) -> String;
-    fn username(&self) -> Option<&String>;
+    fn full_name(&self) -> impl AsRef<str>;
+    fn username(&self) -> Option<impl AsRef<str>>;
 
     fn get_url(&self) -> String {
         if let Some(username) = &self.username() {
-            format!("https://t.me/{username}")
+            format!("https://t.me/{}", username.as_ref())
         } else {
             // message_id 999999999 is used to allow the link to work in all clients
             format!("https://t.me/c/{}/999999999", -self.id() - 1000000000000)
@@ -298,21 +298,21 @@ impl_trait!(TgChat for Chat {
         self.id
     }
 
-    fn full_name(&self) -> String {
+    fn full_name(&self) -> impl AsRef<str> {
         if let Some(title) = &self.title {
-            title.clone()
+            title.to_owned()
         } else if let Some(first) = &self.first_name {
             if let Some(last) = &self.last_name {
                 format!("{first} {last}")
             } else {
-                first.clone()
+                first.to_owned()
             }
         } else {
             "No Title".to_owned()
         }
     }
 
-    fn username(&self) -> Option<&String> {
+    fn username(&self) -> Option<impl AsRef<str>> {
         self.username.as_ref()
     }
 });
@@ -322,7 +322,7 @@ impl_trait!(TgChat for ChatFullInfo {
         self.id
     }
 
-    fn full_name(&self) -> String {
+    fn full_name(&self) -> impl AsRef<str> {
         if let Some(title) = &self.title {
             title.clone()
         } else if let Some(first) = &self.first_name {
@@ -336,7 +336,7 @@ impl_trait!(TgChat for ChatFullInfo {
         }
     }
 
-    fn username(&self) -> Option<&String> {
+    fn username(&self) -> Option<impl AsRef<str>> {
         self.username.as_ref()
     }
 });
