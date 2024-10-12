@@ -9,13 +9,7 @@ macro_rules! impl_into_future {
                         + 'a,
                 >,
             >;
-            type Output = <Pin<
-                Box<
-                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, ConogramError>>
-                        + Send
-                        + 'a,
-                >,
-            > as Future>::Output;
+            type Output = <Self::IntoFuture as Future>::Output;
 
             fn into_future(self) -> Self::IntoFuture {
                 Box::pin(self.send())
@@ -30,13 +24,7 @@ macro_rules! impl_into_future {
                         + 'b,
                 >,
             >;
-            type Output = <Pin<
-                Box<
-                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, ConogramError>>
-                        + Send
-                        + 'b,
-                >,
-            > as Future>::Output;
+            type Output = <Self::IntoFuture as Future>::Output;
 
             fn into_future(self) -> Self::IntoFuture {
                 Box::pin(self.send_ref())
@@ -56,13 +44,7 @@ macro_rules! impl_into_future_multipart {
                         + 'a,
                 >,
             >;
-            type Output = <Pin<
-                Box<
-                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, ConogramError>>
-                        + Send
-                        + 'a,
-                >,
-            > as Future>::Output;
+            type Output = <Self::IntoFuture as Future>::Output;
 
             fn into_future(self) -> Self::IntoFuture {
                 Box::pin(self.send_multipart())
@@ -77,13 +59,7 @@ macro_rules! impl_into_future_multipart {
                         + 'b,
                 >,
             >;
-            type Output = <Pin<
-                Box<
-                    dyn Future<Output = Result<<$struct as RequestT>::ReturnType, ConogramError>>
-                        + Send
-                        + 'b,
-                >,
-            > as Future>::Output;
+            type Output = <Self::IntoFuture as Future>::Output;
 
             fn into_future(self) -> Self::IntoFuture {
                 Box::pin(self.send_ref_multipart())
