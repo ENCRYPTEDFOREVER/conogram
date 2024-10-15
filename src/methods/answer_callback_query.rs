@@ -1,11 +1,14 @@
-use crate::api::API;
-use crate::errors::ConogramError;
-use crate::impl_into_future;
-use crate::request::RequestT;
-use crate::utils::deserialize_utils::is_false;
+use std::{
+    future::{Future, IntoFuture},
+    pin::Pin,
+};
+
 use serde::Serialize;
-use std::future::{Future, IntoFuture};
-use std::pin::Pin;
+
+use crate::{
+    api::API, errors::ConogramError, impl_into_future, request::RequestT,
+    utils::deserialize_utils::is_false,
+};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct AnswerCallbackQueryParams {

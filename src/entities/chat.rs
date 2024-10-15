@@ -1,94 +1,91 @@
-use crate::utils::deserialize_utils::is_false;
 use serde::{Deserialize, Serialize};
 
-///This object represents a chat.
+use crate::utils::deserialize_utils::is_false;
+
+/// This object represents a chat.
 ///
-///API Reference: [link](https://core.telegram.org/bots/api/#chat)
+/// API Reference: [link](https://core.telegram.org/bots/api/#chat)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Chat {
-    ///Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+    /// Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
     pub id: i64,
 
-    ///Type of the chat, can be either “private”, “group”, “supergroup” or “channel”
+    /// Type of the chat, can be either “private”, “group”, “supergroup” or “channel”
     #[serde(rename = "type")]
     pub type_: ChatType,
 
-    ///*Optional*. Title, for supergroups, channels and group chats
-    #[serde(skip_serializing_if = "Option::is_none")]
+    /// *Optional*. Title, for supergroups, channels and group chats
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
 
-    ///*Optional*. Username, for private chats, supergroups and channels if available
-    #[serde(skip_serializing_if = "Option::is_none")]
+    /// *Optional*. Username, for private chats, supergroups and channels if available
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
 
-    ///*Optional*. First name of the other party in a private chat
-    #[serde(skip_serializing_if = "Option::is_none")]
+    /// *Optional*. First name of the other party in a private chat
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub first_name: Option<String>,
 
-    ///*Optional*. Last name of the other party in a private chat
-    #[serde(skip_serializing_if = "Option::is_none")]
+    /// *Optional*. Last name of the other party in a private chat
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub last_name: Option<String>,
 
-    ///*Optional*. *True*, if the supergroup chat is a forum (has [topics](https://telegram.org/blog/topics-in-groups-collectible-usernames#topics-in-groups) enabled)
+    /// *Optional*. *True*, if the supergroup chat is a forum (has [topics](https://telegram.org/blog/topics-in-groups-collectible-usernames#topics-in-groups) enabled)
     #[serde(default, skip_serializing_if = "is_false")]
     pub is_forum: bool,
 }
 
-///Type of the chat, can be either “private”, “group”, “supergroup” or “channel”
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
-#[serde(rename = "type")]
+/// Type of the chat, can be either “private”, “group”, “supergroup” or “channel”
+#[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
 pub enum ChatType {
+    /// `private`
     #[default]
-    /// "private"
     #[serde(rename = "private")]
     Private,
 
-    /// "group"
+    /// `group`
     #[serde(rename = "group")]
     Group,
 
-    /// "supergroup"
+    /// `supergroup`
     #[serde(rename = "supergroup")]
     Supergroup,
 
-    /// "channel"
+    /// `channel`
     #[serde(rename = "channel")]
     Channel,
 }
-// Divider: all content below this line will be preserved after code regen
-use super::chat_full_info::ChatFullInfo;
-use super::misc::input_file::InputFile;
-use crate::api::API;
-use crate::entities::chat_permissions::ChatPermissions;
-use crate::impl_trait;
 
-use crate::methods::approve_chat_join_request::ApproveChatJoinRequestRequest;
-use crate::methods::ban_chat_member::BanChatMemberRequest;
-use crate::methods::ban_chat_sender_chat::BanChatSenderChatRequest;
-use crate::methods::create_chat_invite_link::CreateChatInviteLinkRequest;
-use crate::methods::decline_chat_join_request::DeclineChatJoinRequestRequest;
-use crate::methods::delete_chat_photo::DeleteChatPhotoRequest;
-use crate::methods::delete_chat_sticker_set::DeleteChatStickerSetRequest;
-use crate::methods::edit_chat_invite_link::EditChatInviteLinkRequest;
-use crate::methods::export_chat_invite_link::ExportChatInviteLinkRequest;
-use crate::methods::get_chat::GetChatRequest;
-use crate::methods::get_chat_administrators::GetChatAdministratorsRequest;
-use crate::methods::get_chat_member::GetChatMemberRequest;
-use crate::methods::get_chat_member_count::GetChatMemberCountRequest;
-use crate::methods::leave_chat::LeaveChatRequest;
-use crate::methods::promote_chat_member::PromoteChatMemberRequest;
-use crate::methods::restrict_chat_member::RestrictChatMemberRequest;
-use crate::methods::revoke_chat_invite_link::RevokeChatInviteLinkRequest;
-use crate::methods::send_chat_action::SendChatActionRequest;
-use crate::methods::set_chat_administrator_custom_title::SetChatAdministratorCustomTitleRequest;
-use crate::methods::set_chat_description::SetChatDescriptionRequest;
-use crate::methods::set_chat_permissions::SetChatPermissionsRequest;
-use crate::methods::set_chat_photo::SetChatPhotoRequest;
-use crate::methods::set_chat_sticker_set::SetChatStickerSetRequest;
-use crate::methods::set_chat_title::SetChatTitleRequest;
-use crate::methods::unban_chat_member::UnbanChatMemberRequest;
-use crate::methods::unban_chat_sender_chat::UnbanChatSenderChatRequest;
-use crate::methods::unpin_all_chat_messages::UnpinAllChatMessagesRequest;
+// Divider: all content below this line will be preserved after code regen
+use super::{chat_full_info::ChatFullInfo, misc::input_file::InputFile};
+use crate::{
+    api::API,
+    entities::chat_permissions::ChatPermissions,
+    impl_trait,
+    methods::{
+        approve_chat_join_request::ApproveChatJoinRequestRequest,
+        ban_chat_member::BanChatMemberRequest, ban_chat_sender_chat::BanChatSenderChatRequest,
+        create_chat_invite_link::CreateChatInviteLinkRequest,
+        decline_chat_join_request::DeclineChatJoinRequestRequest,
+        delete_chat_photo::DeleteChatPhotoRequest,
+        delete_chat_sticker_set::DeleteChatStickerSetRequest,
+        edit_chat_invite_link::EditChatInviteLinkRequest,
+        export_chat_invite_link::ExportChatInviteLinkRequest, get_chat::GetChatRequest,
+        get_chat_administrators::GetChatAdministratorsRequest,
+        get_chat_member::GetChatMemberRequest, get_chat_member_count::GetChatMemberCountRequest,
+        leave_chat::LeaveChatRequest, promote_chat_member::PromoteChatMemberRequest,
+        restrict_chat_member::RestrictChatMemberRequest,
+        revoke_chat_invite_link::RevokeChatInviteLinkRequest,
+        send_chat_action::SendChatActionRequest,
+        set_chat_administrator_custom_title::SetChatAdministratorCustomTitleRequest,
+        set_chat_description::SetChatDescriptionRequest,
+        set_chat_permissions::SetChatPermissionsRequest, set_chat_photo::SetChatPhotoRequest,
+        set_chat_sticker_set::SetChatStickerSetRequest, set_chat_title::SetChatTitleRequest,
+        unban_chat_member::UnbanChatMemberRequest,
+        unban_chat_sender_chat::UnbanChatSenderChatRequest,
+        unpin_all_chat_messages::UnpinAllChatMessagesRequest,
+    },
+};
 
 impl Chat {
     // Returns Chat's title for groups and User::full_name for private chats
@@ -109,12 +106,12 @@ impl Chat {
 
 pub trait TgChat {
     fn id(&self) -> i64;
-    fn full_name(&self) -> String;
-    fn username(&self) -> Option<&String>;
+    fn full_name(&self) -> impl AsRef<str>;
+    fn username(&self) -> Option<impl AsRef<str>>;
 
     fn get_url(&self) -> String {
-        if let Some(username) = &self.username() {
-            format!("https://t.me/{username}")
+        if let Some(username) = self.username() {
+            format!("https://t.me/{}", username.as_ref())
         } else {
             // message_id 999999999 is used to allow the link to work in all clients
             format!("https://t.me/c/{}/999999999", -self.id() - 1000000000000)
@@ -301,21 +298,21 @@ impl_trait!(TgChat for Chat {
         self.id
     }
 
-    fn full_name(&self) -> String {
+    fn full_name(&self) -> impl AsRef<str> {
         if let Some(title) = &self.title {
-            title.clone()
+            title.to_owned()
         } else if let Some(first) = &self.first_name {
             if let Some(last) = &self.last_name {
                 format!("{first} {last}")
             } else {
-                first.clone()
+                first.to_owned()
             }
         } else {
             "No Title".to_owned()
         }
     }
 
-    fn username(&self) -> Option<&String> {
+    fn username(&self) -> Option<impl AsRef<str>> {
         self.username.as_ref()
     }
 });
@@ -325,7 +322,7 @@ impl_trait!(TgChat for ChatFullInfo {
         self.id
     }
 
-    fn full_name(&self) -> String {
+    fn full_name(&self) -> impl AsRef<str> {
         if let Some(title) = &self.title {
             title.clone()
         } else if let Some(first) = &self.first_name {
@@ -339,7 +336,7 @@ impl_trait!(TgChat for ChatFullInfo {
         }
     }
 
-    fn username(&self) -> Option<&String> {
+    fn username(&self) -> Option<impl AsRef<str>> {
         self.username.as_ref()
     }
 });

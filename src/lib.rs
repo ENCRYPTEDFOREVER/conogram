@@ -8,17 +8,16 @@
     clippy::module_name_repetitions,
     clippy::cast_sign_loss,
     clippy::cast_possible_truncation,
+    clippy::cast_precision_loss,
     clippy::no_effect_underscore_binding,
     clippy::unreadable_literal,
     clippy::cast_possible_wrap,
     clippy::similar_names,
     clippy::struct_excessive_bools,
-    clippy::cast_precision_loss,
     clippy::wildcard_imports,
     clippy::must_use_candidate,
     clippy::doc_markdown,
     clippy::fn_params_excessive_bools,
-    clippy::missing_const_for_fn,
 
     // TODO
     clippy::missing_errors_doc,

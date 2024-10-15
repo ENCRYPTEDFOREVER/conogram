@@ -1,37 +1,28 @@
-use std::fmt::Debug;
-use std::future::IntoFuture;
-use std::sync::atomic::AtomicI64;
-use std::time::Duration;
+use std::{fmt::Debug, future::IntoFuture, sync::atomic::AtomicI64, time::Duration};
 
-use crate::client::ApiClient;
-use crate::entities::misc::chat_id::ChatId;
-use crate::entities::misc::input_file::GetFiles;
-use crate::entities::update::{AllowedUpdates, Update};
-use crate::errors::{ConogramError, ConogramErrorType, TgApiError};
-use crate::methods::edit_message_caption::EditMessageCaptionRequest;
-use crate::methods::edit_message_text::EditMessageTextRequest;
-use crate::methods::send_animation::SendAnimationRequest;
-use crate::methods::send_audio::SendAudioRequest;
-use crate::methods::send_contact::SendContactRequest;
-use crate::methods::send_dice::SendDiceRequest;
-use crate::methods::send_document::SendDocumentRequest;
-use crate::methods::send_game::SendGameRequest;
-use crate::methods::send_invoice::SendInvoiceRequest;
-use crate::methods::send_location::SendLocationRequest;
-use crate::methods::send_media_group::SendMediaGroupRequest;
-use crate::methods::send_message::SendMessageRequest;
-use crate::methods::send_photo::SendPhotoRequest;
-use crate::methods::send_poll::SendPollRequest;
-use crate::methods::send_sticker::SendStickerRequest;
-use crate::methods::send_venue::SendVenueRequest;
-use crate::methods::send_video::SendVideoRequest;
-use crate::methods::send_video_note::SendVideoNoteRequest;
-use crate::methods::send_voice::SendVoiceRequest;
-use crate::request::RequestT;
-use crate::server_config::ApiServerConfig;
+use serde::{de::DeserializeOwned, Serialize};
 
-use serde::de::DeserializeOwned;
-use serde::Serialize;
+use crate::{
+    client::ApiClient,
+    entities::{
+        misc::{chat_id::ChatId, input_file::GetFiles},
+        update::{AllowedUpdates, Update},
+    },
+    errors::{ConogramError, ConogramErrorType, TgApiError},
+    methods::{
+        edit_message_caption::EditMessageCaptionRequest, edit_message_text::EditMessageTextRequest,
+        send_animation::SendAnimationRequest, send_audio::SendAudioRequest,
+        send_contact::SendContactRequest, send_dice::SendDiceRequest,
+        send_document::SendDocumentRequest, send_game::SendGameRequest,
+        send_invoice::SendInvoiceRequest, send_location::SendLocationRequest,
+        send_media_group::SendMediaGroupRequest, send_message::SendMessageRequest,
+        send_photo::SendPhotoRequest, send_poll::SendPollRequest, send_sticker::SendStickerRequest,
+        send_venue::SendVenueRequest, send_video::SendVideoRequest,
+        send_video_note::SendVideoNoteRequest, send_voice::SendVoiceRequest,
+    },
+    request::RequestT,
+    server_config::ApiServerConfig,
+};
 
 macro_rules! set_default_param {
     ($api_client: expr, $param_name: literal, $value: ident, [$($request: ty),*] $(,)?) => {

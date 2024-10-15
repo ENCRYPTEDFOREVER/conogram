@@ -1,13 +1,18 @@
-use crate::api::API;
-use crate::entities::chat_invite_link::ChatInviteLink;
-use crate::entities::misc::chat_id::ChatId;
-use crate::errors::ConogramError;
-use crate::impl_into_future;
-use crate::request::RequestT;
-use crate::utils::deserialize_utils::is_false;
+use std::{
+    future::{Future, IntoFuture},
+    pin::Pin,
+};
+
 use serde::Serialize;
-use std::future::{Future, IntoFuture};
-use std::pin::Pin;
+
+use crate::{
+    api::API,
+    entities::{chat_invite_link::ChatInviteLink, misc::chat_id::ChatId},
+    errors::ConogramError,
+    impl_into_future,
+    request::RequestT,
+    utils::deserialize_utils::is_false,
+};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct EditChatInviteLinkParams {

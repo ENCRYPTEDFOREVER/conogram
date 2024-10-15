@@ -1,8 +1,9 @@
+use std::fmt::Debug;
+
 use async_trait::async_trait;
 use serde::{de::DeserializeOwned, Serialize};
 
 use crate::{api::API, entities::misc::input_file::GetFiles, errors::ConogramError};
-use std::fmt::Debug;
 
 #[async_trait]
 pub trait RequestT

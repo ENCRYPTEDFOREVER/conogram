@@ -42,11 +42,11 @@ pub trait Utf16Len {
     /// Returns a count of utf16 code units in the string
     ///
     /// <https://core.telegram.org/api/entities#computing-entity-length>
-    fn utf16_codeunits(&self) -> i64;
+    fn utf16_codeunits(&self) -> usize;
 }
 
 impl<T: AsRef<str>> Utf16Len for T {
-    fn utf16_codeunits(&self) -> i64 {
+    fn utf16_codeunits(&self) -> usize {
         // self.as_ref().chars().map(|c| c.len_utf16()).sum::<usize>() as i64
         let mut len = 0;
 
@@ -70,7 +70,7 @@ impl<T: AsRef<str>> Utf16Len for T {
 pub struct FormattedText {
     text: String,
     /// Length in utf-16 codeunits
-    len: i64,
+    len_utf16: i64,
     entities: Vec<MessageEntity>,
 
     /// Ignore trailing and preceding whitespace chars when calculating entities' length
@@ -86,17 +86,11 @@ pub struct FormattedText {
     last_ent_len: i64,
 }
 
-impl PartialEq for FormattedText {
-    fn eq(&self, other: &Self) -> bool {
-        self.text == other.text && self.len == other.len && self.entities == other.entities
-    }
-}
-
 impl FormattedText {
-    pub fn empty() -> Self {
+    pub const fn empty() -> Self {
         Self {
             text: String::new(),
-            len: 0,
+            len_utf16: 0,
             entities: Vec::new(),
             trim_spaces: true,
             use_last_offsets: false,
@@ -105,13 +99,17 @@ impl FormattedText {
         }
     }
 
-    pub fn new(text: impl Into<String>, entities: impl Into<Vec<MessageEntity>>) -> Self {
+    pub const fn new() -> Self {
+        Self::empty()
+    }
+
+    pub fn with_text(text: impl Into<String>, entities: impl Into<Vec<MessageEntity>>) -> Self {
         let text = text.into();
-        let len = text.utf16_codeunits();
+        let len = text.utf16_codeunits() as i64;
 
         Self {
             text,
-            len,
+            len_utf16: len,
             entities: entities.into(),
             trim_spaces: true,
             use_last_offsets: false,
@@ -120,10 +118,21 @@ impl FormattedText {
         }
     }
 
+    pub fn clear(&mut self) -> &mut Self {
+        self.text.clear();
+        self.entities.clear();
+
+        self.len_utf16 = 0;
+        self.last_ent_len = 0;
+        self.last_ent_offset = 0;
+
+        self
+    }
+
     #[must_use]
     pub fn slice(&self, range: impl Into<Range<usize>>) -> Self {
         let mut range: Range<usize> = range.into();
-        range.end = std::cmp::min(range.end, self.len as usize);
+        range.end = std::cmp::min(range.end, self.len_utf16 as usize);
         range.start = std::cmp::max(range.start, 0);
 
         let new_text = self.text[range.clone()].to_string();
@@ -150,7 +159,7 @@ impl FormattedText {
             ent.length = end - offset;
         }
 
-        Self::new(new_text, new_entities)
+        Self::with_text(new_text, new_entities)
     }
 
     /// Concats `other` to this instance
@@ -158,27 +167,31 @@ impl FormattedText {
         let other: Self = other.into();
 
         let added_entities = other.entities.into_iter().map(|mut ent| {
-            ent.offset += self.len;
+            ent.offset += self.len_utf16;
             ent
         });
 
-        self.last_ent_offset = self.len;
-        self.last_ent_len = other.len;
+        self.last_ent_offset = self.len_utf16;
+        self.last_ent_len = other.len_utf16;
 
         self.entities.extend(added_entities);
         self.text.push_str(&other.text);
-        self.len += other.len;
+        self.len_utf16 += other.len_utf16;
 
         self
     }
 
     pub const fn is_empty(&self) -> bool {
-        self.len == 0
+        self.len_utf16 == 0
+    }
+
+    pub fn len(&self) -> usize {
+        self.text.len()
     }
 
     /// Length in utf-16 codeunits
-    pub const fn len(&self) -> usize {
-        self.len as usize
+    pub const fn len_utf16(&self) -> usize {
+        self.len_utf16 as usize
     }
 
     pub const fn get_entities(&self) -> &Vec<MessageEntity> {
@@ -207,17 +220,17 @@ impl FormattedText {
 
     /// Calculates text length, entity lenght and offset in utf-16 codeunits needed to wrap provided text
     fn calc_entity_len_offset(&self, text: &str) -> (i64, i64, i64) {
-        let text_len = text.utf16_codeunits();
+        let text_len = text.utf16_codeunits() as i64;
 
         let entity_offset;
         let entity_len = if self.trim_spaces {
             let l_trim = text.trim_start();
-            let l_trim_len = l_trim.utf16_codeunits();
+            let l_trim_len = l_trim.utf16_codeunits() as i64;
 
-            entity_offset = self.len + (text_len - l_trim_len);
-            l_trim.trim_end().utf16_codeunits()
+            entity_offset = self.len_utf16 + (text_len - l_trim_len);
+            l_trim.trim_end().utf16_codeunits() as i64
         } else {
-            entity_offset = self.len;
+            entity_offset = self.len_utf16;
             text_len
         };
 
@@ -264,7 +277,7 @@ impl FormattedText {
 
             self.entities.push(entity);
             self.text.push_str(text);
-            self.len += text_len;
+            self.len_utf16 += text_len;
         }
 
         self
@@ -300,7 +313,7 @@ impl FormattedText {
 
             self.entities.push(entity);
             self.text.push_str(text);
-            self.len += text_len;
+            self.len_utf16 += text_len;
         }
 
         self
@@ -341,7 +354,7 @@ impl FormattedText {
 
             self.entities.extend(entities);
             self.text.push_str(text);
-            self.len += text_len;
+            self.len_utf16 += text_len;
             self
         }
     }
@@ -357,7 +370,7 @@ impl FormattedText {
         }
 
         self.text.push_str(&text_ref);
-        self.len += text_len;
+        self.len_utf16 += text_len;
         self
     }
 
@@ -366,7 +379,7 @@ impl FormattedText {
         // self.use_last_entities_offset
 
         self.text.push('\n');
-        self.len += 1;
+        self.len_utf16 += 1;
         self
     }
 
@@ -493,6 +506,14 @@ impl Default for FormattedText {
     }
 }
 
+impl PartialEq for FormattedText {
+    fn eq(&self, other: &Self) -> bool {
+        self.text == other.text
+            && self.len_utf16 == other.len_utf16
+            && self.entities == other.entities
+    }
+}
+
 impl Display for FormattedText {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str(&self.text)
@@ -501,10 +522,10 @@ impl Display for FormattedText {
 
 impl From<String> for FormattedText {
     fn from(value: String) -> Self {
-        let len = value.utf16_codeunits();
+        let len = value.utf16_codeunits() as i64;
         Self {
             text: value,
-            len,
+            len_utf16: len,
 
             trim_spaces: true,
             ..Default::default()
@@ -514,10 +535,10 @@ impl From<String> for FormattedText {
 
 impl From<&str> for FormattedText {
     fn from(value: &str) -> Self {
-        let len = value.utf16_codeunits();
+        let len = value.utf16_codeunits() as i64;
         Self {
             text: value.to_owned(),
-            len,
+            len_utf16: len,
 
             trim_spaces: true,
             ..Default::default()

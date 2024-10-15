@@ -1,30 +1,46 @@
-use crate::entities::revenue_withdrawal_state_failed::RevenueWithdrawalStateFailed;
-use crate::entities::revenue_withdrawal_state_pending::RevenueWithdrawalStatePending;
-use crate::entities::revenue_withdrawal_state_succeeded::RevenueWithdrawalStateSucceeded;
 use serde::{Deserialize, Serialize};
 
-///This object describes the state of a revenue withdrawal operation. Currently, it can be one of
+use crate::entities::{
+    revenue_withdrawal_state_failed::RevenueWithdrawalStateFailed,
+    revenue_withdrawal_state_pending::RevenueWithdrawalStatePending,
+    revenue_withdrawal_state_succeeded::RevenueWithdrawalStateSucceeded,
+};
+
+/// This object describes the state of a revenue withdrawal operation. Currently, it can be one of
 ///
-///* [RevenueWithdrawalStatePending](https://core.telegram.org/bots/api/#revenuewithdrawalstatepending)
-///* [RevenueWithdrawalStateSucceeded](https://core.telegram.org/bots/api/#revenuewithdrawalstatesucceeded)
-///* [RevenueWithdrawalStateFailed](https://core.telegram.org/bots/api/#revenuewithdrawalstatefailed)
+/// * [RevenueWithdrawalStatePending](https://core.telegram.org/bots/api/#revenuewithdrawalstatepending)
+/// * [RevenueWithdrawalStateSucceeded](https://core.telegram.org/bots/api/#revenuewithdrawalstatesucceeded)
+/// * [RevenueWithdrawalStateFailed](https://core.telegram.org/bots/api/#revenuewithdrawalstatefailed)
 ///
-///API Reference: [link](https://core.telegram.org/bots/api/#revenuewithdrawalstate)
+/// API Reference: [link](https://core.telegram.org/bots/api/#revenuewithdrawalstate)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum RevenueWithdrawalState {
+    /// The withdrawal is in progress.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#revenuewithdrawalstatepending)
     #[serde(rename = "pending")]
     Pending(RevenueWithdrawalStatePending),
+
+    /// The withdrawal succeeded.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#revenuewithdrawalstatesucceeded)
     #[serde(rename = "succeeded")]
     Succeeded(RevenueWithdrawalStateSucceeded),
+
+    /// The withdrawal failed and the transaction was refunded.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#revenuewithdrawalstatefailed)
     #[serde(rename = "failed")]
     Failed(RevenueWithdrawalStateFailed),
 }
+
 impl Default for RevenueWithdrawalState {
     fn default() -> Self {
         Self::Pending(RevenueWithdrawalStatePending::default())
     }
 }
+
 impl From<RevenueWithdrawalStatePending> for RevenueWithdrawalState {
     fn from(value: RevenueWithdrawalStatePending) -> Self {
         Self::Pending(value)
@@ -42,4 +58,5 @@ impl From<RevenueWithdrawalStateFailed> for RevenueWithdrawalState {
         Self::Failed(value)
     }
 }
+
 // Divider: all content below this line will be preserved after code regen

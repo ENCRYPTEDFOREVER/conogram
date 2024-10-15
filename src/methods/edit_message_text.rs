@@ -1,15 +1,20 @@
-use crate::api::API;
-use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
-use crate::entities::link_preview_options::LinkPreviewOptions;
-use crate::entities::message::Message;
-use crate::entities::message_entity::MessageEntity;
-use crate::entities::misc::chat_id::ChatId;
-use crate::errors::ConogramError;
-use crate::impl_into_future;
-use crate::request::RequestT;
+use std::{
+    future::{Future, IntoFuture},
+    pin::Pin,
+};
+
 use serde::Serialize;
-use std::future::{Future, IntoFuture};
-use std::pin::Pin;
+
+use crate::{
+    api::API,
+    entities::{
+        inline_keyboard_markup::InlineKeyboardMarkup, link_preview_options::LinkPreviewOptions,
+        message::Message, message_entity::MessageEntity, misc::chat_id::ChatId,
+    },
+    errors::ConogramError,
+    impl_into_future,
+    request::RequestT,
+};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct EditMessageTextParams {

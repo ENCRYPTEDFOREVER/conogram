@@ -1,20 +1,27 @@
-use crate::api::API;
-use crate::entities::message::Message;
-use crate::entities::message_entity::MessageEntity;
-use crate::entities::misc::chat_id::ChatId;
-use crate::entities::misc::input_file::GetFiles;
-use crate::entities::misc::input_file::InputFile;
-use crate::entities::misc::input_file::Moose;
-use crate::entities::misc::reply_markup::ReplyMarkup;
-use crate::entities::reply_parameters::ReplyParameters;
-use crate::errors::ConogramError;
-use crate::impl_into_future_multipart;
-use crate::request::RequestT;
-use crate::utils::deserialize_utils::is_false;
+use std::{
+    future::{Future, IntoFuture},
+    pin::Pin,
+};
+
 use serde::Serialize;
-use std::collections::HashMap;
-use std::future::{Future, IntoFuture};
-use std::pin::Pin;
+
+use crate::{
+    api::API,
+    entities::{
+        message::Message,
+        message_entity::MessageEntity,
+        misc::{
+            chat_id::ChatId,
+            input_file::{GetFiles, InputFile},
+            reply_markup::ReplyMarkup,
+        },
+        reply_parameters::ReplyParameters,
+    },
+    errors::ConogramError,
+    impl_into_future_multipart,
+    request::RequestT,
+    utils::deserialize_utils::is_false,
+};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SendAudioParams {
@@ -23,7 +30,6 @@ pub struct SendAudioParams {
     pub chat_id: ChatId,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_thread_id: Option<i64>,
-    #[serde(skip)]
     pub audio: InputFile,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption: Option<String>,
@@ -37,7 +43,7 @@ pub struct SendAudioParams {
     pub performer: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
-    #[serde(skip, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thumbnail: Option<InputFile>,
     #[serde(default, skip_serializing_if = "is_false")]
     pub disable_notification: bool,
@@ -52,13 +58,13 @@ pub struct SendAudioParams {
 }
 
 impl GetFiles for SendAudioParams {
-    fn get_files(&self) -> HashMap<Moose, &InputFile> {
-        let mut map = HashMap::new();
-        map.insert(Moose::Owned("audio".into()), &self.audio);
+    fn get_files(&self) -> Vec<&InputFile> {
+        let mut vec = Vec::with_capacity(4);
+        vec.push(&self.audio);
         if let Some(thumbnail) = &self.thumbnail {
-            map.insert(Moose::Owned("thumbnail".into()), thumbnail);
+            vec.push(thumbnail);
         }
-        map
+        vec
     }
 }
 impl_into_future_multipart!(SendAudioRequest<'a>);

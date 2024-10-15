@@ -1,12 +1,17 @@
-use crate::api::API;
-use crate::entities::misc::chat_id::ChatId;
-use crate::entities::user_chat_boosts::UserChatBoosts;
-use crate::errors::ConogramError;
-use crate::impl_into_future;
-use crate::request::RequestT;
+use std::{
+    future::{Future, IntoFuture},
+    pin::Pin,
+};
+
 use serde::Serialize;
-use std::future::{Future, IntoFuture};
-use std::pin::Pin;
+
+use crate::{
+    api::API,
+    entities::{misc::chat_id::ChatId, user_chat_boosts::UserChatBoosts},
+    errors::ConogramError,
+    impl_into_future,
+    request::RequestT,
+};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct GetUserChatBoostsParams {

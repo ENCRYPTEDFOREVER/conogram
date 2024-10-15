@@ -1,18 +1,25 @@
-use crate::api::API;
-use crate::entities::inline_keyboard_markup::InlineKeyboardMarkup;
-use crate::entities::input_media::InputMedia;
-use crate::entities::message::Message;
-use crate::entities::misc::chat_id::ChatId;
-use crate::entities::misc::input_file::GetFiles;
-use crate::entities::misc::input_file::InputFile;
-use crate::entities::misc::input_file::Moose;
-use crate::errors::ConogramError;
-use crate::impl_into_future_multipart;
-use crate::request::RequestT;
+use std::{
+    future::{Future, IntoFuture},
+    pin::Pin,
+};
+
 use serde::Serialize;
-use std::collections::HashMap;
-use std::future::{Future, IntoFuture};
-use std::pin::Pin;
+
+use crate::{
+    api::API,
+    entities::{
+        inline_keyboard_markup::InlineKeyboardMarkup,
+        input_media::InputMedia,
+        message::Message,
+        misc::{
+            chat_id::ChatId,
+            input_file::{GetFiles, InputFile},
+        },
+    },
+    errors::ConogramError,
+    impl_into_future_multipart,
+    request::RequestT,
+};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct EditMessageMediaParams {
@@ -30,10 +37,10 @@ pub struct EditMessageMediaParams {
 }
 
 impl GetFiles for EditMessageMediaParams {
-    fn get_files(&self) -> HashMap<Moose, &InputFile> {
-        let mut map = HashMap::new();
-        map.extend(self.media.get_files());
-        map
+    fn get_files(&self) -> Vec<&InputFile> {
+        let mut vec = Vec::with_capacity(1);
+        vec.extend(self.media.get_files());
+        vec
     }
 }
 impl_into_future_multipart!(EditMessageMediaRequest<'a>);

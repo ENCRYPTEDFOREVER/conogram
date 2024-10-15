@@ -1,29 +1,31 @@
-use crate::api::API;
-use crate::entities::file::File;
-use crate::entities::misc::input_file::GetFiles;
-use crate::entities::misc::input_file::InputFile;
-use crate::entities::misc::input_file::Moose;
-use crate::errors::ConogramError;
-use crate::impl_into_future_multipart;
-use crate::request::RequestT;
+use std::{
+    future::{Future, IntoFuture},
+    pin::Pin,
+};
+
 use serde::Serialize;
-use std::collections::HashMap;
-use std::future::{Future, IntoFuture};
-use std::pin::Pin;
+
+use crate::{
+    api::API,
+    entities::{
+        file::File,
+        misc::input_file::{GetFiles, InputFile},
+    },
+    errors::ConogramError,
+    impl_into_future_multipart,
+    request::RequestT,
+};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct UploadStickerFileParams {
     pub user_id: i64,
-    #[serde(skip)]
     pub sticker: InputFile,
     pub sticker_format: UploadStickerFileStickerFormat,
 }
 
 impl GetFiles for UploadStickerFileParams {
-    fn get_files(&self) -> HashMap<Moose, &InputFile> {
-        let mut map = HashMap::new();
-        map.insert(Moose::Owned("sticker".into()), &self.sticker);
-        map
+    fn get_files(&self) -> Vec<&InputFile> {
+        vec![&self.sticker]
     }
 }
 impl_into_future_multipart!(UploadStickerFileRequest<'a>);

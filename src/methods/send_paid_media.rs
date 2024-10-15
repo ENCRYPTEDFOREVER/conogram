@@ -1,21 +1,28 @@
-use crate::api::API;
-use crate::entities::input_paid_media::InputPaidMedia;
-use crate::entities::message::Message;
-use crate::entities::message_entity::MessageEntity;
-use crate::entities::misc::chat_id::ChatId;
-use crate::entities::misc::input_file::GetFiles;
-use crate::entities::misc::input_file::InputFile;
-use crate::entities::misc::input_file::Moose;
-use crate::entities::misc::reply_markup::ReplyMarkup;
-use crate::entities::reply_parameters::ReplyParameters;
-use crate::errors::ConogramError;
-use crate::impl_into_future_multipart;
-use crate::request::RequestT;
-use crate::utils::deserialize_utils::is_false;
+use std::{
+    future::{Future, IntoFuture},
+    pin::Pin,
+};
+
 use serde::Serialize;
-use std::collections::HashMap;
-use std::future::{Future, IntoFuture};
-use std::pin::Pin;
+
+use crate::{
+    api::API,
+    entities::{
+        input_paid_media::InputPaidMedia,
+        message::Message,
+        message_entity::MessageEntity,
+        misc::{
+            chat_id::ChatId,
+            input_file::{GetFiles, InputFile},
+            reply_markup::ReplyMarkup,
+        },
+        reply_parameters::ReplyParameters,
+    },
+    errors::ConogramError,
+    impl_into_future_multipart,
+    request::RequestT,
+    utils::deserialize_utils::is_false,
+};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SendPaidMediaParams {
@@ -45,12 +52,12 @@ pub struct SendPaidMediaParams {
 }
 
 impl GetFiles for SendPaidMediaParams {
-    fn get_files(&self) -> HashMap<Moose, &InputFile> {
-        let mut map = HashMap::new();
+    fn get_files(&self) -> Vec<&InputFile> {
+        let mut vec = Vec::with_capacity(3);
         for media in &self.media {
-            map.extend(media.get_files());
+            vec.extend(media.get_files());
         }
-        map
+        vec
     }
 }
 impl_into_future_multipart!(SendPaidMediaRequest<'a>);

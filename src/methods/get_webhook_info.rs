@@ -1,11 +1,14 @@
-use crate::api::API;
-use crate::entities::webhook_info::WebhookInfo;
-use crate::errors::ConogramError;
-use crate::impl_into_future;
-use crate::request::RequestT;
+use std::{
+    future::{Future, IntoFuture},
+    pin::Pin,
+};
+
 use serde::Serialize;
-use std::future::{Future, IntoFuture};
-use std::pin::Pin;
+
+use crate::{
+    api::API, entities::webhook_info::WebhookInfo, errors::ConogramError, impl_into_future,
+    request::RequestT,
+};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct GetWebhookInfoParams {}
@@ -36,7 +39,7 @@ impl<'a> RequestT for GetWebhookInfoRequest<'a> {
     }
 }
 impl<'a> GetWebhookInfoRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub const fn new(api: &'a API) -> Self {
         Self {
             api,
             params: GetWebhookInfoParams {},
@@ -46,7 +49,7 @@ impl<'a> GetWebhookInfoRequest<'a> {
 
 impl API {
     ///Use this method to get current webhook status. Requires no parameters. On success, returns a [WebhookInfo](https://core.telegram.org/bots/api/#webhookinfo) object. If the bot is using [getUpdates](https://core.telegram.org/bots/api/#getupdates), will return an object with the *url* field empty.
-    pub fn get_webhook_info(&self) -> GetWebhookInfoRequest {
+    pub const fn get_webhook_info(&self) -> GetWebhookInfoRequest {
         GetWebhookInfoRequest::new(self)
     }
 }

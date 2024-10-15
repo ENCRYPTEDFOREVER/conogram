@@ -1,15 +1,20 @@
-use crate::api::API;
-use crate::entities::input_sticker::InputSticker;
-use crate::entities::misc::input_file::GetFiles;
-use crate::entities::misc::input_file::InputFile;
-use crate::entities::misc::input_file::Moose;
-use crate::errors::ConogramError;
-use crate::impl_into_future_multipart;
-use crate::request::RequestT;
+use std::{
+    future::{Future, IntoFuture},
+    pin::Pin,
+};
+
 use serde::Serialize;
-use std::collections::HashMap;
-use std::future::{Future, IntoFuture};
-use std::pin::Pin;
+
+use crate::{
+    api::API,
+    entities::{
+        input_sticker::InputSticker,
+        misc::input_file::{GetFiles, InputFile},
+    },
+    errors::ConogramError,
+    impl_into_future_multipart,
+    request::RequestT,
+};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct ReplaceStickerInSetParams {
@@ -20,10 +25,10 @@ pub struct ReplaceStickerInSetParams {
 }
 
 impl GetFiles for ReplaceStickerInSetParams {
-    fn get_files(&self) -> HashMap<Moose, &InputFile> {
-        let mut map = HashMap::new();
-        map.extend(self.sticker.get_files());
-        map
+    fn get_files(&self) -> Vec<&InputFile> {
+        let mut vec = Vec::with_capacity(1);
+        vec.extend(self.sticker.get_files());
+        vec
     }
 }
 impl_into_future_multipart!(ReplaceStickerInSetRequest<'a>);

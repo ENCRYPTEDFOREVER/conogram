@@ -1,17 +1,24 @@
-use crate::api::API;
-use crate::entities::link_preview_options::LinkPreviewOptions;
-use crate::entities::message::Message;
-use crate::entities::message_entity::MessageEntity;
-use crate::entities::misc::chat_id::ChatId;
-use crate::entities::misc::reply_markup::ReplyMarkup;
-use crate::entities::reply_parameters::ReplyParameters;
-use crate::errors::ConogramError;
-use crate::impl_into_future;
-use crate::request::RequestT;
-use crate::utils::deserialize_utils::is_false;
+use std::{
+    future::{Future, IntoFuture},
+    pin::Pin,
+};
+
 use serde::Serialize;
-use std::future::{Future, IntoFuture};
-use std::pin::Pin;
+
+use crate::{
+    api::API,
+    entities::{
+        link_preview_options::LinkPreviewOptions,
+        message::Message,
+        message_entity::MessageEntity,
+        misc::{chat_id::ChatId, reply_markup::ReplyMarkup},
+        reply_parameters::ReplyParameters,
+    },
+    errors::ConogramError,
+    impl_into_future,
+    request::RequestT,
+    utils::deserialize_utils::is_false,
+};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SendMessageParams {

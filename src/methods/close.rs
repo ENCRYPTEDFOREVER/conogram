@@ -1,10 +1,11 @@
-use crate::api::API;
-use crate::errors::ConogramError;
-use crate::impl_into_future;
-use crate::request::RequestT;
+use std::{
+    future::{Future, IntoFuture},
+    pin::Pin,
+};
+
 use serde::Serialize;
-use std::future::{Future, IntoFuture};
-use std::pin::Pin;
+
+use crate::{api::API, errors::ConogramError, impl_into_future, request::RequestT};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct CloseParams {}
@@ -35,7 +36,7 @@ impl<'a> RequestT for CloseRequest<'a> {
     }
 }
 impl<'a> CloseRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub const fn new(api: &'a API) -> Self {
         Self {
             api,
             params: CloseParams {},
@@ -45,7 +46,7 @@ impl<'a> CloseRequest<'a> {
 
 impl API {
     ///Use this method to close the bot instance before moving it from one local server to another. You need to delete the webhook before calling this method to ensure that the bot isn't launched again after server restart. The method will return error 429 in the first 10 minutes after the bot is launched. Returns *True* on success. Requires no parameters.
-    pub fn close(&self) -> CloseRequest {
+    pub const fn close(&self) -> CloseRequest {
         CloseRequest::new(self)
     }
 }

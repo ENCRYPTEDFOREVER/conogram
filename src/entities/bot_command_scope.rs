@@ -1,46 +1,78 @@
-use crate::entities::bot_command_scope_all_chat_administrators::BotCommandScopeAllChatAdministrators;
-use crate::entities::bot_command_scope_all_group_chats::BotCommandScopeAllGroupChats;
-use crate::entities::bot_command_scope_all_private_chats::BotCommandScopeAllPrivateChats;
-use crate::entities::bot_command_scope_chat::BotCommandScopeChat;
-use crate::entities::bot_command_scope_chat_administrators::BotCommandScopeChatAdministrators;
-use crate::entities::bot_command_scope_chat_member::BotCommandScopeChatMember;
-use crate::entities::bot_command_scope_default::BotCommandScopeDefault;
 use serde::{Deserialize, Serialize};
 
-///This object represents the scope to which bot commands are applied. Currently, the following 7 scopes are supported:
+use crate::entities::{
+    bot_command_scope_all_chat_administrators::BotCommandScopeAllChatAdministrators,
+    bot_command_scope_all_group_chats::BotCommandScopeAllGroupChats,
+    bot_command_scope_all_private_chats::BotCommandScopeAllPrivateChats,
+    bot_command_scope_chat::BotCommandScopeChat,
+    bot_command_scope_chat_administrators::BotCommandScopeChatAdministrators,
+    bot_command_scope_chat_member::BotCommandScopeChatMember,
+    bot_command_scope_default::BotCommandScopeDefault,
+};
+
+/// This object represents the scope to which bot commands are applied. Currently, the following 7 scopes are supported:
 ///
-///* [BotCommandScopeDefault](https://core.telegram.org/bots/api/#botcommandscopedefault)
-///* [BotCommandScopeAllPrivateChats](https://core.telegram.org/bots/api/#botcommandscopeallprivatechats)
-///* [BotCommandScopeAllGroupChats](https://core.telegram.org/bots/api/#botcommandscopeallgroupchats)
-///* [BotCommandScopeAllChatAdministrators](https://core.telegram.org/bots/api/#botcommandscopeallchatadministrators)
-///* [BotCommandScopeChat](https://core.telegram.org/bots/api/#botcommandscopechat)
-///* [BotCommandScopeChatAdministrators](https://core.telegram.org/bots/api/#botcommandscopechatadministrators)
-///* [BotCommandScopeChatMember](https://core.telegram.org/bots/api/#botcommandscopechatmember)
+/// * [BotCommandScopeDefault](https://core.telegram.org/bots/api/#botcommandscopedefault)
+/// * [BotCommandScopeAllPrivateChats](https://core.telegram.org/bots/api/#botcommandscopeallprivatechats)
+/// * [BotCommandScopeAllGroupChats](https://core.telegram.org/bots/api/#botcommandscopeallgroupchats)
+/// * [BotCommandScopeAllChatAdministrators](https://core.telegram.org/bots/api/#botcommandscopeallchatadministrators)
+/// * [BotCommandScopeChat](https://core.telegram.org/bots/api/#botcommandscopechat)
+/// * [BotCommandScopeChatAdministrators](https://core.telegram.org/bots/api/#botcommandscopechatadministrators)
+/// * [BotCommandScopeChatMember](https://core.telegram.org/bots/api/#botcommandscopechatmember)
 ///
-///API Reference: [link](https://core.telegram.org/bots/api/#botcommandscope)
+/// API Reference: [link](https://core.telegram.org/bots/api/#botcommandscope)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum BotCommandScope {
+    /// Represents the default [scope](https://core.telegram.org/bots/api/#botcommandscope) of bot commands. Default commands are used if no commands with a [narrower scope](https://core.telegram.org/bots/api/#determining-list-of-commands) are specified for the user.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#botcommandscopedefault)
     #[serde(rename = "default")]
     Default(BotCommandScopeDefault),
+
+    /// Represents the [scope](https://core.telegram.org/bots/api/#botcommandscope) of bot commands, covering all private chats.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#botcommandscopeallprivatechats)
     #[serde(rename = "all_private_chats")]
     AllPrivateChats(BotCommandScopeAllPrivateChats),
+
+    /// Represents the [scope](https://core.telegram.org/bots/api/#botcommandscope) of bot commands, covering all group and supergroup chats.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#botcommandscopeallgroupchats)
     #[serde(rename = "all_group_chats")]
     AllGroupChats(BotCommandScopeAllGroupChats),
+
+    /// Represents the [scope](https://core.telegram.org/bots/api/#botcommandscope) of bot commands, covering all group and supergroup chat administrators.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#botcommandscopeallchatadministrators)
     #[serde(rename = "all_chat_administrators")]
     AllChatAdministrators(BotCommandScopeAllChatAdministrators),
+
+    /// Represents the [scope](https://core.telegram.org/bots/api/#botcommandscope) of bot commands, covering a specific chat.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#botcommandscopechat)
     #[serde(rename = "chat")]
     Chat(BotCommandScopeChat),
+
+    /// Represents the [scope](https://core.telegram.org/bots/api/#botcommandscope) of bot commands, covering all administrators of a specific group or supergroup chat.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#botcommandscopechatadministrators)
     #[serde(rename = "chat_administrators")]
     ChatAdministrators(BotCommandScopeChatAdministrators),
+
+    /// Represents the [scope](https://core.telegram.org/bots/api/#botcommandscope) of bot commands, covering a specific member of a group or supergroup chat.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#botcommandscopechatmember)
     #[serde(rename = "chat_member")]
     ChatMember(BotCommandScopeChatMember),
 }
+
 impl Default for BotCommandScope {
     fn default() -> Self {
         Self::Default(BotCommandScopeDefault::default())
     }
 }
+
 impl From<BotCommandScopeDefault> for BotCommandScope {
     fn from(value: BotCommandScopeDefault) -> Self {
         Self::Default(value)
@@ -82,6 +114,7 @@ impl From<BotCommandScopeChatMember> for BotCommandScope {
         Self::ChatMember(value)
     }
 }
+
 // Divider: all content below this line will be preserved after code regen
 use std::fmt::Display;
 

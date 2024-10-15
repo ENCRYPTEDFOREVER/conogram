@@ -1,42 +1,67 @@
-use crate::entities::chat_member_administrator::ChatMemberAdministrator;
-use crate::entities::chat_member_banned::ChatMemberBanned;
-use crate::entities::chat_member_left::ChatMemberLeft;
-use crate::entities::chat_member_member::ChatMemberMember;
-use crate::entities::chat_member_owner::ChatMemberOwner;
-use crate::entities::chat_member_restricted::ChatMemberRestricted;
 use serde::{Deserialize, Serialize};
 
-///This object contains information about one member of a chat. Currently, the following 6 types of chat members are supported:
+use crate::entities::{
+    chat_member_administrator::ChatMemberAdministrator, chat_member_banned::ChatMemberBanned,
+    chat_member_left::ChatMemberLeft, chat_member_member::ChatMemberMember,
+    chat_member_owner::ChatMemberOwner, chat_member_restricted::ChatMemberRestricted,
+};
+
+/// This object contains information about one member of a chat. Currently, the following 6 types of chat members are supported:
 ///
-///* [ChatMemberOwner](https://core.telegram.org/bots/api/#chatmemberowner)
-///* [ChatMemberAdministrator](https://core.telegram.org/bots/api/#chatmemberadministrator)
-///* [ChatMemberMember](https://core.telegram.org/bots/api/#chatmembermember)
-///* [ChatMemberRestricted](https://core.telegram.org/bots/api/#chatmemberrestricted)
-///* [ChatMemberLeft](https://core.telegram.org/bots/api/#chatmemberleft)
-///* [ChatMemberBanned](https://core.telegram.org/bots/api/#chatmemberbanned)
+/// * [ChatMemberOwner](https://core.telegram.org/bots/api/#chatmemberowner)
+/// * [ChatMemberAdministrator](https://core.telegram.org/bots/api/#chatmemberadministrator)
+/// * [ChatMemberMember](https://core.telegram.org/bots/api/#chatmembermember)
+/// * [ChatMemberRestricted](https://core.telegram.org/bots/api/#chatmemberrestricted)
+/// * [ChatMemberLeft](https://core.telegram.org/bots/api/#chatmemberleft)
+/// * [ChatMemberBanned](https://core.telegram.org/bots/api/#chatmemberbanned)
 ///
-///API Reference: [link](https://core.telegram.org/bots/api/#chatmember)
+/// API Reference: [link](https://core.telegram.org/bots/api/#chatmember)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "status")]
 pub enum ChatMember {
+    /// Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that owns the chat and has all administrator privileges.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#chatmemberowner)
     #[serde(rename = "creator")]
     Owner(ChatMemberOwner),
+
+    /// Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that has some additional privileges.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#chatmemberadministrator)
     #[serde(rename = "administrator")]
     Administrator(ChatMemberAdministrator),
+
+    /// Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that has no additional privileges or restrictions.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#chatmembermember)
     #[serde(rename = "member")]
     Member(ChatMemberMember),
+
+    /// Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that is under certain restrictions in the chat. Supergroups only.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#chatmemberrestricted)
     #[serde(rename = "restricted")]
     Restricted(ChatMemberRestricted),
+
+    /// Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that isn't currently a member of the chat, but may join it themselves.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#chatmemberleft)
     #[serde(rename = "left")]
     Left(ChatMemberLeft),
+
+    /// Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that was banned in the chat and can't return to the chat or view chat messages.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#chatmemberbanned)
     #[serde(rename = "kicked")]
     Banned(ChatMemberBanned),
 }
+
 impl Default for ChatMember {
     fn default() -> Self {
         Self::Owner(ChatMemberOwner::default())
     }
 }
+
 impl From<ChatMemberOwner> for ChatMember {
     fn from(value: ChatMemberOwner) -> Self {
         Self::Owner(value)
@@ -72,6 +97,7 @@ impl From<ChatMemberBanned> for ChatMember {
         Self::Banned(value)
     }
 }
+
 // Divider: all content below this line will be preserved after code regen
 
 use super::user::User;

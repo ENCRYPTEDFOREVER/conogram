@@ -1,11 +1,14 @@
-use crate::api::API;
-use crate::entities::sticker::Sticker;
-use crate::errors::ConogramError;
-use crate::impl_into_future;
-use crate::request::RequestT;
+use std::{
+    future::{Future, IntoFuture},
+    pin::Pin,
+};
+
 use serde::Serialize;
-use std::future::{Future, IntoFuture};
-use std::pin::Pin;
+
+use crate::{
+    api::API, entities::sticker::Sticker, errors::ConogramError, impl_into_future,
+    request::RequestT,
+};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct GetForumTopicIconStickersParams {}
@@ -36,7 +39,7 @@ impl<'a> RequestT for GetForumTopicIconStickersRequest<'a> {
     }
 }
 impl<'a> GetForumTopicIconStickersRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub const fn new(api: &'a API) -> Self {
         Self {
             api,
             params: GetForumTopicIconStickersParams {},
@@ -46,7 +49,7 @@ impl<'a> GetForumTopicIconStickersRequest<'a> {
 
 impl API {
     ///Use this method to get custom emoji stickers, which can be used as a forum topic icon by any user. Requires no parameters. Returns an Array of [Sticker](https://core.telegram.org/bots/api/#sticker) objects.
-    pub fn get_forum_topic_icon_stickers(&self) -> GetForumTopicIconStickersRequest {
+    pub const fn get_forum_topic_icon_stickers(&self) -> GetForumTopicIconStickersRequest {
         GetForumTopicIconStickersRequest::new(self)
     }
 }
