@@ -1,10 +1,8 @@
-use std::collections::HashMap;
-
 use serde::Serialize;
 
 use crate::entities::{
     mask_position::MaskPosition,
-    misc::input_file::{GetFiles, InputFile, Moose},
+    misc::input_file::{GetFiles, InputFile},
 };
 
 /// This object describes a sticker to be added to a sticker set.
@@ -48,13 +46,7 @@ pub enum InputStickerFormat {
 }
 
 impl GetFiles for InputSticker {
-    fn get_files(&self) -> HashMap<Moose, &InputFile> {
-        let mut map = HashMap::new();
-        map.insert(
-            Moose::Owned(self.sticker.get_uuid().unwrap_or_else(|| "sticker".into())),
-            &self.sticker,
-        );
-        map
+    fn get_files(&self) -> Vec<&InputFile> {
+        vec![&self.sticker]
     }
-}
-// Divider: all content below this line will be preserved after code regen
+} // Divider: all content below this line will be preserved after code regen

@@ -1,5 +1,4 @@
 use std::{
-    collections::HashMap,
     future::{Future, IntoFuture},
     pin::Pin,
 };
@@ -13,7 +12,7 @@ use crate::{
         message_entity::MessageEntity,
         misc::{
             chat_id::ChatId,
-            input_file::{GetFiles, InputFile, Moose},
+            input_file::{GetFiles, InputFile},
             reply_markup::ReplyMarkup,
         },
         reply_parameters::ReplyParameters,
@@ -31,7 +30,6 @@ pub struct SendPhotoParams {
     pub chat_id: ChatId,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_thread_id: Option<i64>,
-    #[serde(skip)]
     pub photo: InputFile,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption: Option<String>,
@@ -56,10 +54,8 @@ pub struct SendPhotoParams {
 }
 
 impl GetFiles for SendPhotoParams {
-    fn get_files(&self) -> HashMap<Moose, &InputFile> {
-        let mut map = HashMap::new();
-        map.insert(Moose::Owned("photo".into()), &self.photo);
-        map
+    fn get_files(&self) -> Vec<&InputFile> {
+        vec![&self.photo]
     }
 }
 impl_into_future_multipart!(SendPhotoRequest<'a>);

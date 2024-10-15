@@ -39,7 +39,7 @@ impl<'a> RequestT for GetWebhookInfoRequest<'a> {
     }
 }
 impl<'a> GetWebhookInfoRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub const fn new(api: &'a API) -> Self {
         Self {
             api,
             params: GetWebhookInfoParams {},
@@ -49,7 +49,7 @@ impl<'a> GetWebhookInfoRequest<'a> {
 
 impl API {
     ///Use this method to get current webhook status. Requires no parameters. On success, returns a [WebhookInfo](https://core.telegram.org/bots/api/#webhookinfo) object. If the bot is using [getUpdates](https://core.telegram.org/bots/api/#getupdates), will return an object with the *url* field empty.
-    pub fn get_webhook_info(&self) -> GetWebhookInfoRequest {
+    pub const fn get_webhook_info(&self) -> GetWebhookInfoRequest {
         GetWebhookInfoRequest::new(self)
     }
 }

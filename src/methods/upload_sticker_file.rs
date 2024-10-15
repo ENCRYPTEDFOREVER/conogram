@@ -1,5 +1,4 @@
 use std::{
-    collections::HashMap,
     future::{Future, IntoFuture},
     pin::Pin,
 };
@@ -10,7 +9,7 @@ use crate::{
     api::API,
     entities::{
         file::File,
-        misc::input_file::{GetFiles, InputFile, Moose},
+        misc::input_file::{GetFiles, InputFile},
     },
     errors::ConogramError,
     impl_into_future_multipart,
@@ -20,16 +19,13 @@ use crate::{
 #[derive(Debug, Clone, Serialize)]
 pub struct UploadStickerFileParams {
     pub user_id: i64,
-    #[serde(skip)]
     pub sticker: InputFile,
     pub sticker_format: UploadStickerFileStickerFormat,
 }
 
 impl GetFiles for UploadStickerFileParams {
-    fn get_files(&self) -> HashMap<Moose, &InputFile> {
-        let mut map = HashMap::new();
-        map.insert(Moose::Owned("sticker".into()), &self.sticker);
-        map
+    fn get_files(&self) -> Vec<&InputFile> {
+        vec![&self.sticker]
     }
 }
 impl_into_future_multipart!(UploadStickerFileRequest<'a>);

@@ -1,5 +1,4 @@
 use std::{
-    collections::HashMap,
     future::{Future, IntoFuture},
     pin::Pin,
 };
@@ -8,7 +7,7 @@ use serde::Serialize;
 
 use crate::{
     api::API,
-    entities::misc::input_file::{GetFiles, InputFile, Moose},
+    entities::misc::input_file::{GetFiles, InputFile},
     errors::ConogramError,
     impl_into_future_multipart,
     request::RequestT,
@@ -18,7 +17,7 @@ use crate::{
 #[derive(Debug, Clone, Serialize)]
 pub struct SetWebhookParams {
     pub url: String,
-    #[serde(skip, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate: Option<InputFile>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
@@ -33,12 +32,12 @@ pub struct SetWebhookParams {
 }
 
 impl GetFiles for SetWebhookParams {
-    fn get_files(&self) -> HashMap<Moose, &InputFile> {
-        let mut map = HashMap::new();
+    fn get_files(&self) -> Vec<&InputFile> {
+        let mut vec = Vec::with_capacity(3);
         if let Some(certificate) = &self.certificate {
-            map.insert(Moose::Owned("certificate".into()), certificate);
+            vec.push(certificate);
         }
-        map
+        vec
     }
 }
 impl_into_future_multipart!(SetWebhookRequest<'a>);

@@ -1,11 +1,9 @@
-use std::collections::HashMap;
-
 use serde::Serialize;
 
 use crate::{
     entities::{
         message_entity::MessageEntity,
-        misc::input_file::{GetFiles, InputFile, Moose},
+        misc::input_file::{GetFiles, InputFile},
     },
     utils::deserialize_utils::is_false,
 };
@@ -56,19 +54,13 @@ pub struct InputMediaAnimation {
 }
 
 impl GetFiles for InputMediaAnimation {
-    fn get_files(&self) -> HashMap<Moose, &InputFile> {
-        let mut map = HashMap::new();
-        map.insert(
-            Moose::Owned(self.media.get_uuid().unwrap_or_else(|| "media".into())),
-            &self.media,
-        );
+    fn get_files(&self) -> Vec<&InputFile> {
+        let mut vec = Vec::with_capacity(2);
+        vec.push(&self.media);
         if let Some(thumbnail) = &self.thumbnail {
-            map.insert(
-                Moose::Owned(thumbnail.get_uuid().unwrap_or_else(|| "thumbnail".into())),
-                thumbnail,
-            );
+            vec.push(thumbnail);
         }
-        map
+        vec
     }
 }
 // Divider: all content below this line will be preserved after code regen

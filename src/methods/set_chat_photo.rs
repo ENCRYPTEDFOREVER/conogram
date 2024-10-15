@@ -1,5 +1,4 @@
 use std::{
-    collections::HashMap,
     future::{Future, IntoFuture},
     pin::Pin,
 };
@@ -10,7 +9,7 @@ use crate::{
     api::API,
     entities::misc::{
         chat_id::ChatId,
-        input_file::{GetFiles, InputFile, Moose},
+        input_file::{GetFiles, InputFile},
     },
     errors::ConogramError,
     impl_into_future_multipart,
@@ -20,15 +19,12 @@ use crate::{
 #[derive(Debug, Clone, Serialize)]
 pub struct SetChatPhotoParams {
     pub chat_id: ChatId,
-    #[serde(skip)]
     pub photo: InputFile,
 }
 
 impl GetFiles for SetChatPhotoParams {
-    fn get_files(&self) -> HashMap<Moose, &InputFile> {
-        let mut map = HashMap::new();
-        map.insert(Moose::Owned("photo".into()), &self.photo);
-        map
+    fn get_files(&self) -> Vec<&InputFile> {
+        vec![&self.photo]
     }
 }
 impl_into_future_multipart!(SetChatPhotoRequest<'a>);

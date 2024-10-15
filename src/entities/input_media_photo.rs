@@ -1,11 +1,9 @@
-use std::collections::HashMap;
-
 use serde::Serialize;
 
 use crate::{
     entities::{
         message_entity::MessageEntity,
-        misc::input_file::{GetFiles, InputFile, Moose},
+        misc::input_file::{GetFiles, InputFile},
     },
     utils::deserialize_utils::is_false,
 };
@@ -40,13 +38,7 @@ pub struct InputMediaPhoto {
 }
 
 impl GetFiles for InputMediaPhoto {
-    fn get_files(&self) -> HashMap<Moose, &InputFile> {
-        let mut map = HashMap::new();
-        map.insert(
-            Moose::Owned(self.media.get_uuid().unwrap_or_else(|| "media".into())),
-            &self.media,
-        );
-        map
+    fn get_files(&self) -> Vec<&InputFile> {
+        vec![&self.media]
     }
-}
-// Divider: all content below this line will be preserved after code regen
+} // Divider: all content below this line will be preserved after code regen

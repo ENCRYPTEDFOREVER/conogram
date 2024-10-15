@@ -1,5 +1,4 @@
 use std::{
-    collections::HashMap,
     future::{Future, IntoFuture},
     pin::Pin,
 };
@@ -13,7 +12,7 @@ use crate::{
         message_entity::MessageEntity,
         misc::{
             chat_id::ChatId,
-            input_file::{GetFiles, InputFile, Moose},
+            input_file::{GetFiles, InputFile},
             reply_markup::ReplyMarkup,
         },
         reply_parameters::ReplyParameters,
@@ -31,9 +30,8 @@ pub struct SendDocumentParams {
     pub chat_id: ChatId,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_thread_id: Option<i64>,
-    #[serde(skip)]
     pub document: InputFile,
-    #[serde(skip, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thumbnail: Option<InputFile>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption: Option<String>,
@@ -56,13 +54,13 @@ pub struct SendDocumentParams {
 }
 
 impl GetFiles for SendDocumentParams {
-    fn get_files(&self) -> HashMap<Moose, &InputFile> {
-        let mut map = HashMap::new();
-        map.insert(Moose::Owned("document".into()), &self.document);
+    fn get_files(&self) -> Vec<&InputFile> {
+        let mut vec = Vec::with_capacity(4);
+        vec.push(&self.document);
         if let Some(thumbnail) = &self.thumbnail {
-            map.insert(Moose::Owned("thumbnail".into()), thumbnail);
+            vec.push(thumbnail);
         }
-        map
+        vec
     }
 }
 impl_into_future_multipart!(SendDocumentRequest<'a>);

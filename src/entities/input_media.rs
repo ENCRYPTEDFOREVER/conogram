@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use serde::Serialize;
 
 use crate::entities::{
@@ -8,7 +6,7 @@ use crate::entities::{
     input_media_document::InputMediaDocument,
     input_media_photo::InputMediaPhoto,
     input_media_video::InputMediaVideo,
-    misc::input_file::{GetFiles, InputFile, Moose},
+    misc::input_file::{GetFiles, InputFile},
 };
 
 /// This object represents the content of a media message to be sent. It should be one of
@@ -91,7 +89,7 @@ impl From<InputMediaVideo> for InputMedia {
 }
 
 impl GetFiles for InputMedia {
-    fn get_files(&self) -> HashMap<Moose, &InputFile> {
+    fn get_files(&self) -> Vec<&InputFile> {
         match self {
             Self::Animation(m) => m.get_files(),
             Self::Audio(m) => m.get_files(),

@@ -38,7 +38,7 @@ impl<'a> RequestT for GetMeRequest<'a> {
     }
 }
 impl<'a> GetMeRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub const fn new(api: &'a API) -> Self {
         Self {
             api,
             params: GetMeParams {},
@@ -48,7 +48,7 @@ impl<'a> GetMeRequest<'a> {
 
 impl API {
     ///A simple method for testing your bot's authentication token. Requires no parameters. Returns basic information about the bot in form of a [User](https://core.telegram.org/bots/api/#user) object.
-    pub fn get_me(&self) -> GetMeRequest {
+    pub const fn get_me(&self) -> GetMeRequest {
         GetMeRequest::new(self)
     }
 }

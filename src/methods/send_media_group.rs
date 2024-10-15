@@ -1,5 +1,4 @@
 use std::{
-    collections::HashMap,
     future::{Future, IntoFuture},
     pin::Pin,
 };
@@ -13,7 +12,7 @@ use crate::{
         message::Message,
         misc::{
             chat_id::ChatId,
-            input_file::{GetFiles, InputFile, Moose},
+            input_file::{GetFiles, InputFile},
         },
         reply_parameters::ReplyParameters,
     },
@@ -42,12 +41,12 @@ pub struct SendMediaGroupParams {
 }
 
 impl GetFiles for SendMediaGroupParams {
-    fn get_files(&self) -> HashMap<Moose, &InputFile> {
-        let mut map = HashMap::new();
+    fn get_files(&self) -> Vec<&InputFile> {
+        let mut vec = Vec::with_capacity(3);
         for media in &self.media {
-            map.extend(media.get_files());
+            vec.extend(media.get_files());
         }
-        map
+        vec
     }
 }
 impl_into_future_multipart!(SendMediaGroupRequest<'a>);

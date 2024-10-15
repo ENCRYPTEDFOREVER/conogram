@@ -1,5 +1,4 @@
 use std::{
-    collections::HashMap,
     future::{Future, IntoFuture},
     pin::Pin,
 };
@@ -14,7 +13,7 @@ use crate::{
         message::Message,
         misc::{
             chat_id::ChatId,
-            input_file::{GetFiles, InputFile, Moose},
+            input_file::{GetFiles, InputFile},
         },
     },
     errors::ConogramError,
@@ -38,10 +37,10 @@ pub struct EditMessageMediaParams {
 }
 
 impl GetFiles for EditMessageMediaParams {
-    fn get_files(&self) -> HashMap<Moose, &InputFile> {
-        let mut map = HashMap::new();
-        map.extend(self.media.get_files());
-        map
+    fn get_files(&self) -> Vec<&InputFile> {
+        let mut vec = Vec::with_capacity(1);
+        vec.extend(self.media.get_files());
+        vec
     }
 }
 impl_into_future_multipart!(EditMessageMediaRequest<'a>);

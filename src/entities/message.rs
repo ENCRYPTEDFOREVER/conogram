@@ -376,6 +376,7 @@ pub struct Message {
 use std::ops::Range;
 
 use super::{
+    input_media::InputMedia,
     misc::{formatting::FormattedText, input_file::InputFile},
     reaction_type::ReactionType,
     reply_parameters::ReplyParameters,
@@ -389,9 +390,9 @@ use crate::{
         edit_message_reply_markup::EditMessageReplyMarkupRequest,
         edit_message_text::EditMessageTextRequest,
         get_custom_emoji_stickers::GetCustomEmojiStickersRequest,
-        send_document::SendDocumentRequest, send_message::SendMessageRequest,
-        send_photo::SendPhotoRequest, send_sticker::SendStickerRequest,
-        set_message_reaction::SetMessageReactionRequest,
+        send_document::SendDocumentRequest, send_media_group::SendMediaGroupRequest,
+        send_message::SendMessageRequest, send_photo::SendPhotoRequest,
+        send_sticker::SendStickerRequest, set_message_reaction::SetMessageReactionRequest,
     },
 };
 
@@ -551,7 +552,7 @@ impl Message {
 
     pub fn get_formatted_text(&self) -> Option<FormattedText> {
         if let (Some(text), entities) = (self.get_text(), self.get_entities()) {
-            Some(FormattedText::new(text.clone(), entities.clone()))
+            Some(FormattedText::with_text(text.clone(), entities.clone()))
         } else {
             None
         }
@@ -744,6 +745,15 @@ impl Message {
         photo: impl Into<InputFile>,
     ) -> SendPhotoRequest<'a> {
         api.send_photo(self.chat.id, photo)
+            .reply_parameters(ReplyParameters::new_current_chat(self.message_id))
+    }
+
+    pub fn reply_media_group<'a>(
+        &'a self,
+        api: &'a API,
+        media: impl IntoIterator<Item = impl Into<InputMedia>>,
+    ) -> SendMediaGroupRequest<'a> {
+        api.send_media_group(self.chat.id, media)
             .reply_parameters(ReplyParameters::new_current_chat(self.message_id))
     }
 

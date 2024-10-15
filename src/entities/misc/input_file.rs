@@ -1,4 +1,4 @@
-use std::{borrow::Cow, collections::HashMap, io, path::PathBuf};
+use std::{borrow::Cow, io, path::PathBuf};
 
 use reqwest::multipart::Part;
 use serde::Serialize;
@@ -153,7 +153,7 @@ where
 pub type Moose = Cow<'static, str>;
 
 pub trait GetFiles {
-    fn get_files(&self) -> HashMap<Moose, &InputFile>;
+    fn get_files(&self) -> Vec<&InputFile>;
 }
 
 impl Serialize for InputFile {

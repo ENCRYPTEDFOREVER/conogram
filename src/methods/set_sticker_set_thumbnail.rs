@@ -1,5 +1,4 @@
 use std::{
-    collections::HashMap,
     future::{Future, IntoFuture},
     pin::Pin,
 };
@@ -8,7 +7,7 @@ use serde::Serialize;
 
 use crate::{
     api::API,
-    entities::misc::input_file::{GetFiles, InputFile, Moose},
+    entities::misc::input_file::{GetFiles, InputFile},
     errors::ConogramError,
     impl_into_future_multipart,
     request::RequestT,
@@ -18,18 +17,18 @@ use crate::{
 pub struct SetStickerSetThumbnailParams {
     pub name: String,
     pub user_id: i64,
-    #[serde(skip, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thumbnail: Option<InputFile>,
     pub format: SetStickerSetThumbnailFormat,
 }
 
 impl GetFiles for SetStickerSetThumbnailParams {
-    fn get_files(&self) -> HashMap<Moose, &InputFile> {
-        let mut map = HashMap::new();
+    fn get_files(&self) -> Vec<&InputFile> {
+        let mut vec = Vec::with_capacity(3);
         if let Some(thumbnail) = &self.thumbnail {
-            map.insert(Moose::Owned("thumbnail".into()), thumbnail);
+            vec.push(thumbnail);
         }
-        map
+        vec
     }
 }
 impl_into_future_multipart!(SetStickerSetThumbnailRequest<'a>);

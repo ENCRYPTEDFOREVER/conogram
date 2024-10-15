@@ -110,7 +110,7 @@ pub trait TgChat {
     fn username(&self) -> Option<impl AsRef<str>>;
 
     fn get_url(&self) -> String {
-        if let Some(username) = &self.username() {
+        if let Some(username) = self.username() {
             format!("https://t.me/{}", username.as_ref())
         } else {
             // message_id 999999999 is used to allow the link to work in all clients

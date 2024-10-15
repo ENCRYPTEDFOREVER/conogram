@@ -1,5 +1,4 @@
 use std::{
-    collections::HashMap,
     future::{Future, IntoFuture},
     pin::Pin,
 };
@@ -10,7 +9,7 @@ use crate::{
     api::API,
     entities::{
         input_sticker::InputSticker,
-        misc::input_file::{GetFiles, InputFile, Moose},
+        misc::input_file::{GetFiles, InputFile},
     },
     errors::ConogramError,
     impl_into_future_multipart,
@@ -31,12 +30,12 @@ pub struct CreateNewStickerSetParams {
 }
 
 impl GetFiles for CreateNewStickerSetParams {
-    fn get_files(&self) -> HashMap<Moose, &InputFile> {
-        let mut map = HashMap::new();
+    fn get_files(&self) -> Vec<&InputFile> {
+        let mut vec = Vec::with_capacity(3);
         for stickers in &self.stickers {
-            map.extend(stickers.get_files());
+            vec.extend(stickers.get_files());
         }
-        map
+        vec
     }
 }
 impl_into_future_multipart!(CreateNewStickerSetRequest<'a>);

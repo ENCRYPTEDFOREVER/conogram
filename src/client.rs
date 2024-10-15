@@ -247,7 +247,7 @@ impl ApiClient {
                     }
                 }
 
-                for (key, file) in params.get_files() {
+                for file in params.get_files() {
                     match file {
                         InputFile::File(f) => {
                             let part = match f.get_part().await {
@@ -257,22 +257,12 @@ impl ApiClient {
                                 }
                             };
 
-                            if key == "media" {
-                                form = form.part(f.get_uuid_str(), part);
-                            } else {
-                                form = form.part(key, part);
-                            }
-                        }
-                        InputFile::FileIdOrURL(value) => {
-                            form = form.text(key.into_owned(), value.clone());
+                            form = form.part(f.get_uuid_str(), part);
                         }
                         InputFile::InMemory(f) => {
-                            if key == "media" {
-                                form = form.part(f.get_uuid_str(), f.get_part());
-                            } else {
-                                form = form.part(key, f.get_part());
-                            }
+                            form = form.part(f.get_uuid_str(), f.get_part());
                         }
+                        InputFile::FileIdOrURL(_) => {}
                     }
                 }
 

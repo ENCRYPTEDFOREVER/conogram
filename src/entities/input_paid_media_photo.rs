@@ -1,8 +1,6 @@
-use std::collections::HashMap;
-
 use serde::Serialize;
 
-use crate::entities::misc::input_file::{GetFiles, InputFile, Moose};
+use crate::entities::misc::input_file::{GetFiles, InputFile};
 
 /// The paid media to send is a photo.
 ///
@@ -14,13 +12,7 @@ pub struct InputPaidMediaPhoto {
 }
 
 impl GetFiles for InputPaidMediaPhoto {
-    fn get_files(&self) -> HashMap<Moose, &InputFile> {
-        let mut map = HashMap::new();
-        map.insert(
-            Moose::Owned(self.media.get_uuid().unwrap_or_else(|| "media".into())),
-            &self.media,
-        );
-        map
+    fn get_files(&self) -> Vec<&InputFile> {
+        vec![&self.media]
     }
-}
-// Divider: all content below this line will be preserved after code regen
+} // Divider: all content below this line will be preserved after code regen
