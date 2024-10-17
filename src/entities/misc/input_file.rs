@@ -57,18 +57,18 @@ pub struct LocalFile {
 }
 
 impl LocalFile {
-    pub fn from_path(path: impl Into<String>) -> Self {
+    pub fn from_path(path: impl Into<PathBuf>) -> Self {
         Self {
             filename: None,
-            path: PathBuf::from(path.into()),
+            path: path.into(),
             uuid: Uuid::new_v4(),
         }
     }
 
-    pub fn with_filename(filename: Option<String>, path: impl Into<String>) -> Self {
+    pub fn with_filename(filename: String, path: impl Into<PathBuf>) -> Self {
         Self {
-            filename,
-            path: PathBuf::from(path.into()),
+            filename: Some(filename),
+            path: path.into(),
             uuid: Uuid::new_v4(),
         }
     }
@@ -108,8 +108,12 @@ impl Default for InputFile {
 }
 
 impl InputFile {
-    pub fn from_path(path: impl Into<String>) -> Self {
+    pub fn from_path(path: impl Into<PathBuf>) -> Self {
         Self::File(LocalFile::from_path(path))
+    }
+
+    pub fn with_filename(filename: String, path: impl Into<PathBuf>) -> Self {
+        Self::File(LocalFile::with_filename(filename, path))
     }
 
     pub fn from_file_id(file_id: impl Into<String>) -> Self {
