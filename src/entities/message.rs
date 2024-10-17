@@ -630,14 +630,23 @@ impl Message {
             (None, vec![], None)
         };
 
-        SendMessageRequest::new(api, chat_id, text).reply_parameters(ReplyParameters {
-            message_id: self.message_id,
-            chat_id: Some(self.chat.id.into()),
-            quote: quote_text,
-            quote_entities,
-            quote_position: quote_pos,
-            ..Default::default()
-        })
+        let mut req =
+            SendMessageRequest::new(api, chat_id, text).reply_parameters(ReplyParameters {
+                message_id: self.message_id,
+                chat_id: Some(self.chat.id.into()),
+                quote: quote_text,
+                quote_entities,
+                quote_position: quote_pos,
+                ..Default::default()
+            });
+
+        if self.is_topic_message {
+            if let Some(thread_id) = self.message_thread_id {
+                req = req.message_thread_id(thread_id);
+            }
+        }
+
+        req
     }
 
     pub fn reply<'a>(
@@ -645,12 +654,20 @@ impl Message {
         api: &'a API,
         text: impl Into<InputMessageText>,
     ) -> SendMessageRequest<'a> {
-        match text.into() {
+        let mut req = match text.into() {
             InputMessageText::String(v) => api
                 .send_message(self.chat.id, v)
                 .reply_parameters(ReplyParameters::new_current_chat(self.message_id)),
             InputMessageText::FormattedText(ft) => self.reply_formatted(api, ft),
+        };
+
+        if self.is_topic_message {
+            if let Some(thread_id) = self.message_thread_id {
+                req = req.message_thread_id(thread_id);
+            }
         }
+
+        req
     }
 
     /// The same as Message::reply().entities()
@@ -674,14 +691,15 @@ impl Message {
 
     /// Sends message to the same chat and thread
     pub fn answer<'a>(&'a self, api: &'a API, text: impl Into<String>) -> SendMessageRequest<'a> {
+        let mut req = api.send_message(self.chat.id, text);
+
         if self.is_topic_message {
             if let Some(thread_id) = self.message_thread_id {
-                return api
-                    .send_message(self.chat.id, text)
-                    .message_thread_id(thread_id);
+                req = req.message_thread_id(thread_id);
             }
         }
-        api.send_message(self.chat.id, text)
+
+        req
     }
 
     /// The same as Message::answer().entities()
@@ -744,8 +762,16 @@ impl Message {
         api: &'a API,
         photo: impl Into<InputFile>,
     ) -> SendPhotoRequest<'a> {
-        api.send_photo(self.chat.id, photo)
-            .reply_parameters(ReplyParameters::new_current_chat(self.message_id))
+        let mut req = api
+            .send_photo(self.chat.id, photo)
+            .reply_parameters(ReplyParameters::new_current_chat(self.message_id));
+
+        if self.is_topic_message {
+            if let Some(thread_id) = self.message_thread_id {
+                req = req.message_thread_id(thread_id);
+            }
+        }
+        req
     }
 
     pub fn reply_media_group<'a>(
@@ -753,8 +779,16 @@ impl Message {
         api: &'a API,
         media: impl IntoIterator<Item = impl Into<InputMedia>>,
     ) -> SendMediaGroupRequest<'a> {
-        api.send_media_group(self.chat.id, media)
-            .reply_parameters(ReplyParameters::new_current_chat(self.message_id))
+        let mut req = api
+            .send_media_group(self.chat.id, media)
+            .reply_parameters(ReplyParameters::new_current_chat(self.message_id));
+
+        if self.is_topic_message {
+            if let Some(thread_id) = self.message_thread_id {
+                req = req.message_thread_id(thread_id);
+            }
+        }
+        req
     }
 
     pub fn reply_document<'a>(
@@ -762,8 +796,16 @@ impl Message {
         api: &'a API,
         document: impl Into<InputFile>,
     ) -> SendDocumentRequest<'a> {
-        api.send_document(self.chat.id, document)
-            .reply_parameters(ReplyParameters::new_current_chat(self.message_id))
+        let mut req = api
+            .send_document(self.chat.id, document)
+            .reply_parameters(ReplyParameters::new_current_chat(self.message_id));
+
+        if self.is_topic_message {
+            if let Some(thread_id) = self.message_thread_id {
+                req = req.message_thread_id(thread_id);
+            }
+        }
+        req
     }
 
     pub fn reply_sticker<'a>(
@@ -771,8 +813,17 @@ impl Message {
         api: &'a API,
         sticker: impl Into<InputFile>,
     ) -> SendStickerRequest<'a> {
-        api.send_sticker(self.chat.id, sticker)
-            .reply_parameters(ReplyParameters::new_current_chat(self.message_id))
+        let mut req = api
+            .send_sticker(self.chat.id, sticker)
+            .reply_parameters(ReplyParameters::new_current_chat(self.message_id));
+
+        if self.is_topic_message {
+            if let Some(thread_id) = self.message_thread_id {
+                req = req.message_thread_id(thread_id);
+            }
+        }
+
+        req
     }
 
     pub fn copy_to<'a>(
