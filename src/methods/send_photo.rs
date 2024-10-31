@@ -45,6 +45,8 @@ pub struct SendPhotoParams {
     pub disable_notification: bool,
     #[serde(default, skip_serializing_if = "is_false")]
     pub protect_content: bool,
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub allow_paid_broadcast: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_effect_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -99,6 +101,7 @@ impl<'a> SendPhotoRequest<'a> {
                 has_spoiler: bool::default(),
                 disable_notification: bool::default(),
                 protect_content: bool::default(),
+                allow_paid_broadcast: bool::default(),
                 message_effect_id: Option::default(),
                 reply_parameters: Option::default(),
                 reply_markup: Option::default(),
@@ -183,6 +186,13 @@ impl<'a> SendPhotoRequest<'a> {
     #[must_use]
     pub fn protect_content(mut self, protect_content: impl Into<bool>) -> Self {
         self.params.protect_content = protect_content.into();
+        self
+    }
+
+    ///Pass *True* to allow up to 1000 messages per second, ignoring [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+    #[must_use]
+    pub fn allow_paid_broadcast(mut self, allow_paid_broadcast: impl Into<bool>) -> Self {
+        self.params.allow_paid_broadcast = allow_paid_broadcast.into();
         self
     }
 

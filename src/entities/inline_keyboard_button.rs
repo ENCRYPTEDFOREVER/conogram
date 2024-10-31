@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     entities::{
-        callback_game::CallbackGame, login_url::LoginUrl,
+        callback_game::CallbackGame, copy_text_button::CopyTextButton, login_url::LoginUrl,
         switch_inline_query_chosen_chat::SwitchInlineQueryChosenChat, web_app_info::WebAppInfo,
     },
     utils::deserialize_utils::is_false,
@@ -45,6 +45,10 @@ pub struct InlineKeyboardButton {
     /// *Optional*. If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field. Not supported for messages sent on behalf of a Telegram Business account.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub switch_inline_query_chosen_chat: Option<SwitchInlineQueryChosenChat>,
+
+    /// *Optional*. Description of the button that copies the specified text to the clipboard.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub copy_text: Option<CopyTextButton>,
 
     /// *Optional*. Description of the game that will be launched when the user presses the button.  
     ///
@@ -96,6 +100,16 @@ impl InlineKeyboardButton {
         Self {
             text: text.into(),
             callback_data: Some(data.into()),
+            ..Default::default()
+        }
+    }
+
+    pub fn copy_text(text: impl Into<String>, copy_text: impl Into<String>) -> Self {
+        Self {
+            text: text.into(),
+            copy_text: Some(CopyTextButton {
+                text: copy_text.into(),
+            }),
             ..Default::default()
         }
     }
