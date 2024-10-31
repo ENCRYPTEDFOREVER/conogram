@@ -153,12 +153,16 @@ impl<T> From<ApiResponse<T>> for GenericApiErrorParams {
 
 impl Display for GenericApiErrorParams {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_fmt(format_args!(
-            "[API Error {}] {}",
-            self.error_code,
-            self.description
-                .as_ref()
-                .unwrap_or(&"No description".to_string())
-        ))
+        if let Some(description) = &self.description {
+            f.write_fmt(format_args!(
+                "[API Error {}] {description}",
+                self.error_code,
+            ))
+        } else {
+            f.write_fmt(format_args!(
+                "[API Error {}] (No description)",
+                self.error_code
+            ))
+        }
     }
 }

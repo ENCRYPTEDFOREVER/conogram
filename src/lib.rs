@@ -1,5 +1,7 @@
 #![warn(clippy::pedantic, clippy::nursery)]
 #![allow(
+    clippy::too_long_first_doc_paragraph,
+
     clippy::too_many_arguments,
 
     // Pedantic
