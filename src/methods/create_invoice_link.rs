@@ -12,6 +12,8 @@ use crate::{
 
 #[derive(Debug, Clone, Serialize)]
 pub struct CreateInvoiceLinkParams {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub business_connection_id: Option<String>,
     pub title: String,
     pub description: String,
     pub payload: String,
@@ -19,6 +21,8 @@ pub struct CreateInvoiceLinkParams {
     pub provider_token: Option<String>,
     pub currency: String,
     pub prices: Vec<LabeledPrice>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subscription_period: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_tip_amount: Option<i64>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
@@ -91,7 +95,9 @@ impl<'a> CreateInvoiceLinkRequest<'a> {
                 payload: payload.into(),
                 currency: currency.into(),
                 prices: prices.into_iter().map(Into::into).collect(),
+                business_connection_id: Option::default(),
                 provider_token: Option::default(),
+                subscription_period: Option::default(),
                 max_tip_amount: Option::default(),
                 suggested_tip_amounts: Vec::default(),
                 provider_data: Option::default(),
@@ -108,6 +114,13 @@ impl<'a> CreateInvoiceLinkRequest<'a> {
                 is_flexible: bool::default(),
             },
         }
+    }
+
+    ///Unique identifier of the business connection on behalf of which the link will be created
+    #[must_use]
+    pub fn business_connection_id(mut self, business_connection_id: impl Into<String>) -> Self {
+        self.params.business_connection_id = Some(business_connection_id.into());
+        self
     }
 
     ///Product name, 1-32 characters
@@ -149,6 +162,13 @@ impl<'a> CreateInvoiceLinkRequest<'a> {
     #[must_use]
     pub fn prices(mut self, prices: impl IntoIterator<Item = impl Into<LabeledPrice>>) -> Self {
         self.params.prices = prices.into_iter().map(Into::into).collect();
+        self
+    }
+
+    ///The number of seconds the subscription will be active for before the next payment. The currency must be set to “XTR” (Telegram Stars) if the parameter is used. Currently, it must always be 2592000 (30 days) if specified.
+    #[must_use]
+    pub fn subscription_period(mut self, subscription_period: impl Into<i64>) -> Self {
+        self.params.subscription_period = Some(subscription_period.into());
         self
     }
 
