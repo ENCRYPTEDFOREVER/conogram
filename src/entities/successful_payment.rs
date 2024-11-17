@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::entities::order_info::OrderInfo;
+use crate::{entities::order_info::OrderInfo, utils::deserialize_utils::is_false};
 
 /// This object contains basic information about a successful payment.
 ///
@@ -15,6 +15,18 @@ pub struct SuccessfulPayment {
 
     /// Bot-specified invoice payload
     pub invoice_payload: String,
+
+    /// *Optional*. Expiration date of the subscription, in Unix time; for recurring payments only
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub subscription_expiration_date: Option<i64>,
+
+    /// *Optional*. True, if the payment is a recurring payment for a subscription
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub is_recurring: bool,
+
+    /// *Optional*. True, if the payment is the first payment for a subscription
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub is_first_recurring: bool,
 
     /// *Optional*. Identifier of the shipping option chosen by the user
     #[serde(default, skip_serializing_if = "Option::is_none")]
