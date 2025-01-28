@@ -5,7 +5,7 @@ use crate::entities::chat::Chat;
 /// The message was originally sent to a channel chat.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#messageoriginchannel)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct MessageOriginChannel {
     /// Date the message was sent originally in Unix time
     pub date: i64,

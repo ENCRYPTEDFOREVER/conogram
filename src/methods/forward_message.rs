@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{message::Message, misc::chat_id::ChatId},
     errors::ConogramError,
     impl_into_future,
@@ -32,17 +32,17 @@ impl_into_future!(ForwardMessageRequest<'a>);
 ///Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
 #[derive(Clone)]
 pub struct ForwardMessageRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: ForwardMessageParams,
 }
 
-impl<'a> RequestT for ForwardMessageRequest<'a> {
+impl RequestT for ForwardMessageRequest<'_> {
     type ParamsType = ForwardMessageParams;
     type ReturnType = Message;
     fn get_name() -> &'static str {
         "forwardMessage"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -54,7 +54,7 @@ impl<'a> RequestT for ForwardMessageRequest<'a> {
 }
 impl<'a> ForwardMessageRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
         from_chat_id: impl Into<ChatId>,
         message_id: impl Into<i64>,
@@ -115,7 +115,7 @@ impl<'a> ForwardMessageRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn forward_message(
         &self,

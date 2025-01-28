@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         message::Message,
         message_entity::MessageEntity,
@@ -65,17 +65,17 @@ impl_into_future_multipart!(SendPhotoRequest<'a>);
 ///Use this method to send photos. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
 #[derive(Clone)]
 pub struct SendPhotoRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SendPhotoParams,
 }
 
-impl<'a> RequestT for SendPhotoRequest<'a> {
+impl RequestT for SendPhotoRequest<'_> {
     type ParamsType = SendPhotoParams;
     type ReturnType = Message;
     fn get_name() -> &'static str {
         "sendPhoto"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -86,7 +86,7 @@ impl<'a> RequestT for SendPhotoRequest<'a> {
     }
 }
 impl<'a> SendPhotoRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, photo: impl Into<InputFile>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, photo: impl Into<InputFile>) -> Self {
         Self {
             api,
             params: SendPhotoParams {
@@ -218,7 +218,7 @@ impl<'a> SendPhotoRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to send photos. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_photo(
         &self,

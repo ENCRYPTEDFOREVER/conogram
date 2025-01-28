@@ -8,7 +8,7 @@ use crate::entities::{
 /// Describes Telegram Passport data shared with the bot by the user.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#passportdata)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PassportData {
     /// Array with information about documents and other Telegram Passport elements that was shared with the bot
     pub data: Vec<EncryptedPassportElement>,

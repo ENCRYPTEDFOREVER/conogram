@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{message_id::MessageId, misc::chat_id::ChatId},
     errors::ConogramError,
     impl_into_future,
@@ -32,17 +32,17 @@ impl_into_future!(ForwardMessagesRequest<'a>);
 ///Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent messages is returned.
 #[derive(Clone)]
 pub struct ForwardMessagesRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: ForwardMessagesParams,
 }
 
-impl<'a> RequestT for ForwardMessagesRequest<'a> {
+impl RequestT for ForwardMessagesRequest<'_> {
     type ParamsType = ForwardMessagesParams;
     type ReturnType = Vec<MessageId>;
     fn get_name() -> &'static str {
         "forwardMessages"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -54,7 +54,7 @@ impl<'a> RequestT for ForwardMessagesRequest<'a> {
 }
 impl<'a> ForwardMessagesRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
         from_chat_id: impl Into<ChatId>,
         message_ids: impl IntoIterator<Item = impl Into<i64>>,
@@ -115,7 +115,7 @@ impl<'a> ForwardMessagesRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent messages is returned.
     pub fn forward_messages(
         &self,

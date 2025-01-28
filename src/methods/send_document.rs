@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         message::Message,
         message_entity::MessageEntity,
@@ -70,17 +70,17 @@ impl_into_future_multipart!(SendDocumentRequest<'a>);
 ///Use this method to send general files. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
 #[derive(Clone)]
 pub struct SendDocumentRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SendDocumentParams,
 }
 
-impl<'a> RequestT for SendDocumentRequest<'a> {
+impl RequestT for SendDocumentRequest<'_> {
     type ParamsType = SendDocumentParams;
     type ReturnType = Message;
     fn get_name() -> &'static str {
         "sendDocument"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -91,7 +91,7 @@ impl<'a> RequestT for SendDocumentRequest<'a> {
     }
 }
 impl<'a> SendDocumentRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, document: impl Into<InputFile>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, document: impl Into<InputFile>) -> Self {
         Self {
             api,
             params: SendDocumentParams {
@@ -226,7 +226,7 @@ impl<'a> SendDocumentRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to send general files. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
     pub fn send_document(
         &self,

@@ -8,7 +8,7 @@ use crate::{
 /// This object represents changes in the status of a chat member.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatmemberupdated)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatMemberUpdated {
     /// Chat the user belongs to
     pub chat: Box<Chat>,

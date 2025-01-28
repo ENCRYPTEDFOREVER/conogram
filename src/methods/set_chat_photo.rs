@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::misc::{
         chat_id::ChatId,
         input_file::{GetFiles, InputFile},
@@ -32,17 +32,17 @@ impl_into_future_multipart!(SetChatPhotoRequest<'a>);
 ///Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetChatPhotoRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetChatPhotoParams,
 }
 
-impl<'a> RequestT for SetChatPhotoRequest<'a> {
+impl RequestT for SetChatPhotoRequest<'_> {
     type ParamsType = SetChatPhotoParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setChatPhoto"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -53,7 +53,7 @@ impl<'a> RequestT for SetChatPhotoRequest<'a> {
     }
 }
 impl<'a> SetChatPhotoRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, photo: impl Into<InputFile>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, photo: impl Into<InputFile>) -> Self {
         Self {
             api,
             params: SetChatPhotoParams {
@@ -78,7 +78,7 @@ impl<'a> SetChatPhotoRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
     pub fn set_chat_photo(
         &self,

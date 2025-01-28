@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 /// Represents an issue with a document scan. The error is considered resolved when the file with the document scan changes.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrorfile)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PassportElementErrorFile {
     /// The section of the user's Telegram Passport which has the issue, one of “utility\_bill”, “bank\_statement”, “rental\_agreement”, “passport\_registration”, “temporary\_registration”
     #[serde(rename = "type")]
@@ -17,7 +17,7 @@ pub struct PassportElementErrorFile {
 }
 
 /// The section of the user's Telegram Passport which has the issue, one of “utility\_bill”, “bank\_statement”, “rental\_agreement”, “passport\_registration”, “temporary\_registration”
-#[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub enum PassportElementErrorFileType {
     /// `utility_bill`
     #[default]

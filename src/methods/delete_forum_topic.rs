@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -21,17 +21,17 @@ impl_into_future!(DeleteForumTopicRequest<'a>);
 ///Use this method to delete a forum topic along with all its messages in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_delete\_messages* administrator rights. Returns *True* on success.
 #[derive(Clone)]
 pub struct DeleteForumTopicRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: DeleteForumTopicParams,
 }
 
-impl<'a> RequestT for DeleteForumTopicRequest<'a> {
+impl RequestT for DeleteForumTopicRequest<'_> {
     type ParamsType = DeleteForumTopicParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "deleteForumTopic"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -43,7 +43,7 @@ impl<'a> RequestT for DeleteForumTopicRequest<'a> {
 }
 impl<'a> DeleteForumTopicRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
         message_thread_id: impl Into<i64>,
     ) -> Self {
@@ -71,7 +71,7 @@ impl<'a> DeleteForumTopicRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to delete a forum topic along with all its messages in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_delete\_messages* administrator rights. Returns *True* on success.
     pub fn delete_forum_topic(
         &self,

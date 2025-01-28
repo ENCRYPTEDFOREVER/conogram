@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -21,17 +21,17 @@ impl_into_future!(DeleteMessagesRequest<'a>);
 ///Use this method to delete multiple messages simultaneously. If some of the specified messages can't be found, they are skipped. Returns *True* on success.
 #[derive(Clone)]
 pub struct DeleteMessagesRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: DeleteMessagesParams,
 }
 
-impl<'a> RequestT for DeleteMessagesRequest<'a> {
+impl RequestT for DeleteMessagesRequest<'_> {
     type ParamsType = DeleteMessagesParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "deleteMessages"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -43,7 +43,7 @@ impl<'a> RequestT for DeleteMessagesRequest<'a> {
 }
 impl<'a> DeleteMessagesRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
         message_ids: impl IntoIterator<Item = impl Into<i64>>,
     ) -> Self {
@@ -71,7 +71,7 @@ impl<'a> DeleteMessagesRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to delete multiple messages simultaneously. If some of the specified messages can't be found, they are skipped. Returns *True* on success.
     pub fn delete_messages(
         &self,

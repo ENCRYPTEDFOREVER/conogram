@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{forum_topic::ForumTopic, misc::chat_id::ChatId},
     errors::ConogramError,
     impl_into_future,
@@ -28,17 +28,17 @@ impl_into_future!(CreateForumTopicRequest<'a>);
 ///Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights. Returns information about the created topic as a [ForumTopic](https://core.telegram.org/bots/api/#forumtopic) object.
 #[derive(Clone)]
 pub struct CreateForumTopicRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: CreateForumTopicParams,
 }
 
-impl<'a> RequestT for CreateForumTopicRequest<'a> {
+impl RequestT for CreateForumTopicRequest<'_> {
     type ParamsType = CreateForumTopicParams;
     type ReturnType = ForumTopic;
     fn get_name() -> &'static str {
         "createForumTopic"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -49,7 +49,7 @@ impl<'a> RequestT for CreateForumTopicRequest<'a> {
     }
 }
 impl<'a> CreateForumTopicRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, name: impl Into<String>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, name: impl Into<String>) -> Self {
         Self {
             api,
             params: CreateForumTopicParams {
@@ -90,7 +90,7 @@ impl<'a> CreateForumTopicRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights. Returns information about the created topic as a [ForumTopic](https://core.telegram.org/bots/api/#forumtopic) object.
     pub fn create_forum_topic(
         &self,
@@ -102,7 +102,7 @@ impl API {
 }
 
 ///Color of the topic icon in RGB format. Currently, must be one of 7322096 (0x6FB9F0), 16766590 (0xFFD67E), 13338331 (0xCB86DB), 9367192 (0x8EEE98), 16749490 (0xFF93B2), or 16478047 (0xFB6F5F)
-#[derive(Debug, Clone, Default, PartialEq, Serialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
 #[serde(rename = "icon_color")]
 pub enum CreateForumTopicIconColor {
     #[default]

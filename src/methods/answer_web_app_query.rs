@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{inline_query_result::InlineQueryResult, sent_web_app_message::SentWebAppMessage},
     errors::ConogramError,
     impl_into_future,
@@ -24,17 +24,17 @@ impl_into_future!(AnswerWebAppQueryRequest<'a>);
 ///Use this method to set the result of an interaction with a [Web App](https://core.telegram.org/bots/webapps) and send a corresponding message on behalf of the user to the chat from which the query originated. On success, a [SentWebAppMessage](https://core.telegram.org/bots/api/#sentwebappmessage) object is returned.
 #[derive(Clone)]
 pub struct AnswerWebAppQueryRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: AnswerWebAppQueryParams,
 }
 
-impl<'a> RequestT for AnswerWebAppQueryRequest<'a> {
+impl RequestT for AnswerWebAppQueryRequest<'_> {
     type ParamsType = AnswerWebAppQueryParams;
     type ReturnType = SentWebAppMessage;
     fn get_name() -> &'static str {
         "answerWebAppQuery"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -46,7 +46,7 @@ impl<'a> RequestT for AnswerWebAppQueryRequest<'a> {
 }
 impl<'a> AnswerWebAppQueryRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         web_app_query_id: impl Into<String>,
         result: impl Into<InlineQueryResult>,
     ) -> Self {
@@ -74,7 +74,7 @@ impl<'a> AnswerWebAppQueryRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to set the result of an interaction with a [Web App](https://core.telegram.org/bots/webapps) and send a corresponding message on behalf of the user to the chat from which the query originated. On success, a [SentWebAppMessage](https://core.telegram.org/bots/api/#sentwebappmessage) object is returned.
     pub fn answer_web_app_query(
         &self,

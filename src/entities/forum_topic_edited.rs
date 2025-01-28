@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 /// This object represents a service message about an edited forum topic.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#forumtopicedited)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumTopicEdited {
     /// *Optional*. New name of the topic, if it was edited
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -66,7 +66,7 @@ pub struct Sticker {
 }
 
 /// Type of the sticker, currently one of “regular”, “mask”, “custom\_emoji”. The type of the sticker is independent from its format, which is determined by the fields *is\_animated* and *is\_video*.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub enum StickerType {
     /// `regular`
     #[default]
@@ -83,11 +83,11 @@ pub enum StickerType {
 }
 
 // Divider: all content below this line will be preserved after code regen
-use crate::{api::API, methods::get_sticker_set::GetStickerSetRequest};
+use crate::{api::Api, methods::get_sticker_set::GetStickerSetRequest};
 
 impl Sticker {
-    /// Returns a [GetStickerSetRequest] if the sticker has a set, e.g. ([Sticker.set_name](Self::set_name) is `Some`)
-    pub fn get_sticker_set<'a>(&self, api: &'a API) -> Option<GetStickerSetRequest<'a>> {
+    /// Returns a [`GetStickerSetRequest`] if the sticker has a set, e.g. ([`self.set_name`](Self::set_name) is `Some`)
+    pub fn get_sticker_set<'a>(&self, api: &'a Api) -> Option<GetStickerSetRequest<'a>> {
         self.set_name
             .as_ref()
             .map(|set_name| api.get_sticker_set(set_name))

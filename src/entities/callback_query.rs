@@ -35,17 +35,17 @@ pub struct CallbackQuery {
 
 // Divider: all content below this line will be preserved after code regen
 use super::message::Message;
-use crate::{api::API, methods::answer_callback_query::AnswerCallbackQueryRequest};
+use crate::{api::Api, methods::answer_callback_query::AnswerCallbackQueryRequest};
 
 impl CallbackQuery {
-    pub fn answer<'a>(&'a self, api: &'a API) -> AnswerCallbackQueryRequest<'a> {
+    pub fn answer<'a>(&'a self, api: &'a Api) -> AnswerCallbackQueryRequest<'a> {
         api.answer_callback_query(&self.id)
     }
 
     /// An alert will be shown by the client instead of a notification at the top of the chat screen
     pub fn alert<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         text: impl Into<String>,
     ) -> AnswerCallbackQueryRequest<'a> {
         api.answer_callback_query(&self.id)
@@ -56,7 +56,7 @@ impl CallbackQuery {
     /// Notification at the top of the chat screen will be shown instead of alert
     pub fn snackbar<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         text: impl Into<String>,
     ) -> AnswerCallbackQueryRequest<'a> {
         api.answer_callback_query(&self.id)
@@ -67,6 +67,7 @@ impl CallbackQuery {
     /// Backwards compatibility (Bot API <7.0)
     ///
     /// _Optional._ Message sent by the bot with the callback button that originated the query
+    #[must_use]
     pub fn message(&self) -> Option<&Message> {
         self.message.as_ref().and_then(|m| m.as_ref().into())
     }

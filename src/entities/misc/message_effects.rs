@@ -2,7 +2,6 @@ use std::fmt::Display;
 
 #[derive(Debug, Clone, Copy)]
 #[repr(usize)]
-
 pub enum UsableMessageEffects {
     /// 👍
     ThumbsUp = 5107584321108051014,

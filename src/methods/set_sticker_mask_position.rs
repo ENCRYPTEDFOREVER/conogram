@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::mask_position::MaskPosition, errors::ConogramError, impl_into_future,
+    api::Api, entities::mask_position::MaskPosition, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -22,17 +22,17 @@ impl_into_future!(SetStickerMaskPositionRequest<'a>);
 ///Use this method to change the [mask position](https://core.telegram.org/bots/api/#maskposition) of a mask sticker. The sticker must belong to a sticker set that was created by the bot. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetStickerMaskPositionRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetStickerMaskPositionParams,
 }
 
-impl<'a> RequestT for SetStickerMaskPositionRequest<'a> {
+impl RequestT for SetStickerMaskPositionRequest<'_> {
     type ParamsType = SetStickerMaskPositionParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setStickerMaskPosition"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -43,7 +43,7 @@ impl<'a> RequestT for SetStickerMaskPositionRequest<'a> {
     }
 }
 impl<'a> SetStickerMaskPositionRequest<'a> {
-    pub fn new(api: &'a API, sticker: impl Into<String>) -> Self {
+    pub fn new(api: &'a Api, sticker: impl Into<String>) -> Self {
         Self {
             api,
             params: SetStickerMaskPositionParams {
@@ -68,7 +68,7 @@ impl<'a> SetStickerMaskPositionRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to change the [mask position](https://core.telegram.org/bots/api/#maskposition) of a mask sticker. The sticker must belong to a sticker set that was created by the bot. Returns *True* on success.
     pub fn set_sticker_mask_position(
         &self,

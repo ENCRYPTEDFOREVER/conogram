@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::passport_element_error::PassportElementError, errors::ConogramError,
+    api::Api, entities::passport_element_error::PassportElementError, errors::ConogramError,
     impl_into_future, request::RequestT,
 };
 
@@ -23,17 +23,17 @@ impl_into_future!(SetPassportDataErrorsRequest<'a>);
 ///Use this if the data submitted by the user doesn't satisfy the standards your service requires for any reason. For example, if a birthday date seems invalid, a submitted document is blurry, a scan shows evidence of tampering, etc. Supply some details in the error message to make sure the user knows how to correct the issues.
 #[derive(Clone)]
 pub struct SetPassportDataErrorsRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetPassportDataErrorsParams,
 }
 
-impl<'a> RequestT for SetPassportDataErrorsRequest<'a> {
+impl RequestT for SetPassportDataErrorsRequest<'_> {
     type ParamsType = SetPassportDataErrorsParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setPassportDataErrors"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -45,7 +45,7 @@ impl<'a> RequestT for SetPassportDataErrorsRequest<'a> {
 }
 impl<'a> SetPassportDataErrorsRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         user_id: impl Into<i64>,
         errors: impl IntoIterator<Item = impl Into<PassportElementError>>,
     ) -> Self {
@@ -76,7 +76,7 @@ impl<'a> SetPassportDataErrorsRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change). Returns *True* on success.
     ///
     ///Use this if the data submitted by the user doesn't satisfy the standards your service requires for any reason. For example, if a birthday date seems invalid, a submitted document is blurry, a scan shows evidence of tampering, etc. Supply some details in the error message to make sure the user knows how to correct the issues.

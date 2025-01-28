@@ -5,7 +5,7 @@ use crate::utils::deserialize_utils::is_false;
 /// Represents the rights of an administrator in a chat.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatadministratorrights)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatAdministratorRights {
     /// *True*, if the user's presence in the chat is hidden
     pub is_anonymous: bool,

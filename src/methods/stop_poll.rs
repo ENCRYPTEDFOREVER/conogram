@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{inline_keyboard_markup::InlineKeyboardMarkup, misc::chat_id::ChatId, poll::Poll},
     errors::ConogramError,
     impl_into_future,
@@ -28,17 +28,17 @@ impl_into_future!(StopPollRequest<'a>);
 ///Use this method to stop a poll which was sent by the bot. On success, the stopped [Poll](https://core.telegram.org/bots/api/#poll) is returned.
 #[derive(Clone)]
 pub struct StopPollRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: StopPollParams,
 }
 
-impl<'a> RequestT for StopPollRequest<'a> {
+impl RequestT for StopPollRequest<'_> {
     type ParamsType = StopPollParams;
     type ReturnType = Poll;
     fn get_name() -> &'static str {
         "stopPoll"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -49,7 +49,7 @@ impl<'a> RequestT for StopPollRequest<'a> {
     }
 }
 impl<'a> StopPollRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, message_id: impl Into<i64>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, message_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: StopPollParams {
@@ -90,7 +90,7 @@ impl<'a> StopPollRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to stop a poll which was sent by the bot. On success, the stopped [Poll](https://core.telegram.org/bots/api/#poll) is returned.
     pub fn stop_poll(
         &self,

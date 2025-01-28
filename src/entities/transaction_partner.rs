@@ -17,7 +17,7 @@ use crate::entities::{
 /// * [TransactionPartnerOther](https://core.telegram.org/bots/api/#transactionpartnerother)
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartner)
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum TransactionPartner {
     /// Describes a transaction with a user.

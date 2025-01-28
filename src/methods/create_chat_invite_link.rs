@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{chat_invite_link::ChatInviteLink, misc::chat_id::ChatId},
     errors::ConogramError,
     impl_into_future,
@@ -32,17 +32,17 @@ impl_into_future!(CreateChatInviteLinkRequest<'a>);
 ///Use this method to create an additional invite link for a chat. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. The link can be revoked using the method [revokeChatInviteLink](https://core.telegram.org/bots/api/#revokechatinvitelink). Returns the new invite link as [ChatInviteLink](https://core.telegram.org/bots/api/#chatinvitelink) object.
 #[derive(Clone)]
 pub struct CreateChatInviteLinkRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: CreateChatInviteLinkParams,
 }
 
-impl<'a> RequestT for CreateChatInviteLinkRequest<'a> {
+impl RequestT for CreateChatInviteLinkRequest<'_> {
     type ParamsType = CreateChatInviteLinkParams;
     type ReturnType = ChatInviteLink;
     fn get_name() -> &'static str {
         "createChatInviteLink"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -53,7 +53,7 @@ impl<'a> RequestT for CreateChatInviteLinkRequest<'a> {
     }
 }
 impl<'a> CreateChatInviteLinkRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
             params: CreateChatInviteLinkParams {
@@ -102,7 +102,7 @@ impl<'a> CreateChatInviteLinkRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to create an additional invite link for a chat. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. The link can be revoked using the method [revokeChatInviteLink](https://core.telegram.org/bots/api/#revokechatinvitelink). Returns the new invite link as [ChatInviteLink](https://core.telegram.org/bots/api/#chatinvitelink) object.
     pub fn create_chat_invite_link(
         &self,

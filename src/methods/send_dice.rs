@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         message::Message,
         misc::{chat_id::ChatId, reply_markup::ReplyMarkup},
@@ -46,17 +46,17 @@ impl_into_future!(SendDiceRequest<'a>);
 ///Use this method to send an animated emoji that will display a random value. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
 #[derive(Clone)]
 pub struct SendDiceRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SendDiceParams,
 }
 
-impl<'a> RequestT for SendDiceRequest<'a> {
+impl RequestT for SendDiceRequest<'_> {
     type ParamsType = SendDiceParams;
     type ReturnType = Message;
     fn get_name() -> &'static str {
         "sendDice"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -67,7 +67,7 @@ impl<'a> RequestT for SendDiceRequest<'a> {
     }
 }
 impl<'a> SendDiceRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
             params: SendDiceParams {
@@ -156,7 +156,7 @@ impl<'a> SendDiceRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to send an animated emoji that will display a random value. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_dice(&self, chat_id: impl Into<ChatId>) -> SendDiceRequest {
         SendDiceRequest::new(self, chat_id)
@@ -164,7 +164,7 @@ impl API {
 }
 
 ///Emoji on which the dice throw animation is based. Currently, must be one of “🎲”, “🎯”, “🏀”, “⚽”, “🎳”, or “🎰”. Dice can have values 1-6 for “🎲”, “🎯” and “🎳”, values 1-5 for “🏀” and “⚽”, and values 1-64 for “🎰”. Defaults to “🎲”
-#[derive(Debug, Clone, Default, PartialEq, Serialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
 #[serde(rename = "emoji")]
 pub enum SendDiceEmoji {
     #[default]

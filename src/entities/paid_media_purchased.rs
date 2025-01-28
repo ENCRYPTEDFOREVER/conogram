@@ -5,7 +5,7 @@ use crate::entities::user::User;
 /// This object contains information about a paid media purchase.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#paidmediapurchased)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PaidMediaPurchased {
     /// User who purchased the media
     pub from: User,

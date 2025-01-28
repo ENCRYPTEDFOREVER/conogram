@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         inline_keyboard_markup::InlineKeyboardMarkup, message::Message, misc::chat_id::ChatId,
     },
@@ -44,17 +44,17 @@ impl_into_future!(EditMessageLiveLocationRequest<'a>);
 ///Use this method to edit live location messages. A location can be edited until its *live\_period* expires or editing is explicitly disabled by a call to [stopMessageLiveLocation](https://core.telegram.org/bots/api/#stopmessagelivelocation). On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned.
 #[derive(Clone)]
 pub struct EditMessageLiveLocationRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: EditMessageLiveLocationParams,
 }
 
-impl<'a> RequestT for EditMessageLiveLocationRequest<'a> {
+impl RequestT for EditMessageLiveLocationRequest<'_> {
     type ParamsType = EditMessageLiveLocationParams;
     type ReturnType = Option<Message>;
     fn get_name() -> &'static str {
         "editMessageLiveLocation"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -65,7 +65,7 @@ impl<'a> RequestT for EditMessageLiveLocationRequest<'a> {
     }
 }
 impl<'a> EditMessageLiveLocationRequest<'a> {
-    pub fn new(api: &'a API, latitude: impl Into<f64>, longitude: impl Into<f64>) -> Self {
+    pub fn new(api: &'a Api, latitude: impl Into<f64>, longitude: impl Into<f64>) -> Self {
         Self {
             api,
             params: EditMessageLiveLocationParams {
@@ -162,7 +162,7 @@ impl<'a> EditMessageLiveLocationRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to edit live location messages. A location can be edited until its *live\_period* expires or editing is explicitly disabled by a call to [stopMessageLiveLocation](https://core.telegram.org/bots/api/#stopmessagelivelocation). On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned.
     pub fn edit_message_live_location(
         &self,

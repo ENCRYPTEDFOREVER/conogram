@@ -5,7 +5,7 @@ use crate::entities::message_entity::MessageEntity;
 /// This object contains information about one answer option in a poll to be sent.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputpolloption)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct InputPollOption {
     /// Option text, 1-100 characters
     pub text: String,

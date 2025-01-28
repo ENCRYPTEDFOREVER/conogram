@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::update::Update, errors::ConogramError, impl_into_future, request::RequestT,
+    api::Api, entities::update::Update, errors::ConogramError, impl_into_future, request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
@@ -26,17 +26,17 @@ impl_into_future!(GetUpdatesRequest<'a>);
 ///Use this method to receive incoming updates using long polling ([wiki](https://en.wikipedia.org/wiki/Push_technology#Long_polling)). Returns an Array of [Update](https://core.telegram.org/bots/api/#update) objects.
 #[derive(Clone)]
 pub struct GetUpdatesRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: GetUpdatesParams,
 }
 
-impl<'a> RequestT for GetUpdatesRequest<'a> {
+impl RequestT for GetUpdatesRequest<'_> {
     type ParamsType = GetUpdatesParams;
     type ReturnType = Vec<Update>;
     fn get_name() -> &'static str {
         "getUpdates"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -47,7 +47,7 @@ impl<'a> RequestT for GetUpdatesRequest<'a> {
     }
 }
 impl<'a> GetUpdatesRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: GetUpdatesParams {
@@ -93,7 +93,7 @@ impl<'a> GetUpdatesRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to receive incoming updates using long polling ([wiki](https://en.wikipedia.org/wiki/Push_technology#Long_polling)). Returns an Array of [Update](https://core.telegram.org/bots/api/#update) objects.
     pub fn get_updates(&self) -> GetUpdatesRequest {
         GetUpdatesRequest::new(self)

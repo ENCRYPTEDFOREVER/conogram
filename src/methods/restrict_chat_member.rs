@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{chat_permissions::ChatPermissions, misc::chat_id::ChatId},
     errors::ConogramError,
     impl_into_future,
@@ -30,17 +30,17 @@ impl_into_future!(RestrictChatMemberRequest<'a>);
 ///Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to work and must have the appropriate administrator rights. Pass *True* for all permissions to lift restrictions from a user. Returns *True* on success.
 #[derive(Clone)]
 pub struct RestrictChatMemberRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: RestrictChatMemberParams,
 }
 
-impl<'a> RequestT for RestrictChatMemberRequest<'a> {
+impl RequestT for RestrictChatMemberRequest<'_> {
     type ParamsType = RestrictChatMemberParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "restrictChatMember"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -52,7 +52,7 @@ impl<'a> RequestT for RestrictChatMemberRequest<'a> {
 }
 impl<'a> RestrictChatMemberRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
         user_id: impl Into<i64>,
         permissions: impl Into<ChatPermissions>,
@@ -108,7 +108,7 @@ impl<'a> RestrictChatMemberRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to work and must have the appropriate administrator rights. Pass *True* for all permissions to lift restrictions from a user. Returns *True* on success.
     pub fn restrict_chat_member(
         &self,

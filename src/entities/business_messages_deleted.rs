@@ -5,7 +5,7 @@ use crate::entities::chat::Chat;
 /// This object is received when messages are deleted from a connected business account.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#businessmessagesdeleted)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct BusinessMessagesDeleted {
     /// Unique identifier of the business connection
     pub business_connection_id: String,

@@ -3,31 +3,27 @@
 /// See [Using local api server](https://core.telegram.org/bots/api#using-a-local-bot-api-server)
 pub struct ApiServerConfig {
     pub url: String,
-    pub port: u16,
     pub use_test_env: bool,
 }
 
 impl ApiServerConfig {
-    pub const fn new(url: String, port: u16, use_test_env: bool) -> Self {
-        Self {
-            url,
-            port,
-            use_test_env,
-        }
+    #[must_use]
+    pub const fn new(url: String, use_test_env: bool) -> Self {
+        Self { url, use_test_env }
     }
 
+    #[must_use]
     pub fn remote(use_test_env: bool) -> Self {
         Self {
             url: "https://api.telegram.org".to_string(),
-            port: 443,
             use_test_env,
         }
     }
 
-    pub fn local(url: Option<String>, port: Option<u16>, use_test_env: bool) -> Self {
+    #[must_use]
+    pub fn local(url: Option<String>, use_test_env: bool) -> Self {
         Self {
             url: url.unwrap_or_else(|| "http://localhost".to_string()),
-            port: port.unwrap_or(80),
             use_test_env,
         }
     }

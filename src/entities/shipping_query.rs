@@ -5,7 +5,7 @@ use crate::entities::{shipping_address::ShippingAddress, user::User};
 /// This object contains information about an incoming shipping query.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#shippingquery)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ShippingQuery {
     /// Unique query identifier
     pub id: String,

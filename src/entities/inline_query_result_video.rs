@@ -72,7 +72,7 @@ pub struct InlineQueryResultVideo {
 }
 
 /// MIME type of the content of the video URL, “text/html” or “video/mp4”
-#[derive(Debug, Clone, Copy, Default, PartialEq, Serialize)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize)]
 pub enum MimeType {
     /// `text/html`
     #[default]

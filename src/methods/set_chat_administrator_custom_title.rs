@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -22,17 +22,17 @@ impl_into_future!(SetChatAdministratorCustomTitleRequest<'a>);
 ///Use this method to set a custom title for an administrator in a supergroup promoted by the bot. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetChatAdministratorCustomTitleRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetChatAdministratorCustomTitleParams,
 }
 
-impl<'a> RequestT for SetChatAdministratorCustomTitleRequest<'a> {
+impl RequestT for SetChatAdministratorCustomTitleRequest<'_> {
     type ParamsType = SetChatAdministratorCustomTitleParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setChatAdministratorCustomTitle"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -44,7 +44,7 @@ impl<'a> RequestT for SetChatAdministratorCustomTitleRequest<'a> {
 }
 impl<'a> SetChatAdministratorCustomTitleRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
         user_id: impl Into<i64>,
         custom_title: impl Into<String>,
@@ -81,7 +81,7 @@ impl<'a> SetChatAdministratorCustomTitleRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to set a custom title for an administrator in a supergroup promoted by the bot. Returns *True* on success.
     pub fn set_chat_administrator_custom_title(
         &self,

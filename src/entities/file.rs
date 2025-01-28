@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 /// The maximum file size to download is 20 MB
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#file)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct File {
     /// Identifier for this file, which can be used to download or reuse the file
     pub file_id: String,

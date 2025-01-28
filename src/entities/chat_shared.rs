@@ -5,7 +5,7 @@ use crate::entities::photo_size::PhotoSize;
 /// This object contains information about a chat that was shared with the bot using a [KeyboardButtonRequestChat](https://core.telegram.org/bots/api/#keyboardbuttonrequestchat) button.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatshared)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatShared {
     /// Identifier of the request
     pub request_id: i64,

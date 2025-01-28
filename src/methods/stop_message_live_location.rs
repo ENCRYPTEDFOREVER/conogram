@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         inline_keyboard_markup::InlineKeyboardMarkup, message::Message, misc::chat_id::ChatId,
     },
@@ -34,17 +34,17 @@ impl_into_future!(StopMessageLiveLocationRequest<'a>);
 ///Use this method to stop updating a live location message before *live\_period* expires. On success, if the message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned.
 #[derive(Clone)]
 pub struct StopMessageLiveLocationRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: StopMessageLiveLocationParams,
 }
 
-impl<'a> RequestT for StopMessageLiveLocationRequest<'a> {
+impl RequestT for StopMessageLiveLocationRequest<'_> {
     type ParamsType = StopMessageLiveLocationParams;
     type ReturnType = Option<Message>;
     fn get_name() -> &'static str {
         "stopMessageLiveLocation"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -55,7 +55,7 @@ impl<'a> RequestT for StopMessageLiveLocationRequest<'a> {
     }
 }
 impl<'a> StopMessageLiveLocationRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: StopMessageLiveLocationParams {
@@ -104,7 +104,7 @@ impl<'a> StopMessageLiveLocationRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to stop updating a live location message before *live\_period* expires. On success, if the message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned.
     pub fn stop_message_live_location(&self) -> StopMessageLiveLocationRequest {
         StopMessageLiveLocationRequest::new(self)

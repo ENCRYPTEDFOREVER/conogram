@@ -11,7 +11,7 @@ use crate::{
 /// Represents an animation file (GIF or H.264/MPEG-4 AVC video without sound) to be sent.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediaanimation)
-#[derive(Debug, Clone, Default, PartialEq, Serialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
 pub struct InputMediaAnimation {
     /// File to send. Pass a file\_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://\<file\_attach\_name\>” to upload a new one using multipart/form-data under \<file\_attach\_name\> name. [More information on Sending Files »](https://core.telegram.org/bots/api/#sending-files)
     pub media: InputFile,

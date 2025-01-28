@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 /// Represents an issue with the reverse side of a document. The error is considered resolved when the file with reverse side of the document changes.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrorreverseside)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PassportElementErrorReverseSide {
     /// The section of the user's Telegram Passport which has the issue, one of “driver\_license”, “identity\_card”
     #[serde(rename = "type")]
@@ -17,7 +17,7 @@ pub struct PassportElementErrorReverseSide {
 }
 
 /// The section of the user's Telegram Passport which has the issue, one of “driver\_license”, “identity\_card”
-#[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub enum PassportElementErrorReverseSideType {
     /// `driver_license`
     #[default]

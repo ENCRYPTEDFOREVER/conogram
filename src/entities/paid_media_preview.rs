@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 /// The paid media isn't available before the payment.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#paidmediapreview)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PaidMediaPreview {
     /// *Optional*. Media width as defined by the sender
     #[serde(default, skip_serializing_if = "Option::is_none")]

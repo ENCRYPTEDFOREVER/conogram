@@ -5,7 +5,7 @@ use crate::entities::chat::Chat;
 /// This object describes a message that was deleted or is otherwise inaccessible to the bot.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inaccessiblemessage)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct InaccessibleMessage {
     /// Chat the message belonged to
     pub chat: Box<Chat>,

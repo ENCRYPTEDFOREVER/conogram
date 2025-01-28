@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         inline_query_result::InlineQueryResult, prepared_inline_message::PreparedInlineMessage,
     },
@@ -35,17 +35,17 @@ impl_into_future!(SavePreparedInlineMessageRequest<'a>);
 ///Stores a message that can be sent by a user of a Mini App. Returns a [PreparedInlineMessage](https://core.telegram.org/bots/api/#preparedinlinemessage) object.
 #[derive(Clone)]
 pub struct SavePreparedInlineMessageRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SavePreparedInlineMessageParams,
 }
 
-impl<'a> RequestT for SavePreparedInlineMessageRequest<'a> {
+impl RequestT for SavePreparedInlineMessageRequest<'_> {
     type ParamsType = SavePreparedInlineMessageParams;
     type ReturnType = PreparedInlineMessage;
     fn get_name() -> &'static str {
         "savePreparedInlineMessage"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -57,7 +57,7 @@ impl<'a> RequestT for SavePreparedInlineMessageRequest<'a> {
 }
 impl<'a> SavePreparedInlineMessageRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         user_id: impl Into<i64>,
         result: impl Into<InlineQueryResult>,
     ) -> Self {
@@ -117,7 +117,7 @@ impl<'a> SavePreparedInlineMessageRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Stores a message that can be sent by a user of a Mini App. Returns a [PreparedInlineMessage](https://core.telegram.org/bots/api/#preparedinlinemessage) object.
     pub fn save_prepared_inline_message(
         &self,

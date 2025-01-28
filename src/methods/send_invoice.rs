@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         inline_keyboard_markup::InlineKeyboardMarkup, labeled_price::LabeledPrice,
         message::Message, misc::chat_id::ChatId, reply_parameters::ReplyParameters,
@@ -78,17 +78,17 @@ impl_into_future!(SendInvoiceRequest<'a>);
 ///Use this method to send invoices. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
 #[derive(Clone)]
 pub struct SendInvoiceRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SendInvoiceParams,
 }
 
-impl<'a> RequestT for SendInvoiceRequest<'a> {
+impl RequestT for SendInvoiceRequest<'_> {
     type ParamsType = SendInvoiceParams;
     type ReturnType = Message;
     fn get_name() -> &'static str {
         "sendInvoice"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -100,7 +100,7 @@ impl<'a> RequestT for SendInvoiceRequest<'a> {
 }
 impl<'a> SendInvoiceRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
         title: impl Into<String>,
         description: impl Into<String>,
@@ -355,7 +355,7 @@ impl<'a> SendInvoiceRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to send invoices. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_invoice(
         &self,

@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -21,17 +21,17 @@ impl_into_future!(UnbanChatSenderChatRequest<'a>);
 ///Use this method to unban a previously banned channel chat in a supergroup or channel. The bot must be an administrator for this to work and must have the appropriate administrator rights. Returns *True* on success.
 #[derive(Clone)]
 pub struct UnbanChatSenderChatRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: UnbanChatSenderChatParams,
 }
 
-impl<'a> RequestT for UnbanChatSenderChatRequest<'a> {
+impl RequestT for UnbanChatSenderChatRequest<'_> {
     type ParamsType = UnbanChatSenderChatParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "unbanChatSenderChat"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -42,7 +42,7 @@ impl<'a> RequestT for UnbanChatSenderChatRequest<'a> {
     }
 }
 impl<'a> UnbanChatSenderChatRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, sender_chat_id: impl Into<i64>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, sender_chat_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: UnbanChatSenderChatParams {
@@ -67,7 +67,7 @@ impl<'a> UnbanChatSenderChatRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to unban a previously banned channel chat in a supergroup or channel. The bot must be an administrator for this to work and must have the appropriate administrator rights. Returns *True* on success.
     pub fn unban_chat_sender_chat(
         &self,

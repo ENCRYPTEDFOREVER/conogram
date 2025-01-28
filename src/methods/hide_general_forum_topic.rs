@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -20,17 +20,17 @@ impl_into_future!(HideGeneralForumTopicRequest<'a>);
 ///Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights. The topic will be automatically closed if it was open. Returns *True* on success.
 #[derive(Clone)]
 pub struct HideGeneralForumTopicRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: HideGeneralForumTopicParams,
 }
 
-impl<'a> RequestT for HideGeneralForumTopicRequest<'a> {
+impl RequestT for HideGeneralForumTopicRequest<'_> {
     type ParamsType = HideGeneralForumTopicParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "hideGeneralForumTopic"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -41,7 +41,7 @@ impl<'a> RequestT for HideGeneralForumTopicRequest<'a> {
     }
 }
 impl<'a> HideGeneralForumTopicRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
             params: HideGeneralForumTopicParams {
@@ -58,7 +58,7 @@ impl<'a> HideGeneralForumTopicRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights. The topic will be automatically closed if it was open. Returns *True* on success.
     pub fn hide_general_forum_topic(
         &self,

@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::message_entity::MessageEntity, errors::ConogramError, impl_into_future,
+    api::Api, entities::message_entity::MessageEntity, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -27,17 +27,17 @@ impl_into_future!(SendGiftRequest<'a>);
 ///Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user. Returns *True* on success.
 #[derive(Clone)]
 pub struct SendGiftRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SendGiftParams,
 }
 
-impl<'a> RequestT for SendGiftRequest<'a> {
+impl RequestT for SendGiftRequest<'_> {
     type ParamsType = SendGiftParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "sendGift"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -48,7 +48,7 @@ impl<'a> RequestT for SendGiftRequest<'a> {
     }
 }
 impl<'a> SendGiftRequest<'a> {
-    pub fn new(api: &'a API, user_id: impl Into<i64>, gift_id: impl Into<String>) -> Self {
+    pub fn new(api: &'a Api, user_id: impl Into<i64>, gift_id: impl Into<String>) -> Self {
         Self {
             api,
             params: SendGiftParams {
@@ -100,7 +100,7 @@ impl<'a> SendGiftRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user. Returns *True* on success.
     pub fn send_gift(
         &self,

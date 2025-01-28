@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{misc::chat_id::ChatId, user_chat_boosts::UserChatBoosts},
     errors::ConogramError,
     impl_into_future,
@@ -24,17 +24,17 @@ impl_into_future!(GetUserChatBoostsRequest<'a>);
 ///Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat. Returns a [UserChatBoosts](https://core.telegram.org/bots/api/#userchatboosts) object.
 #[derive(Clone)]
 pub struct GetUserChatBoostsRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: GetUserChatBoostsParams,
 }
 
-impl<'a> RequestT for GetUserChatBoostsRequest<'a> {
+impl RequestT for GetUserChatBoostsRequest<'_> {
     type ParamsType = GetUserChatBoostsParams;
     type ReturnType = UserChatBoosts;
     fn get_name() -> &'static str {
         "getUserChatBoosts"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -45,7 +45,7 @@ impl<'a> RequestT for GetUserChatBoostsRequest<'a> {
     }
 }
 impl<'a> GetUserChatBoostsRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, user_id: impl Into<i64>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, user_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: GetUserChatBoostsParams {
@@ -70,7 +70,7 @@ impl<'a> GetUserChatBoostsRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat. Returns a [UserChatBoosts](https://core.telegram.org/bots/api/#userchatboosts) object.
     pub fn get_user_chat_boosts(
         &self,

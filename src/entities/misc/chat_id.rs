@@ -7,10 +7,10 @@ use crate::entities::chat::Chat;
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq, Hash)]
 #[serde(untagged)]
 pub enum ChatId {
-    /// @channel_username
+    /// Chat/Channel username, for example: ``@BotNews``
     Username(String),
 
-    /// Chat/Channel ID
+    /// Chat/Channel ID, for example: ``-1001004276399``, ``36265675``
     Id(i64),
 }
 

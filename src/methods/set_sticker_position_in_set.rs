@@ -5,7 +5,7 @@ use std::{
 
 use serde::Serialize;
 
-use crate::{api::API, errors::ConogramError, impl_into_future, request::RequestT};
+use crate::{api::Api, errors::ConogramError, impl_into_future, request::RequestT};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SetStickerPositionInSetParams {
@@ -18,17 +18,17 @@ impl_into_future!(SetStickerPositionInSetRequest<'a>);
 ///Use this method to move a sticker in a set created by the bot to a specific position. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetStickerPositionInSetRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetStickerPositionInSetParams,
 }
 
-impl<'a> RequestT for SetStickerPositionInSetRequest<'a> {
+impl RequestT for SetStickerPositionInSetRequest<'_> {
     type ParamsType = SetStickerPositionInSetParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setStickerPositionInSet"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -39,7 +39,7 @@ impl<'a> RequestT for SetStickerPositionInSetRequest<'a> {
     }
 }
 impl<'a> SetStickerPositionInSetRequest<'a> {
-    pub fn new(api: &'a API, sticker: impl Into<String>, position: impl Into<i64>) -> Self {
+    pub fn new(api: &'a Api, sticker: impl Into<String>, position: impl Into<i64>) -> Self {
         Self {
             api,
             params: SetStickerPositionInSetParams {
@@ -64,7 +64,7 @@ impl<'a> SetStickerPositionInSetRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to move a sticker in a set created by the bot to a specific position. Returns *True* on success.
     pub fn set_sticker_position_in_set(
         &self,

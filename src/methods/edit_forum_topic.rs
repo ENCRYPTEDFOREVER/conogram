@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -25,17 +25,17 @@ impl_into_future!(EditForumTopicRequest<'a>);
 ///Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights, unless it is the creator of the topic. Returns *True* on success.
 #[derive(Clone)]
 pub struct EditForumTopicRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: EditForumTopicParams,
 }
 
-impl<'a> RequestT for EditForumTopicRequest<'a> {
+impl RequestT for EditForumTopicRequest<'_> {
     type ParamsType = EditForumTopicParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "editForumTopic"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -47,7 +47,7 @@ impl<'a> RequestT for EditForumTopicRequest<'a> {
 }
 impl<'a> EditForumTopicRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
         message_thread_id: impl Into<i64>,
     ) -> Self {
@@ -91,7 +91,7 @@ impl<'a> EditForumTopicRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights, unless it is the creator of the topic. Returns *True* on success.
     pub fn edit_forum_topic(
         &self,

@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         message::Message,
         message_entity::MessageEntity,
@@ -78,17 +78,17 @@ impl_into_future_multipart!(SendAnimationRequest<'a>);
 ///Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
 #[derive(Clone)]
 pub struct SendAnimationRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SendAnimationParams,
 }
 
-impl<'a> RequestT for SendAnimationRequest<'a> {
+impl RequestT for SendAnimationRequest<'_> {
     type ParamsType = SendAnimationParams;
     type ReturnType = Message;
     fn get_name() -> &'static str {
         "sendAnimation"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -99,7 +99,7 @@ impl<'a> RequestT for SendAnimationRequest<'a> {
     }
 }
 impl<'a> SendAnimationRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, animation: impl Into<InputFile>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, animation: impl Into<InputFile>) -> Self {
         Self {
             api,
             params: SendAnimationParams {
@@ -263,7 +263,7 @@ impl<'a> SendAnimationRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
     pub fn send_animation(
         &self,

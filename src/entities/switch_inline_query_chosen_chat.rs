@@ -5,7 +5,7 @@ use crate::utils::deserialize_utils::is_false;
 /// This object represents an inline button that switches the current user to inline mode in a chosen chat, with an optional default inline query.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#switchinlinequerychosenchat)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SwitchInlineQueryChosenChat {
     /// *Optional*. The default inline query to be inserted in the input field. If left empty, only the bot's username will be inserted
     #[serde(default, skip_serializing_if = "Option::is_none")]

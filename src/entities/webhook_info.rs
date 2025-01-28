@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 /// Describes the current status of a webhook.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#webhookinfo)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct WebhookInfo {
     /// Webhook URL, may be empty if webhook is not set up
     pub url: String,

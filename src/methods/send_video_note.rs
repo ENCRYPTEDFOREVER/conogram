@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         message::Message,
         misc::{
@@ -65,17 +65,17 @@ impl_into_future_multipart!(SendVideoNoteRequest<'a>);
 ///As of [v.4.0](https://telegram.org/blog/video-messages-and-telescope), Telegram clients support rounded square MPEG4 videos of up to 1 minute long. Use this method to send video messages. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
 #[derive(Clone)]
 pub struct SendVideoNoteRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SendVideoNoteParams,
 }
 
-impl<'a> RequestT for SendVideoNoteRequest<'a> {
+impl RequestT for SendVideoNoteRequest<'_> {
     type ParamsType = SendVideoNoteParams;
     type ReturnType = Message;
     fn get_name() -> &'static str {
         "sendVideoNote"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -86,7 +86,7 @@ impl<'a> RequestT for SendVideoNoteRequest<'a> {
     }
 }
 impl<'a> SendVideoNoteRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, video_note: impl Into<InputFile>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, video_note: impl Into<InputFile>) -> Self {
         Self {
             api,
             params: SendVideoNoteParams {
@@ -199,7 +199,7 @@ impl<'a> SendVideoNoteRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///As of [v.4.0](https://telegram.org/blog/video-messages-and-telescope), Telegram clients support rounded square MPEG4 videos of up to 1 minute long. Use this method to send video messages. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_video_note(
         &self,

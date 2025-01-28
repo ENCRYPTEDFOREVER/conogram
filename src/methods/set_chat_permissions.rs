@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{chat_permissions::ChatPermissions, misc::chat_id::ChatId},
     errors::ConogramError,
     impl_into_future,
@@ -27,17 +27,17 @@ impl_into_future!(SetChatPermissionsRequest<'a>);
 ///Use this method to set default chat permissions for all members. The bot must be an administrator in the group or a supergroup for this to work and must have the *can\_restrict\_members* administrator rights. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetChatPermissionsRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetChatPermissionsParams,
 }
 
-impl<'a> RequestT for SetChatPermissionsRequest<'a> {
+impl RequestT for SetChatPermissionsRequest<'_> {
     type ParamsType = SetChatPermissionsParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setChatPermissions"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -49,7 +49,7 @@ impl<'a> RequestT for SetChatPermissionsRequest<'a> {
 }
 impl<'a> SetChatPermissionsRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
         permissions: impl Into<ChatPermissions>,
     ) -> Self {
@@ -88,7 +88,7 @@ impl<'a> SetChatPermissionsRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to set default chat permissions for all members. The bot must be an administrator in the group or a supergroup for this to work and must have the *can\_restrict\_members* administrator rights. Returns *True* on success.
     pub fn set_chat_permissions(
         &self,

@@ -29,7 +29,7 @@ pub struct InlineQuery {
 }
 
 /// *Optional*. Type of the chat from which the inline query was sent. Can be either “sender” for a private chat with the inline query sender, “private”, “group”, “supergroup”, or “channel”. The chat type should be always known for requests sent from official clients and most third-party clients, unless the request was sent from a secret chat
-#[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ChatType {
     /// `sender`
     #[default]
@@ -55,26 +55,26 @@ pub enum ChatType {
 
 // Divider: all content below this line will be preserved after code regen
 use super::inline_query_result::InlineQueryResult;
-use crate::{api::API, methods::answer_inline_query::AnswerInlineQueryRequest};
+use crate::{api::Api, methods::answer_inline_query::AnswerInlineQueryRequest};
 
 impl InlineQuery {
     pub fn answer<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         results: impl IntoIterator<Item = impl Into<InlineQueryResult>>,
     ) -> AnswerInlineQueryRequest<'a> {
         api.answer_inline_query(&self.id, results)
     }
 
     // Answer with no results
-    pub fn answer_empty<'a>(&'a self, api: &'a API) -> AnswerInlineQueryRequest<'a> {
+    pub fn answer_empty<'a>(&'a self, api: &'a Api) -> AnswerInlineQueryRequest<'a> {
         api.answer_inline_query(&self.id, Vec::<InlineQueryResult>::new())
     }
 
     /// Answer with all server-side caching disabled
     pub fn answer_persnocache<'a, T: Into<InlineQueryResult>>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         results: impl IntoIterator<Item = T>,
     ) -> AnswerInlineQueryRequest<'a> {
         self.answer(api, results).is_personal(true).cache_time(0)

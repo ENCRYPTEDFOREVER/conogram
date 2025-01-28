@@ -13,7 +13,7 @@ use crate::entities::{
 /// * [RevenueWithdrawalStateFailed](https://core.telegram.org/bots/api/#revenuewithdrawalstatefailed)
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#revenuewithdrawalstate)
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum RevenueWithdrawalState {
     /// The withdrawal is in progress.

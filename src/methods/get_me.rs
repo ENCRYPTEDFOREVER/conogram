@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::user::User, errors::ConogramError, impl_into_future, request::RequestT,
+    api::Api, entities::user::User, errors::ConogramError, impl_into_future, request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
@@ -17,17 +17,17 @@ impl_into_future!(GetMeRequest<'a>);
 ///A simple method for testing your bot's authentication token. Requires no parameters. Returns basic information about the bot in form of a [User](https://core.telegram.org/bots/api/#user) object.
 #[derive(Clone)]
 pub struct GetMeRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: GetMeParams,
 }
 
-impl<'a> RequestT for GetMeRequest<'a> {
+impl RequestT for GetMeRequest<'_> {
     type ParamsType = GetMeParams;
     type ReturnType = User;
     fn get_name() -> &'static str {
         "getMe"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -38,7 +38,7 @@ impl<'a> RequestT for GetMeRequest<'a> {
     }
 }
 impl<'a> GetMeRequest<'a> {
-    pub const fn new(api: &'a API) -> Self {
+    pub const fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: GetMeParams {},
@@ -46,7 +46,7 @@ impl<'a> GetMeRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///A simple method for testing your bot's authentication token. Requires no parameters. Returns basic information about the bot in form of a [User](https://core.telegram.org/bots/api/#user) object.
     pub const fn get_me(&self) -> GetMeRequest {
         GetMeRequest::new(self)

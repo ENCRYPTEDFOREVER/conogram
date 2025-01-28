@@ -5,7 +5,7 @@ use crate::entities::user::User;
 /// Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that was banned in the chat and can't return to the chat or view chat messages.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatmemberbanned)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatMemberBanned {
     /// Information about the user
     pub user: User,

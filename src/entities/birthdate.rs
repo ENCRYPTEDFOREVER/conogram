@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 /// Describes the birthdate of a user.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#birthdate)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Birthdate {
     /// Day of the user's birth; 1-31
     pub day: i64,

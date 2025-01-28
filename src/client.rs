@@ -10,7 +10,7 @@ use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use serde_json::Value;
 
 use crate::{
-    api::APIConfig,
+    api::ApiConfig,
     entities::misc::input_file::{GetFiles, InputFile},
     errors::{ConogramError, ConogramErrorType, TgApiError, TgApiErrorParams},
 };
@@ -29,27 +29,25 @@ pub(crate) struct ApiResponse<ReturnValue> {
 pub(crate) struct ApiClient {
     base_url: String,
     http_client: Client,
-    bot_config: APIConfig,
+    bot_config: ApiConfig,
 
     default_request_params: HashMap<String, HashMap<String, Value>>,
 }
 
 impl ApiClient {
-    pub fn new(config: APIConfig) -> Self {
+    pub fn new(config: ApiConfig) -> Self {
         Self {
             base_url: if config.server_config.use_test_env {
                 format!(
-                    "{url}:{port}/bot{token}/test",
+                    "{url}/bot{token}/test",
                     url = config.server_config.url,
-                    port = config.server_config.port,
-                    token = config.token
+                    token = config.token.leak()
                 )
             } else {
                 format!(
-                    "{url}:{port}/bot{token}",
+                    "{url}/bot{token}",
                     url = config.server_config.url,
-                    port = config.server_config.port,
-                    token = config.token
+                    token = config.token.leak()
                 )
             },
             http_client: Client::new(),
@@ -136,7 +134,7 @@ impl ApiClient {
 
     pub async fn method<
         ReturnType: DeserializeOwned + std::fmt::Debug,
-        Params: Serialize + std::fmt::Debug,
+        Params: Serialize + Sync + std::fmt::Debug,
     >(
         method: &str,
         builder: RequestBuilder,
@@ -194,7 +192,7 @@ impl ApiClient {
 
     pub async fn method_json<
         ReturnType: DeserializeOwned + std::fmt::Debug,
-        Params: Serialize + std::fmt::Debug,
+        Params: Serialize + Sync + std::fmt::Debug,
     >(
         &self,
         method: &str,
@@ -220,7 +218,7 @@ impl ApiClient {
 
     pub async fn method_multipart_form<
         ReturnType: DeserializeOwned + std::fmt::Debug,
-        Params: Serialize + GetFiles + std::fmt::Debug,
+        Params: Serialize + GetFiles + Sync + std::fmt::Debug,
     >(
         &self,
         method: &str,

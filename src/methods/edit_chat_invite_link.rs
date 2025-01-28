@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{chat_invite_link::ChatInviteLink, misc::chat_id::ChatId},
     errors::ConogramError,
     impl_into_future,
@@ -33,17 +33,17 @@ impl_into_future!(EditChatInviteLinkRequest<'a>);
 ///Use this method to edit a non-primary invite link created by the bot. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the edited invite link as a [ChatInviteLink](https://core.telegram.org/bots/api/#chatinvitelink) object.
 #[derive(Clone)]
 pub struct EditChatInviteLinkRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: EditChatInviteLinkParams,
 }
 
-impl<'a> RequestT for EditChatInviteLinkRequest<'a> {
+impl RequestT for EditChatInviteLinkRequest<'_> {
     type ParamsType = EditChatInviteLinkParams;
     type ReturnType = ChatInviteLink;
     fn get_name() -> &'static str {
         "editChatInviteLink"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -54,7 +54,7 @@ impl<'a> RequestT for EditChatInviteLinkRequest<'a> {
     }
 }
 impl<'a> EditChatInviteLinkRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, invite_link: impl Into<String>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, invite_link: impl Into<String>) -> Self {
         Self {
             api,
             params: EditChatInviteLinkParams {
@@ -111,7 +111,7 @@ impl<'a> EditChatInviteLinkRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to edit a non-primary invite link created by the bot. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the edited invite link as a [ChatInviteLink](https://core.telegram.org/bots/api/#chatinvitelink) object.
     pub fn edit_chat_invite_link(
         &self,

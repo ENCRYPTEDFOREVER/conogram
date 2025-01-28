@@ -5,7 +5,7 @@ use crate::{entities::order_info::OrderInfo, utils::deserialize_utils::is_false}
 /// This object contains basic information about a successful payment.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#successfulpayment)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SuccessfulPayment {
     /// Three-letter ISO 4217 [currency](https://core.telegram.org/bots/payments#supported-currencies) code, or “XTR” for payments in [Telegram Stars](https://t.me/BotNews/90)
     pub currency: String,

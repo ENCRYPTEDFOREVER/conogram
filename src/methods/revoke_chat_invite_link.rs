@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{chat_invite_link::ChatInviteLink, misc::chat_id::ChatId},
     errors::ConogramError,
     impl_into_future,
@@ -24,17 +24,17 @@ impl_into_future!(RevokeChatInviteLinkRequest<'a>);
 ///Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as [ChatInviteLink](https://core.telegram.org/bots/api/#chatinvitelink) object.
 #[derive(Clone)]
 pub struct RevokeChatInviteLinkRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: RevokeChatInviteLinkParams,
 }
 
-impl<'a> RequestT for RevokeChatInviteLinkRequest<'a> {
+impl RequestT for RevokeChatInviteLinkRequest<'_> {
     type ParamsType = RevokeChatInviteLinkParams;
     type ReturnType = ChatInviteLink;
     fn get_name() -> &'static str {
         "revokeChatInviteLink"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -45,7 +45,7 @@ impl<'a> RequestT for RevokeChatInviteLinkRequest<'a> {
     }
 }
 impl<'a> RevokeChatInviteLinkRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, invite_link: impl Into<String>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, invite_link: impl Into<String>) -> Self {
         Self {
             api,
             params: RevokeChatInviteLinkParams {
@@ -70,7 +70,7 @@ impl<'a> RevokeChatInviteLinkRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as [ChatInviteLink](https://core.telegram.org/bots/api/#chatinvitelink) object.
     pub fn revoke_chat_invite_link(
         &self,

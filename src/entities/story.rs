@@ -5,7 +5,7 @@ use crate::entities::chat::Chat;
 /// This object represents a story.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#story)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Story {
     /// Chat that posted the story
     pub chat: Box<Chat>,

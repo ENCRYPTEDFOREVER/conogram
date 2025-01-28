@@ -14,7 +14,7 @@ use crate::entities::{
 /// * [BackgroundTypeChatTheme](https://core.telegram.org/bots/api/#backgroundtypechattheme)
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#backgroundtype)
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum BackgroundType {
     /// The background is automatically filled based on the selected colors.

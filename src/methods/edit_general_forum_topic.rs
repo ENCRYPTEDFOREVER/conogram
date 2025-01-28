@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -21,17 +21,17 @@ impl_into_future!(EditGeneralForumTopicRequest<'a>);
 ///Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights. Returns *True* on success.
 #[derive(Clone)]
 pub struct EditGeneralForumTopicRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: EditGeneralForumTopicParams,
 }
 
-impl<'a> RequestT for EditGeneralForumTopicRequest<'a> {
+impl RequestT for EditGeneralForumTopicRequest<'_> {
     type ParamsType = EditGeneralForumTopicParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "editGeneralForumTopic"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -42,7 +42,7 @@ impl<'a> RequestT for EditGeneralForumTopicRequest<'a> {
     }
 }
 impl<'a> EditGeneralForumTopicRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, name: impl Into<String>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, name: impl Into<String>) -> Self {
         Self {
             api,
             params: EditGeneralForumTopicParams {
@@ -67,7 +67,7 @@ impl<'a> EditGeneralForumTopicRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights. Returns *True* on success.
     pub fn edit_general_forum_topic(
         &self,

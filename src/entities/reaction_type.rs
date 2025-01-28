@@ -12,7 +12,7 @@ use crate::entities::{
 /// * [ReactionTypePaid](https://core.telegram.org/bots/api/#reactiontypepaid)
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#reactiontype)
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum ReactionType {
     /// The reaction is based on an emoji.

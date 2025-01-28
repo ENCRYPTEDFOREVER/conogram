@@ -5,7 +5,7 @@ use std::{
 
 use serde::Serialize;
 
-use crate::{api::API, errors::ConogramError, impl_into_future, request::RequestT};
+use crate::{api::Api, errors::ConogramError, impl_into_future, request::RequestT};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct EditUserStarSubscriptionParams {
@@ -19,17 +19,17 @@ impl_into_future!(EditUserStarSubscriptionRequest<'a>);
 ///Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars. Returns *True* on success.
 #[derive(Clone)]
 pub struct EditUserStarSubscriptionRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: EditUserStarSubscriptionParams,
 }
 
-impl<'a> RequestT for EditUserStarSubscriptionRequest<'a> {
+impl RequestT for EditUserStarSubscriptionRequest<'_> {
     type ParamsType = EditUserStarSubscriptionParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "editUserStarSubscription"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -41,7 +41,7 @@ impl<'a> RequestT for EditUserStarSubscriptionRequest<'a> {
 }
 impl<'a> EditUserStarSubscriptionRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         user_id: impl Into<i64>,
         telegram_payment_charge_id: impl Into<String>,
         is_canceled: impl Into<bool>,
@@ -81,7 +81,7 @@ impl<'a> EditUserStarSubscriptionRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars. Returns *True* on success.
     pub fn edit_user_star_subscription(
         &self,

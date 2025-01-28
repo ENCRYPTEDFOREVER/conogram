@@ -5,7 +5,7 @@ use crate::entities::{message_entity::MessageEntity, poll_option::PollOption};
 /// This object contains information about a poll.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#poll)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Poll {
     /// Unique poll identifier
     pub id: String,
@@ -58,7 +58,7 @@ pub struct Poll {
 }
 
 /// Poll type, currently can be “regular” or “quiz”
-#[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub enum PollType {
     /// `regular`
     #[default]

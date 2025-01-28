@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         inline_query_result::InlineQueryResult,
         inline_query_results_button::InlineQueryResultsButton,
@@ -37,17 +37,17 @@ impl_into_future!(AnswerInlineQueryRequest<'a>);
 ///No more than **50** results per query are allowed.
 #[derive(Clone)]
 pub struct AnswerInlineQueryRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: AnswerInlineQueryParams,
 }
 
-impl<'a> RequestT for AnswerInlineQueryRequest<'a> {
+impl RequestT for AnswerInlineQueryRequest<'_> {
     type ParamsType = AnswerInlineQueryParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "answerInlineQuery"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -59,7 +59,7 @@ impl<'a> RequestT for AnswerInlineQueryRequest<'a> {
 }
 impl<'a> AnswerInlineQueryRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         inline_query_id: impl Into<String>,
         results: impl IntoIterator<Item = impl Into<InlineQueryResult>>,
     ) -> Self {
@@ -122,7 +122,7 @@ impl<'a> AnswerInlineQueryRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to send answers to an inline query. On success, *True* is returned.  
     ///No more than **50** results per query are allowed.
     pub fn answer_inline_query(

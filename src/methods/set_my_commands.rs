@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{bot_command::BotCommand, bot_command_scope::BotCommandScope},
     errors::ConogramError,
     impl_into_future,
@@ -27,17 +27,17 @@ impl_into_future!(SetMyCommandsRequest<'a>);
 ///Use this method to change the list of the bot's commands. See [this manual](https://core.telegram.org/bots/features#commands) for more details about bot commands. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetMyCommandsRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetMyCommandsParams,
 }
 
-impl<'a> RequestT for SetMyCommandsRequest<'a> {
+impl RequestT for SetMyCommandsRequest<'_> {
     type ParamsType = SetMyCommandsParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setMyCommands"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -48,7 +48,7 @@ impl<'a> RequestT for SetMyCommandsRequest<'a> {
     }
 }
 impl<'a> SetMyCommandsRequest<'a> {
-    pub fn new(api: &'a API, commands: impl IntoIterator<Item = impl Into<BotCommand>>) -> Self {
+    pub fn new(api: &'a Api, commands: impl IntoIterator<Item = impl Into<BotCommand>>) -> Self {
         Self {
             api,
             params: SetMyCommandsParams {
@@ -81,7 +81,7 @@ impl<'a> SetMyCommandsRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to change the list of the bot's commands. See [this manual](https://core.telegram.org/bots/features#commands) for more details about bot commands. Returns *True* on success.
     pub fn set_my_commands(
         &self,

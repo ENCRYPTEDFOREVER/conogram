@@ -5,7 +5,7 @@ use crate::utils::deserialize_utils::is_false;
 /// This object represents a chat.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chat)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Chat {
     /// Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
     pub id: i64,
@@ -36,7 +36,7 @@ pub struct Chat {
 }
 
 /// Type of the chat, can be either “private”, “group”, “supergroup” or “channel”
-#[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ChatType {
     /// `private`
     #[default]
@@ -59,7 +59,7 @@ pub enum ChatType {
 // Divider: all content below this line will be preserved after code regen
 use super::{chat_full_info::ChatFullInfo, misc::input_file::InputFile};
 use crate::{
-    api::API,
+    api::Api,
     entities::chat_permissions::ChatPermissions,
     impl_trait,
     methods::{
@@ -89,6 +89,7 @@ use crate::{
 
 impl Chat {
     // Returns Chat's title for groups and User::full_name for private chats
+    #[must_use]
     pub fn full_name(&self) -> String {
         if let Some(title) = &self.title {
             title.clone()
@@ -118,33 +119,33 @@ pub trait TgChat {
         }
     }
 
-    fn unpin_all_messages<'a>(&'a self, api: &'a API) -> UnpinAllChatMessagesRequest<'a> {
+    fn unpin_all_messages<'a>(&'a self, api: &'a Api) -> UnpinAllChatMessagesRequest<'a> {
         api.unpin_all_chat_messages(self.id())
     }
 
-    fn get_member_count<'a>(&'a self, api: &'a API) -> GetChatMemberCountRequest<'a> {
+    fn get_member_count<'a>(&'a self, api: &'a Api) -> GetChatMemberCountRequest<'a> {
         api.get_chat_member_count(self.id())
     }
 
-    fn get_administrators<'a>(&'a self, api: &'a API) -> GetChatAdministratorsRequest<'a> {
+    fn get_administrators<'a>(&'a self, api: &'a Api) -> GetChatAdministratorsRequest<'a> {
         api.get_chat_administrators(self.id())
     }
 
-    fn get_member<'a>(&'a self, api: &'a API, user_id: impl Into<i64>) -> GetChatMemberRequest<'a> {
+    fn get_member<'a>(&'a self, api: &'a Api, user_id: impl Into<i64>) -> GetChatMemberRequest<'a> {
         api.get_chat_member(self.id(), user_id)
     }
 
-    fn get_full<'a>(&'a self, api: &'a API) -> GetChatRequest<'a> {
+    fn get_full<'a>(&'a self, api: &'a Api) -> GetChatRequest<'a> {
         api.get_chat(self.id())
     }
 
-    fn ban_member<'a>(&'a self, api: &'a API, user_id: impl Into<i64>) -> BanChatMemberRequest<'a> {
+    fn ban_member<'a>(&'a self, api: &'a Api, user_id: impl Into<i64>) -> BanChatMemberRequest<'a> {
         api.ban_chat_member(self.id(), user_id)
     }
 
     fn unban_member<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         user_id: impl Into<i64>,
     ) -> UnbanChatMemberRequest<'a> {
         api.unban_chat_member(self.id(), user_id)
@@ -152,7 +153,7 @@ pub trait TgChat {
 
     fn ban_sender_chat<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         sender_chat_id: impl Into<i64>,
     ) -> BanChatSenderChatRequest<'a> {
         api.ban_chat_sender_chat(self.id(), sender_chat_id)
@@ -160,7 +161,7 @@ pub trait TgChat {
 
     fn unban_sender_chat<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         sender_chat_id: impl Into<i64>,
     ) -> UnbanChatSenderChatRequest<'a> {
         api.unban_chat_sender_chat(self.id(), sender_chat_id)
@@ -168,20 +169,20 @@ pub trait TgChat {
 
     fn set_administrator_custom_title<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         user_id: impl Into<i64>,
         custom_title: impl Into<String>,
     ) -> SetChatAdministratorCustomTitleRequest<'a> {
         api.set_chat_administrator_custom_title(self.id(), user_id, custom_title)
     }
 
-    fn set_title<'a>(&'a self, api: &'a API, title: impl Into<String>) -> SetChatTitleRequest<'a> {
+    fn set_title<'a>(&'a self, api: &'a Api, title: impl Into<String>) -> SetChatTitleRequest<'a> {
         api.set_chat_title(self.id(), title)
     }
 
     fn set_description<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         description: Option<impl Into<String>>,
     ) -> SetChatDescriptionRequest<'a> {
         if let Some(description) = description {
@@ -193,7 +194,7 @@ pub trait TgChat {
 
     fn set_permissions<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         permissions: impl Into<ChatPermissions>,
     ) -> SetChatPermissionsRequest<'a> {
         api.set_chat_permissions(self.id(), permissions)
@@ -201,7 +202,7 @@ pub trait TgChat {
 
     fn set_photo<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         photo: impl Into<InputFile>,
     ) -> SetChatPhotoRequest<'a> {
         api.set_chat_photo(self.id(), photo)
@@ -209,7 +210,7 @@ pub trait TgChat {
 
     fn set_sticker_set<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         sticker_set_name: impl Into<String>,
     ) -> SetChatStickerSetRequest<'a> {
         api.set_chat_sticker_set(self.id(), sticker_set_name)
@@ -217,7 +218,7 @@ pub trait TgChat {
 
     fn send_action<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         action: impl Into<crate::methods::send_chat_action::SendChatActionAction>,
     ) -> SendChatActionRequest<'a> {
         api.send_chat_action(self.id(), action)
@@ -225,31 +226,31 @@ pub trait TgChat {
 
     fn edit_invite_link<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         invite_link: impl Into<String>,
     ) -> EditChatInviteLinkRequest<'a> {
         api.edit_chat_invite_link(self.id(), invite_link)
     }
 
-    fn leave<'a>(&'a self, api: &'a API) -> LeaveChatRequest<'a> {
+    fn leave<'a>(&'a self, api: &'a Api) -> LeaveChatRequest<'a> {
         api.leave_chat(self.id())
     }
 
-    fn delete_photo<'a>(&'a self, api: &'a API) -> DeleteChatPhotoRequest<'a> {
+    fn delete_photo<'a>(&'a self, api: &'a Api) -> DeleteChatPhotoRequest<'a> {
         api.delete_chat_photo(self.id())
     }
 
-    fn delete_sticker_set<'a>(&'a self, api: &'a API) -> DeleteChatStickerSetRequest<'a> {
+    fn delete_sticker_set<'a>(&'a self, api: &'a Api) -> DeleteChatStickerSetRequest<'a> {
         api.delete_chat_sticker_set(self.id())
     }
 
-    fn export_invite_link<'a>(&'a self, api: &'a API) -> ExportChatInviteLinkRequest<'a> {
+    fn export_invite_link<'a>(&'a self, api: &'a Api) -> ExportChatInviteLinkRequest<'a> {
         api.export_chat_invite_link(self.id())
     }
 
     fn revoke_invite_link<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         invite_link: impl Into<String>,
     ) -> RevokeChatInviteLinkRequest<'a> {
         api.revoke_chat_invite_link(self.id(), invite_link)
@@ -257,7 +258,7 @@ pub trait TgChat {
 
     fn approve_join_request<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         user_id: impl Into<i64>,
     ) -> ApproveChatJoinRequestRequest<'a> {
         api.approve_chat_join_request(self.id(), user_id)
@@ -265,19 +266,19 @@ pub trait TgChat {
 
     fn decline_join_request<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         user_id: impl Into<i64>,
     ) -> DeclineChatJoinRequestRequest<'a> {
         api.decline_chat_join_request(self.id(), user_id)
     }
 
-    fn create_invite_link<'a>(&'a self, api: &'a API) -> CreateChatInviteLinkRequest<'a> {
+    fn create_invite_link<'a>(&'a self, api: &'a Api) -> CreateChatInviteLinkRequest<'a> {
         api.create_chat_invite_link(self.id())
     }
 
     fn promote_member<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         user_id: impl Into<i64>,
     ) -> PromoteChatMemberRequest<'a> {
         api.promote_chat_member(self.id(), user_id)
@@ -285,7 +286,7 @@ pub trait TgChat {
 
     fn restrict_member<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         user_id: impl Into<i64>,
         permissions: impl Into<ChatPermissions>,
     ) -> RestrictChatMemberRequest<'a> {

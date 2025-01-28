@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -21,17 +21,17 @@ impl_into_future!(BanChatSenderChatRequest<'a>);
 ///Use this method to ban a channel chat in a supergroup or a channel. Until the chat is [unbanned](https://core.telegram.org/bots/api/#unbanchatsenderchat), the owner of the banned chat won't be able to send messages on behalf of **any of their channels**. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights. Returns *True* on success.
 #[derive(Clone)]
 pub struct BanChatSenderChatRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: BanChatSenderChatParams,
 }
 
-impl<'a> RequestT for BanChatSenderChatRequest<'a> {
+impl RequestT for BanChatSenderChatRequest<'_> {
     type ParamsType = BanChatSenderChatParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "banChatSenderChat"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -42,7 +42,7 @@ impl<'a> RequestT for BanChatSenderChatRequest<'a> {
     }
 }
 impl<'a> BanChatSenderChatRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, sender_chat_id: impl Into<i64>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, sender_chat_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: BanChatSenderChatParams {
@@ -67,7 +67,7 @@ impl<'a> BanChatSenderChatRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to ban a channel chat in a supergroup or a channel. Until the chat is [unbanned](https://core.telegram.org/bots/api/#unbanchatsenderchat), the owner of the banned chat won't be able to send messages on behalf of **any of their channels**. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights. Returns *True* on success.
     pub fn ban_chat_sender_chat(
         &self,

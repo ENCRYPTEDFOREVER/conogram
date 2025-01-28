@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         link_preview_options::LinkPreviewOptions,
         message::Message,
@@ -53,17 +53,17 @@ impl_into_future!(SendMessageRequest<'a>);
 ///Use this method to send text messages. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
 #[derive(Clone)]
 pub struct SendMessageRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SendMessageParams,
 }
 
-impl<'a> RequestT for SendMessageRequest<'a> {
+impl RequestT for SendMessageRequest<'_> {
     type ParamsType = SendMessageParams;
     type ReturnType = Message;
     fn get_name() -> &'static str {
         "sendMessage"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -74,7 +74,7 @@ impl<'a> RequestT for SendMessageRequest<'a> {
     }
 }
 impl<'a> SendMessageRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, text: impl Into<String>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, text: impl Into<String>) -> Self {
         Self {
             api,
             params: SendMessageParams {
@@ -193,7 +193,7 @@ impl<'a> SendMessageRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to send text messages. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_message(
         &self,

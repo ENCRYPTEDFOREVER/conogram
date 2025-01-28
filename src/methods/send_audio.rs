@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         message::Message,
         message_entity::MessageEntity,
@@ -76,17 +76,17 @@ impl_into_future_multipart!(SendAudioRequest<'a>);
 ///For sending voice messages, use the [sendVoice](https://core.telegram.org/bots/api/#sendvoice) method instead.
 #[derive(Clone)]
 pub struct SendAudioRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SendAudioParams,
 }
 
-impl<'a> RequestT for SendAudioRequest<'a> {
+impl RequestT for SendAudioRequest<'_> {
     type ParamsType = SendAudioParams;
     type ReturnType = Message;
     fn get_name() -> &'static str {
         "sendAudio"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -97,7 +97,7 @@ impl<'a> RequestT for SendAudioRequest<'a> {
     }
 }
 impl<'a> SendAudioRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, audio: impl Into<InputFile>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, audio: impl Into<InputFile>) -> Self {
         Self {
             api,
             params: SendAudioParams {
@@ -245,7 +245,7 @@ impl<'a> SendAudioRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
     ///
     ///For sending voice messages, use the [sendVoice](https://core.telegram.org/bots/api/#sendvoice) method instead.

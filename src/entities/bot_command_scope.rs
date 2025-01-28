@@ -21,7 +21,7 @@ use crate::entities::{
 /// * [BotCommandScopeChatMember](https://core.telegram.org/bots/api/#botcommandscopechatmember)
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#botcommandscope)
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum BotCommandScope {
     /// Represents the default [scope](https://core.telegram.org/bots/api/#botcommandscope) of bot commands. Default commands are used if no commands with a [narrower scope](https://core.telegram.org/bots/api/#determining-list-of-commands) are specified for the user.
@@ -156,14 +156,17 @@ impl BotCommandScope {
         .into()
     }
 
+    #[must_use]
     pub fn all_private_chats() -> Self {
         BotCommandScopeAllPrivateChats {}.into()
     }
 
+    #[must_use]
     pub fn all_group_chats() -> Self {
         BotCommandScopeAllGroupChats {}.into()
     }
 
+    #[must_use]
     pub fn all_chat_administrators() -> Self {
         BotCommandScopeAllChatAdministrators {}.into()
     }

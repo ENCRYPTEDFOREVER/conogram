@@ -5,7 +5,7 @@ use crate::entities::transaction_partner::TransactionPartner;
 /// Describes a Telegram Star transaction.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#startransaction)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct StarTransaction {
     /// Unique identifier of the transaction. Coincides with the identifier of the original transaction for refund transactions. Coincides with *SuccessfulPayment.telegram\_payment\_charge\_id* for successful incoming payments from users.
     pub id: String,

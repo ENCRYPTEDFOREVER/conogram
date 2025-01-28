@@ -5,7 +5,7 @@ use std::{
 
 use serde::Serialize;
 
-use crate::{api::API, errors::ConogramError, impl_into_future, request::RequestT};
+use crate::{api::Api, errors::ConogramError, impl_into_future, request::RequestT};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SetMyShortDescriptionParams {
@@ -20,17 +20,17 @@ impl_into_future!(SetMyShortDescriptionRequest<'a>);
 ///Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetMyShortDescriptionRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetMyShortDescriptionParams,
 }
 
-impl<'a> RequestT for SetMyShortDescriptionRequest<'a> {
+impl RequestT for SetMyShortDescriptionRequest<'_> {
     type ParamsType = SetMyShortDescriptionParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setMyShortDescription"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -41,7 +41,7 @@ impl<'a> RequestT for SetMyShortDescriptionRequest<'a> {
     }
 }
 impl<'a> SetMyShortDescriptionRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: SetMyShortDescriptionParams {
@@ -66,7 +66,7 @@ impl<'a> SetMyShortDescriptionRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot. Returns *True* on success.
     pub fn set_my_short_description(&self) -> SetMyShortDescriptionRequest {
         SetMyShortDescriptionRequest::new(self)

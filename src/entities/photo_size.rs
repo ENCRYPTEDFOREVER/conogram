@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 /// This object represents one size of a photo or a [file](https://core.telegram.org/bots/api/#document) / [sticker](https://core.telegram.org/bots/api/#sticker) thumbnail.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#photosize)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PhotoSize {
     /// Identifier for this file, which can be used to download or reuse the file
     pub file_id: String,

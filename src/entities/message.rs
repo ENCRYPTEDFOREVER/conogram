@@ -382,17 +382,20 @@ use super::{
     reply_parameters::ReplyParameters,
 };
 use crate::{
-    api::API,
+    api::Api,
     entities::misc::chat_id::ChatId,
     errors::ConogramError,
     methods::{
         copy_message::CopyMessageRequest, delete_message::DeleteMessageRequest,
+        edit_message_media::EditMessageMediaRequest,
         edit_message_reply_markup::EditMessageReplyMarkupRequest,
-        edit_message_text::EditMessageTextRequest,
+        edit_message_text::EditMessageTextRequest, forward_message::ForwardMessageRequest,
         get_custom_emoji_stickers::GetCustomEmojiStickersRequest,
-        send_document::SendDocumentRequest, send_media_group::SendMediaGroupRequest,
-        send_message::SendMessageRequest, send_photo::SendPhotoRequest,
-        send_sticker::SendStickerRequest, set_message_reaction::SetMessageReactionRequest,
+        pin_chat_message::PinChatMessageRequest, send_document::SendDocumentRequest,
+        send_media_group::SendMediaGroupRequest, send_message::SendMessageRequest,
+        send_photo::SendPhotoRequest, send_sticker::SendStickerRequest,
+        set_message_reaction::SetMessageReactionRequest,
+        unpin_chat_message::UnpinChatMessageRequest,
     },
 };
 
@@ -438,7 +441,7 @@ impl<'a> From<&'a MaybeInaccessibleMessage> for Option<&'a Message> {
 }
 
 impl Message {
-    /// Static version of get_url()
+    /// Static version of [``Message::get_url()``](Message::get_url())
     pub fn make_url(chat_id: impl Into<ChatId>, message_id: impl Into<i64>) -> String {
         match chat_id.into() {
             ChatId::Username(username) => {
@@ -452,6 +455,7 @@ impl Message {
         }
     }
 
+    #[must_use]
     pub fn get_url(&self) -> String {
         if let Some(username) = &self.chat.username {
             format!("https://t.me/{username}/{}", self.message_id)
@@ -465,6 +469,7 @@ impl Message {
     }
 
     /// ID of the message author
+    #[must_use]
     pub fn from_id(&self) -> i64 {
         if let Some(sender_chat) = &self.sender_chat {
             sender_chat.id
@@ -476,6 +481,7 @@ impl Message {
     }
 
     /// Returns `text` or `caption` if `text` is empty
+    #[must_use]
     pub const fn get_text(&self) -> &Option<String> {
         if self.text.is_some() {
             &self.text
@@ -485,11 +491,12 @@ impl Message {
     }
 
     /// Returns `entities` or `caption_entities` if `entities` is empty
+    #[must_use]
     pub fn get_entities(&self) -> &Vec<MessageEntity> {
-        if self.entities.is_empty() {
-            &self.caption_entities
-        } else {
+        if !self.entities.is_empty() {
             &self.entities
+        } else {
+            &self.caption_entities
         }
     }
 
@@ -497,7 +504,6 @@ impl Message {
     pub fn get_custom_emoji_ids(&self) -> Vec<String> {
         self.get_entities()
             .iter()
-            // .map(|ent| ent.custom_emoji_id)
             .filter_map(|ent| ent.custom_emoji_id.as_ref())
             .map(String::from)
             .collect()
@@ -505,11 +511,12 @@ impl Message {
 
     pub fn get_custom_emoji_stickers<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
     ) -> GetCustomEmojiStickersRequest<'a> {
         api.get_custom_emoji_stickers(self.get_custom_emoji_ids())
     }
 
+    #[must_use]
     pub fn file_uid(&self) -> Option<String> {
         if let Some(m) = self.photo.first() {
             Some(m.file_unique_id.clone())
@@ -530,6 +537,7 @@ impl Message {
         }
     }
 
+    #[must_use]
     pub fn file_id(&self) -> Option<String> {
         if let Some(m) = self.photo.first() {
             Some(m.file_id.clone())
@@ -550,6 +558,7 @@ impl Message {
         }
     }
 
+    #[must_use]
     pub fn get_formatted_text(&self) -> Option<FormattedText> {
         if let (Some(text), entities) = (self.get_text(), self.get_entities()) {
             Some(FormattedText::with_text(text.clone(), entities.clone()))
@@ -561,7 +570,7 @@ impl Message {
     /// Quote entire message and reply in the same Chat
     pub fn quote_reply<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         text: impl Into<String>,
     ) -> SendMessageRequest<'a> {
         self.quote_reply_args(api, text, Option::<Range<usize>>::None, Option::<i64>::None)
@@ -570,7 +579,7 @@ impl Message {
     /// Quote part of the message and reply in the same Chat
     pub fn quote_reply_partial<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         text: impl Into<String>,
         quoting_range: impl Into<Range<usize>>,
     ) -> SendMessageRequest<'a> {
@@ -580,7 +589,7 @@ impl Message {
     /// Quote entire message and reply in the Chat, specified by `chat_id`
     pub fn quote_reply_to<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         text: impl Into<String>,
         chat_id: impl Into<ChatId>,
     ) -> SendMessageRequest<'a> {
@@ -590,7 +599,7 @@ impl Message {
     /// Quote part of the message and reply in the Chat, specified by `chat_id`
     pub fn quote_reply_partial_to<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         text: impl Into<String>,
         quoting_range: impl Into<Range<usize>>,
         chat_id: impl Into<ChatId>,
@@ -605,7 +614,7 @@ impl Message {
     /// `quoting_range`: char-range of the part of the original message which needs to be quoted
     pub fn quote_reply_args<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         text: impl Into<String>,
         quoting_range: Option<impl Into<Range<usize>>>,
         chat_id: Option<impl Into<ChatId>>,
@@ -619,6 +628,7 @@ impl Message {
         let (quote_text, quote_entities, quote_pos) = if let Some(range) = quoting_range {
             let range = range.into();
             let range_start = range.start as i64;
+
             let (quote_text, quote_entities) = self
                 .get_formatted_text()
                 .unwrap_or_default()
@@ -651,7 +661,7 @@ impl Message {
 
     pub fn reply<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         text: impl Into<InputMessageText>,
     ) -> SendMessageRequest<'a> {
         let mut req = match text.into() {
@@ -670,10 +680,10 @@ impl Message {
         req
     }
 
-    /// The same as Message::reply().entities()
+    /// The same as `Message::reply().entities()`
     pub fn reply_entities<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         text: impl Into<InputMessageText>,
         entities: impl IntoIterator<Item = MessageEntity>,
     ) -> SendMessageRequest<'a> {
@@ -682,7 +692,7 @@ impl Message {
 
     pub fn reply_formatted<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         formatted_text: FormattedText,
     ) -> SendMessageRequest<'a> {
         let (text, entities) = formatted_text.build();
@@ -690,7 +700,7 @@ impl Message {
     }
 
     /// Sends message to the same chat and thread
-    pub fn answer<'a>(&'a self, api: &'a API, text: impl Into<String>) -> SendMessageRequest<'a> {
+    pub fn answer<'a>(&'a self, api: &'a Api, text: impl Into<String>) -> SendMessageRequest<'a> {
         let mut req = api.send_message(self.chat.id, text);
 
         if self.is_topic_message {
@@ -702,19 +712,43 @@ impl Message {
         req
     }
 
-    /// The same as Message::answer().entities()
+    /// The same as `Message::answer().entities()`
     pub fn answer_entities<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         text: impl Into<String>,
         entities: impl IntoIterator<Item = MessageEntity>,
     ) -> SendMessageRequest<'a> {
         self.answer(api, text).entities(entities)
     }
 
+    pub fn unpin<'a>(&'a self, api: &'a Api) -> UnpinChatMessageRequest<'a> {
+        api.unpin_chat_message(self.chat.id)
+    }
+
+    pub fn pin<'a>(&'a self, api: &'a Api) -> PinChatMessageRequest<'a> {
+        api.pin_chat_message(self.chat.id, self.message_id)
+    }
+
+    pub fn forward<'a>(
+        &'a self,
+        api: &'a Api,
+        to_chat_id: impl Into<ChatId>,
+    ) -> ForwardMessageRequest<'a> {
+        api.forward_message(to_chat_id, self.chat.id, self.message_id)
+    }
+
+    pub fn edit_media<'a>(
+        &'a self,
+        api: &'a Api,
+        media: impl Into<InputMedia>,
+    ) -> EditMessageMediaRequest<'a> {
+        api.edit_message_media(media)
+    }
+
     pub fn edit_text<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         text: impl Into<String>,
     ) -> EditMessageTextRequest<'a> {
         api.edit_message_text(text.into())
@@ -724,42 +758,42 @@ impl Message {
 
     pub fn edit_text_formatted<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         ft: impl Into<FormattedText>,
     ) -> EditMessageTextRequest<'a> {
         let (text, entities) = ft.into().build();
         self.edit_text(api, text).entities(entities)
     }
 
-    pub fn copy<'a>(&'a self, api: &'a API, chat_id: impl Into<ChatId>) -> CopyMessageRequest<'a> {
+    pub fn copy<'a>(&'a self, api: &'a Api, chat_id: impl Into<ChatId>) -> CopyMessageRequest<'a> {
         api.copy_message(chat_id, self.chat.id, self.message_id)
     }
 
-    pub fn edit_reply_markup<'a>(&'a self, api: &'a API) -> EditMessageReplyMarkupRequest<'a> {
+    pub fn edit_reply_markup<'a>(&'a self, api: &'a Api) -> EditMessageReplyMarkupRequest<'a> {
         api.edit_message_reply_markup()
             .message_id(self.message_id)
             .chat_id(self.chat.id)
     }
 
-    pub fn delete_reply_markup<'a>(&'a self, api: &'a API) -> EditMessageReplyMarkupRequest<'a> {
+    pub fn delete_reply_markup<'a>(&'a self, api: &'a Api) -> EditMessageReplyMarkupRequest<'a> {
         api.edit_message_reply_markup()
             .message_id(self.message_id)
             .chat_id(self.chat.id)
             .reply_markup(InlineKeyboardMarkup::empty())
     }
 
-    pub fn delete<'a>(&'a self, api: &'a API) -> DeleteMessageRequest<'a> {
+    pub fn delete<'a>(&'a self, api: &'a Api) -> DeleteMessageRequest<'a> {
         api.delete_message(self.chat.id, self.message_id)
     }
 
     /// Internal conogram method. Returns `Ok(false)` instead of `Err` if the message can't be deleted
-    pub async fn delete_exp<'a>(&'a self, api: &'a API) -> Result<bool, ConogramError> {
+    pub async fn delete_exp<'a>(&'a self, api: &'a Api) -> Result<bool, ConogramError> {
         api.delete_message_exp(self.chat.id, self.message_id).await
     }
 
     pub fn reply_photo<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         photo: impl Into<InputFile>,
     ) -> SendPhotoRequest<'a> {
         let mut req = api
@@ -776,7 +810,7 @@ impl Message {
 
     pub fn reply_media_group<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         media: impl IntoIterator<Item = impl Into<InputMedia>>,
     ) -> SendMediaGroupRequest<'a> {
         let mut req = api
@@ -793,7 +827,7 @@ impl Message {
 
     pub fn reply_document<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         document: impl Into<InputFile>,
     ) -> SendDocumentRequest<'a> {
         let mut req = api
@@ -810,7 +844,7 @@ impl Message {
 
     pub fn reply_sticker<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         sticker: impl Into<InputFile>,
     ) -> SendStickerRequest<'a> {
         let mut req = api
@@ -828,7 +862,7 @@ impl Message {
 
     pub fn copy_to<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
     ) -> CopyMessageRequest<'a> {
         api.copy_message(chat_id, self.chat.id, self.message_id)
@@ -836,14 +870,14 @@ impl Message {
 
     pub fn set_reactions<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         reactions: impl IntoIterator<Item = impl Into<ReactionType>>,
     ) -> SetMessageReactionRequest<'a> {
         api.set_message_reaction(self.chat.id, self.message_id)
             .reaction(reactions)
     }
 
-    pub fn delete_reactions<'a>(&'a self, api: &'a API) -> SetMessageReactionRequest<'a> {
+    pub fn delete_reactions<'a>(&'a self, api: &'a Api) -> SetMessageReactionRequest<'a> {
         let reactions: [ReactionType; 0] = [];
         self.set_reactions(api, reactions)
     }
@@ -851,7 +885,7 @@ impl Message {
     /// The same as [`message.set_reactions([reaction])`](Self::set_reactions)
     pub fn react<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         reaction: impl Into<ReactionType>,
     ) -> SetMessageReactionRequest<'a> {
         self.set_reactions(api, [reaction.into()])

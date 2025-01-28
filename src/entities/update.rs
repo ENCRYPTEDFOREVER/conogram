@@ -156,6 +156,7 @@ pub enum AllowedUpdates {
 
 impl AllowedUpdates {
     /// All existing updates
+    #[must_use]
     pub const fn all() -> [Self; 23] {
         [
             Self::Message,

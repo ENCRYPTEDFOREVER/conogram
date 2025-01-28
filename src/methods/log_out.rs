@@ -5,7 +5,7 @@ use std::{
 
 use serde::Serialize;
 
-use crate::{api::API, errors::ConogramError, impl_into_future, request::RequestT};
+use crate::{api::Api, errors::ConogramError, impl_into_future, request::RequestT};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct LogOutParams {}
@@ -15,17 +15,17 @@ impl_into_future!(LogOutRequest<'a>);
 ///Use this method to log out from the cloud Bot API server before launching the bot locally. You **must** log out the bot before running it locally, otherwise there is no guarantee that the bot will receive updates. After a successful call, you can immediately log in on a local server, but will not be able to log in back to the cloud Bot API server for 10 minutes. Returns *True* on success. Requires no parameters.
 #[derive(Clone)]
 pub struct LogOutRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: LogOutParams,
 }
 
-impl<'a> RequestT for LogOutRequest<'a> {
+impl RequestT for LogOutRequest<'_> {
     type ParamsType = LogOutParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "logOut"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -36,7 +36,7 @@ impl<'a> RequestT for LogOutRequest<'a> {
     }
 }
 impl<'a> LogOutRequest<'a> {
-    pub const fn new(api: &'a API) -> Self {
+    pub const fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: LogOutParams {},
@@ -44,7 +44,7 @@ impl<'a> LogOutRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to log out from the cloud Bot API server before launching the bot locally. You **must** log out the bot before running it locally, otherwise there is no guarantee that the bot will receive updates. After a successful call, you can immediately log in on a local server, but will not be able to log in back to the cloud Bot API server for 10 minutes. Returns *True* on success. Requires no parameters.
     pub const fn log_out(&self) -> LogOutRequest {
         LogOutRequest::new(self)

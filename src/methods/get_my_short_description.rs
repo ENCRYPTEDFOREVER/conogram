@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::bot_short_description::BotShortDescription, errors::ConogramError,
+    api::Api, entities::bot_short_description::BotShortDescription, errors::ConogramError,
     impl_into_future, request::RequestT,
 };
 
@@ -21,17 +21,17 @@ impl_into_future!(GetMyShortDescriptionRequest<'a>);
 ///Use this method to get the current bot short description for the given user language. Returns [BotShortDescription](https://core.telegram.org/bots/api/#botshortdescription) on success.
 #[derive(Clone)]
 pub struct GetMyShortDescriptionRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: GetMyShortDescriptionParams,
 }
 
-impl<'a> RequestT for GetMyShortDescriptionRequest<'a> {
+impl RequestT for GetMyShortDescriptionRequest<'_> {
     type ParamsType = GetMyShortDescriptionParams;
     type ReturnType = BotShortDescription;
     fn get_name() -> &'static str {
         "getMyShortDescription"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -42,7 +42,7 @@ impl<'a> RequestT for GetMyShortDescriptionRequest<'a> {
     }
 }
 impl<'a> GetMyShortDescriptionRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: GetMyShortDescriptionParams {
@@ -59,7 +59,7 @@ impl<'a> GetMyShortDescriptionRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to get the current bot short description for the given user language. Returns [BotShortDescription](https://core.telegram.org/bots/api/#botshortdescription) on success.
     pub fn get_my_short_description(&self) -> GetMyShortDescriptionRequest {
         GetMyShortDescriptionRequest::new(self)

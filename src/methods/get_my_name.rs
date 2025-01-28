@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::bot_name::BotName, errors::ConogramError, impl_into_future,
+    api::Api, entities::bot_name::BotName, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -21,17 +21,17 @@ impl_into_future!(GetMyNameRequest<'a>);
 ///Use this method to get the current bot name for the given user language. Returns [BotName](https://core.telegram.org/bots/api/#botname) on success.
 #[derive(Clone)]
 pub struct GetMyNameRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: GetMyNameParams,
 }
 
-impl<'a> RequestT for GetMyNameRequest<'a> {
+impl RequestT for GetMyNameRequest<'_> {
     type ParamsType = GetMyNameParams;
     type ReturnType = BotName;
     fn get_name() -> &'static str {
         "getMyName"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -42,7 +42,7 @@ impl<'a> RequestT for GetMyNameRequest<'a> {
     }
 }
 impl<'a> GetMyNameRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: GetMyNameParams {
@@ -59,7 +59,7 @@ impl<'a> GetMyNameRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to get the current bot name for the given user language. Returns [BotName](https://core.telegram.org/bots/api/#botname) on success.
     pub fn get_my_name(&self) -> GetMyNameRequest {
         GetMyNameRequest::new(self)

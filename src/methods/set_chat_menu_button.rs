@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::menu_button::MenuButton, errors::ConogramError, impl_into_future,
+    api::Api, entities::menu_button::MenuButton, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -23,17 +23,17 @@ impl_into_future!(SetChatMenuButtonRequest<'a>);
 ///Use this method to change the bot's menu button in a private chat, or the default menu button. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetChatMenuButtonRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetChatMenuButtonParams,
 }
 
-impl<'a> RequestT for SetChatMenuButtonRequest<'a> {
+impl RequestT for SetChatMenuButtonRequest<'_> {
     type ParamsType = SetChatMenuButtonParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setChatMenuButton"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -44,7 +44,7 @@ impl<'a> RequestT for SetChatMenuButtonRequest<'a> {
     }
 }
 impl<'a> SetChatMenuButtonRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: SetChatMenuButtonParams {
@@ -69,7 +69,7 @@ impl<'a> SetChatMenuButtonRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to change the bot's menu button in a private chat, or the default menu button. Returns *True* on success.
     pub fn set_chat_menu_button(&self) -> SetChatMenuButtonRequest {
         SetChatMenuButtonRequest::new(self)

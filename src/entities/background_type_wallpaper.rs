@@ -5,7 +5,7 @@ use crate::{entities::document::Document, utils::deserialize_utils::is_false};
 /// The background is a wallpaper in the JPEG format.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#backgroundtypewallpaper)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct BackgroundTypeWallpaper {
     /// Document with the wallpaper
     pub document: Document,

@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::gifts::Gifts, errors::ConogramError, impl_into_future, request::RequestT,
+    api::Api, entities::gifts::Gifts, errors::ConogramError, impl_into_future, request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
@@ -17,17 +17,17 @@ impl_into_future!(GetAvailableGiftsRequest<'a>);
 ///Returns the list of gifts that can be sent by the bot to users. Requires no parameters. Returns a [Gifts](https://core.telegram.org/bots/api/#gifts) object.
 #[derive(Clone)]
 pub struct GetAvailableGiftsRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: GetAvailableGiftsParams,
 }
 
-impl<'a> RequestT for GetAvailableGiftsRequest<'a> {
+impl RequestT for GetAvailableGiftsRequest<'_> {
     type ParamsType = GetAvailableGiftsParams;
     type ReturnType = Gifts;
     fn get_name() -> &'static str {
         "getAvailableGifts"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -38,7 +38,7 @@ impl<'a> RequestT for GetAvailableGiftsRequest<'a> {
     }
 }
 impl<'a> GetAvailableGiftsRequest<'a> {
-    pub const fn new(api: &'a API) -> Self {
+    pub const fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: GetAvailableGiftsParams {},
@@ -46,7 +46,7 @@ impl<'a> GetAvailableGiftsRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Returns the list of gifts that can be sent by the bot to users. Requires no parameters. Returns a [Gifts](https://core.telegram.org/bots/api/#gifts) object.
     pub const fn get_available_gifts(&self) -> GetAvailableGiftsRequest {
         GetAvailableGiftsRequest::new(self)

@@ -5,7 +5,7 @@ use std::{
 
 use serde::Serialize;
 
-use crate::{api::API, errors::ConogramError, impl_into_future, request::RequestT};
+use crate::{api::Api, errors::ConogramError, impl_into_future, request::RequestT};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SetMyDescriptionParams {
@@ -20,17 +20,17 @@ impl_into_future!(SetMyDescriptionRequest<'a>);
 ///Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetMyDescriptionRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetMyDescriptionParams,
 }
 
-impl<'a> RequestT for SetMyDescriptionRequest<'a> {
+impl RequestT for SetMyDescriptionRequest<'_> {
     type ParamsType = SetMyDescriptionParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setMyDescription"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -41,7 +41,7 @@ impl<'a> RequestT for SetMyDescriptionRequest<'a> {
     }
 }
 impl<'a> SetMyDescriptionRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: SetMyDescriptionParams {
@@ -66,7 +66,7 @@ impl<'a> SetMyDescriptionRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty. Returns *True* on success.
     pub fn set_my_description(&self) -> SetMyDescriptionRequest {
         SetMyDescriptionRequest::new(self)

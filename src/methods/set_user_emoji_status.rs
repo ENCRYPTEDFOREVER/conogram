@@ -5,7 +5,7 @@ use std::{
 
 use serde::Serialize;
 
-use crate::{api::API, errors::ConogramError, impl_into_future, request::RequestT};
+use crate::{api::Api, errors::ConogramError, impl_into_future, request::RequestT};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SetUserEmojiStatusParams {
@@ -21,17 +21,17 @@ impl_into_future!(SetUserEmojiStatusRequest<'a>);
 ///Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method [requestEmojiStatusAccess](https://core.telegram.org/bots/webapps#initializing-mini-apps). Returns *True* on success.
 #[derive(Clone)]
 pub struct SetUserEmojiStatusRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetUserEmojiStatusParams,
 }
 
-impl<'a> RequestT for SetUserEmojiStatusRequest<'a> {
+impl RequestT for SetUserEmojiStatusRequest<'_> {
     type ParamsType = SetUserEmojiStatusParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setUserEmojiStatus"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -42,7 +42,7 @@ impl<'a> RequestT for SetUserEmojiStatusRequest<'a> {
     }
 }
 impl<'a> SetUserEmojiStatusRequest<'a> {
-    pub fn new(api: &'a API, user_id: impl Into<i64>) -> Self {
+    pub fn new(api: &'a Api, user_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: SetUserEmojiStatusParams {
@@ -81,7 +81,7 @@ impl<'a> SetUserEmojiStatusRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method [requestEmojiStatusAccess](https://core.telegram.org/bots/webapps#initializing-mini-apps). Returns *True* on success.
     pub fn set_user_emoji_status(&self, user_id: impl Into<i64>) -> SetUserEmojiStatusRequest {
         SetUserEmojiStatusRequest::new(self, user_id)

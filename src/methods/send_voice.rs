@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         message::Message,
         message_entity::MessageEntity,
@@ -63,17 +63,17 @@ impl_into_future_multipart!(SendVoiceRequest<'a>);
 ///Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as [Audio](https://core.telegram.org/bots/api/#audio) or [Document](https://core.telegram.org/bots/api/#document)). On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
 #[derive(Clone)]
 pub struct SendVoiceRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SendVoiceParams,
 }
 
-impl<'a> RequestT for SendVoiceRequest<'a> {
+impl RequestT for SendVoiceRequest<'_> {
     type ParamsType = SendVoiceParams;
     type ReturnType = Message;
     fn get_name() -> &'static str {
         "sendVoice"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -84,7 +84,7 @@ impl<'a> RequestT for SendVoiceRequest<'a> {
     }
 }
 impl<'a> SendVoiceRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, voice: impl Into<InputFile>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, voice: impl Into<InputFile>) -> Self {
         Self {
             api,
             params: SendVoiceParams {
@@ -208,7 +208,7 @@ impl<'a> SendVoiceRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as [Audio](https://core.telegram.org/bots/api/#audio) or [Document](https://core.telegram.org/bots/api/#document)). On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
     pub fn send_voice(
         &self,

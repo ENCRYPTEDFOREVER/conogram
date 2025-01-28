@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -21,17 +21,17 @@ impl_into_future!(SetChatTitleRequest<'a>);
 ///Use this method to change the title of a chat. Titles can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetChatTitleRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetChatTitleParams,
 }
 
-impl<'a> RequestT for SetChatTitleRequest<'a> {
+impl RequestT for SetChatTitleRequest<'_> {
     type ParamsType = SetChatTitleParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setChatTitle"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -42,7 +42,7 @@ impl<'a> RequestT for SetChatTitleRequest<'a> {
     }
 }
 impl<'a> SetChatTitleRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, title: impl Into<String>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, title: impl Into<String>) -> Self {
         Self {
             api,
             params: SetChatTitleParams {
@@ -67,7 +67,7 @@ impl<'a> SetChatTitleRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to change the title of a chat. Titles can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
     pub fn set_chat_title(
         &self,

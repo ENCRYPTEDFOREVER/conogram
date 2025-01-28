@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 /// Represents an issue with one of the files that constitute the translation of a document. The error is considered resolved when the file changes.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrortranslationfile)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PassportElementErrorTranslationFile {
     /// Type of element of the user's Telegram Passport which has the issue, one of “passport”, “driver\_license”, “identity\_card”, “internal\_passport”, “utility\_bill”, “bank\_statement”, “rental\_agreement”, “passport\_registration”, “temporary\_registration”
     #[serde(rename = "type")]
@@ -17,7 +17,7 @@ pub struct PassportElementErrorTranslationFile {
 }
 
 /// Type of element of the user's Telegram Passport which has the issue, one of “passport”, “driver\_license”, “identity\_card”, “internal\_passport”, “utility\_bill”, “bank\_statement”, “rental\_agreement”, “passport\_registration”, “temporary\_registration”
-#[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub enum PassportElementErrorTranslationFileType {
     /// `passport`
     #[default]

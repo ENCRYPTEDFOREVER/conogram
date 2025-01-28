@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{bot_command::BotCommand, bot_command_scope::BotCommandScope},
     errors::ConogramError,
     impl_into_future,
@@ -26,17 +26,17 @@ impl_into_future!(GetMyCommandsRequest<'a>);
 ///Use this method to get the current list of the bot's commands for the given scope and user language. Returns an Array of [BotCommand](https://core.telegram.org/bots/api/#botcommand) objects. If commands aren't set, an empty list is returned.
 #[derive(Clone)]
 pub struct GetMyCommandsRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: GetMyCommandsParams,
 }
 
-impl<'a> RequestT for GetMyCommandsRequest<'a> {
+impl RequestT for GetMyCommandsRequest<'_> {
     type ParamsType = GetMyCommandsParams;
     type ReturnType = Vec<BotCommand>;
     fn get_name() -> &'static str {
         "getMyCommands"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -47,7 +47,7 @@ impl<'a> RequestT for GetMyCommandsRequest<'a> {
     }
 }
 impl<'a> GetMyCommandsRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: GetMyCommandsParams {
@@ -72,7 +72,7 @@ impl<'a> GetMyCommandsRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to get the current list of the bot's commands for the given scope and user language. Returns an Array of [BotCommand](https://core.telegram.org/bots/api/#botcommand) objects. If commands aren't set, an empty list is returned.
     pub fn get_my_commands(&self) -> GetMyCommandsRequest {
         GetMyCommandsRequest::new(self)

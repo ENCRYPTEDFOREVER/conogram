@@ -5,7 +5,7 @@ use crate::entities::web_app_info::WebAppInfo;
 /// This object represents a button to be shown above inline query results. You **must** use exactly one of the optional fields.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultsbutton)
-#[derive(Debug, Clone, Default, PartialEq, Serialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
 pub struct InlineQueryResultsButton {
     /// Label text on the button
     pub text: String,

@@ -60,7 +60,7 @@ pub struct InlineQueryResultDocument {
 }
 
 /// MIME type of the content of the file, either “application/pdf” or “application/zip”
-#[derive(Debug, Clone, Copy, Default, PartialEq, Serialize)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize)]
 pub enum MimeType {
     /// `application/pdf`
     #[default]

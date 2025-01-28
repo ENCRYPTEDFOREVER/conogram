@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::bot_command_scope::BotCommandScope, errors::ConogramError,
+    api::Api, entities::bot_command_scope::BotCommandScope, errors::ConogramError,
     impl_into_future, request::RequestT,
 };
 
@@ -23,17 +23,17 @@ impl_into_future!(DeleteMyCommandsRequest<'a>);
 ///Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, [higher level commands](https://core.telegram.org/bots/api/#determining-list-of-commands) will be shown to affected users. Returns *True* on success.
 #[derive(Clone)]
 pub struct DeleteMyCommandsRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: DeleteMyCommandsParams,
 }
 
-impl<'a> RequestT for DeleteMyCommandsRequest<'a> {
+impl RequestT for DeleteMyCommandsRequest<'_> {
     type ParamsType = DeleteMyCommandsParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "deleteMyCommands"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -44,7 +44,7 @@ impl<'a> RequestT for DeleteMyCommandsRequest<'a> {
     }
 }
 impl<'a> DeleteMyCommandsRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: DeleteMyCommandsParams {
@@ -69,7 +69,7 @@ impl<'a> DeleteMyCommandsRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, [higher level commands](https://core.telegram.org/bots/api/#determining-list-of-commands) will be shown to affected users. Returns *True* on success.
     pub fn delete_my_commands(&self) -> DeleteMyCommandsRequest {
         DeleteMyCommandsRequest::new(self)

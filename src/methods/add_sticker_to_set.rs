@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         input_sticker::InputSticker,
         misc::input_file::{GetFiles, InputFile},
@@ -35,17 +35,17 @@ impl_into_future_multipart!(AddStickerToSetRequest<'a>);
 ///Use this method to add a new sticker to a set created by the bot. Emoji sticker sets can have up to 200 stickers. Other sticker sets can have up to 120 stickers. Returns *True* on success.
 #[derive(Clone)]
 pub struct AddStickerToSetRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: AddStickerToSetParams,
 }
 
-impl<'a> RequestT for AddStickerToSetRequest<'a> {
+impl RequestT for AddStickerToSetRequest<'_> {
     type ParamsType = AddStickerToSetParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "addStickerToSet"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -57,7 +57,7 @@ impl<'a> RequestT for AddStickerToSetRequest<'a> {
 }
 impl<'a> AddStickerToSetRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         user_id: impl Into<i64>,
         name: impl Into<String>,
         sticker: impl Into<InputSticker>,
@@ -94,7 +94,7 @@ impl<'a> AddStickerToSetRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to add a new sticker to a set created by the bot. Emoji sticker sets can have up to 200 stickers. Other sticker sets can have up to 120 stickers. Returns *True* on success.
     pub fn add_sticker_to_set(
         &self,

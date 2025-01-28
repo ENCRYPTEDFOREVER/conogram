@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         message_entity::MessageEntity,
         message_id::MessageId,
@@ -51,17 +51,17 @@ impl_into_future!(CopyMessageRequest<'a>);
 ///Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz [poll](https://core.telegram.org/bots/api/#poll) can be copied only if the value of the field *correct\_option\_id* is known to the bot. The method is analogous to the method [forwardMessage](https://core.telegram.org/bots/api/#forwardmessage), but the copied message doesn't have a link to the original message. Returns the [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent message on success.
 #[derive(Clone)]
 pub struct CopyMessageRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: CopyMessageParams,
 }
 
-impl<'a> RequestT for CopyMessageRequest<'a> {
+impl RequestT for CopyMessageRequest<'_> {
     type ParamsType = CopyMessageParams;
     type ReturnType = MessageId;
     fn get_name() -> &'static str {
         "copyMessage"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -73,7 +73,7 @@ impl<'a> RequestT for CopyMessageRequest<'a> {
 }
 impl<'a> CopyMessageRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
         from_chat_id: impl Into<ChatId>,
         message_id: impl Into<i64>,
@@ -193,7 +193,7 @@ impl<'a> CopyMessageRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz [poll](https://core.telegram.org/bots/api/#poll) can be copied only if the value of the field *correct\_option\_id* is known to the bot. The method is analogous to the method [forwardMessage](https://core.telegram.org/bots/api/#forwardmessage), but the copied message doesn't have a link to the original message. Returns the [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent message on success.
     pub fn copy_message(
         &self,

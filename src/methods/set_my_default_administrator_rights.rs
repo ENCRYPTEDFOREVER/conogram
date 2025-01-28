@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::chat_administrator_rights::ChatAdministratorRights, errors::ConogramError,
+    api::Api, entities::chat_administrator_rights::ChatAdministratorRights, errors::ConogramError,
     impl_into_future, request::RequestT, utils::deserialize_utils::is_false,
 };
 
@@ -23,17 +23,17 @@ impl_into_future!(SetMyDefaultAdministratorRightsRequest<'a>);
 ///Use this method to change the default administrator rights requested by the bot when it's added as an administrator to groups or channels. These rights will be suggested to users, but they are free to modify the list before adding the bot. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetMyDefaultAdministratorRightsRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetMyDefaultAdministratorRightsParams,
 }
 
-impl<'a> RequestT for SetMyDefaultAdministratorRightsRequest<'a> {
+impl RequestT for SetMyDefaultAdministratorRightsRequest<'_> {
     type ParamsType = SetMyDefaultAdministratorRightsParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setMyDefaultAdministratorRights"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -44,7 +44,7 @@ impl<'a> RequestT for SetMyDefaultAdministratorRightsRequest<'a> {
     }
 }
 impl<'a> SetMyDefaultAdministratorRightsRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: SetMyDefaultAdministratorRightsParams {
@@ -69,7 +69,7 @@ impl<'a> SetMyDefaultAdministratorRightsRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to change the default administrator rights requested by the bot when it's added as an administrator to groups or channels. These rights will be suggested to users, but they are free to modify the list before adding the bot. Returns *True* on success.
     pub fn set_my_default_administrator_rights(&self) -> SetMyDefaultAdministratorRightsRequest {
         SetMyDefaultAdministratorRightsRequest::new(self)

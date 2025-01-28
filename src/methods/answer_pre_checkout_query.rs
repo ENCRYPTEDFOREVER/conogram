@@ -5,7 +5,7 @@ use std::{
 
 use serde::Serialize;
 
-use crate::{api::API, errors::ConogramError, impl_into_future, request::RequestT};
+use crate::{api::Api, errors::ConogramError, impl_into_future, request::RequestT};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct AnswerPreCheckoutQueryParams {
@@ -20,17 +20,17 @@ impl_into_future!(AnswerPreCheckoutQueryRequest<'a>);
 ///Once the user has confirmed their payment and shipping details, the Bot API sends the final confirmation in the form of an [Update](https://core.telegram.org/bots/api/#update) with the field *pre\_checkout\_query*. Use this method to respond to such pre-checkout queries. On success, *True* is returned. **Note:** The Bot API must receive an answer within 10 seconds after the pre-checkout query was sent.
 #[derive(Clone)]
 pub struct AnswerPreCheckoutQueryRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: AnswerPreCheckoutQueryParams,
 }
 
-impl<'a> RequestT for AnswerPreCheckoutQueryRequest<'a> {
+impl RequestT for AnswerPreCheckoutQueryRequest<'_> {
     type ParamsType = AnswerPreCheckoutQueryParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "answerPreCheckoutQuery"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -42,7 +42,7 @@ impl<'a> RequestT for AnswerPreCheckoutQueryRequest<'a> {
 }
 impl<'a> AnswerPreCheckoutQueryRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         pre_checkout_query_id: impl Into<String>,
         ok: impl Into<bool>,
     ) -> Self {
@@ -78,7 +78,7 @@ impl<'a> AnswerPreCheckoutQueryRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Once the user has confirmed their payment and shipping details, the Bot API sends the final confirmation in the form of an [Update](https://core.telegram.org/bots/api/#update) with the field *pre\_checkout\_query*. Use this method to respond to such pre-checkout queries. On success, *True* is returned. **Note:** The Bot API must receive an answer within 10 seconds after the pre-checkout query was sent.
     pub fn answer_pre_checkout_query(
         &self,

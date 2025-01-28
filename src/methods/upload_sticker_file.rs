@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         file::File,
         misc::input_file::{GetFiles, InputFile},
@@ -33,17 +33,17 @@ impl_into_future_multipart!(UploadStickerFileRequest<'a>);
 ///Use this method to upload a file with a sticker for later use in the [createNewStickerSet](https://core.telegram.org/bots/api/#createnewstickerset), [addStickerToSet](https://core.telegram.org/bots/api/#addstickertoset), or [replaceStickerInSet](https://core.telegram.org/bots/api/#replacestickerinset) methods (the file can be used multiple times). Returns the uploaded [File](https://core.telegram.org/bots/api/#file) on success.
 #[derive(Clone)]
 pub struct UploadStickerFileRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: UploadStickerFileParams,
 }
 
-impl<'a> RequestT for UploadStickerFileRequest<'a> {
+impl RequestT for UploadStickerFileRequest<'_> {
     type ParamsType = UploadStickerFileParams;
     type ReturnType = File;
     fn get_name() -> &'static str {
         "uploadStickerFile"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -55,7 +55,7 @@ impl<'a> RequestT for UploadStickerFileRequest<'a> {
 }
 impl<'a> UploadStickerFileRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         user_id: impl Into<i64>,
         sticker: impl Into<InputFile>,
         sticker_format: impl Into<UploadStickerFileStickerFormat>,
@@ -95,7 +95,7 @@ impl<'a> UploadStickerFileRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to upload a file with a sticker for later use in the [createNewStickerSet](https://core.telegram.org/bots/api/#createnewstickerset), [addStickerToSet](https://core.telegram.org/bots/api/#addstickertoset), or [replaceStickerInSet](https://core.telegram.org/bots/api/#replacestickerinset) methods (the file can be used multiple times). Returns the uploaded [File](https://core.telegram.org/bots/api/#file) on success.
     pub fn upload_sticker_file(
         &self,
@@ -108,7 +108,7 @@ impl API {
 }
 
 ///Format of the sticker, must be one of “static”, “animated”, “video”
-#[derive(Debug, Clone, Default, PartialEq, Serialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
 #[serde(rename = "sticker_format")]
 pub enum UploadStickerFileStickerFormat {
     #[default]

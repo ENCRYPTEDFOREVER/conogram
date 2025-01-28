@@ -5,7 +5,7 @@ use std::{
 
 use serde::Serialize;
 
-use crate::{api::API, errors::ConogramError, impl_into_future, request::RequestT};
+use crate::{api::Api, errors::ConogramError, impl_into_future, request::RequestT};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SetStickerKeywordsParams {
@@ -19,17 +19,17 @@ impl_into_future!(SetStickerKeywordsRequest<'a>);
 ///Use this method to change search keywords assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetStickerKeywordsRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetStickerKeywordsParams,
 }
 
-impl<'a> RequestT for SetStickerKeywordsRequest<'a> {
+impl RequestT for SetStickerKeywordsRequest<'_> {
     type ParamsType = SetStickerKeywordsParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setStickerKeywords"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -40,7 +40,7 @@ impl<'a> RequestT for SetStickerKeywordsRequest<'a> {
     }
 }
 impl<'a> SetStickerKeywordsRequest<'a> {
-    pub fn new(api: &'a API, sticker: impl Into<String>) -> Self {
+    pub fn new(api: &'a Api, sticker: impl Into<String>) -> Self {
         Self {
             api,
             params: SetStickerKeywordsParams {
@@ -65,7 +65,7 @@ impl<'a> SetStickerKeywordsRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to change search keywords assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns *True* on success.
     pub fn set_sticker_keywords(&self, sticker: impl Into<String>) -> SetStickerKeywordsRequest {
         SetStickerKeywordsRequest::new(self, sticker)

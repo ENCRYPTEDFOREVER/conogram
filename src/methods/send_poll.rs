@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         input_poll_option::InputPollOption,
         message::Message,
@@ -72,17 +72,17 @@ impl_into_future!(SendPollRequest<'a>);
 ///Use this method to send a native poll. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
 #[derive(Clone)]
 pub struct SendPollRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SendPollParams,
 }
 
-impl<'a> RequestT for SendPollRequest<'a> {
+impl RequestT for SendPollRequest<'_> {
     type ParamsType = SendPollParams;
     type ReturnType = Message;
     fn get_name() -> &'static str {
         "sendPoll"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -94,7 +94,7 @@ impl<'a> RequestT for SendPollRequest<'a> {
 }
 impl<'a> SendPollRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
         question: impl Into<String>,
         options: impl IntoIterator<Item = impl Into<InputPollOption>>,
@@ -300,7 +300,7 @@ impl<'a> SendPollRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to send a native poll. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_poll(
         &self,
@@ -313,7 +313,7 @@ impl API {
 }
 
 ///Poll type, “quiz” or “regular”, defaults to “regular”
-#[derive(Debug, Clone, Default, PartialEq, Serialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
 #[serde(rename = "type")]
 pub enum SendPollType {
     #[default]

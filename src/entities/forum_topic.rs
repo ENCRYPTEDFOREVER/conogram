@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 /// This object represents a forum topic.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#forumtopic)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumTopic {
     /// Unique identifier of the forum topic
     pub message_thread_id: i64,

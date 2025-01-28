@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         message::Message,
         message_entity::MessageEntity,
@@ -80,17 +80,17 @@ impl_into_future_multipart!(SendVideoRequest<'a>);
 ///Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as [Document](https://core.telegram.org/bots/api/#document)). On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
 #[derive(Clone)]
 pub struct SendVideoRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SendVideoParams,
 }
 
-impl<'a> RequestT for SendVideoRequest<'a> {
+impl RequestT for SendVideoRequest<'_> {
     type ParamsType = SendVideoParams;
     type ReturnType = Message;
     fn get_name() -> &'static str {
         "sendVideo"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -101,7 +101,7 @@ impl<'a> RequestT for SendVideoRequest<'a> {
     }
 }
 impl<'a> SendVideoRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, video: impl Into<InputFile>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, video: impl Into<InputFile>) -> Self {
         Self {
             api,
             params: SendVideoParams {
@@ -273,7 +273,7 @@ impl<'a> SendVideoRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as [Document](https://core.telegram.org/bots/api/#document)). On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
     pub fn send_video(
         &self,

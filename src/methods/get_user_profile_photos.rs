@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::user_profile_photos::UserProfilePhotos, errors::ConogramError,
+    api::Api, entities::user_profile_photos::UserProfilePhotos, errors::ConogramError,
     impl_into_future, request::RequestT,
 };
 
@@ -24,17 +24,17 @@ impl_into_future!(GetUserProfilePhotosRequest<'a>);
 ///Use this method to get a list of profile pictures for a user. Returns a [UserProfilePhotos](https://core.telegram.org/bots/api/#userprofilephotos) object.
 #[derive(Clone)]
 pub struct GetUserProfilePhotosRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: GetUserProfilePhotosParams,
 }
 
-impl<'a> RequestT for GetUserProfilePhotosRequest<'a> {
+impl RequestT for GetUserProfilePhotosRequest<'_> {
     type ParamsType = GetUserProfilePhotosParams;
     type ReturnType = UserProfilePhotos;
     fn get_name() -> &'static str {
         "getUserProfilePhotos"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -45,7 +45,7 @@ impl<'a> RequestT for GetUserProfilePhotosRequest<'a> {
     }
 }
 impl<'a> GetUserProfilePhotosRequest<'a> {
-    pub fn new(api: &'a API, user_id: impl Into<i64>) -> Self {
+    pub fn new(api: &'a Api, user_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: GetUserProfilePhotosParams {
@@ -78,7 +78,7 @@ impl<'a> GetUserProfilePhotosRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to get a list of profile pictures for a user. Returns a [UserProfilePhotos](https://core.telegram.org/bots/api/#userprofilephotos) object.
     pub fn get_user_profile_photos(&self, user_id: impl Into<i64>) -> GetUserProfilePhotosRequest {
         GetUserProfilePhotosRequest::new(self, user_id)

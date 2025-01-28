@@ -12,7 +12,7 @@ use crate::entities::{
 /// * [InputPaidMediaVideo](https://core.telegram.org/bots/api/#inputpaidmediavideo)
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputpaidmedia)
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 #[serde(tag = "type")]
 pub enum InputPaidMedia {
     /// The paid media to send is a photo.

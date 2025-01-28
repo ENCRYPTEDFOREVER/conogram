@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -20,17 +20,17 @@ impl_into_future!(LeaveChatRequest<'a>);
 ///Use this method for your bot to leave a group, supergroup or channel. Returns *True* on success.
 #[derive(Clone)]
 pub struct LeaveChatRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: LeaveChatParams,
 }
 
-impl<'a> RequestT for LeaveChatRequest<'a> {
+impl RequestT for LeaveChatRequest<'_> {
     type ParamsType = LeaveChatParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "leaveChat"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -41,7 +41,7 @@ impl<'a> RequestT for LeaveChatRequest<'a> {
     }
 }
 impl<'a> LeaveChatRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
             params: LeaveChatParams {
@@ -58,7 +58,7 @@ impl<'a> LeaveChatRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method for your bot to leave a group, supergroup or channel. Returns *True* on success.
     pub fn leave_chat(&self, chat_id: impl Into<ChatId>) -> LeaveChatRequest {
         LeaveChatRequest::new(self, chat_id)

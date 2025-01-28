@@ -32,18 +32,22 @@ impl InMemoryFile {
         }
     }
 
+    #[must_use]
     pub fn get_attach_name(&self) -> String {
         format!("attach://{}", self.uuid)
     }
 
+    #[must_use]
     pub fn get_uuid_str(&self) -> String {
         self.uuid.to_string()
     }
 
+    #[must_use]
     pub fn get_part(&self) -> Part {
         Part::bytes(self.contents.clone()).file_name(self.filename.clone())
     }
 
+    #[must_use]
     pub fn into_part(self) -> Part {
         Part::bytes(self.contents).file_name(self.filename)
     }
@@ -73,10 +77,12 @@ impl LocalFile {
         }
     }
 
+    #[must_use]
     pub fn get_uuid_str(&self) -> String {
         self.uuid.to_string()
     }
 
+    #[must_use]
     pub fn get_attach_name(&self) -> String {
         format!("attach://{}", self.uuid)
     }
@@ -89,6 +95,7 @@ impl LocalFile {
         File::open(&self.path).await
     }
 
+    #[must_use]
     pub fn get_file_name(&self) -> String {
         if let Some(filename) = &self.filename {
             filename.clone()
@@ -128,6 +135,7 @@ impl InputFile {
         Self::InMemory(InMemoryFile::new(name, data))
     }
 
+    #[must_use]
     pub fn get_attach_name(&self) -> String {
         match self {
             Self::File(f) => f.get_attach_name(),
@@ -136,6 +144,7 @@ impl InputFile {
         }
     }
 
+    #[must_use]
     pub fn get_uuid(&self) -> Option<String> {
         match self {
             Self::File(f) => Some(f.get_uuid_str()),

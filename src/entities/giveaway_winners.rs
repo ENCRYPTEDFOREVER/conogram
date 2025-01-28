@@ -8,7 +8,7 @@ use crate::{
 /// This object represents a message about the completion of a giveaway with public winners.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#giveawaywinners)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct GiveawayWinners {
     /// The chat that created the giveaway
     pub chat: Box<Chat>,

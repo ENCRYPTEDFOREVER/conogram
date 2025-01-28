@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, errors::ConogramError, impl_into_future, request::RequestT,
+    api::Api, errors::ConogramError, impl_into_future, request::RequestT,
     utils::deserialize_utils::is_false,
 };
 
@@ -30,17 +30,17 @@ impl_into_future!(AnswerCallbackQueryRequest<'a>);
 ///Alternatively, the user can be redirected to the specified Game URL. For this option to work, you must first create a game for your bot via [@BotFather](https://t.me/botfather) and accept the terms. Otherwise, you may use links like `t.me/your_bot?start=XXXX` that open your bot with a parameter.
 #[derive(Clone)]
 pub struct AnswerCallbackQueryRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: AnswerCallbackQueryParams,
 }
 
-impl<'a> RequestT for AnswerCallbackQueryRequest<'a> {
+impl RequestT for AnswerCallbackQueryRequest<'_> {
     type ParamsType = AnswerCallbackQueryParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "answerCallbackQuery"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -51,7 +51,7 @@ impl<'a> RequestT for AnswerCallbackQueryRequest<'a> {
     }
 }
 impl<'a> AnswerCallbackQueryRequest<'a> {
-    pub fn new(api: &'a API, callback_query_id: impl Into<String>) -> Self {
+    pub fn new(api: &'a Api, callback_query_id: impl Into<String>) -> Self {
         Self {
             api,
             params: AnswerCallbackQueryParams {
@@ -102,7 +102,7 @@ impl<'a> AnswerCallbackQueryRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to send answers to callback queries sent from [inline keyboards](https://core.telegram.org/bots/features#inline-keyboards). The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, *True* is returned.
     ///
     ///Alternatively, the user can be redirected to the specified Game URL. For this option to work, you must first create a game for your bot via [@BotFather](https://t.me/botfather) and accept the terms. Otherwise, you may use links like `t.me/your_bot?start=XXXX` that open your bot with a parameter.

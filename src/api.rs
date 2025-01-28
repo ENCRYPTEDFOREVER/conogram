@@ -1,4 +1,9 @@
-use std::{fmt::Debug, future::IntoFuture, sync::atomic::AtomicI64, time::Duration};
+use std::{
+    fmt::Debug,
+    future::{Future, IntoFuture},
+    sync::atomic::AtomicI64,
+    time::Duration,
+};
 
 use serde::{de::DeserializeOwned, Serialize};
 
@@ -10,6 +15,7 @@ use crate::{
     },
     errors::{ConogramError, ConogramErrorType, TgApiError},
     methods::{
+        delete_message::DeleteMessageRequest, delete_messages::DeleteMessagesRequest,
         edit_message_caption::EditMessageCaptionRequest, edit_message_text::EditMessageTextRequest,
         send_animation::SendAnimationRequest, send_audio::SendAudioRequest,
         send_contact::SendContactRequest, send_dice::SendDiceRequest,
@@ -36,71 +42,75 @@ macro_rules! set_default_param {
     }
 }
 
-/// Wraps API request into [``API::request_ref(self)``]
+/// Wraps API request into [``Api::request_ref(self)``]
 pub trait WrapRequest {
-    fn wrap<ReturnType>(
-        &self,
-    ) -> impl std::future::Future<Output = Result<ReturnType, ConogramError>>
+    fn wrap(&self) -> impl Future<Output = Result<Self::ReturnType, ConogramError>>
     where
-        for<'a> &'a Self: IntoFuture<Output = Result<ReturnType, ConogramError>>,
-        Self: Sized,
-    {
-        API::request_ref(self)
-    }
-
-    fn wrap_background<ReturnType>(self)
-    //-> impl std::future::Future<Output = Result<ReturnType, ConogramError>>
-    where
-        for<'a> &'a Self: IntoFuture<Output = Result<ReturnType, ConogramError>> + Send + Sync,
-        Self: IntoFuture<Output = Result<ReturnType, ConogramError>> + Send + Sync,
-        Self: Sized + Send + Sync + 'static,
-        ReturnType: Send,
+        Self: RequestT,
+        for<'a> &'a Self: IntoFuture<Output = Result<Self::ReturnType, ConogramError>>,
         for<'a> <&'a Self as IntoFuture>::IntoFuture: Send,
+        Self::ReturnType: std::marker::Send,
     {
-        tokio::spawn(async move {
-            let _ = API::request(self).await;
-        });
+        Api::request_ref(self)
     }
 }
 impl<T> WrapRequest for T {}
 
-#[derive(Clone)]
-pub struct APIConfig {
-    pub token: String,
+pub struct ApiToken(String);
+impl ApiToken {
+    pub(crate) fn leak(&self) -> &str {
+        &self.0
+    }
+}
+impl Debug for ApiToken {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut token_splits = self.0.split(':');
+        f.debug_struct("ApiToken")
+            .field("bot_id", &token_splits.next().unwrap_or("Unknown"))
+            .field(
+                "token",
+                &format!("{}...", &token_splits.next().unwrap_or("Unknown")[..6]),
+            )
+            .finish()
+    }
+}
+
+impl<T: AsRef<str>> From<T> for ApiToken {
+    fn from(value: T) -> Self {
+        Self(value.as_ref().to_string())
+    }
+}
+
+pub struct ApiConfig {
+    pub token: ApiToken,
     pub server_config: ApiServerConfig,
 }
 
-impl APIConfig {
-    pub fn new(bot_token: impl Into<String>, server_config: Option<ApiServerConfig>) -> Self {
+impl ApiConfig {
+    pub fn new(bot_token: impl Into<ApiToken>, server_config: Option<ApiServerConfig>) -> Self {
         Self {
             token: bot_token.into(),
             server_config: server_config.unwrap_or_else(|| ApiServerConfig::remote(false)),
         }
     }
 
-    pub fn remote(bot_token: impl Into<String>, use_test_env: bool) -> Self {
+    pub fn remote(bot_token: impl Into<ApiToken>, use_test_env: bool) -> Self {
         Self::new(bot_token, Some(ApiServerConfig::remote(use_test_env)))
     }
 
     pub fn local(
-        bot_token: impl Into<String>,
+        bot_token: impl Into<ApiToken>,
         server_url: impl Into<String>,
-        port: impl Into<u16>,
         use_test_env: bool,
     ) -> Self {
         Self::new(
             bot_token,
-            Some(ApiServerConfig::new(
-                server_url.into(),
-                port.into(),
-                use_test_env,
-            )),
+            Some(ApiServerConfig::new(server_url.into(), use_test_env)),
         )
     }
 }
 
-pub struct API {
-    config: APIConfig,
+pub struct Api {
     api_client: ApiClient,
 
     allowed_updates: Vec<String>,
@@ -108,23 +118,10 @@ pub struct API {
     polling_timeout: u64,
 }
 
-impl Debug for API {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let mut token_splits = self.config.token.split(':');
-        f.debug_struct("API")
-            .field("bot_id", &token_splits.next().unwrap_or("Unknown"))
-            .field(
-                "token",
-                &format!("{}...", &token_splits.next().unwrap_or("Unknown")[..10]),
-            )
-            .finish_non_exhaustive()
-    }
-}
-
-impl API {
-    pub fn new(config: APIConfig) -> Self {
+impl Api {
+    #[must_use]
+    pub fn new(config: ApiConfig) -> Self {
         Self {
-            config: config.clone(),
             api_client: ApiClient::new(config),
 
             allowed_updates: vec![],
@@ -236,10 +233,13 @@ impl API {
     /// Internal conogram method. Returns ``Ok(false)`` instead of `Err` if the message can't be deleted
     pub async fn delete_message_exp(
         &self,
-        chat_id: impl Into<ChatId>,
-        message_id: impl Into<i64>,
+        chat_id: impl Into<ChatId> + Send,
+        message_id: impl Into<i64> + Send,
     ) -> Result<bool, ConogramError> {
-        let result = Self::request(self.delete_message(chat_id, message_id)).await;
+        // the trait solver is unable to infer the generic types that should be inferred from this argument
+        // this is a known limitation of the trait solver that will be lifted in the future
+        let result =
+            Self::request::<DeleteMessageRequest>(self.delete_message(chat_id, message_id)).await;
         if let Err(err) = &result {
             if let ConogramErrorType::ApiError(_) = &err.error {
                 return Ok(false);
@@ -251,11 +251,14 @@ impl API {
     /// Internal conogram method. Returns ``Ok(false)`` instead of `Err` if one or more of the messages can't be deleted
     pub async fn delete_messages_exp(
         &self,
-        chat_id: impl Into<ChatId>,
-        message_ids: impl IntoIterator<Item = impl Into<i64>>,
+        chat_id: impl Into<ChatId> + Send,
+        message_ids: impl IntoIterator<Item = impl Into<i64>> + Send,
     ) -> Result<bool, ConogramError> {
-        let ids = message_ids.into_iter().map(Into::into).collect::<Vec<_>>();
-        let result = Self::request(self.delete_messages(chat_id, ids)).await;
+        // the trait solver is unable to infer the generic types that should be inferred from this argument
+        // this is a known limitation of the trait solver that will be lifted in the future
+        let result =
+            Self::request_ref::<DeleteMessagesRequest>(&self.delete_messages(chat_id, message_ids))
+                .await;
         if let Err(err) = &result {
             if let ConogramErrorType::ApiError(_) = &err.error {
                 return Ok(false);
@@ -269,11 +272,12 @@ impl API {
         let offset = self
             .get_updates_offset
             .load(std::sync::atomic::Ordering::Relaxed);
+
         let r = self
             .get_updates()
             .allowed_updates(self.allowed_updates.clone())
             .offset(offset)
-            .timeout(self.polling_timeout as i64);
+            .timeout(self.polling_timeout.clamp(0, i64::MAX as u64) as i64);
 
         let updates = r.await?;
         if let Some(last_update) = updates.iter().max_by_key(|update| update.update_id) {
@@ -287,7 +291,7 @@ impl API {
 
     pub async fn method_json<
         ReturnType: DeserializeOwned + std::fmt::Debug,
-        Params: Serialize + std::fmt::Debug,
+        Params: Serialize + Sync + std::fmt::Debug,
     >(
         &self,
         method: &str,
@@ -298,7 +302,7 @@ impl API {
 
     pub async fn method_multipart_form<
         ReturnType: DeserializeOwned + std::fmt::Debug,
-        Params: Serialize + GetFiles + std::fmt::Debug,
+        Params: Serialize + GetFiles + Sync + std::fmt::Debug,
     >(
         &self,
         method: &str,
@@ -307,20 +311,25 @@ impl API {
         self.api_client.method_multipart_form(method, params).await
     }
 
-    /// Same as [`API::request_ref`] but takes `request` by value
-    pub async fn request<Request, ReturnType>(request: Request) -> Result<ReturnType, ConogramError>
+    /// Same as [`Api::request_ref`] but takes `request` by value
+    pub async fn request<Request: RequestT + Send + Sync>(
+        request: Request,
+    ) -> Result<Request::ReturnType, ConogramError>
     where
-        for<'a> &'a Request: IntoFuture<Output = Result<ReturnType, ConogramError>>,
+        for<'a> &'a Request: IntoFuture<Output = Result<Request::ReturnType, ConogramError>> + Send,
+        for<'a> <&'a Request as IntoFuture>::IntoFuture: Send,
+        Request::ReturnType: Send,
     {
-        Self::request_ref(&request).await
+        Self::request_ref::<Request>(&request).await
     }
 
     /// This will make API request and automativally handle some common errors like `RetryAfter`, `BadGateway` and `GatewayTimeout`
-    pub async fn request_ref<Request, ReturnType>(
+    pub async fn request_ref<Request: RequestT + Sync>(
         request: &Request,
-    ) -> Result<ReturnType, ConogramError>
+    ) -> Result<Request::ReturnType, ConogramError>
     where
-        for<'a> &'a Request: IntoFuture<Output = Result<ReturnType, ConogramError>>,
+        for<'a> &'a Request: IntoFuture<Output = Result<Request::ReturnType, ConogramError>>,
+        for<'a> <&'a Request as IntoFuture>::IntoFuture: Send,
     {
         let mut result = request.await;
 

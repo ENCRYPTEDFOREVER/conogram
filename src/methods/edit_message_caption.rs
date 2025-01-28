@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         inline_keyboard_markup::InlineKeyboardMarkup, message::Message,
         message_entity::MessageEntity, misc::chat_id::ChatId,
@@ -44,17 +44,17 @@ impl_into_future!(EditMessageCaptionRequest<'a>);
 ///Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within **48 hours** from the time they were sent.
 #[derive(Clone)]
 pub struct EditMessageCaptionRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: EditMessageCaptionParams,
 }
 
-impl<'a> RequestT for EditMessageCaptionRequest<'a> {
+impl RequestT for EditMessageCaptionRequest<'_> {
     type ParamsType = EditMessageCaptionParams;
     type ReturnType = Option<Message>;
     fn get_name() -> &'static str {
         "editMessageCaption"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -65,7 +65,7 @@ impl<'a> RequestT for EditMessageCaptionRequest<'a> {
     }
 }
 impl<'a> EditMessageCaptionRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: EditMessageCaptionParams {
@@ -149,7 +149,7 @@ impl<'a> EditMessageCaptionRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within **48 hours** from the time they were sent.
     pub fn edit_message_caption(&self) -> EditMessageCaptionRequest {
         EditMessageCaptionRequest::new(self)

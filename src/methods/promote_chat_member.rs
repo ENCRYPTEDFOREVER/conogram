@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT, utils::deserialize_utils::is_false,
 };
 
@@ -51,17 +51,17 @@ impl_into_future!(PromoteChatMemberRequest<'a>);
 ///Use this method to promote or demote a user in a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Pass *False* for all boolean parameters to demote a user. Returns *True* on success.
 #[derive(Clone)]
 pub struct PromoteChatMemberRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: PromoteChatMemberParams,
 }
 
-impl<'a> RequestT for PromoteChatMemberRequest<'a> {
+impl RequestT for PromoteChatMemberRequest<'_> {
     type ParamsType = PromoteChatMemberParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "promoteChatMember"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -72,7 +72,7 @@ impl<'a> RequestT for PromoteChatMemberRequest<'a> {
     }
 }
 impl<'a> PromoteChatMemberRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, user_id: impl Into<i64>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, user_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: PromoteChatMemberParams {
@@ -217,7 +217,7 @@ impl<'a> PromoteChatMemberRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to promote or demote a user in a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Pass *False* for all boolean parameters to demote a user. Returns *True* on success.
     pub fn promote_chat_member(
         &self,

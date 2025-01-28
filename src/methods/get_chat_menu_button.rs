@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::menu_button::MenuButton, errors::ConogramError, impl_into_future,
+    api::Api, entities::menu_button::MenuButton, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -21,17 +21,17 @@ impl_into_future!(GetChatMenuButtonRequest<'a>);
 ///Use this method to get the current value of the bot's menu button in a private chat, or the default menu button. Returns [MenuButton](https://core.telegram.org/bots/api/#menubutton) on success.
 #[derive(Clone)]
 pub struct GetChatMenuButtonRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: GetChatMenuButtonParams,
 }
 
-impl<'a> RequestT for GetChatMenuButtonRequest<'a> {
+impl RequestT for GetChatMenuButtonRequest<'_> {
     type ParamsType = GetChatMenuButtonParams;
     type ReturnType = MenuButton;
     fn get_name() -> &'static str {
         "getChatMenuButton"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -42,7 +42,7 @@ impl<'a> RequestT for GetChatMenuButtonRequest<'a> {
     }
 }
 impl<'a> GetChatMenuButtonRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: GetChatMenuButtonParams {
@@ -59,7 +59,7 @@ impl<'a> GetChatMenuButtonRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to get the current value of the bot's menu button in a private chat, or the default menu button. Returns [MenuButton](https://core.telegram.org/bots/api/#menubutton) on success.
     pub fn get_chat_menu_button(&self) -> GetChatMenuButtonRequest {
         GetChatMenuButtonRequest::new(self)

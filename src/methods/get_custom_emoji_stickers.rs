@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::sticker::Sticker, errors::ConogramError, impl_into_future,
+    api::Api, entities::sticker::Sticker, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -20,17 +20,17 @@ impl_into_future!(GetCustomEmojiStickersRequest<'a>);
 ///Use this method to get information about custom emoji stickers by their identifiers. Returns an Array of [Sticker](https://core.telegram.org/bots/api/#sticker) objects.
 #[derive(Clone)]
 pub struct GetCustomEmojiStickersRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: GetCustomEmojiStickersParams,
 }
 
-impl<'a> RequestT for GetCustomEmojiStickersRequest<'a> {
+impl RequestT for GetCustomEmojiStickersRequest<'_> {
     type ParamsType = GetCustomEmojiStickersParams;
     type ReturnType = Vec<Sticker>;
     fn get_name() -> &'static str {
         "getCustomEmojiStickers"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -42,7 +42,7 @@ impl<'a> RequestT for GetCustomEmojiStickersRequest<'a> {
 }
 impl<'a> GetCustomEmojiStickersRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         custom_emoji_ids: impl IntoIterator<Item = impl Into<String>>,
     ) -> Self {
         Self {
@@ -64,7 +64,7 @@ impl<'a> GetCustomEmojiStickersRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to get information about custom emoji stickers by their identifiers. Returns an Array of [Sticker](https://core.telegram.org/bots/api/#sticker) objects.
     pub fn get_custom_emoji_stickers(
         &self,

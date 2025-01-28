@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, errors::ConogramError, impl_into_future, request::RequestT,
+    api::Api, errors::ConogramError, impl_into_future, request::RequestT,
     utils::deserialize_utils::is_false,
 };
 
@@ -21,17 +21,17 @@ impl_into_future!(DeleteWebhookRequest<'a>);
 ///Use this method to remove webhook integration if you decide to switch back to [getUpdates](https://core.telegram.org/bots/api/#getupdates). Returns *True* on success.
 #[derive(Clone)]
 pub struct DeleteWebhookRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: DeleteWebhookParams,
 }
 
-impl<'a> RequestT for DeleteWebhookRequest<'a> {
+impl RequestT for DeleteWebhookRequest<'_> {
     type ParamsType = DeleteWebhookParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "deleteWebhook"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -42,7 +42,7 @@ impl<'a> RequestT for DeleteWebhookRequest<'a> {
     }
 }
 impl<'a> DeleteWebhookRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: DeleteWebhookParams {
@@ -59,7 +59,7 @@ impl<'a> DeleteWebhookRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to remove webhook integration if you decide to switch back to [getUpdates](https://core.telegram.org/bots/api/#getupdates). Returns *True* on success.
     pub fn delete_webhook(&self) -> DeleteWebhookRequest {
         DeleteWebhookRequest::new(self)

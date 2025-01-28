@@ -3,20 +3,20 @@ use std::fmt::Debug;
 use async_trait::async_trait;
 use serde::{de::DeserializeOwned, Serialize};
 
-use crate::{api::API, entities::misc::input_file::GetFiles, errors::ConogramError};
+use crate::{api::Api, entities::misc::input_file::GetFiles, errors::ConogramError};
 
 #[async_trait]
 pub trait RequestT
 where
     Self: Sized + Send + Sync,
-    Self::ParamsType: Serialize + Debug + Sync,
-    Self::ReturnType: DeserializeOwned + Debug,
+    Self::ParamsType: Serialize + Debug + Send + Sync,
+    Self::ReturnType: DeserializeOwned + Debug + Send + Sync,
 {
     type ParamsType;
     type ReturnType;
 
     fn get_name() -> &'static str;
-    fn get_api_ref(&self) -> &API;
+    fn get_api_ref(&self) -> &Api;
     fn get_params_ref(&self) -> &Self::ParamsType;
     fn is_multipart() -> bool;
 

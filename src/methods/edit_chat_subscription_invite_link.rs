@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{chat_invite_link::ChatInviteLink, misc::chat_id::ChatId},
     errors::ConogramError,
     impl_into_future,
@@ -26,17 +26,17 @@ impl_into_future!(EditChatSubscriptionInviteLinkRequest<'a>);
 ///Use this method to edit a subscription invite link created by the bot. The bot must have the *can\_invite\_users* administrator rights. Returns the edited invite link as a [ChatInviteLink](https://core.telegram.org/bots/api/#chatinvitelink) object.
 #[derive(Clone)]
 pub struct EditChatSubscriptionInviteLinkRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: EditChatSubscriptionInviteLinkParams,
 }
 
-impl<'a> RequestT for EditChatSubscriptionInviteLinkRequest<'a> {
+impl RequestT for EditChatSubscriptionInviteLinkRequest<'_> {
     type ParamsType = EditChatSubscriptionInviteLinkParams;
     type ReturnType = ChatInviteLink;
     fn get_name() -> &'static str {
         "editChatSubscriptionInviteLink"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -47,7 +47,7 @@ impl<'a> RequestT for EditChatSubscriptionInviteLinkRequest<'a> {
     }
 }
 impl<'a> EditChatSubscriptionInviteLinkRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, invite_link: impl Into<String>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, invite_link: impl Into<String>) -> Self {
         Self {
             api,
             params: EditChatSubscriptionInviteLinkParams {
@@ -80,7 +80,7 @@ impl<'a> EditChatSubscriptionInviteLinkRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to edit a subscription invite link created by the bot. The bot must have the *can\_invite\_users* administrator rights. Returns the edited invite link as a [ChatInviteLink](https://core.telegram.org/bots/api/#chatinvitelink) object.
     pub fn edit_chat_subscription_invite_link(
         &self,

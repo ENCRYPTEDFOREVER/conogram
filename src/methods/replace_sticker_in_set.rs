@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         input_sticker::InputSticker,
         misc::input_file::{GetFiles, InputFile},
@@ -36,17 +36,17 @@ impl_into_future_multipart!(ReplaceStickerInSetRequest<'a>);
 ///Use this method to replace an existing sticker in a sticker set with a new one. The method is equivalent to calling [deleteStickerFromSet](https://core.telegram.org/bots/api/#deletestickerfromset), then [addStickerToSet](https://core.telegram.org/bots/api/#addstickertoset), then [setStickerPositionInSet](https://core.telegram.org/bots/api/#setstickerpositioninset). Returns *True* on success.
 #[derive(Clone)]
 pub struct ReplaceStickerInSetRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: ReplaceStickerInSetParams,
 }
 
-impl<'a> RequestT for ReplaceStickerInSetRequest<'a> {
+impl RequestT for ReplaceStickerInSetRequest<'_> {
     type ParamsType = ReplaceStickerInSetParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "replaceStickerInSet"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -58,7 +58,7 @@ impl<'a> RequestT for ReplaceStickerInSetRequest<'a> {
 }
 impl<'a> ReplaceStickerInSetRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         user_id: impl Into<i64>,
         name: impl Into<String>,
         old_sticker: impl Into<String>,
@@ -104,7 +104,7 @@ impl<'a> ReplaceStickerInSetRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to replace an existing sticker in a sticker set with a new one. The method is equivalent to calling [deleteStickerFromSet](https://core.telegram.org/bots/api/#deletestickerfromset), then [addStickerToSet](https://core.telegram.org/bots/api/#addstickertoset), then [setStickerPositionInSet](https://core.telegram.org/bots/api/#setstickerpositioninset). Returns *True* on success.
     pub fn replace_sticker_in_set(
         &self,

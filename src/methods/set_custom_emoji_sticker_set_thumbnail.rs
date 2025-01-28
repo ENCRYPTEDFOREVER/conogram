@@ -5,7 +5,7 @@ use std::{
 
 use serde::Serialize;
 
-use crate::{api::API, errors::ConogramError, impl_into_future, request::RequestT};
+use crate::{api::Api, errors::ConogramError, impl_into_future, request::RequestT};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SetCustomEmojiStickerSetThumbnailParams {
@@ -19,17 +19,17 @@ impl_into_future!(SetCustomEmojiStickerSetThumbnailRequest<'a>);
 ///Use this method to set the thumbnail of a custom emoji sticker set. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetCustomEmojiStickerSetThumbnailRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetCustomEmojiStickerSetThumbnailParams,
 }
 
-impl<'a> RequestT for SetCustomEmojiStickerSetThumbnailRequest<'a> {
+impl RequestT for SetCustomEmojiStickerSetThumbnailRequest<'_> {
     type ParamsType = SetCustomEmojiStickerSetThumbnailParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setCustomEmojiStickerSetThumbnail"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -40,7 +40,7 @@ impl<'a> RequestT for SetCustomEmojiStickerSetThumbnailRequest<'a> {
     }
 }
 impl<'a> SetCustomEmojiStickerSetThumbnailRequest<'a> {
-    pub fn new(api: &'a API, name: impl Into<String>) -> Self {
+    pub fn new(api: &'a Api, name: impl Into<String>) -> Self {
         Self {
             api,
             params: SetCustomEmojiStickerSetThumbnailParams {
@@ -65,7 +65,7 @@ impl<'a> SetCustomEmojiStickerSetThumbnailRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to set the thumbnail of a custom emoji sticker set. Returns *True* on success.
     pub fn set_custom_emoji_sticker_set_thumbnail(
         &self,

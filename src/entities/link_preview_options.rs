@@ -5,7 +5,7 @@ use crate::utils::deserialize_utils::is_false;
 /// Describes the options used for link preview generation.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#linkpreviewoptions)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct LinkPreviewOptions {
     /// *Optional*. *True*, if the link preview is disabled
     #[serde(default, skip_serializing_if = "is_false")]
@@ -30,6 +30,7 @@ pub struct LinkPreviewOptions {
 
 // Divider: all content below this line will be preserved after code regen
 impl LinkPreviewOptions {
+    #[must_use]
     pub fn disabled() -> Self {
         Self {
             is_disabled: true,

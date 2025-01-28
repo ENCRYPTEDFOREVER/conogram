@@ -5,7 +5,7 @@ use crate::entities::reaction_type::ReactionType;
 /// Represents a reaction added to a message along with the number of times it was added.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#reactioncount)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ReactionCount {
     /// Type of the reaction
     #[serde(rename = "type")]

@@ -5,7 +5,7 @@ use crate::entities::{chat::Chat, chat_invite_link::ChatInviteLink, user::User};
 /// Represents a join request sent to a chat.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatjoinrequest)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatJoinRequest {
     /// Chat to which the request was sent
     pub chat: Box<Chat>,
@@ -31,7 +31,7 @@ pub struct ChatJoinRequest {
 // Divider: all content below this line will be preserved after code regen
 
 use crate::{
-    api::API,
+    api::Api,
     methods::{
         approve_chat_join_request::ApproveChatJoinRequestRequest,
         decline_chat_join_request::DeclineChatJoinRequestRequest,
@@ -39,11 +39,11 @@ use crate::{
 };
 
 impl ChatJoinRequest {
-    pub fn approve<'a>(&'a self, api: &'a API) -> ApproveChatJoinRequestRequest<'a> {
+    pub fn approve<'a>(&'a self, api: &'a Api) -> ApproveChatJoinRequestRequest<'a> {
         api.approve_chat_join_request(self.chat.id, self.from.id)
     }
 
-    pub fn decline<'a>(&'a self, api: &'a API) -> DeclineChatJoinRequestRequest<'a> {
+    pub fn decline<'a>(&'a self, api: &'a Api) -> DeclineChatJoinRequestRequest<'a> {
         api.decline_chat_join_request(self.chat.id, self.from.id)
     }
 }

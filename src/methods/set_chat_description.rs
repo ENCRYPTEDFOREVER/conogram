@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -22,17 +22,17 @@ impl_into_future!(SetChatDescriptionRequest<'a>);
 ///Use this method to change the description of a group, a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetChatDescriptionRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetChatDescriptionParams,
 }
 
-impl<'a> RequestT for SetChatDescriptionRequest<'a> {
+impl RequestT for SetChatDescriptionRequest<'_> {
     type ParamsType = SetChatDescriptionParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setChatDescription"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -43,7 +43,7 @@ impl<'a> RequestT for SetChatDescriptionRequest<'a> {
     }
 }
 impl<'a> SetChatDescriptionRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
             params: SetChatDescriptionParams {
@@ -68,7 +68,7 @@ impl<'a> SetChatDescriptionRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to change the description of a group, a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
     pub fn set_chat_description(&self, chat_id: impl Into<ChatId>) -> SetChatDescriptionRequest {
         SetChatDescriptionRequest::new(self, chat_id)

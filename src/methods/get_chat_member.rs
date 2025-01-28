@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{chat_member::ChatMember, misc::chat_id::ChatId},
     errors::ConogramError,
     impl_into_future,
@@ -24,17 +24,17 @@ impl_into_future!(GetChatMemberRequest<'a>);
 ///Use this method to get information about a member of a chat. The method is only guaranteed to work for other users if the bot is an administrator in the chat. Returns a [ChatMember](https://core.telegram.org/bots/api/#chatmember) object on success.
 #[derive(Clone)]
 pub struct GetChatMemberRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: GetChatMemberParams,
 }
 
-impl<'a> RequestT for GetChatMemberRequest<'a> {
+impl RequestT for GetChatMemberRequest<'_> {
     type ParamsType = GetChatMemberParams;
     type ReturnType = ChatMember;
     fn get_name() -> &'static str {
         "getChatMember"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -45,7 +45,7 @@ impl<'a> RequestT for GetChatMemberRequest<'a> {
     }
 }
 impl<'a> GetChatMemberRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, user_id: impl Into<i64>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, user_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: GetChatMemberParams {
@@ -70,7 +70,7 @@ impl<'a> GetChatMemberRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to get information about a member of a chat. The method is only guaranteed to work for other users if the bot is an administrator in the chat. Returns a [ChatMember](https://core.telegram.org/bots/api/#chatmember) object on success.
     pub fn get_chat_member(
         &self,

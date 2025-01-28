@@ -5,7 +5,7 @@ use crate::{entities::user::User, utils::deserialize_utils::is_false};
 /// Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that has some additional privileges.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatmemberadministrator)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatMemberAdministrator {
     /// Information about the user
     pub user: User,

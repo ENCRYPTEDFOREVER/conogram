@@ -5,7 +5,7 @@ use crate::entities::background_type::BackgroundType;
 /// This object represents a chat background.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatbackground)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatBackground {
     /// Type of the background
     #[serde(rename = "type")]

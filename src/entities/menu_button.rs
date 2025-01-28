@@ -12,7 +12,7 @@ use crate::entities::{
 /// * [MenuButtonDefault](https://core.telegram.org/bots/api/#menubuttondefault)
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#menubutton)
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum MenuButton {
     /// Represents a menu button, which opens the bot's list of commands.

@@ -5,7 +5,7 @@ use crate::entities::user::User;
 /// Describes the connection of the bot with a business account.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#businessconnection)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct BusinessConnection {
     /// Unique identifier of the business connection
     pub id: String,

@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 /// The background is a gradient fill.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#backgroundfillgradient)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct BackgroundFillGradient {
     /// Top color of the gradient in the RGB24 format
     pub top_color: i64,

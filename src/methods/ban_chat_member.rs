@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT, utils::deserialize_utils::is_false,
 };
 
@@ -25,17 +25,17 @@ impl_into_future!(BanChatMemberRequest<'a>);
 ///Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless [unbanned](https://core.telegram.org/bots/api/#unbanchatmember) first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
 #[derive(Clone)]
 pub struct BanChatMemberRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: BanChatMemberParams,
 }
 
-impl<'a> RequestT for BanChatMemberRequest<'a> {
+impl RequestT for BanChatMemberRequest<'_> {
     type ParamsType = BanChatMemberParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "banChatMember"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -46,7 +46,7 @@ impl<'a> RequestT for BanChatMemberRequest<'a> {
     }
 }
 impl<'a> BanChatMemberRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, user_id: impl Into<i64>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, user_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: BanChatMemberParams {
@@ -87,7 +87,7 @@ impl<'a> BanChatMemberRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless [unbanned](https://core.telegram.org/bots/api/#unbanchatmember) first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
     pub fn ban_chat_member(
         &self,

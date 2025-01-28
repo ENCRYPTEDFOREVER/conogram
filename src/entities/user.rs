@@ -5,7 +5,7 @@ use crate::utils::deserialize_utils::is_false;
 /// This object represents a Telegram user or bot.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#user)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct User {
     /// Unique identifier for this user or bot. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
     pub id: i64,
@@ -60,6 +60,7 @@ pub struct User {
 // Divider: all content below this line will be preserved after code regen
 
 impl User {
+    #[must_use]
     pub fn get_url(&self) -> String {
         if let Some(username) = &self.username {
             format!("https://t.me/{username}")
@@ -69,6 +70,7 @@ impl User {
         }
     }
 
+    #[must_use]
     pub fn full_name(&self) -> String {
         match &self.last_name {
             Some(last) => format!("{} {}", self.first_name, last),
@@ -76,6 +78,7 @@ impl User {
         }
     }
 
+    #[must_use]
     pub fn mention_html(&self) -> String {
         if let Some(username) = &self.username {
             format!("@{username}")

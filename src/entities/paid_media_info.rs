@@ -5,7 +5,7 @@ use crate::entities::paid_media::PaidMedia;
 /// Describes the paid media added to a message.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#paidmediainfo)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PaidMediaInfo {
     /// The number of Telegram Stars that must be paid to buy access to the media
     pub star_count: i64,

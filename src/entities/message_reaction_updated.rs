@@ -5,7 +5,7 @@ use crate::entities::{chat::Chat, reaction_type::ReactionType, user::User};
 /// This object represents a change of a reaction on a message performed by a user.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#messagereactionupdated)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct MessageReactionUpdated {
     /// The chat containing the message the user reacted to
     pub chat: Box<Chat>,

@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 /// Represents an issue with the front side of a document. The error is considered resolved when the file with the front side of the document changes.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrorfrontside)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PassportElementErrorFrontSide {
     /// The section of the user's Telegram Passport which has the issue, one of “passport”, “driver\_license”, “identity\_card”, “internal\_passport”
     #[serde(rename = "type")]
@@ -17,7 +17,7 @@ pub struct PassportElementErrorFrontSide {
 }
 
 /// The section of the user's Telegram Passport which has the issue, one of “passport”, “driver\_license”, “identity\_card”, “internal\_passport”
-#[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub enum PassportElementErrorFrontSideType {
     /// `passport`
     #[default]

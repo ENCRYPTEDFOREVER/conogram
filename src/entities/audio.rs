@@ -5,7 +5,7 @@ use crate::entities::photo_size::PhotoSize;
 /// This object represents an audio file to be treated as music by the Telegram clients.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#audio)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Audio {
     /// Identifier for this file, which can be used to download or reuse the file
     pub file_id: String,

@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         inline_keyboard_markup::InlineKeyboardMarkup, message::Message,
         reply_parameters::ReplyParameters,
@@ -44,17 +44,17 @@ impl_into_future!(SendGameRequest<'a>);
 ///Use this method to send a game. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
 #[derive(Clone)]
 pub struct SendGameRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SendGameParams,
 }
 
-impl<'a> RequestT for SendGameRequest<'a> {
+impl RequestT for SendGameRequest<'_> {
     type ParamsType = SendGameParams;
     type ReturnType = Message;
     fn get_name() -> &'static str {
         "sendGame"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -65,7 +65,7 @@ impl<'a> RequestT for SendGameRequest<'a> {
     }
 }
 impl<'a> SendGameRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<i64>, game_short_name: impl Into<String>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<i64>, game_short_name: impl Into<String>) -> Self {
         Self {
             api,
             params: SendGameParams {
@@ -154,7 +154,7 @@ impl<'a> SendGameRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to send a game. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_game(
         &self,

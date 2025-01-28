@@ -29,6 +29,7 @@ pub struct StickerSet {
 
 // Divider: all content below this line will be preserved after code regen
 impl StickerSet {
+    #[must_use]
     pub fn get_url(&self) -> String {
         format!("https://t.me/addstickers/{}", self.name)
     }

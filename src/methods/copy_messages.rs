@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{message_id::MessageId, misc::chat_id::ChatId},
     errors::ConogramError,
     impl_into_future,
@@ -34,17 +34,17 @@ impl_into_future!(CopyMessagesRequest<'a>);
 ///Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz [poll](https://core.telegram.org/bots/api/#poll) can be copied only if the value of the field *correct\_option\_id* is known to the bot. The method is analogous to the method [forwardMessages](https://core.telegram.org/bots/api/#forwardmessages), but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent messages is returned.
 #[derive(Clone)]
 pub struct CopyMessagesRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: CopyMessagesParams,
 }
 
-impl<'a> RequestT for CopyMessagesRequest<'a> {
+impl RequestT for CopyMessagesRequest<'_> {
     type ParamsType = CopyMessagesParams;
     type ReturnType = Vec<MessageId>;
     fn get_name() -> &'static str {
         "copyMessages"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -56,7 +56,7 @@ impl<'a> RequestT for CopyMessagesRequest<'a> {
 }
 impl<'a> CopyMessagesRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
         from_chat_id: impl Into<ChatId>,
         message_ids: impl IntoIterator<Item = impl Into<i64>>,
@@ -125,7 +125,7 @@ impl<'a> CopyMessagesRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz [poll](https://core.telegram.org/bots/api/#poll) can be copied only if the value of the field *correct\_option\_id* is known to the bot. The method is analogous to the method [forwardMessages](https://core.telegram.org/bots/api/#forwardmessages), but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent messages is returned.
     pub fn copy_messages(
         &self,

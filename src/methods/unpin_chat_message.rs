@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -24,17 +24,17 @@ impl_into_future!(UnpinChatMessageRequest<'a>);
 ///Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can\_pin\_messages' administrator right in a supergroup or 'can\_edit\_messages' administrator right in a channel. Returns *True* on success.
 #[derive(Clone)]
 pub struct UnpinChatMessageRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: UnpinChatMessageParams,
 }
 
-impl<'a> RequestT for UnpinChatMessageRequest<'a> {
+impl RequestT for UnpinChatMessageRequest<'_> {
     type ParamsType = UnpinChatMessageParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "unpinChatMessage"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -45,7 +45,7 @@ impl<'a> RequestT for UnpinChatMessageRequest<'a> {
     }
 }
 impl<'a> UnpinChatMessageRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
             params: UnpinChatMessageParams {
@@ -78,7 +78,7 @@ impl<'a> UnpinChatMessageRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can\_pin\_messages' administrator right in a supergroup or 'can\_edit\_messages' administrator right in a channel. Returns *True* on success.
     pub fn unpin_chat_message(&self, chat_id: impl Into<ChatId>) -> UnpinChatMessageRequest {
         UnpinChatMessageRequest::new(self, chat_id)

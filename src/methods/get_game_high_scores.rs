@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::game_high_score::GameHighScore, errors::ConogramError, impl_into_future,
+    api::Api, entities::game_high_score::GameHighScore, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -28,17 +28,17 @@ impl_into_future!(GetGameHighScoresRequest<'a>);
 ///This method will currently return scores for the target user, plus two of their closest neighbors on each side. Will also return the top three users if the user and their neighbors are not among them. Please note that this behavior is subject to change.
 #[derive(Clone)]
 pub struct GetGameHighScoresRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: GetGameHighScoresParams,
 }
 
-impl<'a> RequestT for GetGameHighScoresRequest<'a> {
+impl RequestT for GetGameHighScoresRequest<'_> {
     type ParamsType = GetGameHighScoresParams;
     type ReturnType = Vec<GameHighScore>;
     fn get_name() -> &'static str {
         "getGameHighScores"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -49,7 +49,7 @@ impl<'a> RequestT for GetGameHighScoresRequest<'a> {
     }
 }
 impl<'a> GetGameHighScoresRequest<'a> {
-    pub fn new(api: &'a API, user_id: impl Into<i64>) -> Self {
+    pub fn new(api: &'a Api, user_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: GetGameHighScoresParams {
@@ -90,7 +90,7 @@ impl<'a> GetGameHighScoresRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to get data for high score tables. Will return the score of the specified user and several of their neighbors in a game. Returns an Array of [GameHighScore](https://core.telegram.org/bots/api/#gamehighscore) objects.
     ///
     ///This method will currently return scores for the target user, plus two of their closest neighbors on each side. Will also return the top three users if the user and their neighbors are not among them. Please note that this behavior is subject to change.

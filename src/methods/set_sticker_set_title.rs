@@ -5,7 +5,7 @@ use std::{
 
 use serde::Serialize;
 
-use crate::{api::API, errors::ConogramError, impl_into_future, request::RequestT};
+use crate::{api::Api, errors::ConogramError, impl_into_future, request::RequestT};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SetStickerSetTitleParams {
@@ -18,17 +18,17 @@ impl_into_future!(SetStickerSetTitleRequest<'a>);
 ///Use this method to set the title of a created sticker set. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetStickerSetTitleRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetStickerSetTitleParams,
 }
 
-impl<'a> RequestT for SetStickerSetTitleRequest<'a> {
+impl RequestT for SetStickerSetTitleRequest<'_> {
     type ParamsType = SetStickerSetTitleParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setStickerSetTitle"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -39,7 +39,7 @@ impl<'a> RequestT for SetStickerSetTitleRequest<'a> {
     }
 }
 impl<'a> SetStickerSetTitleRequest<'a> {
-    pub fn new(api: &'a API, name: impl Into<String>, title: impl Into<String>) -> Self {
+    pub fn new(api: &'a Api, name: impl Into<String>, title: impl Into<String>) -> Self {
         Self {
             api,
             params: SetStickerSetTitleParams {
@@ -64,7 +64,7 @@ impl<'a> SetStickerSetTitleRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to set the title of a created sticker set. Returns *True* on success.
     pub fn set_sticker_set_title(
         &self,

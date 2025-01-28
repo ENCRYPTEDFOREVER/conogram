@@ -5,7 +5,7 @@ use std::{
 
 use serde::Serialize;
 
-use crate::{api::API, errors::ConogramError, impl_into_future, request::RequestT};
+use crate::{api::Api, errors::ConogramError, impl_into_future, request::RequestT};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SetStickerEmojiListParams {
@@ -18,17 +18,17 @@ impl_into_future!(SetStickerEmojiListRequest<'a>);
 ///Use this method to change the list of emoji assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetStickerEmojiListRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetStickerEmojiListParams,
 }
 
-impl<'a> RequestT for SetStickerEmojiListRequest<'a> {
+impl RequestT for SetStickerEmojiListRequest<'_> {
     type ParamsType = SetStickerEmojiListParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setStickerEmojiList"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -40,7 +40,7 @@ impl<'a> RequestT for SetStickerEmojiListRequest<'a> {
 }
 impl<'a> SetStickerEmojiListRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         sticker: impl Into<String>,
         emoji_list: impl IntoIterator<Item = impl Into<String>>,
     ) -> Self {
@@ -68,7 +68,7 @@ impl<'a> SetStickerEmojiListRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to change the list of emoji assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns *True* on success.
     pub fn set_sticker_emoji_list(
         &self,

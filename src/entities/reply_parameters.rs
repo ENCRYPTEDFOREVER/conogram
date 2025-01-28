@@ -8,7 +8,7 @@ use crate::{
 /// Describes reply parameters for the message that is being sent.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#replyparameters)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ReplyParameters {
     /// Identifier of the message that will be replied to in the current chat, or in the chat *chat\_id* if it is specified
     pub message_id: i64,

@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -30,17 +30,17 @@ impl_into_future!(DeleteMessageRequest<'a>);
 ///Returns *True* on success.
 #[derive(Clone)]
 pub struct DeleteMessageRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: DeleteMessageParams,
 }
 
-impl<'a> RequestT for DeleteMessageRequest<'a> {
+impl RequestT for DeleteMessageRequest<'_> {
     type ParamsType = DeleteMessageParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "deleteMessage"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -51,7 +51,7 @@ impl<'a> RequestT for DeleteMessageRequest<'a> {
     }
 }
 impl<'a> DeleteMessageRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, message_id: impl Into<i64>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, message_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: DeleteMessageParams {
@@ -76,7 +76,7 @@ impl<'a> DeleteMessageRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to delete a message, including service messages, with the following limitations:  
     ///\- A message can only be deleted if it was sent less than 48 hours ago.  
     ///\- Service messages about a supergroup, channel, or forum topic creation can't be deleted.  

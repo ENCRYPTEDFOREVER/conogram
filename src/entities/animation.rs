@@ -5,7 +5,7 @@ use crate::entities::photo_size::PhotoSize;
 /// This object represents an animation file (GIF or H.264/MPEG-4 AVC video without sound).
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#animation)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Animation {
     /// Identifier for this file, which can be used to download or reuse the file
     pub file_id: String,

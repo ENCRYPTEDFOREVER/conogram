@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::message::Message, errors::ConogramError, impl_into_future,
+    api::Api, entities::message::Message, errors::ConogramError, impl_into_future,
     request::RequestT, utils::deserialize_utils::is_false,
 };
 
@@ -31,17 +31,17 @@ impl_into_future!(SetGameScoreRequest<'a>);
 ///Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Returns an error, if the new score is not greater than the user's current score in the chat and *force* is *False*.
 #[derive(Clone)]
 pub struct SetGameScoreRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetGameScoreParams,
 }
 
-impl<'a> RequestT for SetGameScoreRequest<'a> {
+impl RequestT for SetGameScoreRequest<'_> {
     type ParamsType = SetGameScoreParams;
     type ReturnType = Option<Message>;
     fn get_name() -> &'static str {
         "setGameScore"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -52,7 +52,7 @@ impl<'a> RequestT for SetGameScoreRequest<'a> {
     }
 }
 impl<'a> SetGameScoreRequest<'a> {
-    pub fn new(api: &'a API, user_id: impl Into<i64>, score: impl Into<i64>) -> Self {
+    pub fn new(api: &'a Api, user_id: impl Into<i64>, score: impl Into<i64>) -> Self {
         Self {
             api,
             params: SetGameScoreParams {
@@ -117,7 +117,7 @@ impl<'a> SetGameScoreRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Returns an error, if the new score is not greater than the user's current score in the chat and *force* is *False*.
     pub fn set_game_score(
         &self,

@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -20,17 +20,17 @@ impl_into_future!(GetChatMemberCountRequest<'a>);
 ///Use this method to get the number of members in a chat. Returns *Int* on success.
 #[derive(Clone)]
 pub struct GetChatMemberCountRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: GetChatMemberCountParams,
 }
 
-impl<'a> RequestT for GetChatMemberCountRequest<'a> {
+impl RequestT for GetChatMemberCountRequest<'_> {
     type ParamsType = GetChatMemberCountParams;
     type ReturnType = i64;
     fn get_name() -> &'static str {
         "getChatMemberCount"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -41,7 +41,7 @@ impl<'a> RequestT for GetChatMemberCountRequest<'a> {
     }
 }
 impl<'a> GetChatMemberCountRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
             params: GetChatMemberCountParams {
@@ -58,7 +58,7 @@ impl<'a> GetChatMemberCountRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to get the number of members in a chat. Returns *Int* on success.
     pub fn get_chat_member_count(&self, chat_id: impl Into<ChatId>) -> GetChatMemberCountRequest {
         GetChatMemberCountRequest::new(self, chat_id)

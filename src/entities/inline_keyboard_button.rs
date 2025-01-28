@@ -11,7 +11,7 @@ use crate::{
 /// This object represents one button of an inline keyboard. Exactly one of the optional fields must be used to specify type of the button.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inlinekeyboardbutton)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct InlineKeyboardButton {
     /// Label text on the button
     pub text: String,

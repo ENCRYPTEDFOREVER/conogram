@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 /// This object represents a phone contact.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#contact)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Contact {
     /// Contact's phone number
     pub phone_number: String,

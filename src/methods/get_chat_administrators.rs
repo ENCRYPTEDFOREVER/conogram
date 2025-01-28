@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{chat_member::ChatMember, misc::chat_id::ChatId},
     errors::ConogramError,
     impl_into_future,
@@ -23,17 +23,17 @@ impl_into_future!(GetChatAdministratorsRequest<'a>);
 ///Use this method to get a list of administrators in a chat, which aren't bots. Returns an Array of [ChatMember](https://core.telegram.org/bots/api/#chatmember) objects.
 #[derive(Clone)]
 pub struct GetChatAdministratorsRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: GetChatAdministratorsParams,
 }
 
-impl<'a> RequestT for GetChatAdministratorsRequest<'a> {
+impl RequestT for GetChatAdministratorsRequest<'_> {
     type ParamsType = GetChatAdministratorsParams;
     type ReturnType = Vec<ChatMember>;
     fn get_name() -> &'static str {
         "getChatAdministrators"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -44,7 +44,7 @@ impl<'a> RequestT for GetChatAdministratorsRequest<'a> {
     }
 }
 impl<'a> GetChatAdministratorsRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
             params: GetChatAdministratorsParams {
@@ -61,7 +61,7 @@ impl<'a> GetChatAdministratorsRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to get a list of administrators in a chat, which aren't bots. Returns an Array of [ChatMember](https://core.telegram.org/bots/api/#chatmember) objects.
     pub fn get_chat_administrators(
         &self,

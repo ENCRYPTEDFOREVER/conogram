@@ -18,7 +18,7 @@ use crate::entities::{
 /// * [InputMediaVideo](https://core.telegram.org/bots/api/#inputmediavideo)
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputmedia)
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 #[serde(tag = "type")]
 pub enum InputMedia {
     /// Represents an animation file (GIF or H.264/MPEG-4 AVC video without sound) to be sent.

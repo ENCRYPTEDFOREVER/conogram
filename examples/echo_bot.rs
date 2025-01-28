@@ -1,13 +1,12 @@
 use conogram::{
-    api::{APIConfig, API},
+    api::{Api, ApiConfig},
     entities::update::AllowedUpdates,
 };
 
 fn main() {
     let bot_token = "123456:AABBCCDDEEFF";
-    let api_config = APIConfig::remote(bot_token, false);
-
-    let api = API::new(api_config);
+    let api_config = ApiConfig::remote(bot_token, false);
+    let api = Api::new(api_config);
 
     let rt = match tokio::runtime::Builder::new_current_thread()
         .enable_all()
@@ -26,7 +25,7 @@ fn main() {
     }
 }
 
-async fn run_bot(mut api: API) -> Result<(), conogram::errors::ConogramError> {
+async fn run_bot(mut api: Api) -> Result<(), conogram::errors::ConogramError> {
     api.set_allowed_updates(vec![AllowedUpdates::Message]);
 
     loop {

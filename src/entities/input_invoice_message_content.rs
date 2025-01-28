@@ -5,7 +5,7 @@ use crate::{entities::labeled_price::LabeledPrice, utils::deserialize_utils::is_
 /// Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of an invoice message to be sent as the result of an inline query.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputinvoicemessagecontent)
-#[derive(Debug, Clone, Default, PartialEq, Serialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
 pub struct InputInvoiceMessageContent {
     /// Product name, 1-32 characters
     pub title: String,

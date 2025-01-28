@@ -5,7 +5,7 @@ use crate::entities::user::User;
 /// Represents an invite link for a chat.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatinvitelink)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatInviteLink {
     /// The invite link. If the link was created by another chat administrator, then the second part of the link will be replaced with “…”.
     pub invite_link: String,
@@ -50,12 +50,12 @@ pub struct ChatInviteLink {
 // Divider: all content below this line will be preserved after code regen
 
 use super::misc::chat_id::ChatId;
-use crate::{api::API, methods::revoke_chat_invite_link::RevokeChatInviteLinkRequest};
+use crate::{api::Api, methods::revoke_chat_invite_link::RevokeChatInviteLinkRequest};
 
 impl ChatInviteLink {
     pub fn revoke<'a>(
         &'a self,
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
     ) -> RevokeChatInviteLinkRequest<'a> {
         api.revoke_chat_invite_link(chat_id.into(), &self.invite_link)

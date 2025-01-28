@@ -5,7 +5,7 @@ use crate::entities::photo_size::PhotoSize;
 /// This object represents a video file.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#video)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Video {
     /// Identifier for this file, which can be used to download or reuse the file
     pub file_id: String,

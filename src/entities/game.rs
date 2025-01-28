@@ -5,7 +5,7 @@ use crate::entities::{animation::Animation, message_entity::MessageEntity, photo
 /// This object represents a game. Use BotFather to create and edit games, their short names will act as unique identifiers.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#game)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Game {
     /// Title of the game
     pub title: String,

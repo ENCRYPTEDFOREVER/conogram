@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{chat_full_info::ChatFullInfo, misc::chat_id::ChatId},
     errors::ConogramError,
     impl_into_future,
@@ -23,17 +23,17 @@ impl_into_future!(GetChatRequest<'a>);
 ///Use this method to get up-to-date information about the chat. Returns a [ChatFullInfo](https://core.telegram.org/bots/api/#chatfullinfo) object on success.
 #[derive(Clone)]
 pub struct GetChatRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: GetChatParams,
 }
 
-impl<'a> RequestT for GetChatRequest<'a> {
+impl RequestT for GetChatRequest<'_> {
     type ParamsType = GetChatParams;
     type ReturnType = ChatFullInfo;
     fn get_name() -> &'static str {
         "getChat"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -44,7 +44,7 @@ impl<'a> RequestT for GetChatRequest<'a> {
     }
 }
 impl<'a> GetChatRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
             params: GetChatParams {
@@ -61,7 +61,7 @@ impl<'a> GetChatRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to get up-to-date information about the chat. Returns a [ChatFullInfo](https://core.telegram.org/bots/api/#chatfullinfo) object on success.
     pub fn get_chat(&self, chat_id: impl Into<ChatId>) -> GetChatRequest {
         GetChatRequest::new(self, chat_id)

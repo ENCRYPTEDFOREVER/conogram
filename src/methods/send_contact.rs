@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         message::Message,
         misc::{chat_id::ChatId, reply_markup::ReplyMarkup},
@@ -50,17 +50,17 @@ impl_into_future!(SendContactRequest<'a>);
 ///Use this method to send phone contacts. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
 #[derive(Clone)]
 pub struct SendContactRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SendContactParams,
 }
 
-impl<'a> RequestT for SendContactRequest<'a> {
+impl RequestT for SendContactRequest<'_> {
     type ParamsType = SendContactParams;
     type ReturnType = Message;
     fn get_name() -> &'static str {
         "sendContact"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -72,7 +72,7 @@ impl<'a> RequestT for SendContactRequest<'a> {
 }
 impl<'a> SendContactRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
         phone_number: impl Into<String>,
         first_name: impl Into<String>,
@@ -189,7 +189,7 @@ impl<'a> SendContactRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to send phone contacts. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_contact(
         &self,

@@ -5,7 +5,7 @@ use crate::{entities::chat::Chat, utils::deserialize_utils::is_false};
 /// This object represents a message about a scheduled giveaway.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#giveaway)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Giveaway {
     /// The list of chats which the user must join to participate in the giveaway
     pub chats: Vec<Chat>,

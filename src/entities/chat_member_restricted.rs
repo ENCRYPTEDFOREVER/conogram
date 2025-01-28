@@ -5,7 +5,7 @@ use crate::entities::user::User;
 /// Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that is under certain restrictions in the chat. Supergroups only.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatmemberrestricted)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatMemberRestricted {
     /// Information about the user
     pub user: User,
@@ -63,6 +63,7 @@ pub struct ChatMemberRestricted {
 use super::chat_permissions::ChatPermissions;
 
 impl ChatMemberRestricted {
+    #[must_use]
     pub const fn permissions(&self) -> ChatPermissions {
         ChatPermissions {
             can_send_messages: self.can_send_messages,

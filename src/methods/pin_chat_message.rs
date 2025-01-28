@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT, utils::deserialize_utils::is_false,
 };
 
@@ -25,17 +25,17 @@ impl_into_future!(PinChatMessageRequest<'a>);
 ///Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can\_pin\_messages' administrator right in a supergroup or 'can\_edit\_messages' administrator right in a channel. Returns *True* on success.
 #[derive(Clone)]
 pub struct PinChatMessageRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: PinChatMessageParams,
 }
 
-impl<'a> RequestT for PinChatMessageRequest<'a> {
+impl RequestT for PinChatMessageRequest<'_> {
     type ParamsType = PinChatMessageParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "pinChatMessage"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -46,7 +46,7 @@ impl<'a> RequestT for PinChatMessageRequest<'a> {
     }
 }
 impl<'a> PinChatMessageRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, message_id: impl Into<i64>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, message_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: PinChatMessageParams {
@@ -87,7 +87,7 @@ impl<'a> PinChatMessageRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can\_pin\_messages' administrator right in a supergroup or 'can\_edit\_messages' administrator right in a channel. Returns *True* on success.
     pub fn pin_chat_message(
         &self,

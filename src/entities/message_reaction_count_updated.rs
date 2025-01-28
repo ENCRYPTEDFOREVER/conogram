@@ -5,7 +5,7 @@ use crate::entities::{chat::Chat, reaction_count::ReactionCount};
 /// This object represents reaction changes on a message with anonymous reactions.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#messagereactioncountupdated)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct MessageReactionCountUpdated {
     /// The chat containing the message
     pub chat: Box<Chat>,

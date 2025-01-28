@@ -5,7 +5,7 @@ use std::{
 
 use serde::Serialize;
 
-use crate::{api::API, errors::ConogramError, impl_into_future, request::RequestT};
+use crate::{api::Api, errors::ConogramError, impl_into_future, request::RequestT};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct SetMyNameParams {
@@ -20,17 +20,17 @@ impl_into_future!(SetMyNameRequest<'a>);
 ///Use this method to change the bot's name. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetMyNameRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetMyNameParams,
 }
 
-impl<'a> RequestT for SetMyNameRequest<'a> {
+impl RequestT for SetMyNameRequest<'_> {
     type ParamsType = SetMyNameParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setMyName"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -41,7 +41,7 @@ impl<'a> RequestT for SetMyNameRequest<'a> {
     }
 }
 impl<'a> SetMyNameRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: SetMyNameParams {
@@ -66,7 +66,7 @@ impl<'a> SetMyNameRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to change the bot's name. Returns *True* on success.
     pub fn set_my_name(&self) -> SetMyNameRequest {
         SetMyNameRequest::new(self)

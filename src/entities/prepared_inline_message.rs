@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 /// Describes an inline message to be sent by a user of a Mini App.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#preparedinlinemessage)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PreparedInlineMessage {
     /// Unique identifier of the prepared message
     pub id: String,

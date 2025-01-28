@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         message::Message,
         misc::{chat_id::ChatId, reply_markup::ReplyMarkup},
@@ -56,17 +56,17 @@ impl_into_future!(SendVenueRequest<'a>);
 ///Use this method to send information about a venue. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
 #[derive(Clone)]
 pub struct SendVenueRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SendVenueParams,
 }
 
-impl<'a> RequestT for SendVenueRequest<'a> {
+impl RequestT for SendVenueRequest<'_> {
     type ParamsType = SendVenueParams;
     type ReturnType = Message;
     fn get_name() -> &'static str {
         "sendVenue"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -78,7 +78,7 @@ impl<'a> RequestT for SendVenueRequest<'a> {
 }
 impl<'a> SendVenueRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
         latitude: impl Into<f64>,
         longitude: impl Into<f64>,
@@ -229,7 +229,7 @@ impl<'a> SendVenueRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to send information about a venue. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_venue(
         &self,

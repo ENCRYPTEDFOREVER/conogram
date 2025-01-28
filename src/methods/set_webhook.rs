@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::misc::input_file::{GetFiles, InputFile},
     errors::ConogramError,
     impl_into_future_multipart,
@@ -47,17 +47,17 @@ impl_into_future_multipart!(SetWebhookRequest<'a>);
 ///If you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter *secret\_token*. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the secret token as content.
 #[derive(Clone)]
 pub struct SetWebhookRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetWebhookParams,
 }
 
-impl<'a> RequestT for SetWebhookRequest<'a> {
+impl RequestT for SetWebhookRequest<'_> {
     type ParamsType = SetWebhookParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setWebhook"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -68,7 +68,7 @@ impl<'a> RequestT for SetWebhookRequest<'a> {
     }
 }
 impl<'a> SetWebhookRequest<'a> {
-    pub fn new(api: &'a API, url: impl Into<String>) -> Self {
+    pub fn new(api: &'a Api, url: impl Into<String>) -> Self {
         Self {
             api,
             params: SetWebhookParams {
@@ -137,7 +137,7 @@ impl<'a> SetWebhookRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized [Update](https://core.telegram.org/bots/api/#update). In case of an unsuccessful request, we will give up after a reasonable amount of attempts. Returns *True* on success.
     ///
     ///If you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter *secret\_token*. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the secret token as content.

@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::shipping_option::ShippingOption, errors::ConogramError, impl_into_future,
+    api::Api, entities::shipping_option::ShippingOption, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -25,17 +25,17 @@ impl_into_future!(AnswerShippingQueryRequest<'a>);
 ///If you sent an invoice requesting a shipping address and the parameter *is\_flexible* was specified, the Bot API will send an [Update](https://core.telegram.org/bots/api/#update) with a *shipping\_query* field to the bot. Use this method to reply to shipping queries. On success, *True* is returned.
 #[derive(Clone)]
 pub struct AnswerShippingQueryRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: AnswerShippingQueryParams,
 }
 
-impl<'a> RequestT for AnswerShippingQueryRequest<'a> {
+impl RequestT for AnswerShippingQueryRequest<'_> {
     type ParamsType = AnswerShippingQueryParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "answerShippingQuery"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -46,7 +46,7 @@ impl<'a> RequestT for AnswerShippingQueryRequest<'a> {
     }
 }
 impl<'a> AnswerShippingQueryRequest<'a> {
-    pub fn new(api: &'a API, shipping_query_id: impl Into<String>, ok: impl Into<bool>) -> Self {
+    pub fn new(api: &'a Api, shipping_query_id: impl Into<String>, ok: impl Into<bool>) -> Self {
         Self {
             api,
             params: AnswerShippingQueryParams {
@@ -90,7 +90,7 @@ impl<'a> AnswerShippingQueryRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///If you sent an invoice requesting a shipping address and the parameter *is\_flexible* was specified, the Bot API will send an [Update](https://core.telegram.org/bots/api/#update) with a *shipping\_query* field to the bot. Use this method to reply to shipping queries. On success, *True* is returned.
     pub fn answer_shipping_query(
         &self,

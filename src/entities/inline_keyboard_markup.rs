@@ -5,7 +5,7 @@ use crate::entities::inline_keyboard_button::InlineKeyboardButton;
 /// This object represents an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards) that appears right next to the message it belongs to.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inlinekeyboardmarkup)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct InlineKeyboardMarkup {
     /// Array of button rows, each represented by an Array of [InlineKeyboardButton](https://core.telegram.org/bots/api/#inlinekeyboardbutton) objects
     pub inline_keyboard: Vec<Vec<InlineKeyboardButton>>,
@@ -20,6 +20,7 @@ impl InlineKeyboardMarkup {
         }
     }
 
+    #[must_use]
     pub const fn empty() -> Self {
         Self {
             inline_keyboard: vec![],

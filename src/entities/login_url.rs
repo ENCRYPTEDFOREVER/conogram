@@ -9,7 +9,7 @@ use crate::utils::deserialize_utils::is_false;
 /// Sample bot: [@discussbot](https://t.me/discussbot)
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#loginurl)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct LoginUrl {
     /// An HTTPS URL to be opened with user authorization data added to the query string when the button is pressed. If the user refuses to provide authorization data, the original URL without information about the user will be opened. The data added is the same as described in [Receiving authorization data](https://core.telegram.org/widgets/login#receiving-authorization-data).  
     ///

@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 /// This object represents a shipping address.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#shippingaddress)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ShippingAddress {
     /// Two-letter [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code
     pub country_code: String,

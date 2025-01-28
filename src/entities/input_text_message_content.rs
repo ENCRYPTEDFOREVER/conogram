@@ -5,7 +5,7 @@ use crate::entities::{link_preview_options::LinkPreviewOptions, message_entity::
 /// Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a text message to be sent as the result of an inline query.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputtextmessagecontent)
-#[derive(Debug, Clone, Default, PartialEq, Serialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
 pub struct InputTextMessageContent {
     /// Text of the message to be sent, 1-4096 characters
     pub message_text: String,

@@ -5,7 +5,7 @@ use crate::{entities::keyboard_button::KeyboardButton, utils::deserialize_utils:
 /// This object represents a [custom keyboard](https://core.telegram.org/bots/features#keyboards) with reply options (see [Introduction to bots](https://core.telegram.org/bots/features#keyboards) for details and examples). Not supported in channels and for messages sent on behalf of a Telegram Business account.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#replykeyboardmarkup)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ReplyKeyboardMarkup {
     /// Array of button rows, each represented by an Array of [KeyboardButton](https://core.telegram.org/bots/api/#keyboardbutton) objects
     pub keyboard: Vec<Vec<KeyboardButton>>,

@@ -12,7 +12,7 @@ use crate::entities::{
 /// * [PaidMediaVideo](https://core.telegram.org/bots/api/#paidmediavideo)
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#paidmedia)
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum PaidMedia {
     /// The paid media isn't available before the payment.

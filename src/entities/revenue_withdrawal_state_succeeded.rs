@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 /// The withdrawal succeeded.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#revenuewithdrawalstatesucceeded)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct RevenueWithdrawalStateSucceeded {
     /// Date the withdrawal was completed in Unix time
     pub date: i64,

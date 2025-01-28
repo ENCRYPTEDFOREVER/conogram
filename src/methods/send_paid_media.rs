@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         input_paid_media::InputPaidMedia,
         message::Message,
@@ -67,17 +67,17 @@ impl_into_future_multipart!(SendPaidMediaRequest<'a>);
 ///Use this method to send paid media. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
 #[derive(Clone)]
 pub struct SendPaidMediaRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SendPaidMediaParams,
 }
 
-impl<'a> RequestT for SendPaidMediaRequest<'a> {
+impl RequestT for SendPaidMediaRequest<'_> {
     type ParamsType = SendPaidMediaParams;
     type ReturnType = Message;
     fn get_name() -> &'static str {
         "sendPaidMedia"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -89,7 +89,7 @@ impl<'a> RequestT for SendPaidMediaRequest<'a> {
 }
 impl<'a> SendPaidMediaRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
         star_count: impl Into<i64>,
         media: impl IntoIterator<Item = impl Into<InputPaidMedia>>,
@@ -217,7 +217,7 @@ impl<'a> SendPaidMediaRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to send paid media. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
     pub fn send_paid_media(
         &self,

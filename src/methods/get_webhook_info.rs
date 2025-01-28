@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::webhook_info::WebhookInfo, errors::ConogramError, impl_into_future,
+    api::Api, entities::webhook_info::WebhookInfo, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -18,17 +18,17 @@ impl_into_future!(GetWebhookInfoRequest<'a>);
 ///Use this method to get current webhook status. Requires no parameters. On success, returns a [WebhookInfo](https://core.telegram.org/bots/api/#webhookinfo) object. If the bot is using [getUpdates](https://core.telegram.org/bots/api/#getupdates), will return an object with the *url* field empty.
 #[derive(Clone)]
 pub struct GetWebhookInfoRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: GetWebhookInfoParams,
 }
 
-impl<'a> RequestT for GetWebhookInfoRequest<'a> {
+impl RequestT for GetWebhookInfoRequest<'_> {
     type ParamsType = GetWebhookInfoParams;
     type ReturnType = WebhookInfo;
     fn get_name() -> &'static str {
         "getWebhookInfo"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -39,7 +39,7 @@ impl<'a> RequestT for GetWebhookInfoRequest<'a> {
     }
 }
 impl<'a> GetWebhookInfoRequest<'a> {
-    pub const fn new(api: &'a API) -> Self {
+    pub const fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: GetWebhookInfoParams {},
@@ -47,7 +47,7 @@ impl<'a> GetWebhookInfoRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to get current webhook status. Requires no parameters. On success, returns a [WebhookInfo](https://core.telegram.org/bots/api/#webhookinfo) object. If the bot is using [getUpdates](https://core.telegram.org/bots/api/#getupdates), will return an object with the *url* field empty.
     pub const fn get_webhook_info(&self) -> GetWebhookInfoRequest {
         GetWebhookInfoRequest::new(self)

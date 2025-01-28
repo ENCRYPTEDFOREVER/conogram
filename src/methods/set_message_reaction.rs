@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{misc::chat_id::ChatId, reaction_type::ReactionType},
     errors::ConogramError,
     impl_into_future,
@@ -29,17 +29,17 @@ impl_into_future!(SetMessageReactionRequest<'a>);
 ///Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can't use paid reactions. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetMessageReactionRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetMessageReactionParams,
 }
 
-impl<'a> RequestT for SetMessageReactionRequest<'a> {
+impl RequestT for SetMessageReactionRequest<'_> {
     type ParamsType = SetMessageReactionParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setMessageReaction"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -50,7 +50,7 @@ impl<'a> RequestT for SetMessageReactionRequest<'a> {
     }
 }
 impl<'a> SetMessageReactionRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, message_id: impl Into<i64>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, message_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: SetMessageReactionParams {
@@ -91,7 +91,7 @@ impl<'a> SetMessageReactionRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can't use paid reactions. Returns *True* on success.
     pub fn set_message_reaction(
         &self,

@@ -19,7 +19,7 @@ pub struct MaskPosition {
 }
 
 /// The part of the face relative to which the mask should be placed. One of “forehead”, “eyes”, “mouth”, or “chin”.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub enum MaskPositionPoint {
     /// `forehead`
     #[default]

@@ -5,7 +5,7 @@ use crate::entities::{paid_media::PaidMedia, user::User};
 /// Describes a transaction with a user.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartneruser)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct TransactionPartnerUser {
     /// Information about the user
     pub user: User,

@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 /// Represents an issue in an unspecified place. The error is considered resolved when new data is added.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrorunspecified)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PassportElementErrorUnspecified {
     /// Type of element of the user's Telegram Passport which has the issue
     #[serde(rename = "type")]

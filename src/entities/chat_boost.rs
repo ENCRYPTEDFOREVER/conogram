@@ -5,7 +5,7 @@ use crate::entities::chat_boost_source::ChatBoostSource;
 /// This object contains information about a chat boost.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatboost)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatBoost {
     /// Unique identifier of the boost
     pub boost_id: String,

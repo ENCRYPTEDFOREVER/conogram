@@ -5,7 +5,7 @@ use crate::entities::shipping_address::ShippingAddress;
 /// This object represents information about an order.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#orderinfo)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct OrderInfo {
     /// *Optional*. User name
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -5,7 +5,7 @@ use crate::{entities::message_entity::MessageEntity, utils::deserialize_utils::i
 /// This object contains information about the quoted part of a message that is replied to by the given message.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#textquote)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct TextQuote {
     /// Text of the quoted part of a message that is replied to by the given message
     pub text: String,

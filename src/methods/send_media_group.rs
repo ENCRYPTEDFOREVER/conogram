@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         input_media::InputMedia,
         message::Message,
@@ -56,17 +56,17 @@ impl_into_future_multipart!(SendMediaGroupRequest<'a>);
 ///Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of [Messages](https://core.telegram.org/bots/api/#message) that were sent is returned.
 #[derive(Clone)]
 pub struct SendMediaGroupRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SendMediaGroupParams,
 }
 
-impl<'a> RequestT for SendMediaGroupRequest<'a> {
+impl RequestT for SendMediaGroupRequest<'_> {
     type ParamsType = SendMediaGroupParams;
     type ReturnType = Vec<Message>;
     fn get_name() -> &'static str {
         "sendMediaGroup"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -78,7 +78,7 @@ impl<'a> RequestT for SendMediaGroupRequest<'a> {
 }
 impl<'a> SendMediaGroupRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
         media: impl IntoIterator<Item = impl Into<InputMedia>>,
     ) -> Self {
@@ -162,7 +162,7 @@ impl<'a> SendMediaGroupRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of [Messages](https://core.telegram.org/bots/api/#message) that were sent is returned.
     pub fn send_media_group(
         &self,

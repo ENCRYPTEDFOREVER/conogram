@@ -12,7 +12,7 @@ use crate::entities::{
 /// * [BackgroundFillFreeformGradient](https://core.telegram.org/bots/api/#backgroundfillfreeformgradient)
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#backgroundfill)
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum BackgroundFill {
     /// The background is filled using the selected color.

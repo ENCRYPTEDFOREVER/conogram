@@ -5,7 +5,7 @@ use crate::entities::{order_info::OrderInfo, user::User};
 /// This object contains information about an incoming pre-checkout query.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#precheckoutquery)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PreCheckoutQuery {
     /// Unique query identifier
     pub id: String,

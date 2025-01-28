@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         inline_keyboard_markup::InlineKeyboardMarkup, link_preview_options::LinkPreviewOptions,
         message::Message, message_entity::MessageEntity, misc::chat_id::ChatId,
@@ -42,17 +42,17 @@ impl_into_future!(EditMessageTextRequest<'a>);
 ///Use this method to edit text and [game](https://core.telegram.org/bots/api/#games) messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within **48 hours** from the time they were sent.
 #[derive(Clone)]
 pub struct EditMessageTextRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: EditMessageTextParams,
 }
 
-impl<'a> RequestT for EditMessageTextRequest<'a> {
+impl RequestT for EditMessageTextRequest<'_> {
     type ParamsType = EditMessageTextParams;
     type ReturnType = Option<Message>;
     fn get_name() -> &'static str {
         "editMessageText"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -63,7 +63,7 @@ impl<'a> RequestT for EditMessageTextRequest<'a> {
     }
 }
 impl<'a> EditMessageTextRequest<'a> {
-    pub fn new(api: &'a API, text: impl Into<String>) -> Self {
+    pub fn new(api: &'a Api, text: impl Into<String>) -> Self {
         Self {
             api,
             params: EditMessageTextParams {
@@ -150,7 +150,7 @@ impl<'a> EditMessageTextRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to edit text and [game](https://core.telegram.org/bots/api/#games) messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within **48 hours** from the time they were sent.
     pub fn edit_message_text(&self, text: impl Into<String>) -> EditMessageTextRequest {
         EditMessageTextRequest::new(self, text)

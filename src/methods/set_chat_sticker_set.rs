@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -21,17 +21,17 @@ impl_into_future!(SetChatStickerSetRequest<'a>);
 ///Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field *can\_set\_sticker\_set* optionally returned in [getChat](https://core.telegram.org/bots/api/#getchat) requests to check if the bot can use this method. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetChatStickerSetRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetChatStickerSetParams,
 }
 
-impl<'a> RequestT for SetChatStickerSetRequest<'a> {
+impl RequestT for SetChatStickerSetRequest<'_> {
     type ParamsType = SetChatStickerSetParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setChatStickerSet"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -43,7 +43,7 @@ impl<'a> RequestT for SetChatStickerSetRequest<'a> {
 }
 impl<'a> SetChatStickerSetRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
         sticker_set_name: impl Into<String>,
     ) -> Self {
@@ -71,7 +71,7 @@ impl<'a> SetChatStickerSetRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field *can\_set\_sticker\_set* optionally returned in [getChat](https://core.telegram.org/bots/api/#getchat) requests to check if the bot can use this method. Returns *True* on success.
     pub fn set_chat_sticker_set(
         &self,

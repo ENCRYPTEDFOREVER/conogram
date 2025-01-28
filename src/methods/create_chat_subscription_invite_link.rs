@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{chat_invite_link::ChatInviteLink, misc::chat_id::ChatId},
     errors::ConogramError,
     impl_into_future,
@@ -27,17 +27,17 @@ impl_into_future!(CreateChatSubscriptionInviteLinkRequest<'a>);
 ///Use this method to create a [subscription invite link](https://telegram.org/blog/superchannels-star-reactions-subscriptions#star-subscriptions) for a channel chat. The bot must have the *can\_invite\_users* administrator rights. The link can be edited using the method [editChatSubscriptionInviteLink](https://core.telegram.org/bots/api/#editchatsubscriptioninvitelink) or revoked using the method [revokeChatInviteLink](https://core.telegram.org/bots/api/#revokechatinvitelink). Returns the new invite link as a [ChatInviteLink](https://core.telegram.org/bots/api/#chatinvitelink) object.
 #[derive(Clone)]
 pub struct CreateChatSubscriptionInviteLinkRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: CreateChatSubscriptionInviteLinkParams,
 }
 
-impl<'a> RequestT for CreateChatSubscriptionInviteLinkRequest<'a> {
+impl RequestT for CreateChatSubscriptionInviteLinkRequest<'_> {
     type ParamsType = CreateChatSubscriptionInviteLinkParams;
     type ReturnType = ChatInviteLink;
     fn get_name() -> &'static str {
         "createChatSubscriptionInviteLink"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -49,7 +49,7 @@ impl<'a> RequestT for CreateChatSubscriptionInviteLinkRequest<'a> {
 }
 impl<'a> CreateChatSubscriptionInviteLinkRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         chat_id: impl Into<ChatId>,
         subscription_period: impl Into<i64>,
         subscription_price: impl Into<i64>,
@@ -94,7 +94,7 @@ impl<'a> CreateChatSubscriptionInviteLinkRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to create a [subscription invite link](https://telegram.org/blog/superchannels-star-reactions-subscriptions#star-subscriptions) for a channel chat. The bot must have the *can\_invite\_users* administrator rights. The link can be edited using the method [editChatSubscriptionInviteLink](https://core.telegram.org/bots/api/#editchatsubscriptioninvitelink) or revoked using the method [revokeChatInviteLink](https://core.telegram.org/bots/api/#revokechatinvitelink). Returns the new invite link as a [ChatInviteLink](https://core.telegram.org/bots/api/#chatinvitelink) object.
     pub fn create_chat_subscription_invite_link(
         &self,

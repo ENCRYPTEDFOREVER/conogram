@@ -5,7 +5,7 @@ use crate::utils::deserialize_utils::is_false;
 /// Describes actions that a non-administrator user is allowed to take in a chat.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatpermissions)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatPermissions {
     /// *Optional*. *True*, if the user is allowed to send text messages, contacts, giveaways, giveaway winners, invoices, locations and venues
     #[serde(default, skip_serializing_if = "is_false")]
@@ -67,11 +67,13 @@ pub struct ChatPermissions {
 // Divider: all content below this line will be preserved after code regen
 impl ChatPermissions {
     /// An instance with **none** permissions
+    #[must_use]
     pub fn none() -> Self {
         Self::default()
     }
 
     /// An instance with **all** permissions
+    #[must_use]
     pub const fn all() -> Self {
         Self {
             can_send_messages: true,

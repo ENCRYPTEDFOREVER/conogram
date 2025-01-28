@@ -13,7 +13,7 @@ use crate::entities::{
 /// * [MessageOriginChannel](https://core.telegram.org/bots/api/#messageoriginchannel)
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#messageorigin)
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum MessageOrigin {
     /// The message was originally sent by a known user.

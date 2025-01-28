@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::star_transactions::StarTransactions, errors::ConogramError,
+    api::Api, entities::star_transactions::StarTransactions, errors::ConogramError,
     impl_into_future, request::RequestT,
 };
 
@@ -23,17 +23,17 @@ impl_into_future!(GetStarTransactionsRequest<'a>);
 ///Returns the bot's Telegram Star transactions in chronological order. On success, returns a [StarTransactions](https://core.telegram.org/bots/api/#startransactions) object.
 #[derive(Clone)]
 pub struct GetStarTransactionsRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: GetStarTransactionsParams,
 }
 
-impl<'a> RequestT for GetStarTransactionsRequest<'a> {
+impl RequestT for GetStarTransactionsRequest<'_> {
     type ParamsType = GetStarTransactionsParams;
     type ReturnType = StarTransactions;
     fn get_name() -> &'static str {
         "getStarTransactions"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -44,7 +44,7 @@ impl<'a> RequestT for GetStarTransactionsRequest<'a> {
     }
 }
 impl<'a> GetStarTransactionsRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: GetStarTransactionsParams {
@@ -69,7 +69,7 @@ impl<'a> GetStarTransactionsRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Returns the bot's Telegram Star transactions in chronological order. On success, returns a [StarTransactions](https://core.telegram.org/bots/api/#startransactions) object.
     pub fn get_star_transactions(&self) -> GetStarTransactionsRequest {
         GetStarTransactionsRequest::new(self)

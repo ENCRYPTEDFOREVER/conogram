@@ -5,7 +5,7 @@ use std::{
 
 use serde::Serialize;
 
-use crate::{api::API, errors::ConogramError, impl_into_future, request::RequestT};
+use crate::{api::Api, errors::ConogramError, impl_into_future, request::RequestT};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct DeleteStickerFromSetParams {
@@ -17,17 +17,17 @@ impl_into_future!(DeleteStickerFromSetRequest<'a>);
 ///Use this method to delete a sticker from a set created by the bot. Returns *True* on success.
 #[derive(Clone)]
 pub struct DeleteStickerFromSetRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: DeleteStickerFromSetParams,
 }
 
-impl<'a> RequestT for DeleteStickerFromSetRequest<'a> {
+impl RequestT for DeleteStickerFromSetRequest<'_> {
     type ParamsType = DeleteStickerFromSetParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "deleteStickerFromSet"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -38,7 +38,7 @@ impl<'a> RequestT for DeleteStickerFromSetRequest<'a> {
     }
 }
 impl<'a> DeleteStickerFromSetRequest<'a> {
-    pub fn new(api: &'a API, sticker: impl Into<String>) -> Self {
+    pub fn new(api: &'a Api, sticker: impl Into<String>) -> Self {
         Self {
             api,
             params: DeleteStickerFromSetParams {
@@ -55,7 +55,7 @@ impl<'a> DeleteStickerFromSetRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to delete a sticker from a set created by the bot. Returns *True* on success.
     pub fn delete_sticker_from_set(
         &self,

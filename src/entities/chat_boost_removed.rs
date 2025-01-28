@@ -5,7 +5,7 @@ use crate::entities::{chat::Chat, chat_boost_source::ChatBoostSource};
 /// This object represents a boost removed from a chat.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatboostremoved)
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatBoostRemoved {
     /// Chat which was boosted
     pub chat: Box<Chat>,

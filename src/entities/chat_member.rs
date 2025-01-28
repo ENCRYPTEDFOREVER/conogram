@@ -16,7 +16,7 @@ use crate::entities::{
 /// * [ChatMemberBanned](https://core.telegram.org/bots/api/#chatmemberbanned)
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatmember)
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "status")]
 pub enum ChatMember {
     /// Represents a [chat member](https://core.telegram.org/bots/api/#chatmember) that owns the chat and has all administrator privileges.
@@ -104,6 +104,7 @@ use super::user::User;
 
 impl ChatMember {
     /// Returns a User object from underlying value
+    #[must_use]
     pub const fn user(&self) -> &User {
         match self {
             Self::Owner(m) => &m.user,
@@ -115,10 +116,12 @@ impl ChatMember {
         }
     }
 
+    #[must_use]
     pub const fn is_admin(&self) -> bool {
         matches!(self, Self::Owner(_) | Self::Administrator(_))
     }
 
+    #[must_use]
     pub const fn is_in_chat(&self) -> bool {
         match self {
             Self::Owner(_) | Self::Administrator(_) | Self::Member(_) => true,
@@ -127,6 +130,7 @@ impl ChatMember {
         }
     }
 
+    #[must_use]
     pub const fn get_until_date(&self) -> Option<i64> {
         if let Self::Banned(m) = &self {
             Some(m.until_date)
@@ -135,10 +139,12 @@ impl ChatMember {
         }
     }
 
+    #[must_use]
     pub const fn is_banned(&self) -> bool {
         matches!(self, Self::Banned(_))
     }
 
+    #[must_use]
     pub const fn is_restricted(&self) -> bool {
         matches!(self, Self::Restricted(_))
     }

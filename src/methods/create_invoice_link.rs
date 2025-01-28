@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::labeled_price::LabeledPrice, errors::ConogramError, impl_into_future,
+    api::Api, entities::labeled_price::LabeledPrice, errors::ConogramError, impl_into_future,
     request::RequestT, utils::deserialize_utils::is_false,
 };
 
@@ -58,17 +58,17 @@ impl_into_future!(CreateInvoiceLinkRequest<'a>);
 ///Use this method to create a link for an invoice. Returns the created invoice link as *String* on success.
 #[derive(Clone)]
 pub struct CreateInvoiceLinkRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: CreateInvoiceLinkParams,
 }
 
-impl<'a> RequestT for CreateInvoiceLinkRequest<'a> {
+impl RequestT for CreateInvoiceLinkRequest<'_> {
     type ParamsType = CreateInvoiceLinkParams;
     type ReturnType = String;
     fn get_name() -> &'static str {
         "createInvoiceLink"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -80,7 +80,7 @@ impl<'a> RequestT for CreateInvoiceLinkRequest<'a> {
 }
 impl<'a> CreateInvoiceLinkRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         title: impl Into<String>,
         description: impl Into<String>,
         payload: impl Into<String>,
@@ -278,7 +278,7 @@ impl<'a> CreateInvoiceLinkRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to create a link for an invoice. Returns the created invoice link as *String* on success.
     pub fn create_invoice_link(
         &self,

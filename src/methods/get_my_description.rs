@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::bot_description::BotDescription, errors::ConogramError, impl_into_future,
+    api::Api, entities::bot_description::BotDescription, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -21,17 +21,17 @@ impl_into_future!(GetMyDescriptionRequest<'a>);
 ///Use this method to get the current bot description for the given user language. Returns [BotDescription](https://core.telegram.org/bots/api/#botdescription) on success.
 #[derive(Clone)]
 pub struct GetMyDescriptionRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: GetMyDescriptionParams,
 }
 
-impl<'a> RequestT for GetMyDescriptionRequest<'a> {
+impl RequestT for GetMyDescriptionRequest<'_> {
     type ParamsType = GetMyDescriptionParams;
     type ReturnType = BotDescription;
     fn get_name() -> &'static str {
         "getMyDescription"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -42,7 +42,7 @@ impl<'a> RequestT for GetMyDescriptionRequest<'a> {
     }
 }
 impl<'a> GetMyDescriptionRequest<'a> {
-    pub fn new(api: &'a API) -> Self {
+    pub fn new(api: &'a Api) -> Self {
         Self {
             api,
             params: GetMyDescriptionParams {
@@ -59,7 +59,7 @@ impl<'a> GetMyDescriptionRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to get the current bot description for the given user language. Returns [BotDescription](https://core.telegram.org/bots/api/#botdescription) on success.
     pub fn get_my_description(&self) -> GetMyDescriptionRequest {
         GetMyDescriptionRequest::new(self)

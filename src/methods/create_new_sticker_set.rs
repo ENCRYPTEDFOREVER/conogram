@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::{
         input_sticker::InputSticker,
         misc::input_file::{GetFiles, InputFile},
@@ -43,17 +43,17 @@ impl_into_future_multipart!(CreateNewStickerSetRequest<'a>);
 ///Use this method to create a new sticker set owned by a user. The bot will be able to edit the sticker set thus created. Returns *True* on success.
 #[derive(Clone)]
 pub struct CreateNewStickerSetRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: CreateNewStickerSetParams,
 }
 
-impl<'a> RequestT for CreateNewStickerSetRequest<'a> {
+impl RequestT for CreateNewStickerSetRequest<'_> {
     type ParamsType = CreateNewStickerSetParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "createNewStickerSet"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -65,7 +65,7 @@ impl<'a> RequestT for CreateNewStickerSetRequest<'a> {
 }
 impl<'a> CreateNewStickerSetRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         user_id: impl Into<i64>,
         name: impl Into<String>,
         title: impl Into<String>,
@@ -127,7 +127,7 @@ impl<'a> CreateNewStickerSetRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to create a new sticker set owned by a user. The bot will be able to edit the sticker set thus created. Returns *True* on success.
     pub fn create_new_sticker_set(
         &self,
@@ -141,15 +141,15 @@ impl API {
 }
 
 ///Type of stickers in the set, pass “regular”, “mask”, or “custom\_emoji”. By default, a regular sticker set is created.
-#[derive(Debug, Clone, Default, PartialEq, Serialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
 #[serde(rename = "sticker_type")]
 pub enum CreateNewStickerSetStickerType {
     #[default]
-    /// "mask"
+    /// `mask`
     #[serde(rename = "mask")]
     Mask,
 
-    /// "custom_emoji"
+    /// `custom_emoji`
     #[serde(rename = "custom_emoji")]
     CustomEmoji,
 }

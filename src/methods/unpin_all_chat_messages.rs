@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -20,17 +20,17 @@ impl_into_future!(UnpinAllChatMessagesRequest<'a>);
 ///Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can\_pin\_messages' administrator right in a supergroup or 'can\_edit\_messages' administrator right in a channel. Returns *True* on success.
 #[derive(Clone)]
 pub struct UnpinAllChatMessagesRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: UnpinAllChatMessagesParams,
 }
 
-impl<'a> RequestT for UnpinAllChatMessagesRequest<'a> {
+impl RequestT for UnpinAllChatMessagesRequest<'_> {
     type ParamsType = UnpinAllChatMessagesParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "unpinAllChatMessages"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -41,7 +41,7 @@ impl<'a> RequestT for UnpinAllChatMessagesRequest<'a> {
     }
 }
 impl<'a> UnpinAllChatMessagesRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
             params: UnpinAllChatMessagesParams {
@@ -58,7 +58,7 @@ impl<'a> UnpinAllChatMessagesRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can\_pin\_messages' administrator right in a supergroup or 'can\_edit\_messages' administrator right in a channel. Returns *True* on success.
     pub fn unpin_all_chat_messages(
         &self,

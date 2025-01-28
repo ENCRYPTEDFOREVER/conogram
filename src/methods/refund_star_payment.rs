@@ -5,7 +5,7 @@ use std::{
 
 use serde::Serialize;
 
-use crate::{api::API, errors::ConogramError, impl_into_future, request::RequestT};
+use crate::{api::Api, errors::ConogramError, impl_into_future, request::RequestT};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct RefundStarPaymentParams {
@@ -18,17 +18,17 @@ impl_into_future!(RefundStarPaymentRequest<'a>);
 ///Refunds a successful payment in [Telegram Stars](https://t.me/BotNews/90). Returns *True* on success.
 #[derive(Clone)]
 pub struct RefundStarPaymentRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: RefundStarPaymentParams,
 }
 
-impl<'a> RequestT for RefundStarPaymentRequest<'a> {
+impl RequestT for RefundStarPaymentRequest<'_> {
     type ParamsType = RefundStarPaymentParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "refundStarPayment"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -40,7 +40,7 @@ impl<'a> RequestT for RefundStarPaymentRequest<'a> {
 }
 impl<'a> RefundStarPaymentRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         user_id: impl Into<i64>,
         telegram_payment_charge_id: impl Into<String>,
     ) -> Self {
@@ -71,7 +71,7 @@ impl<'a> RefundStarPaymentRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Refunds a successful payment in [Telegram Stars](https://t.me/BotNews/90). Returns *True* on success.
     pub fn refund_star_payment(
         &self,

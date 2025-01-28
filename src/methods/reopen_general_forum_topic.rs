@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT,
 };
 
@@ -20,17 +20,17 @@ impl_into_future!(ReopenGeneralForumTopicRequest<'a>);
 ///Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights. The topic will be automatically unhidden if it was hidden. Returns *True* on success.
 #[derive(Clone)]
 pub struct ReopenGeneralForumTopicRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: ReopenGeneralForumTopicParams,
 }
 
-impl<'a> RequestT for ReopenGeneralForumTopicRequest<'a> {
+impl RequestT for ReopenGeneralForumTopicRequest<'_> {
     type ParamsType = ReopenGeneralForumTopicParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "reopenGeneralForumTopic"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -41,7 +41,7 @@ impl<'a> RequestT for ReopenGeneralForumTopicRequest<'a> {
     }
 }
 impl<'a> ReopenGeneralForumTopicRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>) -> Self {
         Self {
             api,
             params: ReopenGeneralForumTopicParams {
@@ -58,7 +58,7 @@ impl<'a> ReopenGeneralForumTopicRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights. The topic will be automatically unhidden if it was hidden. Returns *True* on success.
     pub fn reopen_general_forum_topic(
         &self,

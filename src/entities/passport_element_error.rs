@@ -25,7 +25,7 @@ use crate::entities::{
 /// * [PassportElementErrorUnspecified](https://core.telegram.org/bots/api/#passportelementerrorunspecified)
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerror)
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "source")]
 pub enum PassportElementError {
     /// Represents an issue in one of the data fields that was provided by the user. The error is considered resolved when the field's value changes.

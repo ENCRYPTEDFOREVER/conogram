@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API,
+    api::Api,
     entities::misc::input_file::{GetFiles, InputFile},
     errors::ConogramError,
     impl_into_future_multipart,
@@ -36,17 +36,17 @@ impl_into_future_multipart!(SetStickerSetThumbnailRequest<'a>);
 ///Use this method to set the thumbnail of a regular or mask sticker set. The format of the thumbnail file must match the format of the stickers in the set. Returns *True* on success.
 #[derive(Clone)]
 pub struct SetStickerSetThumbnailRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: SetStickerSetThumbnailParams,
 }
 
-impl<'a> RequestT for SetStickerSetThumbnailRequest<'a> {
+impl RequestT for SetStickerSetThumbnailRequest<'_> {
     type ParamsType = SetStickerSetThumbnailParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "setStickerSetThumbnail"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -58,7 +58,7 @@ impl<'a> RequestT for SetStickerSetThumbnailRequest<'a> {
 }
 impl<'a> SetStickerSetThumbnailRequest<'a> {
     pub fn new(
-        api: &'a API,
+        api: &'a Api,
         name: impl Into<String>,
         user_id: impl Into<i64>,
         format: impl Into<SetStickerSetThumbnailFormat>,
@@ -103,7 +103,7 @@ impl<'a> SetStickerSetThumbnailRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to set the thumbnail of a regular or mask sticker set. The format of the thumbnail file must match the format of the stickers in the set. Returns *True* on success.
     pub fn set_sticker_set_thumbnail(
         &self,
@@ -116,7 +116,7 @@ impl API {
 }
 
 ///Format of the thumbnail, must be one of “static” for a **.WEBP** or **.PNG** image, “animated” for a **.TGS** animation, or “video” for a **WEBM** video
-#[derive(Debug, Clone, Default, PartialEq, Serialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
 #[serde(rename = "format")]
 pub enum SetStickerSetThumbnailFormat {
     #[default]

@@ -6,7 +6,7 @@ use std::{
 use serde::Serialize;
 
 use crate::{
-    api::API, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
     request::RequestT, utils::deserialize_utils::is_false,
 };
 
@@ -23,17 +23,17 @@ impl_into_future!(UnbanChatMemberRequest<'a>);
 ///Use this method to unban a previously banned user in a supergroup or channel. The user will **not** return to the group or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to work. By default, this method guarantees that after the call the user is not a member of the chat, but will be able to join it. So if the user is a member of the chat they will also be **removed** from the chat. If you don't want this, use the parameter *only\_if\_banned*. Returns *True* on success.
 #[derive(Clone)]
 pub struct UnbanChatMemberRequest<'a> {
-    api: &'a API,
+    api: &'a Api,
     params: UnbanChatMemberParams,
 }
 
-impl<'a> RequestT for UnbanChatMemberRequest<'a> {
+impl RequestT for UnbanChatMemberRequest<'_> {
     type ParamsType = UnbanChatMemberParams;
     type ReturnType = bool;
     fn get_name() -> &'static str {
         "unbanChatMember"
     }
-    fn get_api_ref(&self) -> &API {
+    fn get_api_ref(&self) -> &Api {
         self.api
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
@@ -44,7 +44,7 @@ impl<'a> RequestT for UnbanChatMemberRequest<'a> {
     }
 }
 impl<'a> UnbanChatMemberRequest<'a> {
-    pub fn new(api: &'a API, chat_id: impl Into<ChatId>, user_id: impl Into<i64>) -> Self {
+    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, user_id: impl Into<i64>) -> Self {
         Self {
             api,
             params: UnbanChatMemberParams {
@@ -77,7 +77,7 @@ impl<'a> UnbanChatMemberRequest<'a> {
     }
 }
 
-impl API {
+impl Api {
     ///Use this method to unban a previously banned user in a supergroup or channel. The user will **not** return to the group or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to work. By default, this method guarantees that after the call the user is not a member of the chat, but will be able to join it. So if the user is a member of the chat they will also be **removed** from the chat. If you don't want this, use the parameter *only\_if\_banned*. Returns *True* on success.
     pub fn unban_chat_member(
         &self,
