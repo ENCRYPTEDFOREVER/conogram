@@ -744,6 +744,8 @@ impl Message {
         media: impl Into<InputMedia>,
     ) -> EditMessageMediaRequest<'a> {
         api.edit_message_media(media)
+            .chat_id(self.chat.id)
+            .message_id(self.message_id)
     }
 
     pub fn edit_text<'a>(
