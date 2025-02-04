@@ -41,4 +41,5 @@ impl GetFiles for InputMediaPhoto {
     fn get_files(&self) -> Vec<&InputFile> {
         vec![&self.media]
     }
-} // Divider: all content below this line will be preserved after code regen
+}
+// Divider: all content below this line will be preserved after code regen

@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::entities::{
+    transaction_partner_affiliate_program::TransactionPartnerAffiliateProgram,
     transaction_partner_fragment::TransactionPartnerFragment,
     transaction_partner_other::TransactionPartnerOther,
     transaction_partner_telegram_ads::TransactionPartnerTelegramAds,
@@ -11,13 +12,14 @@ use crate::entities::{
 /// This object describes the source of a transaction, or its recipient for outgoing transactions. Currently, it can be one of
 ///
 /// * [TransactionPartnerUser](https://core.telegram.org/bots/api/#transactionpartneruser)
+/// * [TransactionPartnerAffiliateProgram](https://core.telegram.org/bots/api/#transactionpartneraffiliateprogram)
 /// * [TransactionPartnerFragment](https://core.telegram.org/bots/api/#transactionpartnerfragment)
 /// * [TransactionPartnerTelegramAds](https://core.telegram.org/bots/api/#transactionpartnertelegramads)
 /// * [TransactionPartnerTelegramApi](https://core.telegram.org/bots/api/#transactionpartnertelegramapi)
 /// * [TransactionPartnerOther](https://core.telegram.org/bots/api/#transactionpartnerother)
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartner)
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum TransactionPartner {
     /// Describes a transaction with a user.
@@ -25,6 +27,12 @@ pub enum TransactionPartner {
     /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartneruser)
     #[serde(rename = "user")]
     User(TransactionPartnerUser),
+
+    /// Describes the affiliate program that issued the affiliate commission received via this transaction.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartneraffiliateprogram)
+    #[serde(rename = "affiliate_program")]
+    AffiliateProgram(TransactionPartnerAffiliateProgram),
 
     /// Describes a withdrawal transaction with Fragment.
     ///
@@ -60,6 +68,12 @@ impl Default for TransactionPartner {
 impl From<TransactionPartnerUser> for TransactionPartner {
     fn from(value: TransactionPartnerUser) -> Self {
         Self::User(value)
+    }
+}
+
+impl From<TransactionPartnerAffiliateProgram> for TransactionPartner {
+    fn from(value: TransactionPartnerAffiliateProgram) -> Self {
+        Self::AffiliateProgram(value)
     }
 }
 

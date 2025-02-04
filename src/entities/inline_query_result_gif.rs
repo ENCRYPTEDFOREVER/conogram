@@ -16,7 +16,7 @@ pub struct InlineQueryResultGif {
     /// Unique identifier for this result, 1-64 bytes
     pub id: String,
 
-    /// A valid URL for the GIF file. File size must not exceed 1MB
+    /// A valid URL for the GIF file
     pub gif_url: String,
 
     /// *Optional*. Width of the GIF

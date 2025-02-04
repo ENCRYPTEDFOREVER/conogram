@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{entities::order_info::OrderInfo, utils::deserialize_utils::is_false};
 
-/// This object contains basic information about a successful payment.
+/// This object contains basic information about a successful payment. Note that if the buyer initiates a chargeback with the relevant payment provider following this transaction, the funds may be debited from your balance. This is outside of Telegram's control.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#successfulpayment)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]

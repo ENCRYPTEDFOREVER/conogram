@@ -1,3 +1,4 @@
+pub mod affiliate_info;
 pub mod animation;
 pub mod audio;
 pub mod background_fill;
@@ -205,6 +206,7 @@ pub mod successful_payment;
 pub mod switch_inline_query_chosen_chat;
 pub mod text_quote;
 pub mod transaction_partner;
+pub mod transaction_partner_affiliate_program;
 pub mod transaction_partner_fragment;
 pub mod transaction_partner_other;
 pub mod transaction_partner_telegram_ads;

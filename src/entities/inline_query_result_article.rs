@@ -1,10 +1,7 @@
 use serde::Serialize;
 
-use crate::{
-    entities::{
-        inline_keyboard_markup::InlineKeyboardMarkup, input_message_content::InputMessageContent,
-    },
-    utils::deserialize_utils::is_false,
+use crate::entities::{
+    inline_keyboard_markup::InlineKeyboardMarkup, input_message_content::InputMessageContent,
 };
 
 /// Represents a link to an article or web page.
@@ -28,10 +25,6 @@ pub struct InlineQueryResultArticle {
     /// *Optional*. URL of the result
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
-
-    /// *Optional*. Pass *True* if you don't want the URL to be shown in the message
-    #[serde(skip_serializing_if = "is_false")]
-    pub hide_url: bool,
 
     /// *Optional*. Short description of the result
     #[serde(skip_serializing_if = "Option::is_none")]

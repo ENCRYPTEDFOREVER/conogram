@@ -29,7 +29,7 @@ pub enum BackgroundType {
     #[serde(rename = "wallpaper")]
     Wallpaper(BackgroundTypeWallpaper),
 
-    /// The background is a PNG or TGV (gzipped subset of SVG with MIME type “application/x-tgwallpattern”) pattern to be combined with the background fill chosen by the user.
+    /// The background is a .PNG or .TGV (gzipped subset of SVG with MIME type “application/x-tgwallpattern”) pattern to be combined with the background fill chosen by the user.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#backgroundtypepattern)
     #[serde(rename = "pattern")]

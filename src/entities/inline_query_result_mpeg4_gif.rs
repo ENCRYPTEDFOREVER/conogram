@@ -16,7 +16,7 @@ pub struct InlineQueryResultMpeg4Gif {
     /// Unique identifier for this result, 1-64 bytes
     pub id: String,
 
-    /// A valid URL for the MPEG4 file. File size must not exceed 1MB
+    /// A valid URL for the MPEG4 file
     pub mpeg4_url: String,
 
     /// *Optional*. Video width

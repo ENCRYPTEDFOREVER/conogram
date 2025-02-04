@@ -25,6 +25,9 @@
     // UsableMessageEffects enum with large ids
     clippy::unreadable_literal,
     clippy::enum_clike_unportable_variant,
+
+    // Large enums are boxed when contained inside of structs 
+    clippy::large_enum_variant
 )]
 
 extern crate core;
