@@ -1,8 +1,3 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
-
 use serde::Serialize;
 
 use crate::{
@@ -17,7 +12,6 @@ use crate::{
         },
         reply_parameters::ReplyParameters,
     },
-    errors::ConogramError,
     impl_into_future_multipart,
     request::RequestT,
     utils::deserialize_utils::is_false,
@@ -57,11 +51,9 @@ pub struct SendDocumentParams {
 
 impl GetFiles for SendDocumentParams {
     fn get_files(&self) -> Vec<&InputFile> {
-        let mut vec = Vec::with_capacity(4);
-        vec.push(&self.document);
-        if let Some(thumbnail) = &self.thumbnail {
-            vec.push(thumbnail);
-        }
+        let mut vec = Vec::with_capacity(2);
+        vec.extend(&self.document.get_files());
+        vec.extend(&self.thumbnail.get_files());
         vec
     }
 }
@@ -85,9 +77,6 @@ impl RequestT for SendDocumentRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        true
     }
 }
 impl<'a> SendDocumentRequest<'a> {

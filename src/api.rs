@@ -1,9 +1,4 @@
-use std::{
-    fmt::Debug,
-    future::{Future, IntoFuture},
-    sync::atomic::AtomicI64,
-    time::Duration,
-};
+use std::{fmt::Debug, future::IntoFuture, sync::atomic::AtomicI64, time::Duration};
 
 use serde::{de::DeserializeOwned, Serialize};
 
@@ -15,7 +10,6 @@ use crate::{
     },
     errors::{ConogramError, ConogramErrorType, TgApiError},
     methods::{
-        delete_message::DeleteMessageRequest, delete_messages::DeleteMessagesRequest,
         edit_message_caption::EditMessageCaptionRequest, edit_message_text::EditMessageTextRequest,
         send_animation::SendAnimationRequest, send_audio::SendAudioRequest,
         send_contact::SendContactRequest, send_dice::SendDiceRequest,
@@ -42,19 +36,19 @@ macro_rules! set_default_param {
     }
 }
 
-/// Wraps API request into [``Api::request_ref(self)``]
-pub trait WrapRequest {
-    fn wrap(&self) -> impl Future<Output = Result<Self::ReturnType, ConogramError>>
-    where
-        Self: RequestT,
-        for<'a> &'a Self: IntoFuture<Output = Result<Self::ReturnType, ConogramError>>,
-        for<'a> <&'a Self as IntoFuture>::IntoFuture: Send,
-        Self::ReturnType: std::marker::Send,
-    {
-        Api::request_ref(self)
-    }
-}
-impl<T> WrapRequest for T {}
+// /// Wraps API request into [``Api::request_ref(self)``]
+// pub trait WrapRequest {
+//     fn wrap(&self) -> impl Future<Output = Result<Self::ReturnType, ConogramError>>
+//     where
+//         Self: RequestT,
+//         for<'a> &'a Self: IntoFuture<Output = Result<Self::ReturnType, ConogramError>>,
+//         for<'a> <&'a Self as IntoFuture>::IntoFuture: Send,
+//         Self::ReturnType: std::marker::Send,
+//     {
+//         Api::request_ref(self)
+//     }
+// }
+// impl<T> WrapRequest for T {}
 
 pub struct ApiToken(String);
 impl ApiToken {
@@ -236,10 +230,7 @@ impl Api {
         chat_id: impl Into<ChatId> + Send,
         message_id: impl Into<i64> + Send,
     ) -> Result<bool, ConogramError> {
-        // the trait solver is unable to infer the generic types that should be inferred from this argument
-        // this is a known limitation of the trait solver that will be lifted in the future
-        let result =
-            Self::request::<DeleteMessageRequest>(self.delete_message(chat_id, message_id)).await;
+        let result = self.delete_message(chat_id, message_id).wrap().await;
         if let Err(err) = &result {
             if let ConogramErrorType::ApiError(_) = &err.error {
                 return Ok(false);
@@ -254,11 +245,7 @@ impl Api {
         chat_id: impl Into<ChatId> + Send,
         message_ids: impl IntoIterator<Item = impl Into<i64>> + Send,
     ) -> Result<bool, ConogramError> {
-        // the trait solver is unable to infer the generic types that should be inferred from this argument
-        // this is a known limitation of the trait solver that will be lifted in the future
-        let result =
-            Self::request_ref::<DeleteMessagesRequest>(&self.delete_messages(chat_id, message_ids))
-                .await;
+        let result = self.delete_messages(chat_id, message_ids).wrap().await;
         if let Err(err) = &result {
             if let ConogramErrorType::ApiError(_) = &err.error {
                 return Ok(false);

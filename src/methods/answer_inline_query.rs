@@ -1,7 +1,5 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
@@ -11,13 +9,14 @@ use crate::{
         inline_query_result::InlineQueryResult,
         inline_query_results_button::InlineQueryResultsButton,
     },
-    errors::ConogramError,
+    
     impl_into_future,
     request::RequestT,
     utils::deserialize_utils::is_false,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct AnswerInlineQueryParams {
     pub inline_query_id: String,
     pub results: Vec<InlineQueryResult>,
@@ -52,9 +51,6 @@ impl RequestT for AnswerInlineQueryRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> AnswerInlineQueryRequest<'a> {

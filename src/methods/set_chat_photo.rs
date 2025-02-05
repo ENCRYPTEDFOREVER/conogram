@@ -1,8 +1,3 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
-
 use serde::Serialize;
 
 use crate::{
@@ -11,12 +6,12 @@ use crate::{
         chat_id::ChatId,
         input_file::{GetFiles, InputFile},
     },
-    errors::ConogramError,
     impl_into_future_multipart,
     request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct SetChatPhotoParams {
     pub chat_id: ChatId,
     pub photo: InputFile,
@@ -47,9 +42,6 @@ impl RequestT for SetChatPhotoRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        true
     }
 }
 impl<'a> SetChatPhotoRequest<'a> {

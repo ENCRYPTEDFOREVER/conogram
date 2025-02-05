@@ -1,7 +1,5 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
@@ -16,13 +14,14 @@ use crate::{
         },
         reply_parameters::ReplyParameters,
     },
-    errors::ConogramError,
+    
     impl_into_future_multipart,
     request::RequestT,
     utils::deserialize_utils::is_false,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct SendStickerParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub business_connection_id: Option<String>,
@@ -71,9 +70,6 @@ impl RequestT for SendStickerRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        true
     }
 }
 impl<'a> SendStickerRequest<'a> {

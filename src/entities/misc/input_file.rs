@@ -9,16 +9,15 @@ use uuid::Uuid;
 ///API Reference: [link](https://core.telegram.org/bots/api/#inputfile)
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum InputFile {
-    File(LocalFile),
-    FileIdOrURL(String),
+    Local(LocalFile),
+    FileIdOrUrl(String),
     InMemory(InMemoryFile),
 }
 
-// TODO: rewrite to use borrowed data
-type FileContents = Vec<u8>;
+type FileContents = Cow<'static, [u8]>;
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct InMemoryFile {
-    filename: String,
+    name: String,
     contents: FileContents,
     uuid: Uuid,
 }
@@ -26,7 +25,7 @@ pub struct InMemoryFile {
 impl InMemoryFile {
     pub fn new(name: impl Into<String>, data: impl Into<FileContents>) -> Self {
         Self {
-            filename: name.into(),
+            name: name.into(),
             contents: data.into(),
             uuid: Uuid::new_v4(),
         }
@@ -43,19 +42,19 @@ impl InMemoryFile {
     }
 
     #[must_use]
-    pub fn get_part(&self) -> Part {
-        Part::bytes(self.contents.clone()).file_name(self.filename.clone())
+    pub fn get_form_part(&self) -> Part {
+        Part::bytes(self.contents.clone()).file_name(self.name.clone())
     }
 
     #[must_use]
-    pub fn into_part(self) -> Part {
-        Part::bytes(self.contents).file_name(self.filename)
+    pub fn into_form_part(self) -> Part {
+        Part::bytes(self.contents).file_name(self.name)
     }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LocalFile {
-    filename: Option<String>,
+    name: Option<String>,
     path: PathBuf,
     uuid: Uuid,
 }
@@ -63,15 +62,15 @@ pub struct LocalFile {
 impl LocalFile {
     pub fn from_path(path: impl Into<PathBuf>) -> Self {
         Self {
-            filename: None,
+            name: None,
             path: path.into(),
             uuid: Uuid::new_v4(),
         }
     }
 
-    pub fn with_filename(filename: String, path: impl Into<PathBuf>) -> Self {
+    pub fn from_path_with_name(path: impl Into<PathBuf>, name: impl Into<String>) -> Self {
         Self {
-            filename: Some(filename),
+            name: Some(name.into()),
             path: path.into(),
             uuid: Uuid::new_v4(),
         }
@@ -87,8 +86,8 @@ impl LocalFile {
         format!("attach://{}", self.uuid)
     }
 
-    pub async fn get_part(&self) -> Result<Part, io::Error> {
-        Ok(Part::stream(self.open().await?).file_name(self.get_file_name()))
+    pub async fn get_form_part(&self) -> Result<Part, io::Error> {
+        Ok(Part::stream(self.open().await?).file_name(self.get_name()))
     }
 
     pub async fn open(&self) -> Result<File, std::io::Error> {
@@ -96,8 +95,8 @@ impl LocalFile {
     }
 
     #[must_use]
-    pub fn get_file_name(&self) -> String {
-        if let Some(filename) = &self.filename {
+    pub fn get_name(&self) -> String {
+        if let Some(filename) = &self.name {
             filename.clone()
         } else {
             match self.path.file_name() {
@@ -116,38 +115,29 @@ impl Default for InputFile {
 
 impl InputFile {
     pub fn from_path(path: impl Into<PathBuf>) -> Self {
-        Self::File(LocalFile::from_path(path))
+        Self::Local(LocalFile::from_path(path))
     }
 
-    pub fn with_filename(filename: String, path: impl Into<PathBuf>) -> Self {
-        Self::File(LocalFile::with_filename(filename, path))
+    pub fn from_path_with_name(path: impl Into<PathBuf>, name: impl Into<String>) -> Self {
+        Self::Local(LocalFile::from_path_with_name(path, name))
     }
 
     pub fn from_file_id(file_id: impl Into<String>) -> Self {
-        Self::FileIdOrURL(file_id.into())
+        Self::FileIdOrUrl(file_id.into())
     }
 
     pub fn from_url(url: impl Into<String>) -> Self {
-        Self::FileIdOrURL(url.into())
+        Self::FileIdOrUrl(url.into())
     }
 
-    pub fn new_in_memory(name: impl Into<String>, data: impl Into<FileContents>) -> Self {
+    pub fn from_data(name: impl Into<String>, data: impl Into<FileContents>) -> Self {
         Self::InMemory(InMemoryFile::new(name, data))
-    }
-
-    #[must_use]
-    pub fn get_attach_name(&self) -> String {
-        match self {
-            Self::File(f) => f.get_attach_name(),
-            Self::FileIdOrURL(id_or_url) => id_or_url.clone(),
-            Self::InMemory(_) => todo!(),
-        }
     }
 
     #[must_use]
     pub fn get_uuid(&self) -> Option<String> {
         match self {
-            Self::File(f) => Some(f.get_uuid_str()),
+            Self::Local(f) => Some(f.get_uuid_str()),
             _ => None,
         }
     }
@@ -158,15 +148,31 @@ where
     IntoString: Into<String>,
 {
     fn from(value: IntoString) -> Self {
-        Self::FileIdOrURL(value.into())
+        Self::FileIdOrUrl(value.into())
     }
 }
 
-/// If we have Cows why not have Moose
-pub type Moose = Cow<'static, str>;
-
-pub trait GetFiles {
+pub trait GetFiles: Sized {
     fn get_files(&self) -> Vec<&InputFile>;
+}
+
+impl GetFiles for InputFile {
+    fn get_files(&self) -> Vec<&InputFile> {
+        vec![self]
+    }
+}
+impl<T: GetFiles> GetFiles for Vec<T> {
+    fn get_files(&self) -> Vec<&InputFile> {
+        self.iter().flat_map(GetFiles::get_files).collect()
+    }
+}
+impl<T: GetFiles> GetFiles for Option<T> {
+    fn get_files(&self) -> Vec<&InputFile> {
+        match self {
+            Some(v) => v.get_files(),
+            None => vec![],
+        }
+    }
 }
 
 impl Serialize for InputFile {
@@ -175,9 +181,9 @@ impl Serialize for InputFile {
         S: serde::Serializer,
     {
         match self {
-            Self::File(f) => serializer.serialize_str(&f.get_attach_name()),
+            Self::Local(f) => serializer.serialize_str(&f.get_attach_name()),
             Self::InMemory(f) => serializer.serialize_str(&f.get_attach_name()),
-            Self::FileIdOrURL(s) => serializer.serialize_str(s),
+            Self::FileIdOrUrl(s) => serializer.serialize_str(s),
         }
     }
 }

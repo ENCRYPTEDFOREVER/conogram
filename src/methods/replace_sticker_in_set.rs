@@ -1,7 +1,5 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
@@ -11,12 +9,13 @@ use crate::{
         input_sticker::InputSticker,
         misc::input_file::{GetFiles, InputFile},
     },
-    errors::ConogramError,
+    
     impl_into_future_multipart,
     request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct ReplaceStickerInSetParams {
     pub user_id: i64,
     pub name: String,
@@ -51,9 +50,6 @@ impl RequestT for ReplaceStickerInSetRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        true
     }
 }
 impl<'a> ReplaceStickerInSetRequest<'a> {

@@ -1,7 +1,5 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
@@ -14,13 +12,14 @@ use crate::{
         misc::{chat_id::ChatId, reply_markup::ReplyMarkup},
         reply_parameters::ReplyParameters,
     },
-    errors::ConogramError,
+    
     impl_into_future,
     request::RequestT,
     utils::deserialize_utils::is_false,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct SendMessageParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub business_connection_id: Option<String>,
@@ -68,9 +67,6 @@ impl RequestT for SendMessageRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> SendMessageRequest<'a> {

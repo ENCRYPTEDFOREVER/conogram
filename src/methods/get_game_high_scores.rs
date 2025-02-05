@@ -1,16 +1,15 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
-    api::Api, entities::game_high_score::GameHighScore, errors::ConogramError, impl_into_future,
+    api::Api, entities::game_high_score::GameHighScore,  impl_into_future,
     request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct GetGameHighScoresParams {
     pub user_id: i64,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -43,9 +42,6 @@ impl RequestT for GetGameHighScoresRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> GetGameHighScoresRequest<'a> {

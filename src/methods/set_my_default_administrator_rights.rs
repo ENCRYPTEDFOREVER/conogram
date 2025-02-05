@@ -1,16 +1,15 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
-    api::Api, entities::chat_administrator_rights::ChatAdministratorRights, errors::ConogramError,
+    api::Api, entities::chat_administrator_rights::ChatAdministratorRights, 
     impl_into_future, request::RequestT, utils::deserialize_utils::is_false,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct SetMyDefaultAdministratorRightsParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rights: Option<ChatAdministratorRights>,
@@ -38,9 +37,6 @@ impl RequestT for SetMyDefaultAdministratorRightsRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> SetMyDefaultAdministratorRightsRequest<'a> {

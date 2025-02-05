@@ -1,8 +1,3 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
-
 use serde::Serialize;
 
 use crate::{
@@ -16,13 +11,13 @@ use crate::{
         },
         reply_parameters::ReplyParameters,
     },
-    errors::ConogramError,
     impl_into_future_multipart,
     request::RequestT,
     utils::deserialize_utils::is_false,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct SendMediaGroupParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub business_connection_id: Option<String>,
@@ -44,11 +39,7 @@ pub struct SendMediaGroupParams {
 
 impl GetFiles for SendMediaGroupParams {
     fn get_files(&self) -> Vec<&InputFile> {
-        let mut vec = Vec::with_capacity(3);
-        for media in &self.media {
-            vec.extend(media.get_files());
-        }
-        vec
+        self.media.get_files()
     }
 }
 impl_into_future_multipart!(SendMediaGroupRequest<'a>);
@@ -71,9 +62,6 @@ impl RequestT for SendMediaGroupRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        true
     }
 }
 impl<'a> SendMediaGroupRequest<'a> {

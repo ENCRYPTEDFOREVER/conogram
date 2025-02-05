@@ -1,15 +1,14 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
-    api::Api, entities::update::Update, errors::ConogramError, impl_into_future, request::RequestT,
+    api::Api, entities::update::Update,  impl_into_future, request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct GetUpdatesParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub offset: Option<i64>,
@@ -41,9 +40,6 @@ impl RequestT for GetUpdatesRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> GetUpdatesRequest<'a> {

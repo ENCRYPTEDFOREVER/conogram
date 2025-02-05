@@ -1,16 +1,15 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
-    api::Api, entities::webhook_info::WebhookInfo, errors::ConogramError, impl_into_future,
+    api::Api, entities::webhook_info::WebhookInfo,  impl_into_future,
     request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct GetWebhookInfoParams {}
 
 impl_into_future!(GetWebhookInfoRequest<'a>);
@@ -33,9 +32,6 @@ impl RequestT for GetWebhookInfoRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> GetWebhookInfoRequest<'a> {

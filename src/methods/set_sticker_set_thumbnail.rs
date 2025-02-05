@@ -1,19 +1,14 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
-
 use serde::Serialize;
 
 use crate::{
     api::Api,
     entities::misc::input_file::{GetFiles, InputFile},
-    errors::ConogramError,
     impl_into_future_multipart,
     request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct SetStickerSetThumbnailParams {
     pub name: String,
     pub user_id: i64,
@@ -51,9 +46,6 @@ impl RequestT for SetStickerSetThumbnailRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        true
     }
 }
 impl<'a> SetStickerSetThumbnailRequest<'a> {

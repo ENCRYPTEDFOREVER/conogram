@@ -1,19 +1,18 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
     api::Api,
     entities::{forum_topic::ForumTopic, misc::chat_id::ChatId},
-    errors::ConogramError,
+    
     impl_into_future,
     request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct CreateForumTopicParams {
     pub chat_id: ChatId,
     pub name: String,
@@ -43,9 +42,6 @@ impl RequestT for CreateForumTopicRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> CreateForumTopicRequest<'a> {

@@ -1,16 +1,15 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
-    api::Api, entities::business_connection::BusinessConnection, errors::ConogramError,
+    api::Api, entities::business_connection::BusinessConnection, 
     impl_into_future, request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct GetBusinessConnectionParams {
     pub business_connection_id: String,
 }
@@ -35,9 +34,6 @@ impl RequestT for GetBusinessConnectionRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> GetBusinessConnectionRequest<'a> {

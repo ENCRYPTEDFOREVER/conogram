@@ -1,13 +1,12 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
-use crate::{api::Api, errors::ConogramError, impl_into_future, request::RequestT};
+use crate::{api::Api,  impl_into_future, request::RequestT};
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct SetCustomEmojiStickerSetThumbnailParams {
     pub name: String,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -34,9 +33,6 @@ impl RequestT for SetCustomEmojiStickerSetThumbnailRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> SetCustomEmojiStickerSetThumbnailRequest<'a> {

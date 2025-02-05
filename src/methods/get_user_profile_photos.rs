@@ -1,16 +1,15 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
-    api::Api, entities::user_profile_photos::UserProfilePhotos, errors::ConogramError,
+    api::Api, entities::user_profile_photos::UserProfilePhotos, 
     impl_into_future, request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct GetUserProfilePhotosParams {
     pub user_id: i64,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -39,9 +38,6 @@ impl RequestT for GetUserProfilePhotosRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> GetUserProfilePhotosRequest<'a> {

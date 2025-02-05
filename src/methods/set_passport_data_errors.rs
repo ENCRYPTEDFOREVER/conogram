@@ -1,16 +1,15 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
-    api::Api, entities::passport_element_error::PassportElementError, errors::ConogramError,
+    api::Api, entities::passport_element_error::PassportElementError, 
     impl_into_future, request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct SetPassportDataErrorsParams {
     pub user_id: i64,
     pub errors: Vec<PassportElementError>,
@@ -38,9 +37,6 @@ impl RequestT for SetPassportDataErrorsRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> SetPassportDataErrorsRequest<'a> {

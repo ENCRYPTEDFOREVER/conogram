@@ -1,13 +1,12 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
-use crate::{api::Api, errors::ConogramError, impl_into_future, request::RequestT};
+use crate::{api::Api,  impl_into_future, request::RequestT};
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct AnswerPreCheckoutQueryParams {
     pub pre_checkout_query_id: String,
     pub ok: bool,
@@ -35,9 +34,6 @@ impl RequestT for AnswerPreCheckoutQueryRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> AnswerPreCheckoutQueryRequest<'a> {

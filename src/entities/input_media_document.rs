@@ -39,8 +39,7 @@ pub struct InputMediaDocument {
 
 impl GetFiles for InputMediaDocument {
     fn get_files(&self) -> Vec<&InputFile> {
-        let mut vec = Vec::with_capacity(2);
-        vec.push(&self.media);
+        let mut vec = vec![&self.media];
         if let Some(thumbnail) = &self.thumbnail {
             vec.push(thumbnail);
         }

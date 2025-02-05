@@ -247,8 +247,8 @@ impl ApiClient {
 
                 for file in params.get_files() {
                     match file {
-                        InputFile::File(f) => {
-                            let part = match f.get_part().await {
+                        InputFile::Local(f) => {
+                            let part = match f.get_form_part().await {
                                 Ok(part) => part,
                                 Err(err) => {
                                     return Err(ConogramError::new(method, params, err.into()))
@@ -258,9 +258,9 @@ impl ApiClient {
                             form = form.part(f.get_uuid_str(), part);
                         }
                         InputFile::InMemory(f) => {
-                            form = form.part(f.get_uuid_str(), f.get_part());
+                            form = form.part(f.get_uuid_str(), f.get_form_part());
                         }
-                        InputFile::FileIdOrURL(_) => {}
+                        InputFile::FileIdOrUrl(_) => {}
                     }
                 }
 

@@ -1,15 +1,14 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
-    api::Api, entities::user::User, errors::ConogramError, impl_into_future, request::RequestT,
+    api::Api, entities::user::User,  impl_into_future, request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct GetMeParams {}
 
 impl_into_future!(GetMeRequest<'a>);
@@ -32,9 +31,6 @@ impl RequestT for GetMeRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> GetMeRequest<'a> {

@@ -1,19 +1,18 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
     api::Api,
     entities::{bot_command::BotCommand, bot_command_scope::BotCommandScope},
-    errors::ConogramError,
+    
     impl_into_future,
     request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct GetMyCommandsParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scope: Option<BotCommandScope>,
@@ -41,9 +40,6 @@ impl RequestT for GetMyCommandsRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> GetMyCommandsRequest<'a> {

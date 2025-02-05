@@ -1,7 +1,5 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
@@ -16,12 +14,13 @@ use crate::{
             input_file::{GetFiles, InputFile},
         },
     },
-    errors::ConogramError,
+    
     impl_into_future_multipart,
     request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct EditMessageMediaParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub business_connection_id: Option<String>,
@@ -63,9 +62,6 @@ impl RequestT for EditMessageMediaRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        true
     }
 }
 impl<'a> EditMessageMediaRequest<'a> {

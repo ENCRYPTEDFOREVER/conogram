@@ -1,16 +1,15 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
-    api::Api, entities::message_entity::MessageEntity, errors::ConogramError, impl_into_future,
+    api::Api, entities::message_entity::MessageEntity,  impl_into_future,
     request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct SendGiftParams {
     pub user_id: i64,
     pub gift_id: String,
@@ -42,9 +41,6 @@ impl RequestT for SendGiftRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> SendGiftRequest<'a> {

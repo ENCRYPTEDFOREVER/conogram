@@ -1,20 +1,19 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
     api::Api,
     entities::{message_id::MessageId, misc::chat_id::ChatId},
-    errors::ConogramError,
+    
     impl_into_future,
     request::RequestT,
     utils::deserialize_utils::is_false,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct ForwardMessagesParams {
     pub chat_id: ChatId,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -47,9 +46,6 @@ impl RequestT for ForwardMessagesRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> ForwardMessagesRequest<'a> {

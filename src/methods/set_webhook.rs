@@ -1,20 +1,15 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
-
 use serde::Serialize;
 
 use crate::{
     api::Api,
     entities::misc::input_file::{GetFiles, InputFile},
-    errors::ConogramError,
     impl_into_future_multipart,
     request::RequestT,
     utils::deserialize_utils::is_false,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct SetWebhookParams {
     pub url: String,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -62,9 +57,6 @@ impl RequestT for SetWebhookRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        true
     }
 }
 impl<'a> SetWebhookRequest<'a> {

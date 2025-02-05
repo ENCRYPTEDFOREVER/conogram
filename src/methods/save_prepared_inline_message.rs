@@ -1,7 +1,5 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
@@ -10,13 +8,14 @@ use crate::{
     entities::{
         inline_query_result::InlineQueryResult, prepared_inline_message::PreparedInlineMessage,
     },
-    errors::ConogramError,
+    
     impl_into_future,
     request::RequestT,
     utils::deserialize_utils::is_false,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct SavePreparedInlineMessageParams {
     pub user_id: i64,
     pub result: InlineQueryResult,
@@ -50,9 +49,6 @@ impl RequestT for SavePreparedInlineMessageRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> SavePreparedInlineMessageRequest<'a> {

@@ -1,8 +1,3 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
-
 use serde::Serialize;
 
 use crate::{
@@ -11,7 +6,6 @@ use crate::{
         input_sticker::InputSticker,
         misc::input_file::{GetFiles, InputFile},
     },
-    errors::ConogramError,
     impl_into_future_multipart,
     request::RequestT,
     utils::deserialize_utils::is_false,
@@ -58,9 +52,6 @@ impl RequestT for CreateNewStickerSetRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        true
     }
 }
 impl<'a> CreateNewStickerSetRequest<'a> {

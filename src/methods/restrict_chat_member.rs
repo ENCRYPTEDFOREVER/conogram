@@ -1,20 +1,19 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
     api::Api,
     entities::{chat_permissions::ChatPermissions, misc::chat_id::ChatId},
-    errors::ConogramError,
+    
     impl_into_future,
     request::RequestT,
     utils::deserialize_utils::is_false,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct RestrictChatMemberParams {
     pub chat_id: ChatId,
     pub user_id: i64,
@@ -45,9 +44,6 @@ impl RequestT for RestrictChatMemberRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> RestrictChatMemberRequest<'a> {

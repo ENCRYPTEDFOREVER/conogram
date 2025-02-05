@@ -1,19 +1,18 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
     api::Api,
     entities::{chat_invite_link::ChatInviteLink, misc::chat_id::ChatId},
-    errors::ConogramError,
+    
     impl_into_future,
     request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct RevokeChatInviteLinkParams {
     pub chat_id: ChatId,
     pub invite_link: String,
@@ -39,9 +38,6 @@ impl RequestT for RevokeChatInviteLinkRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> RevokeChatInviteLinkRequest<'a> {

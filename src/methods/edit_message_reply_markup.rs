@@ -1,7 +1,5 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
@@ -10,12 +8,13 @@ use crate::{
     entities::{
         inline_keyboard_markup::InlineKeyboardMarkup, message::Message, misc::chat_id::ChatId,
     },
-    errors::ConogramError,
+    
     impl_into_future,
     request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct EditMessageReplyMarkupParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub business_connection_id: Option<String>,
@@ -49,9 +48,6 @@ impl RequestT for EditMessageReplyMarkupRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> EditMessageReplyMarkupRequest<'a> {

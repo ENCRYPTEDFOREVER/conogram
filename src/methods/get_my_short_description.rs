@@ -1,16 +1,15 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
-    api::Api, entities::bot_short_description::BotShortDescription, errors::ConogramError,
+    api::Api, entities::bot_short_description::BotShortDescription, 
     impl_into_future, request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct GetMyShortDescriptionParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language_code: Option<String>,
@@ -36,9 +35,6 @@ impl RequestT for GetMyShortDescriptionRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> GetMyShortDescriptionRequest<'a> {

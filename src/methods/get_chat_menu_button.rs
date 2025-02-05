@@ -1,16 +1,15 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
-    api::Api, entities::menu_button::MenuButton, errors::ConogramError, impl_into_future,
+    api::Api, entities::menu_button::MenuButton,  impl_into_future,
     request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct GetChatMenuButtonParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub chat_id: Option<i64>,
@@ -36,9 +35,6 @@ impl RequestT for GetChatMenuButtonRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> GetChatMenuButtonRequest<'a> {

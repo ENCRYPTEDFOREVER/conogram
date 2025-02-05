@@ -1,16 +1,15 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
-    api::Api, entities::sticker::Sticker, errors::ConogramError, impl_into_future,
+    api::Api, entities::sticker::Sticker,  impl_into_future,
     request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct GetForumTopicIconStickersParams {}
 
 impl_into_future!(GetForumTopicIconStickersRequest<'a>);
@@ -33,9 +32,6 @@ impl RequestT for GetForumTopicIconStickersRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> GetForumTopicIconStickersRequest<'a> {

@@ -1,12 +1,7 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
-
 use serde::Serialize;
 
 use crate::{
-    api::Api, errors::ConogramError, impl_into_future, request::RequestT,
+    api::Api,  impl_into_future, request::RequestT,
     utils::deserialize_utils::is_false,
 };
 
@@ -45,9 +40,6 @@ impl RequestT for AnswerCallbackQueryRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> AnswerCallbackQueryRequest<'a> {

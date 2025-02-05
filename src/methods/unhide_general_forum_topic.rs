@@ -1,16 +1,15 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
-    api::Api, entities::misc::chat_id::ChatId, errors::ConogramError, impl_into_future,
+    api::Api, entities::misc::chat_id::ChatId,  impl_into_future,
     request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct UnhideGeneralForumTopicParams {
     pub chat_id: ChatId,
 }
@@ -35,9 +34,6 @@ impl RequestT for UnhideGeneralForumTopicRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> UnhideGeneralForumTopicRequest<'a> {

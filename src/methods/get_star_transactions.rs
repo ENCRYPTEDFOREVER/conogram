@@ -1,16 +1,15 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
-    api::Api, entities::star_transactions::StarTransactions, errors::ConogramError,
+    api::Api, entities::star_transactions::StarTransactions, 
     impl_into_future, request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct GetStarTransactionsParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub offset: Option<i64>,
@@ -38,9 +37,6 @@ impl RequestT for GetStarTransactionsRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> GetStarTransactionsRequest<'a> {

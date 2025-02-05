@@ -1,19 +1,18 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
     api::Api,
     entities::{inline_query_result::InlineQueryResult, sent_web_app_message::SentWebAppMessage},
-    errors::ConogramError,
+    
     impl_into_future,
     request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct AnswerWebAppQueryParams {
     pub web_app_query_id: String,
     pub result: InlineQueryResult,
@@ -39,9 +38,6 @@ impl RequestT for AnswerWebAppQueryRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> AnswerWebAppQueryRequest<'a> {

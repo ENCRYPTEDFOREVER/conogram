@@ -1,16 +1,15 @@
-use std::{
-    future::{Future, IntoFuture},
-    pin::Pin,
-};
+
+
 
 use serde::Serialize;
 
 use crate::{
-    api::Api, entities::shipping_option::ShippingOption, errors::ConogramError, impl_into_future,
+    api::Api, entities::shipping_option::ShippingOption,  impl_into_future,
     request::RequestT,
 };
 
 #[derive(Debug, Clone, Serialize)]
+
 pub struct AnswerShippingQueryParams {
     pub shipping_query_id: String,
     pub ok: bool,
@@ -40,9 +39,6 @@ impl RequestT for AnswerShippingQueryRequest<'_> {
     }
     fn get_params_ref(&self) -> &Self::ParamsType {
         &self.params
-    }
-    fn is_multipart() -> bool {
-        false
     }
 }
 impl<'a> AnswerShippingQueryRequest<'a> {
