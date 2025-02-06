@@ -59,10 +59,10 @@ impl From<ReactionTypePaid> for ReactionType {
 }
 
 // Divider: all content below this line will be preserved after code regen
-use super::reaction_type_emoji::ReactionTypeEmojiEmoji;
+use super::reaction_type_emoji::ReactionEmoji;
 
-impl From<ReactionTypeEmojiEmoji> for ReactionType {
-    fn from(value: ReactionTypeEmojiEmoji) -> Self {
-        Self::Emoji(value.into())
+impl From<ReactionEmoji> for ReactionType {
+    fn from(emoji: ReactionEmoji) -> Self {
+        Self::Emoji(ReactionTypeEmoji { emoji })
     }
 }

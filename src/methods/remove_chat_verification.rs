@@ -3,12 +3,12 @@ use serde::Serialize;
 
 use crate::entities::misc::chat_id::ChatId;
 
-/// Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
+/// Removes verification from a chat that is currently verified [on behalf of the organization](https://telegram.org/verify#third-party-verification) represented by the bot. Returns *True* on success.
 ///
-/// API Reference: [link](https://core.telegram.org/bots/api/#deletechatphoto)
+/// API Reference: [link](https://core.telegram.org/bots/api/#removechatverification)
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = bool)]
-pub struct DeleteChatPhotoParams {
+pub struct RemoveChatVerificationParams {
     /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
     pub chat_id: ChatId,
 }

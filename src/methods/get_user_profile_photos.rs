@@ -1,84 +1,24 @@
-
-
-
+use conogram_derives::Request;
 use serde::Serialize;
 
-use crate::{
-    api::Api, entities::user_profile_photos::UserProfilePhotos, 
-    impl_into_future, request::RequestT,
-};
+use crate::entities::user_profile_photos::UserProfilePhotos;
 
-#[derive(Debug, Clone, Serialize)]
-
+/// Use this method to get a list of profile pictures for a user. Returns a [UserProfilePhotos](https://core.telegram.org/bots/api/#userprofilephotos) object.
+///
+/// API Reference: [link](https://core.telegram.org/bots/api/#getuserprofilephotos)
+#[derive(Debug, Clone, Serialize, Request)]
+#[conogram(result = UserProfilePhotos)]
 pub struct GetUserProfilePhotosParams {
+    /// Unique identifier of the target user
     pub user_id: i64,
+
+    /// Sequential number of the first photo to be returned. By default, all photos are returned.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub offset: Option<i64>,
+
+    /// Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-}
-
-impl_into_future!(GetUserProfilePhotosRequest<'a>);
-
-///Use this method to get a list of profile pictures for a user. Returns a [UserProfilePhotos](https://core.telegram.org/bots/api/#userprofilephotos) object.
-#[derive(Clone)]
-pub struct GetUserProfilePhotosRequest<'a> {
-    api: &'a Api,
-    params: GetUserProfilePhotosParams,
-}
-
-impl RequestT for GetUserProfilePhotosRequest<'_> {
-    type ParamsType = GetUserProfilePhotosParams;
-    type ReturnType = UserProfilePhotos;
-    fn get_name() -> &'static str {
-        "getUserProfilePhotos"
-    }
-    fn get_api_ref(&self) -> &Api {
-        self.api
-    }
-    fn get_params_ref(&self) -> &Self::ParamsType {
-        &self.params
-    }
-}
-impl<'a> GetUserProfilePhotosRequest<'a> {
-    pub fn new(api: &'a Api, user_id: impl Into<i64>) -> Self {
-        Self {
-            api,
-            params: GetUserProfilePhotosParams {
-                user_id: user_id.into(),
-                offset: Option::default(),
-                limit: Option::default(),
-            },
-        }
-    }
-
-    ///Unique identifier of the target user
-    #[must_use]
-    pub fn user_id(mut self, user_id: impl Into<i64>) -> Self {
-        self.params.user_id = user_id.into();
-        self
-    }
-
-    ///Sequential number of the first photo to be returned. By default, all photos are returned.
-    #[must_use]
-    pub fn offset(mut self, offset: impl Into<i64>) -> Self {
-        self.params.offset = Some(offset.into());
-        self
-    }
-
-    ///Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100.
-    #[must_use]
-    pub fn limit(mut self, limit: impl Into<i64>) -> Self {
-        self.params.limit = Some(limit.into());
-        self
-    }
-}
-
-impl Api {
-    ///Use this method to get a list of profile pictures for a user. Returns a [UserProfilePhotos](https://core.telegram.org/bots/api/#userprofilephotos) object.
-    pub fn get_user_profile_photos(&self, user_id: impl Into<i64>) -> GetUserProfilePhotosRequest {
-        GetUserProfilePhotosRequest::new(self, user_id)
-    }
 }
 
 // Divider: all content below this line will be preserved after code regen

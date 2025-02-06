@@ -1,84 +1,19 @@
+use conogram_derives::Request;
 use serde::Serialize;
 
-use crate::{
-    api::Api,
-    entities::misc::{
-        chat_id::ChatId,
-        input_file::{GetFiles, InputFile},
-    },
-    impl_into_future_multipart,
-    request::RequestT,
-};
+use crate::entities::misc::{chat_id::ChatId, input_file::InputFile};
 
-#[derive(Debug, Clone, Serialize)]
-
+/// Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
+///
+/// API Reference: [link](https://core.telegram.org/bots/api/#setchatphoto)
+#[derive(Debug, Clone, Serialize, Request)]
+#[conogram(result = bool)]
 pub struct SetChatPhotoParams {
+    /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
     pub chat_id: ChatId,
+
+    /// New chat photo, uploaded using multipart/form-data
     pub photo: InputFile,
-}
-
-impl GetFiles for SetChatPhotoParams {
-    fn get_files(&self) -> Vec<&InputFile> {
-        vec![&self.photo]
-    }
-}
-impl_into_future_multipart!(SetChatPhotoRequest<'a>);
-
-///Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
-#[derive(Clone)]
-pub struct SetChatPhotoRequest<'a> {
-    api: &'a Api,
-    params: SetChatPhotoParams,
-}
-
-impl RequestT for SetChatPhotoRequest<'_> {
-    type ParamsType = SetChatPhotoParams;
-    type ReturnType = bool;
-    fn get_name() -> &'static str {
-        "setChatPhoto"
-    }
-    fn get_api_ref(&self) -> &Api {
-        self.api
-    }
-    fn get_params_ref(&self) -> &Self::ParamsType {
-        &self.params
-    }
-}
-impl<'a> SetChatPhotoRequest<'a> {
-    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, photo: impl Into<InputFile>) -> Self {
-        Self {
-            api,
-            params: SetChatPhotoParams {
-                chat_id: chat_id.into(),
-                photo: photo.into(),
-            },
-        }
-    }
-
-    ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-    #[must_use]
-    pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
-        self.params.chat_id = chat_id.into();
-        self
-    }
-
-    ///New chat photo, uploaded using multipart/form-data
-    #[must_use]
-    pub fn photo(mut self, photo: impl Into<InputFile>) -> Self {
-        self.params.photo = photo.into();
-        self
-    }
-}
-
-impl Api {
-    ///Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
-    pub fn set_chat_photo(
-        &self,
-        chat_id: impl Into<ChatId>,
-        photo: impl Into<InputFile>,
-    ) -> SetChatPhotoRequest {
-        SetChatPhotoRequest::new(self, chat_id, photo)
-    }
 }
 
 // Divider: all content below this line will be preserved after code regen

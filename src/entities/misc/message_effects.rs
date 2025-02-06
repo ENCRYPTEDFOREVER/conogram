@@ -1,7 +1,8 @@
 use std::fmt::Display;
 
+pub type MessageEffect = u64;
 #[derive(Debug, Clone, Copy)]
-#[repr(usize)]
+#[repr(u64)]
 pub enum UsableMessageEffects {
     /// 👍
     ThumbsUp = 5107584321108051014,
@@ -23,8 +24,8 @@ impl Display for UsableMessageEffects {
     }
 }
 
-impl From<UsableMessageEffects> for String {
+impl From<UsableMessageEffects> for u64 {
     fn from(val: UsableMessageEffects) -> Self {
-        val.to_string()
+        val as Self
     }
 }

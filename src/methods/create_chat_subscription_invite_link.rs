@@ -1,110 +1,26 @@
-
-
-
+use conogram_derives::Request;
 use serde::Serialize;
 
-use crate::{
-    api::Api,
-    entities::{chat_invite_link::ChatInviteLink, misc::chat_id::ChatId},
-    
-    impl_into_future,
-    request::RequestT,
-};
+use crate::entities::{chat_invite_link::ChatInviteLink, misc::chat_id::ChatId};
 
-#[derive(Debug, Clone, Serialize)]
-
+/// Use this method to create a [subscription invite link](https://telegram.org/blog/superchannels-star-reactions-subscriptions#star-subscriptions) for a channel chat. The bot must have the *can\_invite\_users* administrator rights. The link can be edited using the method [editChatSubscriptionInviteLink](https://core.telegram.org/bots/api/#editchatsubscriptioninvitelink) or revoked using the method [revokeChatInviteLink](https://core.telegram.org/bots/api/#revokechatinvitelink). Returns the new invite link as a [ChatInviteLink](https://core.telegram.org/bots/api/#chatinvitelink) object.
+///
+/// API Reference: [link](https://core.telegram.org/bots/api/#createchatsubscriptioninvitelink)
+#[derive(Debug, Clone, Serialize, Request)]
+#[conogram(result = ChatInviteLink)]
 pub struct CreateChatSubscriptionInviteLinkParams {
+    /// Unique identifier for the target channel chat or username of the target channel (in the format `@channelusername`)
     pub chat_id: ChatId,
+
+    /// Invite link name; 0-32 characters
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+
+    /// The number of seconds the subscription will be active for before the next payment. Currently, it must always be 2592000 (30 days).
     pub subscription_period: i64,
+
+    /// The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-2500
     pub subscription_price: i64,
-}
-
-impl_into_future!(CreateChatSubscriptionInviteLinkRequest<'a>);
-
-///Use this method to create a [subscription invite link](https://telegram.org/blog/superchannels-star-reactions-subscriptions#star-subscriptions) for a channel chat. The bot must have the *can\_invite\_users* administrator rights. The link can be edited using the method [editChatSubscriptionInviteLink](https://core.telegram.org/bots/api/#editchatsubscriptioninvitelink) or revoked using the method [revokeChatInviteLink](https://core.telegram.org/bots/api/#revokechatinvitelink). Returns the new invite link as a [ChatInviteLink](https://core.telegram.org/bots/api/#chatinvitelink) object.
-#[derive(Clone)]
-pub struct CreateChatSubscriptionInviteLinkRequest<'a> {
-    api: &'a Api,
-    params: CreateChatSubscriptionInviteLinkParams,
-}
-
-impl RequestT for CreateChatSubscriptionInviteLinkRequest<'_> {
-    type ParamsType = CreateChatSubscriptionInviteLinkParams;
-    type ReturnType = ChatInviteLink;
-    fn get_name() -> &'static str {
-        "createChatSubscriptionInviteLink"
-    }
-    fn get_api_ref(&self) -> &Api {
-        self.api
-    }
-    fn get_params_ref(&self) -> &Self::ParamsType {
-        &self.params
-    }
-}
-impl<'a> CreateChatSubscriptionInviteLinkRequest<'a> {
-    pub fn new(
-        api: &'a Api,
-        chat_id: impl Into<ChatId>,
-        subscription_period: impl Into<i64>,
-        subscription_price: impl Into<i64>,
-    ) -> Self {
-        Self {
-            api,
-            params: CreateChatSubscriptionInviteLinkParams {
-                chat_id: chat_id.into(),
-                subscription_period: subscription_period.into(),
-                subscription_price: subscription_price.into(),
-                name: Option::default(),
-            },
-        }
-    }
-
-    ///Unique identifier for the target channel chat or username of the target channel (in the format `@channelusername`)
-    #[must_use]
-    pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
-        self.params.chat_id = chat_id.into();
-        self
-    }
-
-    ///Invite link name; 0-32 characters
-    #[must_use]
-    pub fn name(mut self, name: impl Into<String>) -> Self {
-        self.params.name = Some(name.into());
-        self
-    }
-
-    ///The number of seconds the subscription will be active for before the next payment. Currently, it must always be 2592000 (30 days).
-    #[must_use]
-    pub fn subscription_period(mut self, subscription_period: impl Into<i64>) -> Self {
-        self.params.subscription_period = subscription_period.into();
-        self
-    }
-
-    ///The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-2500
-    #[must_use]
-    pub fn subscription_price(mut self, subscription_price: impl Into<i64>) -> Self {
-        self.params.subscription_price = subscription_price.into();
-        self
-    }
-}
-
-impl Api {
-    ///Use this method to create a [subscription invite link](https://telegram.org/blog/superchannels-star-reactions-subscriptions#star-subscriptions) for a channel chat. The bot must have the *can\_invite\_users* administrator rights. The link can be edited using the method [editChatSubscriptionInviteLink](https://core.telegram.org/bots/api/#editchatsubscriptioninvitelink) or revoked using the method [revokeChatInviteLink](https://core.telegram.org/bots/api/#revokechatinvitelink). Returns the new invite link as a [ChatInviteLink](https://core.telegram.org/bots/api/#chatinvitelink) object.
-    pub fn create_chat_subscription_invite_link(
-        &self,
-        chat_id: impl Into<ChatId>,
-        subscription_period: impl Into<i64>,
-        subscription_price: impl Into<i64>,
-    ) -> CreateChatSubscriptionInviteLinkRequest {
-        CreateChatSubscriptionInviteLinkRequest::new(
-            self,
-            chat_id,
-            subscription_period,
-            subscription_price,
-        )
-    }
 }
 
 // Divider: all content below this line will be preserved after code regen

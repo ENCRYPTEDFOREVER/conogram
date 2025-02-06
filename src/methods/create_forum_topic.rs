@@ -1,113 +1,27 @@
-
-
-
+use conogram_derives::Request;
 use serde::Serialize;
 
-use crate::{
-    api::Api,
-    entities::{forum_topic::ForumTopic, misc::chat_id::ChatId},
-    
-    impl_into_future,
-    request::RequestT,
-};
+use crate::entities::{forum_topic::ForumTopic, misc::chat_id::ChatId};
 
-#[derive(Debug, Clone, Serialize)]
-
+/// Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights. Returns information about the created topic as a [ForumTopic](https://core.telegram.org/bots/api/#forumtopic) object.
+///
+/// API Reference: [link](https://core.telegram.org/bots/api/#createforumtopic)
+#[derive(Debug, Clone, Serialize, Request)]
+#[conogram(result = ForumTopic)]
 pub struct CreateForumTopicParams {
+    /// Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
     pub chat_id: ChatId,
+
+    /// Topic name, 1-128 characters
     pub name: String,
+
+    /// Color of the topic icon in RGB format. Currently, must be one of 7322096 (0x6FB9F0), 16766590 (0xFFD67E), 13338331 (0xCB86DB), 9367192 (0x8EEE98), 16749490 (0xFF93B2), or 16478047 (0xFB6F5F)
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub icon_color: Option<CreateForumTopicIconColor>,
+    pub icon_color: Option<i64>,
+
+    /// Unique identifier of the custom emoji shown as the topic icon. Use [getForumTopicIconStickers](https://core.telegram.org/bots/api/#getforumtopiciconstickers) to get all allowed custom emoji identifiers.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub icon_custom_emoji_id: Option<String>,
-}
-
-impl_into_future!(CreateForumTopicRequest<'a>);
-
-///Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights. Returns information about the created topic as a [ForumTopic](https://core.telegram.org/bots/api/#forumtopic) object.
-#[derive(Clone)]
-pub struct CreateForumTopicRequest<'a> {
-    api: &'a Api,
-    params: CreateForumTopicParams,
-}
-
-impl RequestT for CreateForumTopicRequest<'_> {
-    type ParamsType = CreateForumTopicParams;
-    type ReturnType = ForumTopic;
-    fn get_name() -> &'static str {
-        "createForumTopic"
-    }
-    fn get_api_ref(&self) -> &Api {
-        self.api
-    }
-    fn get_params_ref(&self) -> &Self::ParamsType {
-        &self.params
-    }
-}
-impl<'a> CreateForumTopicRequest<'a> {
-    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, name: impl Into<String>) -> Self {
-        Self {
-            api,
-            params: CreateForumTopicParams {
-                chat_id: chat_id.into(),
-                name: name.into(),
-                icon_color: Option::default(),
-                icon_custom_emoji_id: Option::default(),
-            },
-        }
-    }
-
-    ///Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
-    #[must_use]
-    pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
-        self.params.chat_id = chat_id.into();
-        self
-    }
-
-    ///Topic name, 1-128 characters
-    #[must_use]
-    pub fn name(mut self, name: impl Into<String>) -> Self {
-        self.params.name = name.into();
-        self
-    }
-
-    ///Color of the topic icon in RGB format. Currently, must be one of 7322096 (0x6FB9F0), 16766590 (0xFFD67E), 13338331 (0xCB86DB), 9367192 (0x8EEE98), 16749490 (0xFF93B2), or 16478047 (0xFB6F5F)
-    #[must_use]
-    pub fn icon_color(mut self, icon_color: impl Into<CreateForumTopicIconColor>) -> Self {
-        self.params.icon_color = Some(icon_color.into());
-        self
-    }
-
-    ///Unique identifier of the custom emoji shown as the topic icon. Use [getForumTopicIconStickers](https://core.telegram.org/bots/api/#getforumtopiciconstickers) to get all allowed custom emoji identifiers.
-    #[must_use]
-    pub fn icon_custom_emoji_id(mut self, icon_custom_emoji_id: impl Into<String>) -> Self {
-        self.params.icon_custom_emoji_id = Some(icon_custom_emoji_id.into());
-        self
-    }
-}
-
-impl Api {
-    ///Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator rights. Returns information about the created topic as a [ForumTopic](https://core.telegram.org/bots/api/#forumtopic) object.
-    pub fn create_forum_topic(
-        &self,
-        chat_id: impl Into<ChatId>,
-        name: impl Into<String>,
-    ) -> CreateForumTopicRequest {
-        CreateForumTopicRequest::new(self, chat_id, name)
-    }
-}
-
-///Color of the topic icon in RGB format. Currently, must be one of 7322096 (0x6FB9F0), 16766590 (0xFFD67E), 13338331 (0xCB86DB), 9367192 (0x8EEE98), 16749490 (0xFF93B2), or 16478047 (0xFB6F5F)
-#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
-#[serde(rename = "icon_color")]
-pub enum CreateForumTopicIconColor {
-    #[default]
-    _6FB9F0 = 0x6fb9f0,
-    _FFD67E = 0xffd67e,
-    _CB86DB = 0xcb86db,
-    _8EEE98 = 0x8eee98,
-    _FF93B2 = 0xff93b2,
-    _FB6F5F = 0xfb6f5f,
 }
 
 // Divider: all content below this line will be preserved after code regen

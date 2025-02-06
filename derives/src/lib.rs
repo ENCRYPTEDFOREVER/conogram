@@ -178,6 +178,19 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
             )
         };
 
+        let multipart_starts = [
+            "InputSticker",
+            "InputMedia",
+            "InputFile",
+            "LocalFile",
+            "Option<LocalFile>",
+            "Vec<InputMedia>",
+        ];
+        // False-positives
+        let multipart_blacklist = ["InputStickerFormat"];
+        let is_multipart = multipart_starts.iter().any(|n| type_name.starts_with(n))
+            && multipart_blacklist.iter().all(|n| !type_name.eq(n));
+
         fields.push(RequestField {
             _inner: f,
 
@@ -185,10 +198,7 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
             optional,
             method_type,
             assing_impl,
-
-            is_multipart: ["InputSticker", "InputMedia", "InputFile"]
-                .iter()
-                .any(|n| type_name.contains(n)),
+            is_multipart,
 
             doc_comment: doc_comment_attrs
                 .iter()
@@ -206,17 +216,20 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
             .map(|f| {
                 let name = &f.name;
                 quote! {
-                    vec.extend(crate::entities::misc::input_file::GetFiles::get_files(&self.#name));
+                    form = crate::entities::misc::input_file::GetFiles::form(&self.#name, form).await?;
+                    // vec.extend(crate::entities::misc::input_file::GetFiles::get_files(&self.#name));
                 }
             })
             .collect::<TokenStream2>();
 
         stream.extend(quote! {
             impl crate::entities::misc::input_file::GetFiles for #params_struct_ident {
-                fn get_files(&self) -> Vec<&crate::entities::misc::input_file::InputFile> {
-                    let mut vec = Vec::with_capacity(6);
+                async fn form(&self, form: reqwest::multipart::Form) -> Result<reqwest::multipart::Form, std::io::Error> {
+                    // let mut vec = Vec::with_capacity(6);
+                    let mut form = form;
                     #getfiles_body
-                    vec
+                    Ok(form)
+                    // vec
                 }
             }
         });
@@ -356,7 +369,7 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
             })
             .collect::<TokenStream2>();
 
-        let request_struct_ident_snake = to_snake_case(&request_struct_ident);
+        let request_struct_ident_snake = request_struct_ident_to_snake_case(&request_struct_ident);
 
         stream.extend(quote! {
             impl crate::api::Api {
@@ -374,9 +387,10 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
     stream.into()
 }
 
-fn to_snake_case(ident: &Ident) -> Ident {
+fn request_struct_ident_to_snake_case(ident: &Ident) -> Ident {
     let str = ident.to_string();
-    let str = str.trim_end_matches("Request");
+    let str = str.strip_suffix("Request").unwrap_or(&str);
+
     let mut out = String::with_capacity(str.len());
 
     for (i, char) in str.chars().enumerate() {

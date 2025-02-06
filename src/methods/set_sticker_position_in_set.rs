@@ -1,74 +1,17 @@
-
-
-
+use conogram_derives::Request;
 use serde::Serialize;
 
-use crate::{api::Api,  impl_into_future, request::RequestT};
-
-#[derive(Debug, Clone, Serialize)]
-
+/// Use this method to move a sticker in a set created by the bot to a specific position. Returns *True* on success.
+///
+/// API Reference: [link](https://core.telegram.org/bots/api/#setstickerpositioninset)
+#[derive(Debug, Clone, Serialize, Request)]
+#[conogram(result = bool)]
 pub struct SetStickerPositionInSetParams {
+    /// File identifier of the sticker
     pub sticker: String,
+
+    /// New sticker position in the set, zero-based
     pub position: i64,
-}
-
-impl_into_future!(SetStickerPositionInSetRequest<'a>);
-
-///Use this method to move a sticker in a set created by the bot to a specific position. Returns *True* on success.
-#[derive(Clone)]
-pub struct SetStickerPositionInSetRequest<'a> {
-    api: &'a Api,
-    params: SetStickerPositionInSetParams,
-}
-
-impl RequestT for SetStickerPositionInSetRequest<'_> {
-    type ParamsType = SetStickerPositionInSetParams;
-    type ReturnType = bool;
-    fn get_name() -> &'static str {
-        "setStickerPositionInSet"
-    }
-    fn get_api_ref(&self) -> &Api {
-        self.api
-    }
-    fn get_params_ref(&self) -> &Self::ParamsType {
-        &self.params
-    }
-}
-impl<'a> SetStickerPositionInSetRequest<'a> {
-    pub fn new(api: &'a Api, sticker: impl Into<String>, position: impl Into<i64>) -> Self {
-        Self {
-            api,
-            params: SetStickerPositionInSetParams {
-                sticker: sticker.into(),
-                position: position.into(),
-            },
-        }
-    }
-
-    ///File identifier of the sticker
-    #[must_use]
-    pub fn sticker(mut self, sticker: impl Into<String>) -> Self {
-        self.params.sticker = sticker.into();
-        self
-    }
-
-    ///New sticker position in the set, zero-based
-    #[must_use]
-    pub fn position(mut self, position: impl Into<i64>) -> Self {
-        self.params.position = position.into();
-        self
-    }
-}
-
-impl Api {
-    ///Use this method to move a sticker in a set created by the bot to a specific position. Returns *True* on success.
-    pub fn set_sticker_position_in_set(
-        &self,
-        sticker: impl Into<String>,
-        position: impl Into<i64>,
-    ) -> SetStickerPositionInSetRequest {
-        SetStickerPositionInSetRequest::new(self, sticker, position)
-    }
 }
 
 // Divider: all content below this line will be preserved after code regen

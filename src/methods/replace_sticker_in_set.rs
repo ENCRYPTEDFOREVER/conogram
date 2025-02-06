@@ -1,116 +1,25 @@
-
-
-
+use conogram_derives::Request;
 use serde::Serialize;
 
-use crate::{
-    api::Api,
-    entities::{
-        input_sticker::InputSticker,
-        misc::input_file::{GetFiles, InputFile},
-    },
-    
-    impl_into_future_multipart,
-    request::RequestT,
-};
+use crate::entities::input_sticker::InputSticker;
 
-#[derive(Debug, Clone, Serialize)]
-
+/// Use this method to replace an existing sticker in a sticker set with a new one. The method is equivalent to calling [deleteStickerFromSet](https://core.telegram.org/bots/api/#deletestickerfromset), then [addStickerToSet](https://core.telegram.org/bots/api/#addstickertoset), then [setStickerPositionInSet](https://core.telegram.org/bots/api/#setstickerpositioninset). Returns *True* on success.
+///
+/// API Reference: [link](https://core.telegram.org/bots/api/#replacestickerinset)
+#[derive(Debug, Clone, Serialize, Request)]
+#[conogram(result = bool)]
 pub struct ReplaceStickerInSetParams {
+    /// User identifier of the sticker set owner
     pub user_id: i64,
+
+    /// Sticker set name
     pub name: String,
+
+    /// File identifier of the replaced sticker
     pub old_sticker: String,
+
+    /// A JSON-serialized object with information about the added sticker. If exactly the same sticker had already been added to the set, then the set remains unchanged.
     pub sticker: InputSticker,
-}
-
-impl GetFiles for ReplaceStickerInSetParams {
-    fn get_files(&self) -> Vec<&InputFile> {
-        let mut vec = Vec::with_capacity(1);
-        vec.extend(self.sticker.get_files());
-        vec
-    }
-}
-impl_into_future_multipart!(ReplaceStickerInSetRequest<'a>);
-
-///Use this method to replace an existing sticker in a sticker set with a new one. The method is equivalent to calling [deleteStickerFromSet](https://core.telegram.org/bots/api/#deletestickerfromset), then [addStickerToSet](https://core.telegram.org/bots/api/#addstickertoset), then [setStickerPositionInSet](https://core.telegram.org/bots/api/#setstickerpositioninset). Returns *True* on success.
-#[derive(Clone)]
-pub struct ReplaceStickerInSetRequest<'a> {
-    api: &'a Api,
-    params: ReplaceStickerInSetParams,
-}
-
-impl RequestT for ReplaceStickerInSetRequest<'_> {
-    type ParamsType = ReplaceStickerInSetParams;
-    type ReturnType = bool;
-    fn get_name() -> &'static str {
-        "replaceStickerInSet"
-    }
-    fn get_api_ref(&self) -> &Api {
-        self.api
-    }
-    fn get_params_ref(&self) -> &Self::ParamsType {
-        &self.params
-    }
-}
-impl<'a> ReplaceStickerInSetRequest<'a> {
-    pub fn new(
-        api: &'a Api,
-        user_id: impl Into<i64>,
-        name: impl Into<String>,
-        old_sticker: impl Into<String>,
-        sticker: impl Into<InputSticker>,
-    ) -> Self {
-        Self {
-            api,
-            params: ReplaceStickerInSetParams {
-                user_id: user_id.into(),
-                name: name.into(),
-                old_sticker: old_sticker.into(),
-                sticker: sticker.into(),
-            },
-        }
-    }
-
-    ///User identifier of the sticker set owner
-    #[must_use]
-    pub fn user_id(mut self, user_id: impl Into<i64>) -> Self {
-        self.params.user_id = user_id.into();
-        self
-    }
-
-    ///Sticker set name
-    #[must_use]
-    pub fn name(mut self, name: impl Into<String>) -> Self {
-        self.params.name = name.into();
-        self
-    }
-
-    ///File identifier of the replaced sticker
-    #[must_use]
-    pub fn old_sticker(mut self, old_sticker: impl Into<String>) -> Self {
-        self.params.old_sticker = old_sticker.into();
-        self
-    }
-
-    ///A JSON-serialized object with information about the added sticker. If exactly the same sticker had already been added to the set, then the set remains unchanged.
-    #[must_use]
-    pub fn sticker(mut self, sticker: impl Into<InputSticker>) -> Self {
-        self.params.sticker = sticker.into();
-        self
-    }
-}
-
-impl Api {
-    ///Use this method to replace an existing sticker in a sticker set with a new one. The method is equivalent to calling [deleteStickerFromSet](https://core.telegram.org/bots/api/#deletestickerfromset), then [addStickerToSet](https://core.telegram.org/bots/api/#addstickertoset), then [setStickerPositionInSet](https://core.telegram.org/bots/api/#setstickerpositioninset). Returns *True* on success.
-    pub fn replace_sticker_in_set(
-        &self,
-        user_id: impl Into<i64>,
-        name: impl Into<String>,
-        old_sticker: impl Into<String>,
-        sticker: impl Into<InputSticker>,
-    ) -> ReplaceStickerInSetRequest {
-        ReplaceStickerInSetRequest::new(self, user_id, name, old_sticker, sticker)
-    }
 }
 
 // Divider: all content below this line will be preserved after code regen

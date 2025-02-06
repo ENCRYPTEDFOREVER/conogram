@@ -1,7 +1,7 @@
 use serde::Serialize;
 
 use crate::{
-    entities::misc::input_file::{GetFiles, InputFile},
+    entities::misc::input_file::{GetFiles, InputFile, LocalFile},
     utils::deserialize_utils::is_false,
 };
 
@@ -15,7 +15,7 @@ pub struct InputPaidMediaVideo {
 
     /// *Optional*. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://\<file\_attach\_name\>” if the thumbnail was uploaded using multipart/form-data under \<file\_attach\_name\>. [More information on Sending Files »](https://core.telegram.org/bots/api/#sending-files)
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub thumbnail: Option<InputFile>,
+    pub thumbnail: Option<LocalFile>,
 
     /// *Optional*. Video width
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -35,12 +35,14 @@ pub struct InputPaidMediaVideo {
 }
 
 impl GetFiles for InputPaidMediaVideo {
-    fn get_files(&self) -> Vec<&InputFile> {
-        let mut vec = vec![&self.media];
-        if let Some(thumbnail) = &self.thumbnail {
-            vec.push(thumbnail);
-        }
-        vec
+    async fn form(
+        &self,
+        form: reqwest::multipart::Form,
+    ) -> Result<reqwest::multipart::Form, std::io::Error> {
+        let mut form = form;
+        form = self.media.form(form).await?;
+        form = self.thumbnail.form(form).await?;
+        Ok(form)
     }
 }
 // Divider: all content below this line will be preserved after code regen

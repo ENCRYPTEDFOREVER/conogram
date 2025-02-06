@@ -1,74 +1,17 @@
-
-
-
+use conogram_derives::Request;
 use serde::Serialize;
 
-use crate::{api::Api,  impl_into_future, request::RequestT};
-
-#[derive(Debug, Clone, Serialize)]
-
+/// Use this method to set the title of a created sticker set. Returns *True* on success.
+///
+/// API Reference: [link](https://core.telegram.org/bots/api/#setstickersettitle)
+#[derive(Debug, Clone, Serialize, Request)]
+#[conogram(result = bool)]
 pub struct SetStickerSetTitleParams {
+    /// Sticker set name
     pub name: String,
+
+    /// Sticker set title, 1-64 characters
     pub title: String,
-}
-
-impl_into_future!(SetStickerSetTitleRequest<'a>);
-
-///Use this method to set the title of a created sticker set. Returns *True* on success.
-#[derive(Clone)]
-pub struct SetStickerSetTitleRequest<'a> {
-    api: &'a Api,
-    params: SetStickerSetTitleParams,
-}
-
-impl RequestT for SetStickerSetTitleRequest<'_> {
-    type ParamsType = SetStickerSetTitleParams;
-    type ReturnType = bool;
-    fn get_name() -> &'static str {
-        "setStickerSetTitle"
-    }
-    fn get_api_ref(&self) -> &Api {
-        self.api
-    }
-    fn get_params_ref(&self) -> &Self::ParamsType {
-        &self.params
-    }
-}
-impl<'a> SetStickerSetTitleRequest<'a> {
-    pub fn new(api: &'a Api, name: impl Into<String>, title: impl Into<String>) -> Self {
-        Self {
-            api,
-            params: SetStickerSetTitleParams {
-                name: name.into(),
-                title: title.into(),
-            },
-        }
-    }
-
-    ///Sticker set name
-    #[must_use]
-    pub fn name(mut self, name: impl Into<String>) -> Self {
-        self.params.name = name.into();
-        self
-    }
-
-    ///Sticker set title, 1-64 characters
-    #[must_use]
-    pub fn title(mut self, title: impl Into<String>) -> Self {
-        self.params.title = title.into();
-        self
-    }
-}
-
-impl Api {
-    ///Use this method to set the title of a created sticker set. Returns *True* on success.
-    pub fn set_sticker_set_title(
-        &self,
-        name: impl Into<String>,
-        title: impl Into<String>,
-    ) -> SetStickerSetTitleRequest {
-        SetStickerSetTitleRequest::new(self, name, title)
-    }
 }
 
 // Divider: all content below this line will be preserved after code regen

@@ -1,77 +1,19 @@
-
-
-
+use conogram_derives::Request;
 use serde::Serialize;
 
-use crate::{
-    api::Api, entities::misc::chat_id::ChatId,  impl_into_future,
-    request::RequestT,
-};
+use crate::entities::misc::chat_id::ChatId;
 
-#[derive(Debug, Clone, Serialize)]
-
+/// Use this method to change the title of a chat. Titles can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
+///
+/// API Reference: [link](https://core.telegram.org/bots/api/#setchattitle)
+#[derive(Debug, Clone, Serialize, Request)]
+#[conogram(result = bool)]
 pub struct SetChatTitleParams {
+    /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
     pub chat_id: ChatId,
+
+    /// New chat title, 1-128 characters
     pub title: String,
-}
-
-impl_into_future!(SetChatTitleRequest<'a>);
-
-///Use this method to change the title of a chat. Titles can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
-#[derive(Clone)]
-pub struct SetChatTitleRequest<'a> {
-    api: &'a Api,
-    params: SetChatTitleParams,
-}
-
-impl RequestT for SetChatTitleRequest<'_> {
-    type ParamsType = SetChatTitleParams;
-    type ReturnType = bool;
-    fn get_name() -> &'static str {
-        "setChatTitle"
-    }
-    fn get_api_ref(&self) -> &Api {
-        self.api
-    }
-    fn get_params_ref(&self) -> &Self::ParamsType {
-        &self.params
-    }
-}
-impl<'a> SetChatTitleRequest<'a> {
-    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, title: impl Into<String>) -> Self {
-        Self {
-            api,
-            params: SetChatTitleParams {
-                chat_id: chat_id.into(),
-                title: title.into(),
-            },
-        }
-    }
-
-    ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-    #[must_use]
-    pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
-        self.params.chat_id = chat_id.into();
-        self
-    }
-
-    ///New chat title, 1-128 characters
-    #[must_use]
-    pub fn title(mut self, title: impl Into<String>) -> Self {
-        self.params.title = title.into();
-        self
-    }
-}
-
-impl Api {
-    ///Use this method to change the title of a chat. Titles can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
-    pub fn set_chat_title(
-        &self,
-        chat_id: impl Into<ChatId>,
-        title: impl Into<String>,
-    ) -> SetChatTitleRequest {
-        SetChatTitleRequest::new(self, chat_id, title)
-    }
 }
 
 // Divider: all content below this line will be preserved after code regen

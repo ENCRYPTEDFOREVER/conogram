@@ -1,325 +1,112 @@
-
-
-
+use conogram_derives::Request;
 use serde::Serialize;
 
 use crate::{
-    api::Api,
     entities::{
         input_poll_option::InputPollOption,
         message::Message,
         message_entity::MessageEntity,
-        misc::{chat_id::ChatId, reply_markup::ReplyMarkup},
+        misc::{chat_id::ChatId, message_effects::MessageEffect, reply_markup::ReplyMarkup},
+        poll::PollType,
         reply_parameters::ReplyParameters,
     },
-    
-    impl_into_future,
-    request::RequestT,
     utils::deserialize_utils::is_false,
 };
 
-#[derive(Debug, Clone, Serialize)]
-
+/// Use this method to send a native poll. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
+///
+/// API Reference: [link](https://core.telegram.org/bots/api/#sendpoll)
+#[derive(Debug, Clone, Serialize, Request)]
+#[conogram(result = Message)]
 pub struct SendPollParams {
+    /// Unique identifier of the business connection on behalf of which the message will be sent
     #[serde(skip_serializing_if = "Option::is_none")]
     pub business_connection_id: Option<String>,
+
+    /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
     pub chat_id: ChatId,
+
+    /// Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_thread_id: Option<i64>,
+
+    /// Poll question, 1-300 characters
     pub question: String,
+
+    /// Mode for parsing entities in the question. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details. Currently, only custom emoji entities are allowed
     #[serde(skip_serializing_if = "Option::is_none")]
     pub question_parse_mode: Option<String>,
+
+    /// A JSON-serialized list of special entities that appear in the poll question. It can be specified instead of *question\_parse\_mode*
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub question_entities: Vec<MessageEntity>,
+
+    /// A JSON-serialized list of 2-10 answer options
     pub options: Vec<InputPollOption>,
-    #[serde(default, skip_serializing_if = "is_false")]
+
+    /// *True*, if the poll needs to be anonymous, defaults to *True*
+    #[serde(skip_serializing_if = "is_false")]
     pub is_anonymous: bool,
+
+    /// Poll type, “quiz” or “regular”, defaults to “regular”
     #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
-    pub type_: Option<SendPollType>,
-    #[serde(default, skip_serializing_if = "is_false")]
+    pub type_: Option<PollType>,
+
+    /// *True*, if the poll allows multiple answers, ignored for polls in quiz mode, defaults to *False*
+    #[serde(skip_serializing_if = "is_false")]
     pub allows_multiple_answers: bool,
+
+    /// 0-based identifier of the correct answer option, required for polls in quiz mode
     #[serde(skip_serializing_if = "Option::is_none")]
     pub correct_option_id: Option<i64>,
+
+    /// Text that is shown when a user chooses an incorrect answer or taps on the lamp icon in a quiz-style poll, 0-200 characters with at most 2 line feeds after entities parsing
     #[serde(skip_serializing_if = "Option::is_none")]
     pub explanation: Option<String>,
+
+    /// Mode for parsing entities in the explanation. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub explanation_parse_mode: Option<String>,
+
+    /// A JSON-serialized list of special entities that appear in the poll explanation. It can be specified instead of *explanation\_parse\_mode*
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub explanation_entities: Vec<MessageEntity>,
+
+    /// Amount of time in seconds the poll will be active after creation, 5-600. Can't be used together with *close\_date*.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub open_period: Option<i64>,
+
+    /// Point in time (Unix timestamp) when the poll will be automatically closed. Must be at least 5 and no more than 600 seconds in the future. Can't be used together with *open\_period*.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub close_date: Option<i64>,
-    #[serde(default, skip_serializing_if = "is_false")]
+
+    /// Pass *True* if the poll needs to be immediately closed. This can be useful for poll preview.
+    #[serde(skip_serializing_if = "is_false")]
     pub is_closed: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+
+    /// Sends the message [silently](https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
+    #[serde(skip_serializing_if = "is_false")]
     pub disable_notification: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+
+    /// Protects the contents of the sent message from forwarding and saving
+    #[serde(skip_serializing_if = "is_false")]
     pub protect_content: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+
+    /// Pass *True* to allow up to 1000 messages per second, ignoring [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+    #[serde(skip_serializing_if = "is_false")]
     pub allow_paid_broadcast: bool,
+
+    /// Unique identifier of the message effect to be added to the message; for private chats only
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub message_effect_id: Option<String>,
+    pub message_effect_id: Option<MessageEffect>,
+
+    /// Description of the message to reply to
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_parameters: Option<ReplyParameters>,
+
+    /// Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a reply from the user
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<ReplyMarkup>,
-}
-
-impl_into_future!(SendPollRequest<'a>);
-
-///Use this method to send a native poll. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
-#[derive(Clone)]
-pub struct SendPollRequest<'a> {
-    api: &'a Api,
-    params: SendPollParams,
-}
-
-impl RequestT for SendPollRequest<'_> {
-    type ParamsType = SendPollParams;
-    type ReturnType = Message;
-    fn get_name() -> &'static str {
-        "sendPoll"
-    }
-    fn get_api_ref(&self) -> &Api {
-        self.api
-    }
-    fn get_params_ref(&self) -> &Self::ParamsType {
-        &self.params
-    }
-}
-impl<'a> SendPollRequest<'a> {
-    pub fn new(
-        api: &'a Api,
-        chat_id: impl Into<ChatId>,
-        question: impl Into<String>,
-        options: impl IntoIterator<Item = impl Into<InputPollOption>>,
-    ) -> Self {
-        Self {
-            api,
-            params: SendPollParams {
-                chat_id: chat_id.into(),
-                question: question.into(),
-                options: options.into_iter().map(Into::into).collect(),
-                business_connection_id: Option::default(),
-                message_thread_id: Option::default(),
-                question_parse_mode: Option::default(),
-                question_entities: Vec::default(),
-                is_anonymous: bool::default(),
-                type_: Option::default(),
-                allows_multiple_answers: bool::default(),
-                correct_option_id: Option::default(),
-                explanation: Option::default(),
-                explanation_parse_mode: Option::default(),
-                explanation_entities: Vec::default(),
-                open_period: Option::default(),
-                close_date: Option::default(),
-                is_closed: bool::default(),
-                disable_notification: bool::default(),
-                protect_content: bool::default(),
-                allow_paid_broadcast: bool::default(),
-                message_effect_id: Option::default(),
-                reply_parameters: Option::default(),
-                reply_markup: Option::default(),
-            },
-        }
-    }
-
-    ///Unique identifier of the business connection on behalf of which the message will be sent
-    #[must_use]
-    pub fn business_connection_id(mut self, business_connection_id: impl Into<String>) -> Self {
-        self.params.business_connection_id = Some(business_connection_id.into());
-        self
-    }
-
-    ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-    #[must_use]
-    pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
-        self.params.chat_id = chat_id.into();
-        self
-    }
-
-    ///Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
-    #[must_use]
-    pub fn message_thread_id(mut self, message_thread_id: impl Into<i64>) -> Self {
-        self.params.message_thread_id = Some(message_thread_id.into());
-        self
-    }
-
-    ///Poll question, 1-300 characters
-    #[must_use]
-    pub fn question(mut self, question: impl Into<String>) -> Self {
-        self.params.question = question.into();
-        self
-    }
-
-    ///Mode for parsing entities in the question. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details. Currently, only custom emoji entities are allowed
-    #[must_use]
-    pub fn question_parse_mode(mut self, question_parse_mode: impl Into<String>) -> Self {
-        self.params.question_parse_mode = Some(question_parse_mode.into());
-        self
-    }
-
-    ///A JSON-serialized list of special entities that appear in the poll question. It can be specified instead of *question\_parse\_mode*
-    #[must_use]
-    pub fn question_entities(
-        mut self,
-        question_entities: impl IntoIterator<Item = impl Into<MessageEntity>>,
-    ) -> Self {
-        self.params.question_entities = question_entities.into_iter().map(Into::into).collect();
-        self
-    }
-
-    ///A JSON-serialized list of 2-10 answer options
-    #[must_use]
-    pub fn options(
-        mut self,
-        options: impl IntoIterator<Item = impl Into<InputPollOption>>,
-    ) -> Self {
-        self.params.options = options.into_iter().map(Into::into).collect();
-        self
-    }
-
-    ///*True*, if the poll needs to be anonymous, defaults to *True*
-    #[must_use]
-    pub fn is_anonymous(mut self, is_anonymous: impl Into<bool>) -> Self {
-        self.params.is_anonymous = is_anonymous.into();
-        self
-    }
-
-    #[must_use]
-    pub fn type_(mut self, type_: impl Into<SendPollType>) -> Self {
-        self.params.type_ = Some(type_.into());
-        self
-    }
-
-    ///*True*, if the poll allows multiple answers, ignored for polls in quiz mode, defaults to *False*
-    #[must_use]
-    pub fn allows_multiple_answers(mut self, allows_multiple_answers: impl Into<bool>) -> Self {
-        self.params.allows_multiple_answers = allows_multiple_answers.into();
-        self
-    }
-
-    ///0-based identifier of the correct answer option, required for polls in quiz mode
-    #[must_use]
-    pub fn correct_option_id(mut self, correct_option_id: impl Into<i64>) -> Self {
-        self.params.correct_option_id = Some(correct_option_id.into());
-        self
-    }
-
-    ///Text that is shown when a user chooses an incorrect answer or taps on the lamp icon in a quiz-style poll, 0-200 characters with at most 2 line feeds after entities parsing
-    #[must_use]
-    pub fn explanation(mut self, explanation: impl Into<String>) -> Self {
-        self.params.explanation = Some(explanation.into());
-        self
-    }
-
-    ///Mode for parsing entities in the explanation. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details.
-    #[must_use]
-    pub fn explanation_parse_mode(mut self, explanation_parse_mode: impl Into<String>) -> Self {
-        self.params.explanation_parse_mode = Some(explanation_parse_mode.into());
-        self
-    }
-
-    ///A JSON-serialized list of special entities that appear in the poll explanation. It can be specified instead of *explanation\_parse\_mode*
-    #[must_use]
-    pub fn explanation_entities(
-        mut self,
-        explanation_entities: impl IntoIterator<Item = impl Into<MessageEntity>>,
-    ) -> Self {
-        self.params.explanation_entities =
-            explanation_entities.into_iter().map(Into::into).collect();
-        self
-    }
-
-    ///Amount of time in seconds the poll will be active after creation, 5-600. Can't be used together with *close\_date*.
-    #[must_use]
-    pub fn open_period(mut self, open_period: impl Into<i64>) -> Self {
-        self.params.open_period = Some(open_period.into());
-        self
-    }
-
-    ///Point in time (Unix timestamp) when the poll will be automatically closed. Must be at least 5 and no more than 600 seconds in the future. Can't be used together with *open\_period*.
-    #[must_use]
-    pub fn close_date(mut self, close_date: impl Into<i64>) -> Self {
-        self.params.close_date = Some(close_date.into());
-        self
-    }
-
-    ///Pass *True* if the poll needs to be immediately closed. This can be useful for poll preview.
-    #[must_use]
-    pub fn is_closed(mut self, is_closed: impl Into<bool>) -> Self {
-        self.params.is_closed = is_closed.into();
-        self
-    }
-
-    ///Sends the message [silently](https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
-    #[must_use]
-    pub fn disable_notification(mut self, disable_notification: impl Into<bool>) -> Self {
-        self.params.disable_notification = disable_notification.into();
-        self
-    }
-
-    ///Protects the contents of the sent message from forwarding and saving
-    #[must_use]
-    pub fn protect_content(mut self, protect_content: impl Into<bool>) -> Self {
-        self.params.protect_content = protect_content.into();
-        self
-    }
-
-    ///Pass *True* to allow up to 1000 messages per second, ignoring [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once) for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
-    #[must_use]
-    pub fn allow_paid_broadcast(mut self, allow_paid_broadcast: impl Into<bool>) -> Self {
-        self.params.allow_paid_broadcast = allow_paid_broadcast.into();
-        self
-    }
-
-    ///Unique identifier of the message effect to be added to the message; for private chats only
-    #[must_use]
-    pub fn message_effect_id(mut self, message_effect_id: impl Into<String>) -> Self {
-        self.params.message_effect_id = Some(message_effect_id.into());
-        self
-    }
-
-    ///Description of the message to reply to
-    #[must_use]
-    pub fn reply_parameters(mut self, reply_parameters: impl Into<ReplyParameters>) -> Self {
-        self.params.reply_parameters = Some(reply_parameters.into());
-        self
-    }
-
-    ///Additional interface options. A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards), [custom reply keyboard](https://core.telegram.org/bots/features#keyboards), instructions to remove a reply keyboard or to force a reply from the user
-    #[must_use]
-    pub fn reply_markup(mut self, reply_markup: impl Into<ReplyMarkup>) -> Self {
-        self.params.reply_markup = Some(reply_markup.into());
-        self
-    }
-}
-
-impl Api {
-    ///Use this method to send a native poll. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
-    pub fn send_poll(
-        &self,
-        chat_id: impl Into<ChatId>,
-        question: impl Into<String>,
-        options: impl IntoIterator<Item = impl Into<InputPollOption>>,
-    ) -> SendPollRequest {
-        SendPollRequest::new(self, chat_id, question, options)
-    }
-}
-
-///Poll type, “quiz” or “regular”, defaults to “regular”
-#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
-#[serde(rename = "type")]
-pub enum SendPollType {
-    #[default]
-    /// "quiz"
-    #[serde(rename = "quiz")]
-    Quiz,
-
-    /// "regular"
-    #[serde(rename = "regular")]
-    Regular,
 }
 
 // Divider: all content below this line will be preserved after code regen

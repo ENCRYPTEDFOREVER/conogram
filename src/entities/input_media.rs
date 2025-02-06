@@ -89,14 +89,59 @@ impl From<InputMediaVideo> for InputMedia {
 }
 
 impl GetFiles for InputMedia {
-    fn get_files(&self) -> Vec<&InputFile> {
+    async fn form(
+        &self,
+        form: reqwest::multipart::Form,
+    ) -> Result<reqwest::multipart::Form, std::io::Error> {
         match self {
-            Self::Animation(m) => m.get_files(),
-            Self::Audio(m) => m.get_files(),
-            Self::Document(m) => m.get_files(),
-            Self::Photo(m) => m.get_files(),
-            Self::Video(m) => m.get_files(),
+            Self::Animation(m) => m.form(form).await,
+            Self::Audio(m) => m.form(form).await,
+            Self::Document(m) => m.form(form).await,
+            Self::Photo(m) => m.form(form).await,
+            Self::Video(m) => m.form(form).await,
         }
     }
 }
 // Divider: all content below this line will be preserved after code regen
+impl<T: Into<InputFile>> From<T> for InputMediaAnimation {
+    fn from(value: T) -> Self {
+        Self {
+            media: value.into(),
+            ..Default::default()
+        }
+    }
+}
+
+impl<T: Into<InputFile>> From<T> for InputMediaDocument {
+    fn from(value: T) -> Self {
+        Self {
+            media: value.into(),
+            ..Default::default()
+        }
+    }
+}
+impl<T: Into<InputFile>> From<T> for InputMediaAudio {
+    fn from(value: T) -> Self {
+        Self {
+            media: value.into(),
+            ..Default::default()
+        }
+    }
+}
+impl<T: Into<InputFile>> From<T> for InputMediaPhoto {
+    fn from(value: T) -> Self {
+        Self {
+            media: value.into(),
+            ..Default::default()
+        }
+    }
+}
+
+impl<T: Into<InputFile>> From<T> for InputMediaVideo {
+    fn from(value: T) -> Self {
+        Self {
+            media: value.into(),
+            ..Default::default()
+        }
+    }
+}

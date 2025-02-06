@@ -1,97 +1,27 @@
-
-
-
+use conogram_derives::Request;
 use serde::Serialize;
 
-use crate::{
-    api::Api, entities::misc::chat_id::ChatId,  impl_into_future,
-    request::RequestT, utils::deserialize_utils::is_false,
-};
+use crate::{entities::misc::chat_id::ChatId, utils::deserialize_utils::is_false};
 
-#[derive(Debug, Clone, Serialize)]
-
+/// Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless [unbanned](https://core.telegram.org/bots/api/#unbanchatmember) first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
+///
+/// API Reference: [link](https://core.telegram.org/bots/api/#banchatmember)
+#[derive(Debug, Clone, Serialize, Request)]
+#[conogram(result = bool)]
 pub struct BanChatMemberParams {
+    /// Unique identifier for the target group or username of the target supergroup or channel (in the format `@channelusername`)
     pub chat_id: ChatId,
+
+    /// Unique identifier of the target user
     pub user_id: i64,
+
+    /// Date when the user will be unbanned; Unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever. Applied for supergroups and channels only.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub until_date: Option<i64>,
-    #[serde(default, skip_serializing_if = "is_false")]
+
+    /// Pass *True* to delete all messages from the chat for the user that is being removed. If *False*, the user will be able to see messages in the group that were sent before the user was removed. Always *True* for supergroups and channels.
+    #[serde(skip_serializing_if = "is_false")]
     pub revoke_messages: bool,
-}
-
-impl_into_future!(BanChatMemberRequest<'a>);
-
-///Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless [unbanned](https://core.telegram.org/bots/api/#unbanchatmember) first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
-#[derive(Clone)]
-pub struct BanChatMemberRequest<'a> {
-    api: &'a Api,
-    params: BanChatMemberParams,
-}
-
-impl RequestT for BanChatMemberRequest<'_> {
-    type ParamsType = BanChatMemberParams;
-    type ReturnType = bool;
-    fn get_name() -> &'static str {
-        "banChatMember"
-    }
-    fn get_api_ref(&self) -> &Api {
-        self.api
-    }
-    fn get_params_ref(&self) -> &Self::ParamsType {
-        &self.params
-    }
-}
-impl<'a> BanChatMemberRequest<'a> {
-    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>, user_id: impl Into<i64>) -> Self {
-        Self {
-            api,
-            params: BanChatMemberParams {
-                chat_id: chat_id.into(),
-                user_id: user_id.into(),
-                until_date: Option::default(),
-                revoke_messages: bool::default(),
-            },
-        }
-    }
-
-    ///Unique identifier for the target group or username of the target supergroup or channel (in the format `@channelusername`)
-    #[must_use]
-    pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
-        self.params.chat_id = chat_id.into();
-        self
-    }
-
-    ///Unique identifier of the target user
-    #[must_use]
-    pub fn user_id(mut self, user_id: impl Into<i64>) -> Self {
-        self.params.user_id = user_id.into();
-        self
-    }
-
-    ///Date when the user will be unbanned; Unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever. Applied for supergroups and channels only.
-    #[must_use]
-    pub fn until_date(mut self, until_date: impl Into<i64>) -> Self {
-        self.params.until_date = Some(until_date.into());
-        self
-    }
-
-    ///Pass *True* to delete all messages from the chat for the user that is being removed. If *False*, the user will be able to see messages in the group that were sent before the user was removed. Always *True* for supergroups and channels.
-    #[must_use]
-    pub fn revoke_messages(mut self, revoke_messages: impl Into<bool>) -> Self {
-        self.params.revoke_messages = revoke_messages.into();
-        self
-    }
-}
-
-impl Api {
-    ///Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless [unbanned](https://core.telegram.org/bots/api/#unbanchatmember) first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
-    pub fn ban_chat_member(
-        &self,
-        chat_id: impl Into<ChatId>,
-        user_id: impl Into<i64>,
-    ) -> BanChatMemberRequest {
-        BanChatMemberRequest::new(self, chat_id, user_id)
-    }
 }
 
 // Divider: all content below this line will be preserved after code regen

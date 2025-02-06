@@ -11,7 +11,7 @@ use serde_json::Value;
 
 use crate::{
     api::ApiConfig,
-    entities::misc::input_file::{GetFiles, InputFile},
+    entities::misc::input_file::GetFiles,
     errors::{ConogramError, ConogramErrorType, TgApiError, TgApiErrorParams},
 };
 
@@ -245,24 +245,12 @@ impl ApiClient {
                     }
                 }
 
-                for file in params.get_files() {
-                    match file {
-                        InputFile::Local(f) => {
-                            let part = match f.get_form_part().await {
-                                Ok(part) => part,
-                                Err(err) => {
-                                    return Err(ConogramError::new(method, params, err.into()))
-                                }
-                            };
-
-                            form = form.part(f.get_uuid_str(), part);
-                        }
-                        InputFile::InMemory(f) => {
-                            form = form.part(f.get_uuid_str(), f.get_form_part());
-                        }
-                        InputFile::FileIdOrUrl(_) => {}
+                let form = match params.form(form).await {
+                    Ok(form) => form,
+                    Err(err) => {
+                        return Err(ConogramError::new(method, params, err.into()));
                     }
-                }
+                };
 
                 self.http_client
                     .post(self.build_url(method))

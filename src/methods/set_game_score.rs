@@ -1,127 +1,39 @@
-
-
-
+use conogram_derives::Request;
 use serde::Serialize;
 
-use crate::{
-    api::Api, entities::message::Message,  impl_into_future,
-    request::RequestT, utils::deserialize_utils::is_false,
-};
+use crate::{entities::message::Message, utils::deserialize_utils::is_false};
 
-#[derive(Debug, Clone, Serialize)]
-
+/// Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Returns an error, if the new score is not greater than the user's current score in the chat and *force* is *False*.
+///
+/// API Reference: [link](https://core.telegram.org/bots/api/#setgamescore)
+#[derive(Debug, Clone, Serialize, Request)]
+#[conogram(result = Option<Message>)]
 pub struct SetGameScoreParams {
+    /// User identifier
     pub user_id: i64,
+
+    /// New score, must be non-negative
     pub score: i64,
-    #[serde(default, skip_serializing_if = "is_false")]
+
+    /// Pass *True* if the high score is allowed to decrease. This can be useful when fixing mistakes or banning cheaters
+    #[serde(skip_serializing_if = "is_false")]
     pub force: bool,
-    #[serde(default, skip_serializing_if = "is_false")]
+
+    /// Pass *True* if the game message should not be automatically edited to include the current scoreboard
+    #[serde(skip_serializing_if = "is_false")]
     pub disable_edit_message: bool,
+
+    /// Required if *inline\_message\_id* is not specified. Unique identifier for the target chat
     #[serde(skip_serializing_if = "Option::is_none")]
     pub chat_id: Option<i64>,
+
+    /// Required if *inline\_message\_id* is not specified. Identifier of the sent message
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_id: Option<i64>,
+
+    /// Required if *chat\_id* and *message\_id* are not specified. Identifier of the inline message
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inline_message_id: Option<String>,
-}
-
-impl_into_future!(SetGameScoreRequest<'a>);
-
-///Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Returns an error, if the new score is not greater than the user's current score in the chat and *force* is *False*.
-#[derive(Clone)]
-pub struct SetGameScoreRequest<'a> {
-    api: &'a Api,
-    params: SetGameScoreParams,
-}
-
-impl RequestT for SetGameScoreRequest<'_> {
-    type ParamsType = SetGameScoreParams;
-    type ReturnType = Option<Message>;
-    fn get_name() -> &'static str {
-        "setGameScore"
-    }
-    fn get_api_ref(&self) -> &Api {
-        self.api
-    }
-    fn get_params_ref(&self) -> &Self::ParamsType {
-        &self.params
-    }
-}
-impl<'a> SetGameScoreRequest<'a> {
-    pub fn new(api: &'a Api, user_id: impl Into<i64>, score: impl Into<i64>) -> Self {
-        Self {
-            api,
-            params: SetGameScoreParams {
-                user_id: user_id.into(),
-                score: score.into(),
-                force: bool::default(),
-                disable_edit_message: bool::default(),
-                chat_id: Option::default(),
-                message_id: Option::default(),
-                inline_message_id: Option::default(),
-            },
-        }
-    }
-
-    ///User identifier
-    #[must_use]
-    pub fn user_id(mut self, user_id: impl Into<i64>) -> Self {
-        self.params.user_id = user_id.into();
-        self
-    }
-
-    ///New score, must be non-negative
-    #[must_use]
-    pub fn score(mut self, score: impl Into<i64>) -> Self {
-        self.params.score = score.into();
-        self
-    }
-
-    ///Pass *True* if the high score is allowed to decrease. This can be useful when fixing mistakes or banning cheaters
-    #[must_use]
-    pub fn force(mut self, force: impl Into<bool>) -> Self {
-        self.params.force = force.into();
-        self
-    }
-
-    ///Pass *True* if the game message should not be automatically edited to include the current scoreboard
-    #[must_use]
-    pub fn disable_edit_message(mut self, disable_edit_message: impl Into<bool>) -> Self {
-        self.params.disable_edit_message = disable_edit_message.into();
-        self
-    }
-
-    ///Required if *inline\_message\_id* is not specified. Unique identifier for the target chat
-    #[must_use]
-    pub fn chat_id(mut self, chat_id: impl Into<i64>) -> Self {
-        self.params.chat_id = Some(chat_id.into());
-        self
-    }
-
-    ///Required if *inline\_message\_id* is not specified. Identifier of the sent message
-    #[must_use]
-    pub fn message_id(mut self, message_id: impl Into<i64>) -> Self {
-        self.params.message_id = Some(message_id.into());
-        self
-    }
-
-    ///Required if *chat\_id* and *message\_id* are not specified. Identifier of the inline message
-    #[must_use]
-    pub fn inline_message_id(mut self, inline_message_id: impl Into<String>) -> Self {
-        self.params.inline_message_id = Some(inline_message_id.into());
-        self
-    }
-}
-
-impl Api {
-    ///Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Returns an error, if the new score is not greater than the user's current score in the chat and *force* is *False*.
-    pub fn set_game_score(
-        &self,
-        user_id: impl Into<i64>,
-        score: impl Into<i64>,
-    ) -> SetGameScoreRequest {
-        SetGameScoreRequest::new(self, user_id, score)
-    }
 }
 
 // Divider: all content below this line will be preserved after code regen

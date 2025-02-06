@@ -1,81 +1,19 @@
-
-
-
+use conogram_derives::Request;
 use serde::Serialize;
 
-use crate::{
-    api::Api, entities::misc::chat_id::ChatId,  impl_into_future,
-    request::RequestT,
-};
+use crate::entities::misc::chat_id::ChatId;
 
-#[derive(Debug, Clone, Serialize)]
-
+/// Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field *can\_set\_sticker\_set* optionally returned in [getChat](https://core.telegram.org/bots/api/#getchat) requests to check if the bot can use this method. Returns *True* on success.
+///
+/// API Reference: [link](https://core.telegram.org/bots/api/#setchatstickerset)
+#[derive(Debug, Clone, Serialize, Request)]
+#[conogram(result = bool)]
 pub struct SetChatStickerSetParams {
+    /// Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
     pub chat_id: ChatId,
+
+    /// Name of the sticker set to be set as the group sticker set
     pub sticker_set_name: String,
-}
-
-impl_into_future!(SetChatStickerSetRequest<'a>);
-
-///Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field *can\_set\_sticker\_set* optionally returned in [getChat](https://core.telegram.org/bots/api/#getchat) requests to check if the bot can use this method. Returns *True* on success.
-#[derive(Clone)]
-pub struct SetChatStickerSetRequest<'a> {
-    api: &'a Api,
-    params: SetChatStickerSetParams,
-}
-
-impl RequestT for SetChatStickerSetRequest<'_> {
-    type ParamsType = SetChatStickerSetParams;
-    type ReturnType = bool;
-    fn get_name() -> &'static str {
-        "setChatStickerSet"
-    }
-    fn get_api_ref(&self) -> &Api {
-        self.api
-    }
-    fn get_params_ref(&self) -> &Self::ParamsType {
-        &self.params
-    }
-}
-impl<'a> SetChatStickerSetRequest<'a> {
-    pub fn new(
-        api: &'a Api,
-        chat_id: impl Into<ChatId>,
-        sticker_set_name: impl Into<String>,
-    ) -> Self {
-        Self {
-            api,
-            params: SetChatStickerSetParams {
-                chat_id: chat_id.into(),
-                sticker_set_name: sticker_set_name.into(),
-            },
-        }
-    }
-
-    ///Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
-    #[must_use]
-    pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
-        self.params.chat_id = chat_id.into();
-        self
-    }
-
-    ///Name of the sticker set to be set as the group sticker set
-    #[must_use]
-    pub fn sticker_set_name(mut self, sticker_set_name: impl Into<String>) -> Self {
-        self.params.sticker_set_name = sticker_set_name.into();
-        self
-    }
-}
-
-impl Api {
-    ///Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field *can\_set\_sticker\_set* optionally returned in [getChat](https://core.telegram.org/bots/api/#getchat) requests to check if the bot can use this method. Returns *True* on success.
-    pub fn set_chat_sticker_set(
-        &self,
-        chat_id: impl Into<ChatId>,
-        sticker_set_name: impl Into<String>,
-    ) -> SetChatStickerSetRequest {
-        SetChatStickerSetRequest::new(self, chat_id, sticker_set_name)
-    }
 }
 
 // Divider: all content below this line will be preserved after code regen

@@ -38,8 +38,11 @@ pub struct InputMediaPhoto {
 }
 
 impl GetFiles for InputMediaPhoto {
-    fn get_files(&self) -> Vec<&InputFile> {
-        vec![&self.media]
+    async fn form(
+        &self,
+        form: reqwest::multipart::Form,
+    ) -> Result<reqwest::multipart::Form, std::io::Error> {
+        self.media.form(form).await
     }
 }
 // Divider: all content below this line will be preserved after code regen

@@ -46,8 +46,11 @@ pub enum InputStickerFormat {
 }
 
 impl GetFiles for InputSticker {
-    fn get_files(&self) -> Vec<&InputFile> {
-        vec![&self.sticker]
+    async fn form(
+        &self,
+        form: reqwest::multipart::Form,
+    ) -> Result<reqwest::multipart::Form, std::io::Error> {
+        self.sticker.form(form).await
     }
 }
 // Divider: all content below this line will be preserved after code regen

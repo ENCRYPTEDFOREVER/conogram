@@ -219,7 +219,7 @@ pub trait TgChat {
     fn send_action<'a>(
         &'a self,
         api: &'a Api,
-        action: impl Into<crate::methods::send_chat_action::SendChatActionAction>,
+        action: impl Into<crate::methods::send_chat_action::ChatAction>,
     ) -> SendChatActionRequest<'a> {
         api.send_chat_action(self.id(), action)
     }

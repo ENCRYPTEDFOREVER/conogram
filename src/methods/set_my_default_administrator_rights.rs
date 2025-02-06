@@ -1,75 +1,24 @@
-
-
-
+use conogram_derives::Request;
 use serde::Serialize;
 
 use crate::{
-    api::Api, entities::chat_administrator_rights::ChatAdministratorRights, 
-    impl_into_future, request::RequestT, utils::deserialize_utils::is_false,
+    entities::chat_administrator_rights::ChatAdministratorRights,
+    utils::deserialize_utils::is_false,
 };
 
-#[derive(Debug, Clone, Serialize)]
-
+/// Use this method to change the default administrator rights requested by the bot when it's added as an administrator to groups or channels. These rights will be suggested to users, but they are free to modify the list before adding the bot. Returns *True* on success.
+///
+/// API Reference: [link](https://core.telegram.org/bots/api/#setmydefaultadministratorrights)
+#[derive(Debug, Clone, Serialize, Request)]
+#[conogram(result = bool)]
 pub struct SetMyDefaultAdministratorRightsParams {
+    /// A JSON-serialized object describing new default administrator rights. If not specified, the default administrator rights will be cleared.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rights: Option<ChatAdministratorRights>,
-    #[serde(default, skip_serializing_if = "is_false")]
+
+    /// Pass *True* to change the default administrator rights of the bot in channels. Otherwise, the default administrator rights of the bot for groups and supergroups will be changed.
+    #[serde(skip_serializing_if = "is_false")]
     pub for_channels: bool,
-}
-
-impl_into_future!(SetMyDefaultAdministratorRightsRequest<'a>);
-
-///Use this method to change the default administrator rights requested by the bot when it's added as an administrator to groups or channels. These rights will be suggested to users, but they are free to modify the list before adding the bot. Returns *True* on success.
-#[derive(Clone)]
-pub struct SetMyDefaultAdministratorRightsRequest<'a> {
-    api: &'a Api,
-    params: SetMyDefaultAdministratorRightsParams,
-}
-
-impl RequestT for SetMyDefaultAdministratorRightsRequest<'_> {
-    type ParamsType = SetMyDefaultAdministratorRightsParams;
-    type ReturnType = bool;
-    fn get_name() -> &'static str {
-        "setMyDefaultAdministratorRights"
-    }
-    fn get_api_ref(&self) -> &Api {
-        self.api
-    }
-    fn get_params_ref(&self) -> &Self::ParamsType {
-        &self.params
-    }
-}
-impl<'a> SetMyDefaultAdministratorRightsRequest<'a> {
-    pub fn new(api: &'a Api) -> Self {
-        Self {
-            api,
-            params: SetMyDefaultAdministratorRightsParams {
-                rights: Option::default(),
-                for_channels: bool::default(),
-            },
-        }
-    }
-
-    ///A JSON-serialized object describing new default administrator rights. If not specified, the default administrator rights will be cleared.
-    #[must_use]
-    pub fn rights(mut self, rights: impl Into<ChatAdministratorRights>) -> Self {
-        self.params.rights = Some(rights.into());
-        self
-    }
-
-    ///Pass *True* to change the default administrator rights of the bot in channels. Otherwise, the default administrator rights of the bot for groups and supergroups will be changed.
-    #[must_use]
-    pub fn for_channels(mut self, for_channels: impl Into<bool>) -> Self {
-        self.params.for_channels = for_channels.into();
-        self
-    }
-}
-
-impl Api {
-    ///Use this method to change the default administrator rights requested by the bot when it's added as an administrator to groups or channels. These rights will be suggested to users, but they are free to modify the list before adding the bot. Returns *True* on success.
-    pub fn set_my_default_administrator_rights(&self) -> SetMyDefaultAdministratorRightsRequest {
-        SetMyDefaultAdministratorRightsRequest::new(self)
-    }
 }
 
 // Divider: all content below this line will be preserved after code regen

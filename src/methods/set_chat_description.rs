@@ -1,74 +1,20 @@
-
-
-
+use conogram_derives::Request;
 use serde::Serialize;
 
-use crate::{
-    api::Api, entities::misc::chat_id::ChatId,  impl_into_future,
-    request::RequestT,
-};
+use crate::entities::misc::chat_id::ChatId;
 
-#[derive(Debug, Clone, Serialize)]
-
+/// Use this method to change the description of a group, a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
+///
+/// API Reference: [link](https://core.telegram.org/bots/api/#setchatdescription)
+#[derive(Debug, Clone, Serialize, Request)]
+#[conogram(result = bool)]
 pub struct SetChatDescriptionParams {
+    /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
     pub chat_id: ChatId,
+
+    /// New chat description, 0-255 characters
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-}
-
-impl_into_future!(SetChatDescriptionRequest<'a>);
-
-///Use this method to change the description of a group, a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
-#[derive(Clone)]
-pub struct SetChatDescriptionRequest<'a> {
-    api: &'a Api,
-    params: SetChatDescriptionParams,
-}
-
-impl RequestT for SetChatDescriptionRequest<'_> {
-    type ParamsType = SetChatDescriptionParams;
-    type ReturnType = bool;
-    fn get_name() -> &'static str {
-        "setChatDescription"
-    }
-    fn get_api_ref(&self) -> &Api {
-        self.api
-    }
-    fn get_params_ref(&self) -> &Self::ParamsType {
-        &self.params
-    }
-}
-impl<'a> SetChatDescriptionRequest<'a> {
-    pub fn new(api: &'a Api, chat_id: impl Into<ChatId>) -> Self {
-        Self {
-            api,
-            params: SetChatDescriptionParams {
-                chat_id: chat_id.into(),
-                description: Option::default(),
-            },
-        }
-    }
-
-    ///Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-    #[must_use]
-    pub fn chat_id(mut self, chat_id: impl Into<ChatId>) -> Self {
-        self.params.chat_id = chat_id.into();
-        self
-    }
-
-    ///New chat description, 0-255 characters
-    #[must_use]
-    pub fn description(mut self, description: impl Into<String>) -> Self {
-        self.params.description = Some(description.into());
-        self
-    }
-}
-
-impl Api {
-    ///Use this method to change the description of a group, a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns *True* on success.
-    pub fn set_chat_description(&self, chat_id: impl Into<ChatId>) -> SetChatDescriptionRequest {
-        SetChatDescriptionRequest::new(self, chat_id)
-    }
 }
 
 // Divider: all content below this line will be preserved after code regen

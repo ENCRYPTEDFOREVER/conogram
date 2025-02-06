@@ -15,11 +15,12 @@ use crate::{
         maybe_inaccessible_message::MaybeInaccessibleMessage,
         message_auto_delete_timer_changed::MessageAutoDeleteTimerChanged,
         message_entity::MessageEntity, message_origin::MessageOrigin,
-        paid_media_info::PaidMediaInfo, passport_data::PassportData, photo_size::PhotoSize,
-        poll::Poll, proximity_alert_triggered::ProximityAlertTriggered,
-        refunded_payment::RefundedPayment, sticker::Sticker, story::Story,
-        successful_payment::SuccessfulPayment, text_quote::TextQuote, user::User,
-        users_shared::UsersShared, venue::Venue, video::Video, video_chat_ended::VideoChatEnded,
+        misc::message_effects::MessageEffect, paid_media_info::PaidMediaInfo,
+        passport_data::PassportData, photo_size::PhotoSize, poll::Poll,
+        proximity_alert_triggered::ProximityAlertTriggered, refunded_payment::RefundedPayment,
+        sticker::Sticker, story::Story, successful_payment::SuccessfulPayment,
+        text_quote::TextQuote, user::User, users_shared::UsersShared, venue::Venue, video::Video,
+        video_chat_ended::VideoChatEnded,
         video_chat_participants_invited::VideoChatParticipantsInvited,
         video_chat_scheduled::VideoChatScheduled, video_chat_started::VideoChatStarted,
         video_note::VideoNote, voice::Voice, web_app_data::WebAppData,
@@ -132,7 +133,7 @@ pub struct Message {
 
     /// *Optional*. Unique identifier of the message effect added to the message
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub effect_id: Option<String>,
+    pub effect_id: Option<MessageEffect>,
 
     /// *Optional*. Message is an animation, information about the animation. For backward compatibility, when this field is set, the *document* field will also be set
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -394,7 +395,7 @@ use crate::{
         pin_chat_message::PinChatMessageRequest, send_document::SendDocumentRequest,
         send_media_group::SendMediaGroupRequest, send_message::SendMessageRequest,
         send_photo::SendPhotoRequest, send_sticker::SendStickerRequest,
-        set_message_reaction::SetMessageReactionRequest,
+        send_video::SendVideoRequest, set_message_reaction::SetMessageReactionRequest,
         unpin_chat_message::UnpinChatMessageRequest,
     },
 };
@@ -817,6 +818,23 @@ impl Message {
     ) -> SendMediaGroupRequest<'a> {
         let mut req = api
             .send_media_group(self.chat.id, media)
+            .reply_parameters(ReplyParameters::new_current_chat(self.message_id));
+
+        if self.is_topic_message {
+            if let Some(thread_id) = self.message_thread_id {
+                req = req.message_thread_id(thread_id);
+            }
+        }
+        req
+    }
+
+    pub fn reply_video<'a>(
+        &'a self,
+        api: &'a Api,
+        video: impl Into<InputFile>,
+    ) -> SendVideoRequest<'a> {
+        let mut req = api
+            .send_video(self.chat.id, video)
             .reply_parameters(ReplyParameters::new_current_chat(self.message_id));
 
         if self.is_topic_message {
