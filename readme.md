@@ -28,6 +28,7 @@
 - Full control over update handling
 - Optional automatic rate limit handling and errors caused by bot API server unavailability
 - Optional ChatMember cache
+- Optional API calls statistics (calls count by method)
 
 # TODO
 - More handy entity extension methods

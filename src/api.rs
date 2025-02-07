@@ -6,6 +6,7 @@ use std::{
     time::Duration,
 };
 
+use dashmap::DashMap;
 use serde::{de::DeserializeOwned, Serialize};
 
 use crate::{
@@ -101,6 +102,9 @@ impl ApiConfig {
 pub struct Api {
     api_client: ApiClient,
 
+    request_stats_enabled: bool,
+    request_stats: DashMap<String, usize>,
+
     chat_member_cache: Option<ChatMemberCache>,
 
     allowed_updates: Vec<String>,
@@ -119,12 +123,17 @@ impl Api {
             polling_timeout: 600,
 
             chat_member_cache: None,
+            request_stats: DashMap::new(),
+            request_stats_enabled: false,
         }
     }
 
-    /// Disabled by default
+    /// Enable [ChatMember] caching from updates and requests
     ///
-    /// Note: [ChatMember](AllowedUpdates::ChatMember) update will be automatically enabled if you enable caching
+    /// Notes:
+    /// * Disabled by default
+    /// * Stored inside this [Api] instance
+    /// * [ChatMember](AllowedUpdates::ChatMember) update will be automatically enabled if you enable caching
     pub fn set_chat_member_cache_enabled(&mut self, enabled: bool) {
         self.chat_member_cache = if enabled {
             Some(ChatMemberCache::default())
@@ -135,7 +144,28 @@ impl Api {
         self.check_allowed_updates();
     }
 
-    pub fn check_allowed_updates(&mut self) {
+    /// Enable request count statistics collection, which can be retrieved using [Api::get_request_stats()]
+    ///
+    /// Notes:
+    /// * Disabled by default
+    /// * Stored inside this [Api] instance
+    /// * Disabling after it was enabled will not reset previous statistics
+    pub fn set_request_stats_enabled(&mut self, enabled: bool) {
+        self.request_stats_enabled = enabled;
+    }
+
+    /// Returns API request count statistics as DashMap<RequestName, CallCount>
+    ///
+    /// Note:
+    /// * [Api::set_request_stats_enabled()] must be called to enable stats collection
+    pub fn get_request_stats(&self) -> DashMap<String, usize> {
+        if !self.request_stats_enabled {
+            log::warn!("Called get_request_stats() with disabled statistics collection");
+        }
+        self.request_stats.clone()
+    }
+
+    fn check_allowed_updates(&mut self) {
         if self.chat_member_cache.is_some() {
             let chat_member = AllowedUpdates::ChatMember.to_string();
             if !self.allowed_updates.contains(&chat_member) {
@@ -174,7 +204,7 @@ impl Api {
         Ok(())
     }
 
-    /// Sets the timeout for getUpdates request
+    /// Sets the timeout for [GetUpdatesRequest] request
     pub fn set_polling_timeout(&mut self, timeout_secs: u64) {
         self.polling_timeout = timeout_secs;
     }
@@ -190,7 +220,7 @@ impl Api {
             .set_default_request_param(method.into(), param_name, value)
     }
 
-    /// Sets default `parse_mode` for applicable requests
+    /// Sets default ``parse_mode`` for applicable requests
     pub fn set_parse_mode(&mut self, value: impl Into<String>) -> Result<(), ConogramErrorType> {
         let value = value.into();
 
@@ -334,9 +364,21 @@ impl Api {
                         let return_type = unsafe {
                             (*(std::ptr::from_ref(&chat_member).cast::<ReturnType>())).clone()
                         };
+                        if self.request_stats_enabled {
+                            self.request_stats
+                                .entry(format!("{method}(CacheHit)"))
+                                .and_modify(|n| *n += 1)
+                                .or_insert(1);
+                        }
                         return Ok(return_type);
                     }
 
+                    if self.request_stats_enabled {
+                        self.request_stats
+                            .entry(method.to_string())
+                            .and_modify(|n| *n += 1)
+                            .or_insert(1);
+                    }
                     let value: ReturnType =
                         self.api_client.method_json(method, Some(params)).await?;
                     let chat_member = unsafe { &*std::ptr::from_ref(&value).cast::<ChatMember>() };
@@ -346,6 +388,12 @@ impl Api {
             }
         }
 
+        if self.request_stats_enabled {
+            self.request_stats
+                .entry(method.to_string())
+                .and_modify(|n| *n += 1)
+                .or_insert(1);
+        }
         self.api_client.method_json(method, params).await
     }
 
@@ -357,6 +405,13 @@ impl Api {
         method: &str,
         params: Option<&Params>,
     ) -> Result<ReturnType, ConogramError> {
+        if self.request_stats_enabled {
+            self.request_stats
+                .entry(method.to_string())
+                .and_modify(|n| *n += 1)
+                .or_insert(1);
+        }
+
         self.api_client.method_multipart_form(method, params).await
     }
 
