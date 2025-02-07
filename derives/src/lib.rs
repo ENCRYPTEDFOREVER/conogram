@@ -20,15 +20,20 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
 
     let mut stream = TokenStream2::new();
 
+    let params_struct_ident_str = params_struct_ident.to_string();
     let request_struct_ident = format_ident!(
         "{}Request",
-        params_struct_ident.to_string().trim_end_matches("Params")
+        params_struct_ident_str
+            .strip_suffix("Params")
+            .unwrap_or(&params_struct_ident_str)
     );
 
-    let mut request_name = request_struct_ident
-        .to_string()
-        .trim_end_matches("Request")
+    let request_struct_ident_str = request_struct_ident.to_string();
+    let mut request_name = request_struct_ident_str
+        .strip_suffix("Request")
+        .unwrap_or(&request_struct_ident_str)
         .to_string();
+
     request_name.replace_range(
         ..1,
         &request_name
