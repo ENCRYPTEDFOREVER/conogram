@@ -186,9 +186,10 @@ impl AllowedUpdates {
     }
 }
 
-impl Display for AllowedUpdates {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(match self {
+impl AllowedUpdates {
+    #[must_use]
+    pub const fn as_str(&self) -> &'static str {
+        match self {
             Self::Message => "message",
             Self::EditedMessage => "edited_message",
             Self::MessageReaction => "message_reaction",
@@ -212,6 +213,12 @@ impl Display for AllowedUpdates {
             Self::ChatJoinRequest => "chat_join_request",
             Self::ChatBoost => "chat_boost",
             Self::RemovedChatBoost => "removed_chat_boost",
-        })
+        }
+    }
+}
+
+impl Display for AllowedUpdates {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
     }
 }

@@ -30,12 +30,11 @@
     clippy::large_enum_variant
 )]
 
-extern crate core;
+mod chat_member_cache;
 
 pub mod api;
 pub mod client;
 pub mod errors;
-pub(crate) mod macros;
 pub mod request;
 pub mod server_config;
 

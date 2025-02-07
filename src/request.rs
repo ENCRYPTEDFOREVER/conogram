@@ -1,4 +1,5 @@
 use std::{
+    any::Any,
     fmt::Debug,
     future::{Future, IntoFuture},
     time::Duration,
@@ -18,8 +19,8 @@ pub trait RequestT
 where
     Self: Sized + Send + Sync,
 {
-    type ParamsType: Serialize + Debug + Send + Sync;
-    type ReturnType: DeserializeOwned + Debug + Send + Sync;
+    type ParamsType: Serialize + Debug + Send + Sync + Any;
+    type ReturnType: DeserializeOwned + Debug + Send + Sync + Clone + Any;
 
     /// Request name as defined by the Telegram Bot API, e.g. ``sendMessage``
     fn get_name() -> &'static str;

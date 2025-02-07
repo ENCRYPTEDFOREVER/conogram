@@ -1,18 +1,26 @@
-use std::{fmt::Debug, future::IntoFuture, sync::atomic::AtomicI64, time::Duration};
+use std::{
+    any::{Any, TypeId},
+    fmt::Debug,
+    future::IntoFuture,
+    sync::atomic::AtomicI64,
+    time::Duration,
+};
 
 use serde::{de::DeserializeOwned, Serialize};
 
 use crate::{
+    chat_member_cache::ChatMemberCache,
     client::ApiClient,
     entities::{
+        chat_member::ChatMember,
         misc::{chat_id::ChatId, input_file::GetFiles},
         update::{AllowedUpdates, Update},
     },
     errors::{ConogramError, ConogramErrorType, TgApiError},
     methods::{
         edit_message_caption::EditMessageCaptionRequest, edit_message_text::EditMessageTextRequest,
-        send_animation::SendAnimationRequest, send_audio::SendAudioRequest,
-        send_contact::SendContactRequest, send_dice::SendDiceRequest,
+        get_chat_member::GetChatMemberParams, send_animation::SendAnimationRequest,
+        send_audio::SendAudioRequest, send_contact::SendContactRequest, send_dice::SendDiceRequest,
         send_document::SendDocumentRequest, send_game::SendGameRequest,
         send_invoice::SendInvoiceRequest, send_location::SendLocationRequest,
         send_media_group::SendMediaGroupRequest, send_message::SendMessageRequest,
@@ -35,20 +43,6 @@ macro_rules! set_default_param {
         )*
     }
 }
-
-// /// Wraps API request into [``Api::request_ref(self)``]
-// pub trait WrapRequest {
-//     fn wrap(&self) -> impl Future<Output = Result<Self::ReturnType, ConogramError>>
-//     where
-//         Self: RequestT,
-//         for<'a> &'a Self: IntoFuture<Output = Result<Self::ReturnType, ConogramError>>,
-//         for<'a> <&'a Self as IntoFuture>::IntoFuture: Send,
-//         Self::ReturnType: std::marker::Send,
-//     {
-//         Api::request_ref(self)
-//     }
-// }
-// impl<T> WrapRequest for T {}
 
 pub struct ApiToken(String);
 impl ApiToken {
@@ -107,6 +101,8 @@ impl ApiConfig {
 pub struct Api {
     api_client: ApiClient,
 
+    chat_member_cache: Option<ChatMemberCache>,
+
     allowed_updates: Vec<String>,
     get_updates_offset: AtomicI64,
     polling_timeout: u64,
@@ -121,6 +117,30 @@ impl Api {
             allowed_updates: vec![],
             get_updates_offset: AtomicI64::new(0),
             polling_timeout: 600,
+
+            chat_member_cache: None,
+        }
+    }
+
+    /// Disabled by default
+    ///
+    /// Note: [ChatMember](AllowedUpdates::ChatMember) update will be automatically enabled if you enable caching
+    pub fn set_chat_member_cache_enabled(&mut self, enabled: bool) {
+        self.chat_member_cache = if enabled {
+            Some(ChatMemberCache::default())
+        } else {
+            None
+        };
+
+        self.check_allowed_updates();
+    }
+
+    pub fn check_allowed_updates(&mut self) {
+        if self.chat_member_cache.is_some() {
+            let chat_member = AllowedUpdates::ChatMember.to_string();
+            if !self.allowed_updates.contains(&chat_member) {
+                self.allowed_updates.push(chat_member);
+            }
         }
     }
 
@@ -217,11 +237,15 @@ impl Api {
     }
 
     /// Set allowed update kinds list which will be later used in polling
+    ///
+    /// Note: [AllowedUpdates::ChatMember] update will be automatically enabled if you enable ChatMember caching
     pub fn set_allowed_updates(
         &mut self,
         allowed_updates: impl IntoIterator<Item = AllowedUpdates>,
     ) {
         self.allowed_updates = allowed_updates.into_iter().map(|x| x.to_string()).collect();
+        self.allowed_updates.dedup();
+        self.check_allowed_updates();
     }
 
     /// Internal conogram method. Returns ``Ok(false)`` instead of `Err` if the message can't be deleted
@@ -254,6 +278,24 @@ impl Api {
         result
     }
 
+    fn preprocess_updates(&self, updates: &[Update]) {
+        let mut max_update_id = 0;
+        for update in updates {
+            if update.update_id > max_update_id {
+                max_update_id = update.update_id;
+            }
+
+            if let Some(chat_member_updated) = &update.chat_member {
+                if let Some(cache) = &self.chat_member_cache {
+                    cache.cache_update(chat_member_updated);
+                }
+            }
+        }
+
+        self.get_updates_offset
+            .store(max_update_id + 1, std::sync::atomic::Ordering::Relaxed);
+    }
+
     /// Poll the server for pending updates
     pub async fn poll_once(&self) -> Result<Vec<Update>, ConogramError> {
         let offset = self
@@ -267,27 +309,47 @@ impl Api {
             .timeout(self.polling_timeout.clamp(0, i64::MAX as u64) as i64);
 
         let updates = r.await?;
-        if let Some(last_update) = updates.iter().max_by_key(|update| update.update_id) {
-            self.get_updates_offset.store(
-                last_update.update_id + 1,
-                std::sync::atomic::Ordering::Relaxed,
-            );
-        }
+        self.preprocess_updates(&updates);
         Ok(updates)
     }
 
-    pub async fn method_json<
-        ReturnType: DeserializeOwned + std::fmt::Debug,
-        Params: Serialize + Sync + std::fmt::Debug,
+    pub(crate) async fn method_json<
+        ReturnType: DeserializeOwned + std::fmt::Debug + Clone + Any,
+        Params: Serialize + Sync + std::fmt::Debug + Any,
     >(
         &self,
         method: &str,
         params: Option<&Params>,
     ) -> Result<ReturnType, ConogramError> {
+        if TypeId::of::<Params>() == TypeId::of::<GetChatMemberParams>()
+            && TypeId::of::<ReturnType>() == TypeId::of::<ChatMember>()
+        {
+            if let Some(cache) = &self.chat_member_cache {
+                if let Some(params) = params {
+                    let params = unsafe {
+                        &*std::ptr::from_ref::<Params>(params).cast::<GetChatMemberParams>()
+                    };
+
+                    if let Some(chat_member) = cache.get(&params.chat_id, params.user_id) {
+                        let return_type = unsafe {
+                            (*(std::ptr::from_ref(&chat_member).cast::<ReturnType>())).clone()
+                        };
+                        return Ok(return_type);
+                    }
+
+                    let value: ReturnType =
+                        self.api_client.method_json(method, Some(params)).await?;
+                    let chat_member = unsafe { &*std::ptr::from_ref(&value).cast::<ChatMember>() };
+                    cache.cache_chat_member(&params.chat_id, chat_member);
+                    return Ok(value);
+                }
+            }
+        }
+
         self.api_client.method_json(method, params).await
     }
 
-    pub async fn method_multipart_form<
+    pub(crate) async fn method_multipart_form<
         ReturnType: DeserializeOwned + std::fmt::Debug,
         Params: Serialize + GetFiles + Sync + std::fmt::Debug,
     >(

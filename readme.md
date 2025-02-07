@@ -26,6 +26,8 @@
 <!-- - Ability to set default request params _(e.g. ``parse_mode`` or ``allow_sending_without_reply``)_ -->
 - Can be used in multithreaded context
 - Full control over update handling
+- Optional automatic rate limit handling and errors caused by bot API server unavailability
+- Optional ChatMember cache
 
 # TODO
 - More handy entity extension methods
