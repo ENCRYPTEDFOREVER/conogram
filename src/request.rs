@@ -136,10 +136,10 @@ where
     {
         async move {
             if let Some(_wait_for) = self.get_api_ref().get_flood_wait_duration(self) {
-                self.wrap().await.map(Some)
-            } else {
-                Ok(None)
+                return Ok(None);
             }
+
+            self.wrap().await.map(Some)
         }
     }
 
@@ -157,10 +157,10 @@ where
     {
         async move {
             if let Some(_wait_for) = self.get_api_ref().get_flood_wait_duration(self) {
-                Some(self.wrap().await)
-            } else {
-                None
+                return None;
             }
+
+            Some(self.wrap().await)
         }
     }
 
@@ -180,14 +180,11 @@ where
         let threshold = threshold.into();
         async move {
             if let Some(wait_for) = self.get_api_ref().get_flood_wait_duration(self) {
-                if wait_for <= threshold {
-                    self.wrap().await.map(Some)
-                } else {
-                    Ok(None)
+                if wait_for > threshold {
+                    return Ok(None);
                 }
-            } else {
-                Ok(None)
             }
+            self.wrap().await.map(Some)
         }
     }
 
@@ -205,10 +202,9 @@ where
     {
         async move {
             if let Some(_wait_for) = self.get_api_ref().get_flood_wait_duration(self) {
-                Some(self.wrap().await)
-            } else {
-                None
+                return None;
             }
+            Some(self.wrap().await)
         }
     }
 }
