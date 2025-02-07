@@ -240,6 +240,49 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
         });
     }
 
+    // TargetChatId impl for rate limit tracker
+    if let Some(f) = fields.iter().find(|f| f.name.to_string() == "chat_id") {
+        let type_name = f._inner.ty.to_token_stream().to_string().replace(" ", "");
+
+        let body = match type_name.as_ref() {
+            "ChatId" => quote! {
+                Some(self.chat_id.clone())
+            },
+            "Option<ChatId>" => quote! {
+                self.chat_id.clone()
+            },
+            "i64" => quote! {
+                Some(self.chat_id.into())
+            },
+            "Option<i64>" => quote! {
+                self.chat_id.map(Into::into)
+            },
+            _ => {
+                let msg = format!("Unknown `chat_id` field type: `{type_name}`");
+                return quote! {
+                    compile_error!(#msg)
+                }
+                .into();
+            }
+        };
+
+        stream.extend(quote! {
+            impl crate::request::TargetChatId for #params_struct_ident {
+                fn get_target_chat_id(&self) -> Option<crate::entities::misc::chat_id::ChatId> {
+                    #body
+                }
+            }
+        });
+    } else {
+        stream.extend(quote! {
+            impl crate::request::TargetChatId for #params_struct_ident {
+                fn get_target_chat_id(&self) -> Option<crate::entities::misc::chat_id::ChatId> {
+                    None
+                }
+            }
+        });
+    }
+
     let (send_ident, send_ref_ident) = if multipart_fields.is_empty() {
         (format_ident!("send"), format_ident!("send_ref"))
     } else {

@@ -3,7 +3,7 @@ use std::{
     fmt::Debug,
     future::IntoFuture,
     sync::atomic::AtomicI64,
-    time::Duration,
+    time::{Duration, Instant},
 };
 
 use dashmap::DashMap;
@@ -29,7 +29,7 @@ use crate::{
         send_venue::SendVenueRequest, send_video::SendVideoRequest,
         send_video_note::SendVideoNoteRequest, send_voice::SendVoiceRequest,
     },
-    request::RequestT,
+    request::{RequestT, TargetChatId},
     server_config::ApiServerConfig,
 };
 
@@ -107,6 +107,8 @@ pub struct Api {
 
     chat_member_cache: Option<ChatMemberCache>,
 
+    flood_wait_hits: DashMap<(String, Option<ChatId>), (Instant, Duration)>,
+
     allowed_updates: Vec<String>,
     get_updates_offset: AtomicI64,
     polling_timeout: u64,
@@ -125,6 +127,8 @@ impl Api {
             chat_member_cache: None,
             request_stats: DashMap::new(),
             request_stats_enabled: false,
+
+            flood_wait_hits: DashMap::new(),
         }
     }
 
@@ -163,6 +167,40 @@ impl Api {
             log::warn!("Called get_request_stats() with disabled statistics collection");
         }
         self.request_stats.clone()
+    }
+
+    pub(crate) fn register_flood_wait_hit<Request: RequestT>(
+        &self,
+        request: &Request,
+        retry_after: u64,
+    ) {
+        self.flood_wait_hits.insert(
+            (
+                Request::get_name().to_owned(),
+                request.get_params_ref().get_target_chat_id(),
+            ),
+            (Instant::now(), Duration::from_secs(retry_after)),
+        );
+    }
+
+    /// Return a [Duration], representing remaining flood wait time for some certain request with some certain parameters
+    ///
+    /// Notes:
+    /// * As stated in the description, hitting flood wait is dependent both on request and it's parameters
+    /// * For this to work correctly you must use [RequestT::wrap] for API requests, as it handles tracking rate limits   
+    pub fn get_flood_wait_duration<Request: RequestT>(
+        &self,
+        request: &Request,
+    ) -> Option<Duration> {
+        if let Some(v) = self.flood_wait_hits.get(&(
+            Request::get_name().to_owned(),
+            request.get_params_ref().get_target_chat_id(),
+        )) {
+            let (hit_instant, wait_for) = *v;
+            wait_for.checked_sub(hit_instant.elapsed())
+        } else {
+            None
+        }
     }
 
     fn check_allowed_updates(&mut self) {

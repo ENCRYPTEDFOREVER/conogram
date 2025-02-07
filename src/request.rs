@@ -10,16 +10,19 @@ use serde::{de::DeserializeOwned, Serialize};
 
 use crate::{
     api::Api,
-    entities::misc::input_file::GetFiles,
+    entities::misc::{chat_id::ChatId, input_file::GetFiles},
     errors::{ConogramError, ConogramErrorType, TgApiError},
 };
 
-// #[async_trait]
+pub trait TargetChatId {
+    fn get_target_chat_id(&self) -> Option<ChatId>;
+}
+
 pub trait RequestT
 where
     Self: Sized + Send + Sync,
 {
-    type ParamsType: Serialize + Debug + Send + Sync + Any;
+    type ParamsType: Serialize + TargetChatId + Debug + Send + Sync + Any;
     type ReturnType: DeserializeOwned + Debug + Send + Sync + Clone + Any;
 
     /// Request name as defined by the Telegram Bot API, e.g. ``sendMessage``
@@ -62,10 +65,8 @@ where
         }
     }
 
-    /// Execute the request, automatically handling rate limits, BadGateway, GatewayTimeout (when Bot API server restarts)
-    fn wrap(
-        &self,
-    ) -> impl std::future::Future<Output = Result<Self::ReturnType, ConogramError>> + Send
+    /// Execute the request, automatically handling flood wait and BadGateway, GatewayTimeout errors
+    fn wrap(&self) -> impl Future<Output = Result<Self::ReturnType, ConogramError>> + Send
     where
         for<'a> &'a Self: IntoFuture<Output = Result<Self::ReturnType, ConogramError>>,
         for<'a> <&'a Self as IntoFuture>::IntoFuture: Send,
@@ -81,10 +82,20 @@ where
                         match error {
                             TgApiError::RetryAfter(params) => {
                                 if let Some(params) = params.parameters.as_ref() {
-                                    tokio::time::sleep(Duration::from_secs(
-                                        params.retry_after.unwrap_or_default() as u64,
-                                    ))
-                                    .await;
+                                    let retry_after = params.retry_after.unwrap_or_default();
+                                    if retry_after > 0 {
+                                        let retry_after = retry_after as u64;
+                                        if retry_after > 600 {
+                                            log::warn!("Unusually high RetryAfter: {retry_after}");
+                                        }
+
+                                        self.get_api_ref()
+                                            .register_flood_wait_hit(self, retry_after);
+                                        tokio::time::sleep(Duration::from_secs(retry_after)).await;
+                                    } else {
+                                        log::warn!("RetryAfter is negative: {retry_after}");
+                                    }
+
                                     result = self.await;
                                     false
                                 } else {
@@ -108,6 +119,96 @@ where
             } {}
 
             result
+        }
+    }
+
+    /// The same as [RequestT::wrap()] except the request will not be called if there is ongoing flood wait for this request
+    ///
+    /// Unlike [`RequestT::wrap_nr_o()`][RequestT::wrap_nr_o()] wraps only request's ReturnType in an Option, i.e. Returns a **Result<`Option<` RequestReturnType`>`>**
+    ///
+    /// See: [``Api::get_flood_wait_duration()``][Api::get_flood_wait_duration]
+    fn wrap_nr(
+        &self,
+    ) -> impl Future<Output = Result<Option<Self::ReturnType>, ConogramError>> + Send
+    where
+        for<'a> &'a Self: IntoFuture<Output = Result<Self::ReturnType, ConogramError>>,
+        for<'a> <&'a Self as IntoFuture>::IntoFuture: Send,
+    {
+        async move {
+            if let Some(_wait_for) = self.get_api_ref().get_flood_wait_duration(self) {
+                self.wrap().await.map(Some)
+            } else {
+                Ok(None)
+            }
+        }
+    }
+
+    /// The same as [RequestT::wrap()] except the request will not be called if there is ongoing flood wait for this request
+    ///
+    /// Wraps the entire request in an Option, i.e. Returns an **`Option<`Result&lt;RequestReturnType&gt;`>`**
+    ///
+    /// See: [``Api::get_flood_wait_duration()``][Api::get_flood_wait_duration]
+    fn wrap_nr_o(
+        &self,
+    ) -> impl Future<Output = Option<Result<Self::ReturnType, ConogramError>>> + Send
+    where
+        for<'a> &'a Self: IntoFuture<Output = Result<Self::ReturnType, ConogramError>>,
+        for<'a> <&'a Self as IntoFuture>::IntoFuture: Send,
+    {
+        async move {
+            if let Some(_wait_for) = self.get_api_ref().get_flood_wait_duration(self) {
+                Some(self.wrap().await)
+            } else {
+                None
+            }
+        }
+    }
+
+    /// The same as [RequestT::wrap()] except the request will not be called if there is ongoing flood wait for this request and it's longer than `threshold`
+    ///
+    /// Unlike [`RequestT::wrap_nr_o()`][RequestT::wrap_nr_thr_o()] wraps only request's ReturnType in an Option, i.e. Returns a **Result<`Option<` RequestReturnType`>`>**
+    ///
+    /// See: [``Api::get_flood_wait_duration()``][Api::get_flood_wait_duration]
+    fn wrap_nr_thr(
+        &self,
+        threshold: impl Into<Duration>,
+    ) -> impl Future<Output = Result<Option<Self::ReturnType>, ConogramError>> + Send
+    where
+        for<'a> &'a Self: IntoFuture<Output = Result<Self::ReturnType, ConogramError>>,
+        for<'a> <&'a Self as IntoFuture>::IntoFuture: Send,
+    {
+        let threshold = threshold.into();
+        async move {
+            if let Some(wait_for) = self.get_api_ref().get_flood_wait_duration(self) {
+                if wait_for <= threshold {
+                    self.wrap().await.map(Some)
+                } else {
+                    Ok(None)
+                }
+            } else {
+                Ok(None)
+            }
+        }
+    }
+
+    /// The same as [RequestT::wrap()] except the request will not be called if there is ongoing flood wait for this request and it's longer than `threshold`
+    ///
+    /// Wraps the entire request in an Option, i.e. Returns an **`Option<`Result&lt;RequestReturnType&gt;`>`**
+    ///
+    /// See: [``Api::get_flood_wait_duration()``][Api::get_flood_wait_duration]
+    fn wrap_nr_thr_o(
+        &self,
+    ) -> impl Future<Output = Option<Result<Self::ReturnType, ConogramError>>> + Send
+    where
+        for<'a> &'a Self: IntoFuture<Output = Result<Self::ReturnType, ConogramError>>,
+        for<'a> <&'a Self as IntoFuture>::IntoFuture: Send,
+    {
+        async move {
+            if let Some(_wait_for) = self.get_api_ref().get_flood_wait_duration(self) {
+                Some(self.wrap().await)
+            } else {
+                None
+            }
         }
     }
 }
