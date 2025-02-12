@@ -3,7 +3,7 @@ use serde::Serialize;
 
 use crate::entities::gifts::Gifts;
 
-/// Returns the list of gifts that can be sent by the bot to users. Requires no parameters. Returns a [Gifts](https://core.telegram.org/bots/api/#gifts) object.
+/// Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a [Gifts](https://core.telegram.org/bots/api/#gifts) object.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#getavailablegifts)
 #[derive(Debug, Clone, Serialize, Request)]

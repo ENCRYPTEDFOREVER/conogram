@@ -222,3 +222,9 @@ impl Display for AllowedUpdates {
         f.write_str(self.as_str())
     }
 }
+
+impl From<AllowedUpdates> for String {
+    fn from(value: AllowedUpdates) -> Self {
+        value.as_str().into()
+    }
+}

@@ -1,16 +1,24 @@
 use conogram_derives::Request;
 use serde::Serialize;
 
-use crate::{entities::message_entity::MessageEntity, utils::deserialize_utils::is_false};
+use crate::{
+    entities::{message_entity::MessageEntity, misc::chat_id::ChatId},
+    utils::deserialize_utils::is_false,
+};
 
-/// Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user. Returns *True* on success.
+/// Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receiver. Returns *True* on success.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#sendgift)
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = bool)]
 pub struct SendGiftParams {
-    /// Unique identifier of the target user that will receive the gift
-    pub user_id: i64,
+    /// Required if *chat\_id* is not specified. Unique identifier of the target user who will receive the gift.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<i64>,
+
+    /// Required if *user\_id* is not specified. Unique identifier for the chat or username of the channel (in the format `@channelusername`) that will receive the gift.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chat_id: Option<ChatId>,
 
     /// Identifier of the gift
     pub gift_id: String,

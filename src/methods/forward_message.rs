@@ -22,6 +22,10 @@ pub struct ForwardMessageParams {
     /// Unique identifier for the chat where the original message was sent (or channel username in the format `@channelusername`)
     pub from_chat_id: ChatId,
 
+    /// New start timestamp for the forwarded video in the message
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub video_start_timestamp: Option<i64>,
+
     /// Sends the message [silently](https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.
     #[serde(skip_serializing_if = "is_false")]
     pub disable_notification: bool,

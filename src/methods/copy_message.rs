@@ -30,6 +30,10 @@ pub struct CopyMessageParams {
     /// Message identifier in the chat specified in *from\_chat\_id*
     pub message_id: i64,
 
+    /// New start timestamp for the copied video in the message
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub video_start_timestamp: Option<i64>,
+
     /// New caption for media, 0-1024 characters after entities parsing. If not specified, the original caption is kept
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption: Option<String>,

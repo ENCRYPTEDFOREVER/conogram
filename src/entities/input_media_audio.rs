@@ -48,8 +48,8 @@ impl GetFiles for InputMediaAudio {
         form: reqwest::multipart::Form,
     ) -> Result<reqwest::multipart::Form, std::io::Error> {
         let mut form = form;
-        form = self.thumbnail.form(form).await?;
         form = self.media.form(form).await?;
+        form = self.thumbnail.form(form).await?;
         Ok(form)
     }
 }

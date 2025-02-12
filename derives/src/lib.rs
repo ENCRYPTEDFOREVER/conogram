@@ -189,6 +189,7 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
             "InputFile",
             "LocalFile",
             "Option<LocalFile>",
+            "Option<InputFile>",
             "Vec<InputMedia>",
         ];
         // False-positives
@@ -213,13 +214,17 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
     }
 
     let multipart_fields = fields.iter().filter(|f| f.is_multipart).collect::<Vec<_>>();
+    let mut mutipart_field_names = multipart_fields
+        .iter()
+        .map(|f| f.name.clone())
+        .collect::<Vec<_>>();
+    mutipart_field_names.sort();
 
     // GetFiles impl
     if !multipart_fields.is_empty() {
-        let getfiles_body = multipart_fields
+        let getfiles_body = mutipart_field_names
             .iter()
-            .map(|f| {
-                let name = &f.name;
+            .map(|name| {
                 quote! {
                     form = crate::entities::misc::input_file::GetFiles::form(&self.#name, form).await?;
                     // vec.extend(crate::entities::misc::input_file::GetFiles::get_files(&self.#name));

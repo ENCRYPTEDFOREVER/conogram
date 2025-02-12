@@ -52,6 +52,14 @@ pub struct SendVideoParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thumbnail: Option<LocalFile>,
 
+    /// Cover for the video in the message. Pass a file\_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://\<file\_attach\_name\>” to upload a new one using multipart/form-data under \<file\_attach\_name\> name. [More information on Sending Files »](https://core.telegram.org/bots/api/#sending-files)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cover: Option<InputFile>,
+
+    /// Start timestamp for the video in the message
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_timestamp: Option<i64>,
+
     /// Video caption (may also be used when resending videos by *file\_id*), 0-1024 characters after entities parsing
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption: Option<String>,

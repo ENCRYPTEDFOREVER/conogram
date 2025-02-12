@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::entities::{
     transaction_partner_affiliate_program::TransactionPartnerAffiliateProgram,
+    transaction_partner_chat::TransactionPartnerChat,
     transaction_partner_fragment::TransactionPartnerFragment,
     transaction_partner_other::TransactionPartnerOther,
     transaction_partner_telegram_ads::TransactionPartnerTelegramAds,
@@ -12,6 +13,7 @@ use crate::entities::{
 /// This object describes the source of a transaction, or its recipient for outgoing transactions. Currently, it can be one of
 ///
 /// * [TransactionPartnerUser](https://core.telegram.org/bots/api/#transactionpartneruser)
+/// * [TransactionPartnerChat](https://core.telegram.org/bots/api/#transactionpartnerchat)
 /// * [TransactionPartnerAffiliateProgram](https://core.telegram.org/bots/api/#transactionpartneraffiliateprogram)
 /// * [TransactionPartnerFragment](https://core.telegram.org/bots/api/#transactionpartnerfragment)
 /// * [TransactionPartnerTelegramAds](https://core.telegram.org/bots/api/#transactionpartnertelegramads)
@@ -27,6 +29,12 @@ pub enum TransactionPartner {
     /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartneruser)
     #[serde(rename = "user")]
     User(TransactionPartnerUser),
+
+    /// Describes a transaction with a chat.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartnerchat)
+    #[serde(rename = "chat")]
+    Chat(TransactionPartnerChat),
 
     /// Describes the affiliate program that issued the affiliate commission received via this transaction.
     ///
@@ -68,6 +76,12 @@ impl Default for TransactionPartner {
 impl From<TransactionPartnerUser> for TransactionPartner {
     fn from(value: TransactionPartnerUser) -> Self {
         Self::User(value)
+    }
+}
+
+impl From<TransactionPartnerChat> for TransactionPartner {
+    fn from(value: TransactionPartnerChat) -> Self {
+        Self::Chat(value)
     }
 }
 

@@ -26,6 +26,14 @@ pub struct Video {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub thumbnail: Option<PhotoSize>,
 
+    /// *Optional*. Available sizes of the cover of the video in the message
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub cover: Vec<PhotoSize>,
+
+    /// *Optional*. Timestamp in seconds from which the video will play in the message
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub start_timestamp: Option<i64>,
+
     /// *Optional*. Original filename as defined by the sender
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub file_name: Option<String>,

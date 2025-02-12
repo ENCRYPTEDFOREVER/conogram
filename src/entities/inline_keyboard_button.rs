@@ -113,4 +113,14 @@ impl InlineKeyboardButton {
             ..Default::default()
         }
     }
+
+    pub fn web_app(text: impl Into<String>, web_app_url: impl Into<String>) -> Self {
+        Self {
+            text: text.into(),
+            web_app: Some(WebAppInfo {
+                url: web_app_url.into(),
+            }),
+            ..Default::default()
+        }
+    }
 }
