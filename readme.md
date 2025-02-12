@@ -24,7 +24,7 @@
 - Full control over update handling
 - Utility extension methods for _(not all yet)_ API entities _(e.g. ``Message::reply()`` method)_
 - Optional automatic rate limit handling and errors caused by bot API server unavailability (``request.wrap*()``)
-- Optional ChatMember cache (``Api::set_request_stats_enabled(bool)``)
+- Optional ChatMember cache (``Api::set_chat_member_cache_enabled(bool)``)
 - Optional API calls statistics (calls count by method) ``Api::get_request_stats``
 - Ability to make or not make requests based on the fact if flood wait is reached (``request.wrap_*()``)
 
