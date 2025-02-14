@@ -13,7 +13,7 @@ keywords = ["telegram", "bot", "telegram-bot", "telegram-bot-api"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-conogram-derives = { path = "./derives" }
+conogram-derives = { path = "./derives", version = "0.1.0" }
 
 tokio = { version = "1.25.0", features = ["fs"] }
 reqwest = { version = "0.12.7", features = ["json", "multipart", "stream"] }

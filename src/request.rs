@@ -84,9 +84,15 @@ where
                                 if let Some(params) = params.parameters.as_ref() {
                                     let retry_after = params.retry_after.unwrap_or_default();
                                     if retry_after > 0 {
-                                        let retry_after = retry_after as u64;
+                                        let mut retry_after = retry_after as u64;
+                                        log::debug!(
+                                            "Got RetryAfter {retry_after}s in {}",
+                                            Self::get_name()
+                                        );
+
                                         if retry_after > 600 {
-                                            log::warn!("Unusually high RetryAfter: {retry_after}");
+                                            log::warn!("Unusually high RetryAfter: {retry_after}s, clamping to 600s");
+                                            retry_after = 600;
                                         }
 
                                         self.get_api_ref()
@@ -104,6 +110,7 @@ where
                             }
                             TgApiError::BadGateway(_) | TgApiError::GatewayTimeout(_) => {
                                 wait_for = std::cmp::min(wait_for * 2, 60);
+                                log::debug!("Got gateway error, retrying in {wait_for}s");
                                 tokio::time::sleep(Duration::from_secs(wait_for)).await;
                                 result = self.await;
                                 false
@@ -135,7 +142,12 @@ where
         for<'a> <&'a Self as IntoFuture>::IntoFuture: Send,
     {
         async move {
-            if let Some(_wait_for) = self.get_api_ref().get_flood_wait_duration(self) {
+            if let Some(wait_for) = self.get_api_ref().get_flood_wait_duration(self) {
+                log::debug!(
+                    "Skipped {} in chat {:?}, RetryAfter: {wait_for:?}",
+                    Self::get_name(),
+                    self.get_params_ref().get_target_chat_id()
+                );
                 return Ok(None);
             }
 
@@ -156,7 +168,12 @@ where
         for<'a> <&'a Self as IntoFuture>::IntoFuture: Send,
     {
         async move {
-            if let Some(_wait_for) = self.get_api_ref().get_flood_wait_duration(self) {
+            if let Some(wait_for) = self.get_api_ref().get_flood_wait_duration(self) {
+                log::debug!(
+                    "Skipped {} in chat {:?}, RetryAfter: {wait_for:?}",
+                    Self::get_name(),
+                    self.get_params_ref().get_target_chat_id()
+                );
                 return None;
             }
 
@@ -181,6 +198,11 @@ where
         async move {
             if let Some(wait_for) = self.get_api_ref().get_flood_wait_duration(self) {
                 if wait_for > threshold {
+                    log::debug!(
+                        "Skipped {} in chat {:?}, RetryAfter: {wait_for:?} > {threshold:?}",
+                        Self::get_name(),
+                        self.get_params_ref().get_target_chat_id()
+                    );
                     return Ok(None);
                 }
             }
@@ -195,14 +217,23 @@ where
     /// See: [``Api::get_flood_wait_duration()``][Api::get_flood_wait_duration]
     fn wrap_nr_thr_o(
         &self,
+        threshold: impl Into<Duration>,
     ) -> impl Future<Output = Option<Result<Self::ReturnType, ConogramError>>> + Send
     where
         for<'a> &'a Self: IntoFuture<Output = Result<Self::ReturnType, ConogramError>>,
         for<'a> <&'a Self as IntoFuture>::IntoFuture: Send,
     {
+        let threshold = threshold.into();
         async move {
-            if let Some(_wait_for) = self.get_api_ref().get_flood_wait_duration(self) {
-                return None;
+            if let Some(wait_for) = self.get_api_ref().get_flood_wait_duration(self) {
+                if wait_for > threshold {
+                    log::debug!(
+                        "Skipped {} in chat {:?}, RetryAfter: {wait_for:?} > {threshold:?}",
+                        Self::get_name(),
+                        self.get_params_ref().get_target_chat_id()
+                    );
+                    return None;
+                }
             }
             Some(self.wrap().await)
         }
