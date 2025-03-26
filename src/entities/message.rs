@@ -474,6 +474,8 @@ impl Message {
     pub fn from_id(&self) -> i64 {
         if let Some(sender_chat) = &self.sender_chat {
             sender_chat.id
+        } else if let Some(sender_bot) = &self.sender_business_bot {
+            sender_bot.id
         } else if let Some(from_user) = &self.from {
             from_user.id
         } else {
