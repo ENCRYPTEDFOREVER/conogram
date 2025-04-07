@@ -34,6 +34,14 @@ pub(crate) struct ApiClient {
     default_request_params: HashMap<String, HashMap<String, Value>>,
 }
 
+impl std::fmt::Debug for ApiClient {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("ApiClient")
+            .field("config", &self.bot_config)
+            .finish_non_exhaustive()
+    }
+}
+
 impl ApiClient {
     pub fn new(config: ApiConfig) -> Self {
         Self {
