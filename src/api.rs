@@ -48,7 +48,7 @@ macro_rules! set_default_param {
 pub struct ApiToken(String);
 impl ApiToken {
     pub(crate) fn leak(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 }
 impl Debug for ApiToken {
@@ -99,6 +99,18 @@ impl ApiConfig {
     }
 }
 
+impl Debug for ApiConfig {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("ApiConfig")
+            .field(
+                "bot_id",
+                &self.token.leak().split(':').next().unwrap_or("Unknown"),
+            )
+            .field("server_config", &self.server_config)
+            .finish()
+    }
+}
+
 pub struct Api {
     api_client: ApiClient,
 
@@ -112,6 +124,18 @@ pub struct Api {
     allowed_updates: Vec<String>,
     get_updates_offset: AtomicI64,
     polling_timeout: u64,
+}
+
+impl Debug for Api {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Api")
+            .field("api_client", &self.api_client)
+            .field("request_stats_enabled", &self.request_stats_enabled)
+            .field("allowed_updates", &self.allowed_updates)
+            .field("get_updates_offset", &self.get_updates_offset)
+            .field("polling_timeout", &self.polling_timeout)
+            .finish_non_exhaustive()
+    }
 }
 
 impl Api {
@@ -154,7 +178,7 @@ impl Api {
     /// * Disabled by default
     /// * Stored inside this [Api] instance
     /// * Disabling after it was enabled will not reset previous statistics
-    pub fn set_request_stats_enabled(&mut self, enabled: bool) {
+    pub const fn set_request_stats_enabled(&mut self, enabled: bool) {
         self.request_stats_enabled = enabled;
     }
 
@@ -243,7 +267,7 @@ impl Api {
     }
 
     /// Sets the timeout for [GetUpdatesRequest] request
-    pub fn set_polling_timeout(&mut self, timeout_secs: u64) {
+    pub const fn set_polling_timeout(&mut self, timeout_secs: u64) {
         self.polling_timeout = timeout_secs;
     }
 

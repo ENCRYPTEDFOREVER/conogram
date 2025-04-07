@@ -210,13 +210,13 @@ impl FormattedText {
     }
 
     /// Ignore trailing and preceding whitespace chars when calculating entities' length
-    pub fn trim_spaces(&mut self, trim: bool) -> &mut Self {
+    pub const fn trim_spaces(&mut self, trim: bool) -> &mut Self {
         self.trim_spaces = trim;
         self
     }
 
     /// Uses offsets from last pushed text for all new ones and ignores new text content while the flag is set.
-    pub fn ulo(&mut self, use_last_offsets: bool) -> &mut Self {
+    pub const fn ulo(&mut self, use_last_offsets: bool) -> &mut Self {
         self.use_last_offsets = use_last_offsets;
         self
     }

@@ -1,4 +1,4 @@
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 /// See [Using bot in test environment](https://core.telegram.org/bots/webapps#using-bots-in-the-test-environment)
 /// See [Using local api server](https://core.telegram.org/bots/api#using-a-local-bot-api-server)
 pub struct ApiServerConfig {
