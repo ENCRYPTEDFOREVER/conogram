@@ -174,11 +174,15 @@ impl Api {
         request: &Request,
         retry_after: u64,
     ) {
+        let request_name = Request::get_name();
+        let target_chat_id = if request_name.contains("message") {
+            request.get_params_ref().get_target_chat_id()
+        } else {
+            None
+        };
+
         self.flood_wait_hits.insert(
-            (
-                Request::get_name().to_owned(),
-                request.get_params_ref().get_target_chat_id(),
-            ),
+            (request_name.into(), target_chat_id),
             (Instant::now(), Duration::from_secs(retry_after)),
         );
     }
@@ -187,15 +191,22 @@ impl Api {
     ///
     /// Notes:
     /// * As stated in the description, hitting flood wait is dependent both on request and it's parameters
-    /// * For this to work correctly you must use [RequestT::wrap] for API requests, as it handles tracking rate limits   
+    /// * For this to work correctly you must use [RequestT::wrap] for API requests, as it handles tracking rate limits
     pub fn get_flood_wait_duration<Request: RequestT>(
         &self,
         request: &Request,
     ) -> Option<Duration> {
-        if let Some(v) = self.flood_wait_hits.get(&(
-            Request::get_name().to_owned(),
-            request.get_params_ref().get_target_chat_id(),
-        )) {
+        let request_name = Request::get_name();
+        let target_chat_id = if request_name.contains("message") {
+            request.get_params_ref().get_target_chat_id()
+        } else {
+            None
+        };
+
+        if let Some(v) = self
+            .flood_wait_hits
+            .get(&(request_name.into(), target_chat_id))
+        {
             let (hit_instant, wait_for) = *v;
             wait_for.checked_sub(hit_instant.elapsed())
         } else {
