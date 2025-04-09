@@ -78,7 +78,7 @@ where
 
             while !match &result {
                 Err(err) => {
-                    if let ConogramErrorType::ApiError(error) = &err.error {
+                    if let ConogramErrorType::ApiError(error) = &err.type_ {
                         match error {
                             TgApiError::RetryAfter(params) => {
                                 if let Some(params) = params.parameters.as_ref() {

@@ -71,7 +71,7 @@ impl ApiClient {
         method: impl Into<String>,
         param_name: impl Into<String>,
         value: impl Serialize,
-    ) -> Result<(), ConogramErrorType> {
+    ) -> Result<(), serde_json::Error> {
         let method_entry = self
             .default_request_params
             .entry(method.into())

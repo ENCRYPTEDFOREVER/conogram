@@ -10,14 +10,14 @@ use crate::client::ApiResponse;
 pub struct ConogramError {
     pub method_name: String,
     pub params: serde_json::Value,
-    pub error: ConogramErrorType,
+    pub type_: ConogramErrorType,
 }
 
 impl Debug for ConogramError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!(
             "{}\nCaused by {}({})",
-            self.error, self.method_name, self.params
+            self.type_, self.method_name, self.params
         ))
     }
 }
@@ -26,7 +26,7 @@ impl Display for ConogramError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!(
             "{}\nCaused by {}({})",
-            self.error, self.method_name, self.params
+            self.type_, self.method_name, self.params
         ))
     }
 }
@@ -40,7 +40,7 @@ impl ConogramError {
         Self {
             method_name: method_name.into(),
             params: serde_json::to_value(params).unwrap(),
-            error,
+            type_: error,
         }
     }
 }

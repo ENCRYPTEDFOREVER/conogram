@@ -237,7 +237,7 @@ impl Api {
     }
 
     /// Sets `allow_sending_without_reply` to `true` for all applicable requests
-    pub fn set_essential_request_defaults(&mut self) -> Result<(), ConogramErrorType> {
+    pub fn set_essential_request_defaults(&mut self) -> Result<(), serde_json::Error> {
         set_default_param!(
             self.api_client,
             "allow_sending_without_reply",
@@ -277,7 +277,7 @@ impl Api {
         method: impl Into<String>,
         param_name: impl Into<String>,
         value: impl Serialize,
-    ) -> Result<(), ConogramErrorType> {
+    ) -> Result<(), serde_json::Error> {
         self.api_client
             .set_default_request_param(method.into(), param_name, value)
     }
@@ -315,7 +315,7 @@ impl Api {
     pub fn set_default_link_preview(
         &mut self,
         value: impl Into<crate::entities::link_preview_options::LinkPreviewOptions>,
-    ) -> Result<(), ConogramErrorType> {
+    ) -> Result<(), serde_json::Error> {
         let value = value.into();
 
         set_default_param!(
@@ -348,7 +348,7 @@ impl Api {
     ) -> Result<bool, ConogramError> {
         let result = self.delete_message(chat_id, message_id).wrap().await;
         if let Err(err) = &result {
-            if let ConogramErrorType::ApiError(_) = &err.error {
+            if let ConogramErrorType::ApiError(_) = &err.type_ {
                 return Ok(false);
             }
         }
@@ -363,7 +363,7 @@ impl Api {
     ) -> Result<bool, ConogramError> {
         let result = self.delete_messages(chat_id, message_ids).wrap().await;
         if let Err(err) = &result {
-            if let ConogramErrorType::ApiError(_) = &err.error {
+            if let ConogramErrorType::ApiError(_) = &err.type_ {
                 return Ok(false);
             }
         }
@@ -503,7 +503,7 @@ impl Api {
 
         while !match &result {
             Err(err) => {
-                if let ConogramErrorType::ApiError(error) = &err.error {
+                if let ConogramErrorType::ApiError(error) = &err.type_ {
                     match error {
                         TgApiError::RetryAfter(params) => {
                             if let Some(params) = params.parameters.as_ref() {
