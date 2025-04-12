@@ -1,9 +1,8 @@
 use serde::Serialize;
 
 use crate::entities::{
-    input_paid_media_photo::InputPaidMediaPhoto,
-    input_paid_media_video::InputPaidMediaVideo,
-    misc::input_file::{GetFiles, InputFile},
+    input_paid_media_photo::InputPaidMediaPhoto, input_paid_media_video::InputPaidMediaVideo,
+    misc::input_file::GetFiles,
 };
 
 /// This object describes the paid media to be sent. Currently, it can be one of
@@ -58,6 +57,8 @@ impl GetFiles for InputPaidMedia {
     }
 }
 // Divider: all content below this line will be preserved after code regen
+use crate::entities::misc::input_file::InputFile;
+
 impl<T: Into<InputFile>> From<T> for InputPaidMediaPhoto {
     fn from(value: T) -> Self {
         Self {
