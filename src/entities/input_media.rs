@@ -1,12 +1,9 @@
 use serde::Serialize;
 
 use crate::entities::{
-    input_media_animation::InputMediaAnimation,
-    input_media_audio::InputMediaAudio,
-    input_media_document::InputMediaDocument,
-    input_media_photo::InputMediaPhoto,
-    input_media_video::InputMediaVideo,
-    misc::input_file::{GetFiles, InputFile},
+    input_media_animation::InputMediaAnimation, input_media_audio::InputMediaAudio,
+    input_media_document::InputMediaDocument, input_media_photo::InputMediaPhoto,
+    input_media_video::InputMediaVideo, misc::input_file::GetFiles,
 };
 
 /// This object represents the content of a media message to be sent. It should be one of
@@ -103,6 +100,8 @@ impl GetFiles for InputMedia {
     }
 }
 // Divider: all content below this line will be preserved after code regen
+use crate::entities::misc::input_file::InputFile;
+
 impl<T: Into<InputFile>> From<T> for InputMediaAnimation {
     fn from(value: T) -> Self {
         Self {

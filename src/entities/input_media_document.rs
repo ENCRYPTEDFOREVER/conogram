@@ -3,7 +3,7 @@ use serde::Serialize;
 use crate::{
     entities::{
         message_entity::MessageEntity,
-        misc::input_file::{GetFiles, InputFile, LocalFile},
+        misc::input_file::{GetFiles, InputFile},
     },
     utils::deserialize_utils::is_false,
 };
@@ -18,7 +18,7 @@ pub struct InputMediaDocument {
 
     /// *Optional*. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://\<file\_attach\_name\>” if the thumbnail was uploaded using multipart/form-data under \<file\_attach\_name\>. [More information on Sending Files »](https://core.telegram.org/bots/api/#sending-files)
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub thumbnail: Option<LocalFile>,
+    pub thumbnail: Option<InputFile>,
 
     /// *Optional*. Caption of the document to be sent, 0-1024 characters after entities parsing
     #[serde(skip_serializing_if = "Option::is_none")]

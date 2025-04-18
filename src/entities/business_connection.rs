@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::entities::user::User;
+use crate::entities::{business_bot_rights::BusinessBotRights, user::User};
 
 /// Describes the connection of the bot with a business account.
 ///
@@ -19,8 +19,9 @@ pub struct BusinessConnection {
     /// Date the connection was established in Unix time
     pub date: i64,
 
-    /// True, if the bot can act on behalf of the business account in chats that were active in the last 24 hours
-    pub can_reply: bool,
+    /// *Optional*. Rights of the business bot
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub rights: Option<BusinessBotRights>,
 
     /// True, if the connection is active
     pub is_enabled: bool,

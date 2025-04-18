@@ -381,11 +381,12 @@ impl Api {
         result
     }
 
-    fn preprocess_updates(&self, updates: &[Update]) {
-        let mut max_update_id = 0;
+    /// Internal method used for caching
+    pub fn preprocess_updates(&self, updates: &[Update]) {
+        let mut max_update_id = None;
         for update in updates {
-            if update.update_id > max_update_id {
-                max_update_id = update.update_id;
+            if max_update_id.is_none_or(|prev_max| prev_max < update.update_id) {
+                max_update_id = Some(update.update_id);
             }
 
             if let Some(chat_member_updated) = &update.chat_member {
@@ -395,8 +396,10 @@ impl Api {
             }
         }
 
-        self.get_updates_offset
-            .store(max_update_id + 1, std::sync::atomic::Ordering::Relaxed);
+        if let Some(max_update_id) = max_update_id {
+            self.get_updates_offset
+                .store(max_update_id + 1, std::sync::atomic::Ordering::Relaxed);
+        }
     }
 
     /// Poll the server for pending updates
@@ -416,7 +419,8 @@ impl Api {
         Ok(updates)
     }
 
-    pub(crate) async fn method_json<
+    /// Internal method used for API calls
+    pub async fn method_json<
         ReturnType: DeserializeOwned + std::fmt::Debug + Clone + Any,
         Params: Serialize + Sync + std::fmt::Debug + Any,
     >(
@@ -470,7 +474,8 @@ impl Api {
         self.api_client.method_json(method, params).await
     }
 
-    pub(crate) async fn method_multipart_form<
+    /// Internal method used for API calls which require file uploads
+    pub async fn method_multipart_form<
         ReturnType: DeserializeOwned + std::fmt::Debug,
         Params: Serialize + GetFiles + Sync + std::fmt::Debug,
     >(

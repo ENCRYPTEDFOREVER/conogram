@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     entities::{
+        accepted_gift_types::AcceptedGiftTypes,
         birthdate::Birthdate,
         business_intro::BusinessIntro,
         business_location::BusinessLocation,
@@ -141,6 +142,9 @@ pub struct ChatFullInfo {
     /// *Optional*. Default chat member permissions, for groups and supergroups
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub permissions: Option<ChatPermissions>,
+
+    /// Information about types of gifts that are accepted by the chat or by the corresponding user for private chats
+    pub accepted_gift_types: AcceptedGiftTypes,
 
     /// *Optional*. *True*, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats.
     #[serde(default, skip_serializing_if = "is_false")]

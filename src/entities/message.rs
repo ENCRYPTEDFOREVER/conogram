@@ -8,19 +8,21 @@ use crate::{
         forum_topic_closed::ForumTopicClosed, forum_topic_created::ForumTopicCreated,
         forum_topic_edited::ForumTopicEdited, forum_topic_reopened::ForumTopicReopened, game::Game,
         general_forum_topic_hidden::GeneralForumTopicHidden,
-        general_forum_topic_unhidden::GeneralForumTopicUnhidden, giveaway::Giveaway,
-        giveaway_completed::GiveawayCompleted, giveaway_created::GiveawayCreated,
-        giveaway_winners::GiveawayWinners, inline_keyboard_markup::InlineKeyboardMarkup,
-        invoice::Invoice, link_preview_options::LinkPreviewOptions, location::Location,
+        general_forum_topic_unhidden::GeneralForumTopicUnhidden, gift_info::GiftInfo,
+        giveaway::Giveaway, giveaway_completed::GiveawayCompleted,
+        giveaway_created::GiveawayCreated, giveaway_winners::GiveawayWinners,
+        inline_keyboard_markup::InlineKeyboardMarkup, invoice::Invoice,
+        link_preview_options::LinkPreviewOptions, location::Location,
         maybe_inaccessible_message::MaybeInaccessibleMessage,
         message_auto_delete_timer_changed::MessageAutoDeleteTimerChanged,
         message_entity::MessageEntity, message_origin::MessageOrigin,
         misc::message_effects::MessageEffect, paid_media_info::PaidMediaInfo,
-        passport_data::PassportData, photo_size::PhotoSize, poll::Poll,
-        proximity_alert_triggered::ProximityAlertTriggered, refunded_payment::RefundedPayment,
-        sticker::Sticker, story::Story, successful_payment::SuccessfulPayment,
-        text_quote::TextQuote, user::User, users_shared::UsersShared, venue::Venue, video::Video,
-        video_chat_ended::VideoChatEnded,
+        paid_message_price_changed::PaidMessagePriceChanged, passport_data::PassportData,
+        photo_size::PhotoSize, poll::Poll, proximity_alert_triggered::ProximityAlertTriggered,
+        refunded_payment::RefundedPayment, sticker::Sticker, story::Story,
+        successful_payment::SuccessfulPayment, text_quote::TextQuote,
+        unique_gift_info::UniqueGiftInfo, user::User, users_shared::UsersShared, venue::Venue,
+        video::Video, video_chat_ended::VideoChatEnded,
         video_chat_participants_invited::VideoChatParticipantsInvited,
         video_chat_scheduled::VideoChatScheduled, video_chat_started::VideoChatStarted,
         video_note::VideoNote, voice::Voice, web_app_data::WebAppData,
@@ -118,6 +120,10 @@ pub struct Message {
     /// *Optional*. Signature of the post author for messages in channels, or the custom title of an anonymous group administrator
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub author_signature: Option<String>,
+
+    /// *Optional*. The number of Telegram Stars that were paid by the sender of the message to send it
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub paid_star_count: Option<i64>,
 
     /// *Optional*. For text messages, the actual UTF-8 text of the message
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -283,6 +289,14 @@ pub struct Message {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub chat_shared: Option<ChatShared>,
 
+    /// *Optional*. Service message: a regular gift was sent or received
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gift: Option<GiftInfo>,
+
+    /// *Optional*. Service message: a unique gift was sent or received
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub unique_gift: Option<UniqueGiftInfo>,
+
     /// *Optional*. The domain name of the website on which the user has logged in. [More about Telegram Login »](https://core.telegram.org/widgets/login)
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub connected_website: Option<String>,
@@ -346,6 +360,10 @@ pub struct Message {
     /// *Optional*. Service message: a giveaway without public winners was completed
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub giveaway_completed: Option<GiveawayCompleted>,
+
+    /// *Optional*. Service message: the price for paid messages has changed in the chat
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub paid_message_price_changed: Option<PaidMessagePriceChanged>,
 
     /// *Optional*. Service message: video chat scheduled
     #[serde(default, skip_serializing_if = "Option::is_none")]

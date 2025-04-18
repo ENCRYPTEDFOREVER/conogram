@@ -27,7 +27,7 @@ pub struct SendGiftParams {
     #[serde(skip_serializing_if = "is_false")]
     pub pay_for_upgrade: bool,
 
-    /// Text that will be shown along with the gift; 0-255 characters
+    /// Text that will be shown along with the gift; 0-128 characters
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text: Option<String>,
 
