@@ -144,7 +144,7 @@ impl<T> From<ApiResponse<T>> for GenericApiErrorParams {
             description: Some(
                 value
                     .description
-                    .unwrap_or_else(|| "No decsription".to_owned()),
+                    .unwrap_or_else(|| "No description".to_owned()),
             ),
             parameters: value.parameters,
         }
