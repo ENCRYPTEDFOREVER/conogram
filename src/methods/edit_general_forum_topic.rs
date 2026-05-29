@@ -9,7 +9,7 @@ use crate::entities::misc::chat_id::ChatId;
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = bool)]
 pub struct EditGeneralForumTopicParams {
-    /// Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
+    /// Unique identifier for the target chat or username of the target supergroup in the format `@username`
     pub chat_id: ChatId,
 
     /// New topic name, 1-128 characters

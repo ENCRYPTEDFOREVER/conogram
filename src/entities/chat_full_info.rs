@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 use crate::{
     entities::{
         accepted_gift_types::AcceptedGiftTypes,
+        audio::Audio,
         birthdate::Birthdate,
         business_intro::BusinessIntro,
         business_location::BusinessLocation,
@@ -13,6 +14,8 @@ use crate::{
         chat_photo::ChatPhoto,
         message::Message,
         reaction_type::ReactionType,
+        unique_gift_colors::UniqueGiftColors,
+        user_rating::UserRating,
     },
     utils::deserialize_utils::is_false,
 };
@@ -49,6 +52,10 @@ pub struct ChatFullInfo {
     #[serde(default, skip_serializing_if = "is_false")]
     pub is_forum: bool,
 
+    /// *Optional*. *True*, if the chat is the direct messages chat of a channel
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub is_direct_messages: bool,
+
     /// Identifier of the accent color for the chat name and backgrounds of the chat photo, reply header, and link preview. See [accent colors](https://core.telegram.org/bots/api/#accent-colors) for more details.
     pub accent_color_id: i64,
 
@@ -82,6 +89,10 @@ pub struct ChatFullInfo {
     /// *Optional*. For private chats, the personal channel of the user
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub personal_chat: Option<Box<Chat>>,
+
+    /// *Optional*. Information about the corresponding channel chat; for direct messages chats only
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub parent_chat: Option<Box<Chat>>,
 
     /// *Optional*. List of available reactions allowed in the chat. If omitted, then all [emoji reactions](https://core.telegram.org/bots/api/#reactiontypeemoji) are allowed.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
@@ -197,6 +208,22 @@ pub struct ChatFullInfo {
     /// *Optional*. For supergroups, the location to which the supergroup is connected
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub location: Option<ChatLocation>,
+
+    /// *Optional*. For private chats, the rating of the user if any
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub rating: Option<UserRating>,
+
+    /// *Optional*. For private chats, the first audio added to the profile of the user
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub first_profile_audio: Option<Audio>,
+
+    /// *Optional*. The color scheme based on a unique gift that must be used for the chat's name, message replies and link previews
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub unique_gift_colors: Option<UniqueGiftColors>,
+
+    /// *Optional*. The number of Telegram Stars a general user has to pay to send a message to the chat
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub paid_message_star_count: Option<i64>,
 }
 
 // Divider: all content below this line will be preserved after code regen

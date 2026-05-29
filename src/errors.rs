@@ -4,7 +4,7 @@ use std::fmt::{Debug, Display};
 use serde::Deserialize;
 use thiserror::Error;
 
-use crate::client::ApiResponse;
+use crate::client::TgApiResponse;
 
 #[derive(Error)]
 pub struct ConogramError {
@@ -65,8 +65,8 @@ pub enum ConogramErrorType {
 }
 
 #[allow(clippy::fallible_impl_from)]
-impl<ReturnType> From<ApiResponse<ReturnType>> for Result<ReturnType, ConogramErrorType> {
-    fn from(value: ApiResponse<ReturnType>) -> Self {
+impl<ReturnType> From<TgApiResponse<ReturnType>> for Result<ReturnType, ConogramErrorType> {
+    fn from(value: TgApiResponse<ReturnType>) -> Self {
         if value.ok {
             Ok(value.result.unwrap())
         } else {
@@ -113,8 +113,8 @@ pub enum TgApiError {
     GatewayTimeout(GenericApiErrorParams),
 }
 
-impl<ReturnType> From<ApiResponse<ReturnType>> for TgApiError {
-    fn from(value: ApiResponse<ReturnType>) -> Self {
+impl<ReturnType> From<TgApiResponse<ReturnType>> for TgApiError {
+    fn from(value: TgApiResponse<ReturnType>) -> Self {
         match value.error_code {
             Some(error_code) => match error_code {
                 401 => Self::Unauthorized(value.into()),
@@ -137,8 +137,8 @@ pub struct GenericApiErrorParams {
     pub parameters: Option<TgApiErrorParams>,
 }
 
-impl<T> From<ApiResponse<T>> for GenericApiErrorParams {
-    fn from(value: ApiResponse<T>) -> Self {
+impl<T> From<TgApiResponse<T>> for GenericApiErrorParams {
+    fn from(value: TgApiResponse<T>) -> Self {
         Self {
             error_code: value.error_code.unwrap_or_default(),
             description: Some(

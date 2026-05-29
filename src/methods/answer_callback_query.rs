@@ -14,7 +14,7 @@ pub struct AnswerCallbackQueryParams {
     /// Unique identifier for the query to be answered
     pub callback_query_id: String,
 
-    /// Text of the notification. If not specified, nothing will be shown to the user, 0-200 characters
+    /// Text of the notification. If not specified, nothing will be shown to the user, 0-200 characters.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text: Option<String>,
 
@@ -22,7 +22,7 @@ pub struct AnswerCallbackQueryParams {
     #[serde(skip_serializing_if = "is_false")]
     pub show_alert: bool,
 
-    /// URL that will be opened by the user's client. If you have created a [Game](https://core.telegram.org/bots/api/#game) and accepted the conditions via [@BotFather](https://t.me/botfather), specify the URL that opens your game - note that this will only work if the query comes from a [*callback\_game*](https://core.telegram.org/bots/api/#inlinekeyboardbutton) button.  
+    /// URL that will be opened by the user's client. If you have created a [Game](https://core.telegram.org/bots/api/#game) and accepted the conditions via [@BotFather](https://t.me/botfather), specify the URL that opens your game - note that this will only work if the query comes from a [*callback\_game*](https://core.telegram.org/bots/api/#inlinekeyboardbutton) button.
     ///
     /// Otherwise, you may use links like `t.me/your_bot?start=XXXX` that open your bot with a parameter.
     #[serde(skip_serializing_if = "Option::is_none")]

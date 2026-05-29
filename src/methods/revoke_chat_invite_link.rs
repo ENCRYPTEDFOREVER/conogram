@@ -9,7 +9,7 @@ use crate::entities::{chat_invite_link::ChatInviteLink, misc::chat_id::ChatId};
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = ChatInviteLink)]
 pub struct RevokeChatInviteLinkParams {
-    /// Unique identifier of the target chat or username of the target channel (in the format `@channelusername`)
+    /// Unique identifier of the target chat or username of the target channel in the format `@username`
     pub chat_id: ChatId,
 
     /// The invite link to revoke

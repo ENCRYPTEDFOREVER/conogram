@@ -7,7 +7,7 @@ use crate::entities::misc::chat_id::ChatId;
 /// API Reference: [link](https://core.telegram.org/bots/api/#botcommandscopechat)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct BotCommandScopeChat {
-    /// Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
+    /// Unique identifier for the target chat or username of the target supergroup in the format `@username`. Channel direct messages chats and channel chats aren't supported.
     pub chat_id: ChatId,
 }
 

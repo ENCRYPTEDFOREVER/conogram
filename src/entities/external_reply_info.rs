@@ -2,9 +2,10 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     entities::{
-        animation::Animation, audio::Audio, chat::Chat, contact::Contact, dice::Dice,
-        document::Document, game::Game, giveaway::Giveaway, giveaway_winners::GiveawayWinners,
-        invoice::Invoice, link_preview_options::LinkPreviewOptions, location::Location,
+        animation::Animation, audio::Audio, chat::Chat, checklist::Checklist, contact::Contact,
+        dice::Dice, document::Document, game::Game, giveaway::Giveaway,
+        giveaway_winners::GiveawayWinners, invoice::Invoice,
+        link_preview_options::LinkPreviewOptions, live_photo::LivePhoto, location::Location,
         message_origin::MessageOrigin, paid_media_info::PaidMediaInfo, photo_size::PhotoSize,
         poll::Poll, sticker::Sticker, story::Story, venue::Venue, video::Video,
         video_note::VideoNote, voice::Voice,
@@ -44,6 +45,10 @@ pub struct ExternalReplyInfo {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub document: Option<Document>,
 
+    /// *Optional*. Message is a live photo, information about the live photo
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub live_photo: Option<LivePhoto>,
+
     /// *Optional*. Message contains paid media; information about the paid media
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub paid_media: Option<PaidMediaInfo>,
@@ -75,6 +80,10 @@ pub struct ExternalReplyInfo {
     /// *Optional*. *True*, if the message media is covered by a spoiler animation
     #[serde(default, skip_serializing_if = "is_false")]
     pub has_media_spoiler: bool,
+
+    /// *Optional*. Message is a checklist
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub checklist: Option<Checklist>,
 
     /// *Optional*. Message is a shared contact, information about the contact
     #[serde(default, skip_serializing_if = "Option::is_none")]

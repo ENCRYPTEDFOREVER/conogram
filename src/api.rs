@@ -11,7 +11,7 @@ use serde::{de::DeserializeOwned, Serialize};
 
 use crate::{
     chat_member_cache::ChatMemberCache,
-    client::ApiClient,
+    client::TgApiClient,
     entities::{
         chat_member::ChatMember,
         misc::{chat_id::ChatId, input_file::GetFiles},
@@ -47,7 +47,7 @@ macro_rules! set_default_param {
 
 pub struct ApiToken(String);
 impl ApiToken {
-    pub(crate) fn leak(&self) -> &str {
+    pub(crate) const fn leak(&self) -> &str {
         self.0.as_str()
     }
 }
@@ -112,7 +112,7 @@ impl Debug for ApiConfig {
 }
 
 pub struct Api {
-    api_client: ApiClient,
+    client: TgApiClient,
 
     request_stats_enabled: bool,
     request_stats: DashMap<String, usize>,
@@ -129,7 +129,7 @@ pub struct Api {
 impl Debug for Api {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("Api")
-            .field("api_client", &self.api_client)
+            .field("client", &self.client)
             .field("request_stats_enabled", &self.request_stats_enabled)
             .field("allowed_updates", &self.allowed_updates)
             .field("get_updates_offset", &self.get_updates_offset)
@@ -142,7 +142,7 @@ impl Api {
     #[must_use]
     pub fn new(config: ApiConfig) -> Self {
         Self {
-            api_client: ApiClient::new(config),
+            client: TgApiClient::new(config),
 
             allowed_updates: vec![],
             get_updates_offset: AtomicI64::new(0),
@@ -250,7 +250,7 @@ impl Api {
     /// Sets `allow_sending_without_reply` to `true` for all applicable requests
     pub fn set_essential_request_defaults(&mut self) -> Result<(), serde_json::Error> {
         set_default_param!(
-            self.api_client,
+            self.client,
             "allow_sending_without_reply",
             true,
             [
@@ -289,7 +289,7 @@ impl Api {
         param_name: impl Into<String>,
         value: impl Serialize,
     ) -> Result<(), serde_json::Error> {
-        self.api_client
+        self.client
             .set_default_request_param(method.into(), param_name, value)
     }
 
@@ -298,7 +298,7 @@ impl Api {
         let value = value.into();
 
         set_default_param!(
-            self.api_client,
+            self.client,
             "parse_mode",
             value,
             [
@@ -313,7 +313,7 @@ impl Api {
             ]
         );
 
-        self.api_client.set_default_request_param(
+        self.client.set_default_request_param(
             SendPollRequest::get_name(),
             "explanation_parse_mode",
             value,
@@ -330,7 +330,7 @@ impl Api {
         let value = value.into();
 
         set_default_param!(
-            self.api_client,
+            self.client,
             "link_preview_options",
             value,
             [SendMessageRequest, EditMessageTextRequest]
@@ -456,8 +456,7 @@ impl Api {
                             .and_modify(|n| *n += 1)
                             .or_insert(1);
                     }
-                    let value: ReturnType =
-                        self.api_client.method_json(method, Some(params)).await?;
+                    let value: ReturnType = self.client.method_json(method, Some(params)).await?;
                     let chat_member = unsafe { &*std::ptr::from_ref(&value).cast::<ChatMember>() };
                     cache.cache_chat_member(&params.chat_id, chat_member);
                     return Ok(value);
@@ -471,7 +470,7 @@ impl Api {
                 .and_modify(|n| *n += 1)
                 .or_insert(1);
         }
-        self.api_client.method_json(method, params).await
+        self.client.method_json(method, params).await
     }
 
     /// Internal method used for API calls which require file uploads
@@ -490,7 +489,7 @@ impl Api {
                 .or_insert(1);
         }
 
-        self.api_client.method_multipart_form(method, params).await
+        self.client.method_multipart_form(method, params).await
     }
 
     /// Same as [`Api::request_ref`] but takes `request` by value

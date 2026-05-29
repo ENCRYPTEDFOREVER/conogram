@@ -44,17 +44,33 @@ pub struct User {
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_read_all_group_messages: bool,
 
+    /// *Optional*. *True*, if the bot supports guest queries from chats it is not a member of. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub supports_guest_queries: bool,
+
     /// *Optional*. *True*, if the bot supports inline queries. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
     #[serde(default, skip_serializing_if = "is_false")]
     pub supports_inline_queries: bool,
 
-    /// *Optional*. *True*, if the bot can be connected to a Telegram Business account to receive its messages. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
+    /// *Optional*. *True*, if the bot can be connected to a user account to manage it. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_connect_to_business: bool,
 
     /// *Optional*. *True*, if the bot has a main Web App. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
     #[serde(default, skip_serializing_if = "is_false")]
     pub has_main_web_app: bool,
+
+    /// *Optional*. *True*, if the bot has forum topic mode enabled in private chats. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub has_topics_enabled: bool,
+
+    /// *Optional*. *True*, if the bot allows users to create and delete topics in private chats. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub allows_users_to_create_topics: bool,
+
+    /// *Optional*. *True*, if other bots can be created to be controlled by the bot. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub can_manage_bots: bool,
 }
 
 // Divider: all content below this line will be preserved after code regen

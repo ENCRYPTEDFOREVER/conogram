@@ -9,7 +9,7 @@ use crate::entities::{chat_invite_link::ChatInviteLink, misc::chat_id::ChatId};
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = ChatInviteLink)]
 pub struct CreateChatSubscriptionInviteLinkParams {
-    /// Unique identifier for the target channel chat or username of the target channel (in the format `@channelusername`)
+    /// Unique identifier for the target channel chat or username of the target channel in the format `@username`
     pub chat_id: ChatId,
 
     /// Invite link name; 0-32 characters

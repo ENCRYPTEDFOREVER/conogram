@@ -12,27 +12,35 @@ pub struct GetBusinessAccountGiftsParams {
     /// Unique identifier of the business connection
     pub business_connection_id: String,
 
-    /// Pass True to exclude gifts that aren't saved to the account's profile page
+    /// Pass *True* to exclude gifts that aren't saved to the account's profile page
     #[serde(skip_serializing_if = "is_false")]
     pub exclude_unsaved: bool,
 
-    /// Pass True to exclude gifts that are saved to the account's profile page
+    /// Pass *True* to exclude gifts that are saved to the account's profile page
     #[serde(skip_serializing_if = "is_false")]
     pub exclude_saved: bool,
 
-    /// Pass True to exclude gifts that can be purchased an unlimited number of times
+    /// Pass *True* to exclude gifts that can be purchased an unlimited number of times
     #[serde(skip_serializing_if = "is_false")]
     pub exclude_unlimited: bool,
 
-    /// Pass True to exclude gifts that can be purchased a limited number of times
+    /// Pass *True* to exclude gifts that can be purchased a limited number of times and can be upgraded to unique
     #[serde(skip_serializing_if = "is_false")]
-    pub exclude_limited: bool,
+    pub exclude_limited_upgradable: bool,
 
-    /// Pass True to exclude unique gifts
+    /// Pass *True* to exclude gifts that can be purchased a limited number of times and can't be upgraded to unique
+    #[serde(skip_serializing_if = "is_false")]
+    pub exclude_limited_non_upgradable: bool,
+
+    /// Pass *True* to exclude unique gifts
     #[serde(skip_serializing_if = "is_false")]
     pub exclude_unique: bool,
 
-    /// Pass True to sort results by gift price instead of send date. Sorting is applied before pagination.
+    /// Pass *True* to exclude gifts that were assigned from the TON blockchain and can't be resold or transferred in Telegram
+    #[serde(skip_serializing_if = "is_false")]
+    pub exclude_from_blockchain: bool,
+
+    /// Pass *True* to sort results by gift price instead of send date. Sorting is applied before pagination.
     #[serde(skip_serializing_if = "is_false")]
     pub sort_by_price: bool,
 
@@ -40,7 +48,7 @@ pub struct GetBusinessAccountGiftsParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub offset: Option<String>,
 
-    /// The maximum number of gifts to be returned; 1-100. Defaults to 100
+    /// The maximum number of gifts to be returned; 1-100. Defaults to 100.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
 }

@@ -20,11 +20,11 @@ pub struct StarTransaction {
     /// Date the transaction was created in Unix time
     pub date: i64,
 
-    /// *Optional*. Source of an incoming transaction (e.g., a user purchasing goods or services, Fragment refunding a failed withdrawal). Only for incoming transactions
+    /// *Optional*. Source of an incoming transaction (e.g., a user purchasing goods or services, Fragment refunding a failed withdrawal). Only for incoming transactions.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub source: Option<Box<TransactionPartner>>,
 
-    /// *Optional*. Receiver of an outgoing transaction (e.g., a user for a purchase refund, Fragment for a withdrawal). Only for outgoing transactions
+    /// *Optional*. Receiver of an outgoing transaction (e.g., a user for a purchase refund, Fragment for a withdrawal). Only for outgoing transactions.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub receiver: Option<Box<TransactionPartner>>,
 }

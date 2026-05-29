@@ -12,14 +12,18 @@ use crate::{
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = Vec<MessageId>)]
 pub struct CopyMessagesParams {
-    /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    /// Unique identifier for the target chat or username of the target bot, supergroup or channel in the format `@username`
     pub chat_id: ChatId,
 
-    /// Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+    /// Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_thread_id: Option<i64>,
 
-    /// Unique identifier for the chat where the original messages were sent (or channel username in the format `@channelusername`)
+    /// Identifier of the direct messages topic to which the messages will be sent; required if the messages are sent to a direct messages chat
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_messages_topic_id: Option<i64>,
+
+    /// Unique identifier for the chat where the original messages were sent (or username of the target bot, supergroup or channel in the format `@username`)
     pub from_chat_id: ChatId,
 
     /// A JSON-serialized list of 1-100 identifiers of messages in the chat *from\_chat\_id* to copy. The identifiers must be specified in a strictly increasing order.

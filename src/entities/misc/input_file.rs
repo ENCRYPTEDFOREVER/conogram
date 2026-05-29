@@ -25,7 +25,7 @@ pub enum InputFile {
     /// Post the file using multipart/form-data in the usual way that files are uploaded via the browser. 10 MB max size for photos, 50 MB or 2 GB (with local Bot API server) for other files.
     Local(LocalFile),
 
-    /// **Sending by file\_id**   
+    /// **Sending by file\_id**
     /// *   It is not possible to change the file type when resending by **file\_id**. I.e. a [video](#video) can't be [sent as a photo](#sendphoto), a [photo](#photosize) can't be [sent as a document](#senddocument), etc.
     /// *   It is not possible to resend thumbnails.
     /// *   Resending a photo by **file\_id** will send all of its [sizes](#photosize).
@@ -127,7 +127,7 @@ impl LocalFile {
         } else if let Some(data) = &self.data {
             Ok(Part::bytes(data.clone()).file_name(file_name))
         } else {
-            panic!("path or data must be set for LocalFile",)
+            panic!("path or data must be set for LocalFile")
         }
     }
 
@@ -160,7 +160,7 @@ impl InputFile {
         Self::Local(LocalFile::from_path_with_name(path, name))
     }
 
-    /// **Sending by file\_id**   
+    /// **Sending by file\_id**
     /// *   It is not possible to change the file type when resending by **file\_id**. I.e. a [video](#video) can't be [sent as a photo](#sendphoto), a [photo](#photosize) can't be [sent as a document](#senddocument), etc.
     /// *   It is not possible to resend thumbnails.
     /// *   Resending a photo by **file\_id** will send all of its [sizes](#photosize).

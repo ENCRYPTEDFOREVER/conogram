@@ -34,7 +34,7 @@ pub struct WebhookInfo {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub max_connections: Option<i64>,
 
-    /// *Optional*. A list of update types the bot is subscribed to. Defaults to all update types except *chat\_member*
+    /// *Optional*. A list of update types the bot is subscribed to. Defaults to all update types except *chat\_member*, *message\_reaction*, and *message\_reaction\_count*.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub allowed_updates: Vec<String>,
 }

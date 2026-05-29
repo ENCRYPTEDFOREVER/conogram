@@ -35,7 +35,7 @@ pub struct ChatPermissions {
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_send_voice_notes: bool,
 
-    /// *Optional*. *True*, if the user is allowed to send polls
+    /// *Optional*. *True*, if the user is allowed to send polls and checklists
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_send_polls: bool,
 
@@ -47,7 +47,15 @@ pub struct ChatPermissions {
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_add_web_page_previews: bool,
 
-    /// *Optional*. *True*, if the user is allowed to change the chat title, photo and other settings. Ignored in public supergroups
+    /// *Optional*. *True*, if the user is allowed to react to messages. If omitted, defaults to the value of *can\_send\_messages*.
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub can_react_to_messages: bool,
+
+    /// *Optional*. *True*, if the user is allowed to edit their own tag. If omitted, defaults to the value of *can\_pin\_messages*.
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub can_edit_tag: bool,
+
+    /// *Optional*. *True*, if the user is allowed to change the chat title, photo and other settings. Ignored in public supergroups.
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_change_info: bool,
 
@@ -55,11 +63,11 @@ pub struct ChatPermissions {
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_invite_users: bool,
 
-    /// *Optional*. *True*, if the user is allowed to pin messages. Ignored in public supergroups
+    /// *Optional*. *True*, if the user is allowed to pin messages. Ignored in public supergroups.
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_pin_messages: bool,
 
-    /// *Optional*. *True*, if the user is allowed to create forum topics. If omitted defaults to the value of can\_pin\_messages
+    /// *Optional*. *True*, if the user is allowed to create forum topics. If omitted defaults to the value of can\_pin\_messages.
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_manage_topics: bool,
 }
@@ -90,6 +98,8 @@ impl ChatPermissions {
             can_invite_users: true,
             can_pin_messages: true,
             can_manage_topics: true,
+            can_react_to_messages: true,
+            can_edit_tag: true,
         }
     }
 }
@@ -115,6 +125,8 @@ macro_rules! impl_chat_permissions_bitops {
                         can_invite_users: self.can_invite_users.$func(rhs.can_invite_users),
                         can_pin_messages: self.can_pin_messages.$func(rhs.can_pin_messages),
                         can_manage_topics: self.can_manage_topics.$func(rhs.can_manage_topics),
+                        can_react_to_messages: self.can_react_to_messages.$func(rhs.can_react_to_messages),
+                        can_edit_tag: self.can_edit_tag.$func(rhs.can_edit_tag),
                     }
                 }
             }

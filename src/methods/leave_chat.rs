@@ -9,7 +9,7 @@ use crate::entities::misc::chat_id::ChatId;
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = bool)]
 pub struct LeaveChatParams {
-    /// Unique identifier for the target chat or username of the target supergroup or channel (in the format `@channelusername`)
+    /// Unique identifier for the target chat or username of the target supergroup or channel in the format `@username`. Channel direct messages chats aren't supported; leave the corresponding channel instead.
     pub chat_id: ChatId,
 }
 

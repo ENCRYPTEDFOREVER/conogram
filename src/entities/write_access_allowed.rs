@@ -7,7 +7,7 @@ use crate::utils::deserialize_utils::is_false;
 /// API Reference: [link](https://core.telegram.org/bots/api/#writeaccessallowed)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct WriteAccessAllowed {
-    /// *Optional*. True, if the access was granted after the user accepted an explicit request from a Web App sent by the method [requestWriteAccess](https://core.telegram.org/bots/webapps#initializing-mini-apps)
+    /// *Optional*. *True*, if the access was granted after the user accepted an explicit request from a Web App sent by the method [requestWriteAccess](https://core.telegram.org/bots/webapps#initializing-mini-apps)
     #[serde(default, skip_serializing_if = "is_false")]
     pub from_request: bool,
 
@@ -15,7 +15,7 @@ pub struct WriteAccessAllowed {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub web_app_name: Option<String>,
 
-    /// *Optional*. True, if the access was granted when the bot was added to the attachment or side menu
+    /// *Optional*. *True*, if the access was granted when the bot was added to the attachment or side menu
     #[serde(default, skip_serializing_if = "is_false")]
     pub from_attachment_menu: bool,
 }

@@ -23,7 +23,7 @@ pub struct BusinessConnection {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub rights: Option<BusinessBotRights>,
 
-    /// True, if the connection is active
+    /// *True*, if the connection is active
     pub is_enabled: bool,
 }
 

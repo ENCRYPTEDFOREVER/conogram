@@ -17,7 +17,7 @@ pub struct CallbackQuery {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub message: Option<Box<MaybeInaccessibleMessage>>,
 
-    /// *Optional*. Identifier of the message sent via the bot in inline mode, that originated the query.
+    /// *Optional*. Identifier of the message sent via the bot in inline mode, that originated the query
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub inline_message_id: Option<String>,
 

@@ -189,7 +189,7 @@ impl FormattedText {
     }
 
     #[must_use]
-    pub fn len(&self) -> usize {
+    pub const fn len(&self) -> usize {
         self.text.len()
     }
 
@@ -245,6 +245,7 @@ impl FormattedText {
         (text_len, entity_offset, entity_len)
     }
 
+    #[allow(clippy::too_many_arguments)]
     fn push_entity_extended(
         &mut self,
         text: impl AsRef<str>,
@@ -253,6 +254,8 @@ impl FormattedText {
         user: impl Into<Option<User>>,
         pre_lang: impl Into<Option<String>>,
         custom_emoji_id: impl Into<Option<String>>,
+        unix_time: impl Into<Option<i64>>,
+        date_time_format: impl Into<Option<String>>,
     ) -> &mut Self {
         if self.use_last_offsets {
             let entity = MessageEntity {
@@ -263,6 +266,8 @@ impl FormattedText {
                 user: user.into(),
                 language: pre_lang.into(),
                 custom_emoji_id: custom_emoji_id.into(),
+                unix_time: unix_time.into(),
+                date_time_format: date_time_format.into(),
             };
 
             self.entities.push(entity);
@@ -278,6 +283,8 @@ impl FormattedText {
                 user: user.into(),
                 language: pre_lang.into(),
                 custom_emoji_id: custom_emoji_id.into(),
+                unix_time: unix_time.into(),
+                date_time_format: date_time_format.into(),
             };
 
             self.last_ent_offset = entity_offset;
@@ -439,6 +446,8 @@ impl FormattedText {
             None,
             None,
             None,
+            None,
+            None,
         )
     }
 
@@ -454,6 +463,8 @@ impl FormattedText {
                     id: user_id,
                     ..Default::default()
                 }),
+                None,
+                None,
                 None,
                 None,
             )
@@ -485,6 +496,8 @@ impl FormattedText {
             None,
             Some(language.into().to_lowercase()),
             None,
+            None,
+            None,
         )
     }
 
@@ -500,6 +513,8 @@ impl FormattedText {
             None,
             None,
             Some(custom_emoji_id.into()),
+            None,
+            None,
         )
     }
 

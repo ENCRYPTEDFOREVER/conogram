@@ -12,7 +12,7 @@ use crate::{
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = ChatInviteLink)]
 pub struct EditChatInviteLinkParams {
-    /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    /// Unique identifier for the target chat or username of the target channel in the format `@username`
     pub chat_id: ChatId,
 
     /// The invite link to edit
@@ -30,7 +30,7 @@ pub struct EditChatInviteLinkParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_limit: Option<i64>,
 
-    /// *True*, if users joining the chat via the link need to be approved by chat administrators. If *True*, *member\_limit* can't be specified
+    /// *True*, if users joining the chat via the link need to be approved by chat administrators. If *True*, *member\_limit* can't be specified.
     #[serde(skip_serializing_if = "is_false")]
     pub creates_join_request: bool,
 }

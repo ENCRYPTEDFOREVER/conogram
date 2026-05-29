@@ -11,7 +11,7 @@ pub struct LinkPreviewOptions {
     #[serde(default, skip_serializing_if = "is_false")]
     pub is_disabled: bool,
 
-    /// *Optional*. URL to use for the link preview. If empty, then the first URL found in the message text will be used
+    /// *Optional*. URL to use for the link preview. If empty, then the first URL found in the message text will be used.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
 

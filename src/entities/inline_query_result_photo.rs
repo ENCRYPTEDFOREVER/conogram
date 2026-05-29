@@ -16,7 +16,7 @@ pub struct InlineQueryResultPhoto {
     /// Unique identifier for this result, 1-64 bytes
     pub id: String,
 
-    /// A valid URL of the photo. Photo must be in **JPEG** format. Photo size must not exceed 5MB
+    /// A valid URL of the photo. Photo must be in **JPEG** format. Photo size must not exceed 5MB.
     pub photo_url: String,
 
     /// URL of the thumbnail for the photo

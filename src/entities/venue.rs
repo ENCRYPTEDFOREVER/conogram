@@ -7,7 +7,7 @@ use crate::entities::location::Location;
 /// API Reference: [link](https://core.telegram.org/bots/api/#venue)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Venue {
-    /// Venue location. Can't be a live location
+    /// Venue location. Can't be a live location.
     pub location: Location,
 
     /// Name of the venue

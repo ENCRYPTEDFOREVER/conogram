@@ -10,7 +10,7 @@ pub struct SetCustomEmojiStickerSetThumbnailParams {
     /// Sticker set name
     pub name: String,
 
-    /// Custom emoji identifier of a sticker from the sticker set; pass an empty string to drop the thumbnail and use the first sticker as the thumbnail.
+    /// Custom emoji identifier of a sticker from the sticker set; pass an empty string to drop the thumbnail and use the first sticker as the thumbnail
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_emoji_id: Option<String>,
 }

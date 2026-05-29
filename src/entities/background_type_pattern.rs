@@ -19,7 +19,7 @@ pub struct BackgroundTypePattern {
     /// Intensity of the pattern when it is shown above the filled background; 0-100
     pub intensity: i64,
 
-    /// *Optional*. *True*, if the background fill must be applied only to the pattern itself. All other pixels are black in this case. For dark themes only
+    /// *Optional*. *True*, if the background fill must be applied only to the pattern itself. All other pixels are black in this case. For dark themes only.
     #[serde(default, skip_serializing_if = "is_false")]
     pub is_inverted: bool,
 

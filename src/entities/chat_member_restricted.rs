@@ -7,6 +7,10 @@ use crate::entities::user::User;
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatmemberrestricted)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatMemberRestricted {
+    /// *Optional*. Tag of the member
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub tag: Option<String>,
+
     /// Information about the user
     pub user: User,
 
@@ -34,7 +38,7 @@ pub struct ChatMemberRestricted {
     /// *True*, if the user is allowed to send voice notes
     pub can_send_voice_notes: bool,
 
-    /// *True*, if the user is allowed to send polls
+    /// *True*, if the user is allowed to send polls and checklists
     pub can_send_polls: bool,
 
     /// *True*, if the user is allowed to send animations, games, stickers and use inline bots
@@ -42,6 +46,12 @@ pub struct ChatMemberRestricted {
 
     /// *True*, if the user is allowed to add web page previews to their messages
     pub can_add_web_page_previews: bool,
+
+    /// *True*, if the user is allowed to react to messages
+    pub can_react_to_messages: bool,
+
+    /// *True*, if the user is allowed to edit their own tag
+    pub can_edit_tag: bool,
 
     /// *True*, if the user is allowed to change the chat title, photo and other settings
     pub can_change_info: bool,
@@ -55,7 +65,7 @@ pub struct ChatMemberRestricted {
     /// *True*, if the user is allowed to create forum topics
     pub can_manage_topics: bool,
 
-    /// Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever
+    /// Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever.
     pub until_date: i64,
 }
 
@@ -80,6 +90,8 @@ impl ChatMemberRestricted {
             can_invite_users: self.can_invite_users,
             can_pin_messages: self.can_pin_messages,
             can_manage_topics: self.can_manage_topics,
+            can_react_to_messages: self.can_react_to_messages,
+            can_edit_tag: self.can_edit_tag,
         }
     }
 }

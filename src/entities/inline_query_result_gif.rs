@@ -34,7 +34,7 @@ pub struct InlineQueryResultGif {
     /// URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result
     pub thumbnail_url: String,
 
-    /// *Optional*. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg”
+    /// *Optional*. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg”.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thumbnail_mime_type: Option<ThumbnailMimeType>,
 
@@ -67,7 +67,7 @@ pub struct InlineQueryResultGif {
     pub input_message_content: Option<InputMessageContent>,
 }
 
-/// *Optional*. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg”
+/// *Optional*. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg”.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize)]
 pub enum ThumbnailMimeType {
     /// `image/jpeg`

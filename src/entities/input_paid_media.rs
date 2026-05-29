@@ -1,12 +1,14 @@
 use serde::Serialize;
 
 use crate::entities::{
+    input_paid_media_live_photo::InputPaidMediaLivePhoto,
     input_paid_media_photo::InputPaidMediaPhoto, input_paid_media_video::InputPaidMediaVideo,
     misc::input_file::GetFiles,
 };
 
 /// This object describes the paid media to be sent. Currently, it can be one of
 ///
+/// * [InputPaidMediaLivePhoto](https://core.telegram.org/bots/api/#inputpaidmedialivephoto)
 /// * [InputPaidMediaPhoto](https://core.telegram.org/bots/api/#inputpaidmediaphoto)
 /// * [InputPaidMediaVideo](https://core.telegram.org/bots/api/#inputpaidmediavideo)
 ///
@@ -14,6 +16,12 @@ use crate::entities::{
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 #[serde(tag = "type")]
 pub enum InputPaidMedia {
+    /// The paid media to send is a live photo.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputpaidmedialivephoto)
+    #[serde(rename = "live_photo")]
+    LivePhoto(InputPaidMediaLivePhoto),
+
     /// The paid media to send is a photo.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputpaidmediaphoto)
@@ -29,7 +37,13 @@ pub enum InputPaidMedia {
 
 impl Default for InputPaidMedia {
     fn default() -> Self {
-        Self::Photo(InputPaidMediaPhoto::default())
+        Self::LivePhoto(InputPaidMediaLivePhoto::default())
+    }
+}
+
+impl From<InputPaidMediaLivePhoto> for InputPaidMedia {
+    fn from(value: InputPaidMediaLivePhoto) -> Self {
+        Self::LivePhoto(value)
     }
 }
 
@@ -51,6 +65,7 @@ impl GetFiles for InputPaidMedia {
         form: reqwest::multipart::Form,
     ) -> Result<reqwest::multipart::Form, std::io::Error> {
         match self {
+            Self::LivePhoto(m) => m.form(form).await,
             Self::Photo(m) => m.form(form).await,
             Self::Video(m) => m.form(form).await,
         }

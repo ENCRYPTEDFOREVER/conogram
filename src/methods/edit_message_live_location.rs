@@ -15,15 +15,15 @@ pub struct EditMessageLiveLocationParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub business_connection_id: Option<String>,
 
-    /// Required if *inline\_message\_id* is not specified. Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    /// Required if *inline\_message\_id* is not specified. Unique identifier for the target chat or username of the target bot, supergroup or channel in the format `@username`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub chat_id: Option<ChatId>,
 
-    /// Required if *inline\_message\_id* is not specified. Identifier of the message to edit
+    /// Required if *inline\_message\_id* is not specified. Identifier of the message to edit.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_id: Option<i64>,
 
-    /// Required if *chat\_id* and *message\_id* are not specified. Identifier of the inline message
+    /// Required if *chat\_id* and *message\_id* are not specified. Identifier of the inline message.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inline_message_id: Option<String>,
 
@@ -33,7 +33,7 @@ pub struct EditMessageLiveLocationParams {
     /// Longitude of new location
     pub longitude: f64,
 
-    /// New period in seconds during which the location can be updated, starting from the message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new value must not exceed the current *live\_period* by more than a day, and the live location expiration date must remain within the next 90 days. If not specified, then *live\_period* remains unchanged
+    /// New period in seconds during which the location can be updated, starting from the message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new value must not exceed the current *live\_period* by more than a day, and the live location expiration date must remain within the next 90 days. If not specified, then *live\_period* remains unchanged.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub live_period: Option<i64>,
 
@@ -49,7 +49,7 @@ pub struct EditMessageLiveLocationParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub proximity_alert_radius: Option<i64>,
 
-    /// A JSON-serialized object for a new [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards).
+    /// A JSON-serialized object for a new [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards)
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<InlineKeyboardMarkup>,
 }

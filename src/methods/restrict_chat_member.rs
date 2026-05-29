@@ -12,7 +12,7 @@ use crate::{
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = bool)]
 pub struct RestrictChatMemberParams {
-    /// Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
+    /// Unique identifier for the target chat or username of the target supergroup in the format `@username`
     pub chat_id: ChatId,
 
     /// Unique identifier of the target user
@@ -25,7 +25,7 @@ pub struct RestrictChatMemberParams {
     #[serde(skip_serializing_if = "is_false")]
     pub use_independent_chat_permissions: bool,
 
-    /// Date when restrictions will be lifted for the user; Unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever
+    /// Date when restrictions will be lifted for the user; Unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub until_date: Option<i64>,
 }

@@ -9,7 +9,7 @@ use crate::entities::misc::chat_id::ChatId;
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = bool)]
 pub struct UnbanChatSenderChatParams {
-    /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    /// Unique identifier for the target chat or username of the target channel in the format `@username`
     pub chat_id: ChatId,
 
     /// Unique identifier of the target sender chat

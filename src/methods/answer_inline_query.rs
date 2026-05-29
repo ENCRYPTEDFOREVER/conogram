@@ -9,7 +9,7 @@ use crate::{
     utils::deserialize_utils::is_false,
 };
 
-/// Use this method to send answers to an inline query. On success, *True* is returned.  
+/// Use this method to send answers to an inline query. On success, *True* is returned.
 /// No more than **50** results per query are allowed.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#answerinlinequery)

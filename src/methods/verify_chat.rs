@@ -9,7 +9,7 @@ use crate::entities::misc::chat_id::ChatId;
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = bool)]
 pub struct VerifyChatParams {
-    /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    /// Unique identifier for the target chat or username of the target bot, supergroup or channel in the format `@username`. Channel direct messages chats can't be verified.
     pub chat_id: ChatId,
 
     /// Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.

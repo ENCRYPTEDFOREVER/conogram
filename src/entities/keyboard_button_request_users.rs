@@ -7,7 +7,7 @@ use crate::utils::deserialize_utils::is_false;
 /// API Reference: [link](https://core.telegram.org/bots/api/#keyboardbuttonrequestusers)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct KeyboardButtonRequestUsers {
-    /// Signed 32-bit identifier of the request that will be received back in the [UsersShared](https://core.telegram.org/bots/api/#usersshared) object. Must be unique within the message
+    /// Signed 32-bit identifier of the request that will be received back in the [UsersShared](https://core.telegram.org/bots/api/#usersshared) object. Must be unique within the message.
     pub request_id: i64,
 
     /// *Optional*. Pass *True* to request bots, pass *False* to request regular users. If not specified, no additional restrictions are applied.

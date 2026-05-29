@@ -7,6 +7,10 @@ use crate::entities::user::User;
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatmembermember)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatMemberMember {
+    /// *Optional*. Tag of the member
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub tag: Option<String>,
+
     /// Information about the user
     pub user: User,
 

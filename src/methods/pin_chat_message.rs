@@ -3,7 +3,7 @@ use serde::Serialize;
 
 use crate::{entities::misc::chat_id::ChatId, utils::deserialize_utils::is_false};
 
-/// Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can\_pin\_messages' administrator right in a supergroup or 'can\_edit\_messages' administrator right in a channel. Returns *True* on success.
+/// Use this method to add a message to the list of pinned messages in a chat. In private chats and channel direct messages chats, all non-service messages can be pinned. Conversely, the bot must be an administrator with the 'can\_pin\_messages' right or the 'can\_edit\_messages' right to pin messages in groups and channels respectively. Returns *True* on success.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#pinchatmessage)
 #[derive(Debug, Clone, Serialize, Request)]
@@ -13,7 +13,7 @@ pub struct PinChatMessageParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub business_connection_id: Option<String>,
 
-    /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    /// Unique identifier for the target chat or username of the target channel in the format `@username`
     pub chat_id: ChatId,
 
     /// Identifier of a message to pin

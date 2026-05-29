@@ -9,7 +9,7 @@ use crate::{entities::misc::chat_id::ChatId, utils::deserialize_utils::is_false}
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = bool)]
 pub struct PromoteChatMemberParams {
-    /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    /// Unique identifier for the target chat or username of the target channel in the format `@username`
     pub chat_id: ChatId,
 
     /// Unique identifier of the target user
@@ -19,7 +19,7 @@ pub struct PromoteChatMemberParams {
     #[serde(skip_serializing_if = "is_false")]
     pub is_anonymous: bool,
 
-    /// Pass *True* if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
+    /// Pass *True* if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege.
     #[serde(skip_serializing_if = "is_false")]
     pub can_manage_chat: bool,
 
@@ -31,7 +31,7 @@ pub struct PromoteChatMemberParams {
     #[serde(skip_serializing_if = "is_false")]
     pub can_manage_video_chats: bool,
 
-    /// Pass *True* if the administrator can restrict, ban or unban chat members, or access supergroup statistics
+    /// Pass *True* if the administrator can restrict, ban or unban chat members, or access supergroup statistics. For backward compatibility, defaults to *True* for promotions of channel administrators.
     #[serde(skip_serializing_if = "is_false")]
     pub can_restrict_members: bool,
 
@@ -59,7 +59,7 @@ pub struct PromoteChatMemberParams {
     #[serde(skip_serializing_if = "is_false")]
     pub can_delete_stories: bool,
 
-    /// Pass *True* if the administrator can post messages in the channel, or access channel statistics; for channels only
+    /// Pass *True* if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only
     #[serde(skip_serializing_if = "is_false")]
     pub can_post_messages: bool,
 
@@ -74,6 +74,14 @@ pub struct PromoteChatMemberParams {
     /// Pass *True* if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
     #[serde(skip_serializing_if = "is_false")]
     pub can_manage_topics: bool,
+
+    /// Pass *True* if the administrator can manage direct messages within the channel and decline suggested posts; for channels only
+    #[serde(skip_serializing_if = "is_false")]
+    pub can_manage_direct_messages: bool,
+
+    /// Pass *True* if the administrator can edit the tags of regular members; for groups and supergroups only
+    #[serde(skip_serializing_if = "is_false")]
+    pub can_manage_tags: bool,
 }
 
 // Divider: all content below this line will be preserved after code regen

@@ -32,29 +32,37 @@ pub struct OwnedGiftRegular {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub entities: Vec<MessageEntity>,
 
-    /// *Optional*. True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them
+    /// *Optional*. *True*, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them
     #[serde(default, skip_serializing_if = "is_false")]
     pub is_private: bool,
 
-    /// *Optional*. True, if the gift is displayed on the account's profile page; for gifts received on behalf of business accounts only
+    /// *Optional*. *True*, if the gift is displayed on the account's profile page; for gifts received on behalf of business accounts only
     #[serde(default, skip_serializing_if = "is_false")]
     pub is_saved: bool,
 
-    /// *Optional*. True, if the gift can be upgraded to a unique gift; for gifts received on behalf of business accounts only
+    /// *Optional*. *True*, if the gift can be upgraded to a unique gift; for gifts received on behalf of business accounts only
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_be_upgraded: bool,
 
-    /// *Optional*. True, if the gift was refunded and isn't available anymore
+    /// *Optional*. *True*, if the gift was refunded and isn't available anymore
     #[serde(default, skip_serializing_if = "is_false")]
     pub was_refunded: bool,
 
-    /// *Optional*. Number of Telegram Stars that can be claimed by the receiver instead of the gift; omitted if the gift cannot be converted to Telegram Stars
+    /// *Optional*. Number of Telegram Stars that can be claimed by the receiver instead of the gift; omitted if the gift cannot be converted to Telegram Stars; for gifts received on behalf of business accounts only
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub convert_star_count: Option<i64>,
 
-    /// *Optional*. Number of Telegram Stars that were paid by the sender for the ability to upgrade the gift
+    /// *Optional*. Number of Telegram Stars that were paid for the ability to upgrade the gift
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub prepaid_upgrade_star_count: Option<i64>,
+
+    /// *Optional*. *True*, if the gift's upgrade was purchased after the gift was sent; for gifts received on behalf of business accounts only
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub is_upgrade_separate: bool,
+
+    /// *Optional*. Unique number reserved for this gift when upgraded. See the *number* field in [UniqueGift](https://core.telegram.org/bots/api/#uniquegift).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub unique_gift_number: Option<i64>,
 }
 
 // Divider: all content below this line will be preserved after code regen

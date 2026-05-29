@@ -8,7 +8,7 @@ pub struct PreparedInlineMessage {
     /// Unique identifier of the prepared message
     pub id: String,
 
-    /// Expiration date of the prepared message, in Unix time. Expired prepared messages can no longer be used
+    /// Expiration date of the prepared message, in Unix time. Expired prepared messages can no longer be used.
     pub expiration_date: i64,
 }
 

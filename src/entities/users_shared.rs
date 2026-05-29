@@ -10,7 +10,7 @@ pub struct UsersShared {
     /// Identifier of the request
     pub request_id: i64,
 
-    /// Information about users shared with the bot.
+    /// Information about users shared with the bot
     pub users: Vec<SharedUser>,
 }
 

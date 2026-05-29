@@ -16,7 +16,7 @@ pub struct ChatMemberAdministrator {
     /// *True*, if the user's presence in the chat is hidden
     pub is_anonymous: bool,
 
-    /// *True*, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
+    /// *True*, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege.
     pub can_manage_chat: bool,
 
     /// *True*, if the administrator can delete messages of other users
@@ -46,7 +46,7 @@ pub struct ChatMemberAdministrator {
     /// *True*, if the administrator can delete stories posted by other users
     pub can_delete_stories: bool,
 
-    /// *Optional*. *True*, if the administrator can post messages in the channel, or access channel statistics; for channels only
+    /// *Optional*. *True*, if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_post_messages: bool,
 
@@ -61,6 +61,14 @@ pub struct ChatMemberAdministrator {
     /// *Optional*. *True*, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_manage_topics: bool,
+
+    /// *Optional*. *True*, if the administrator can manage direct messages of the channel and decline suggested posts; for channels only
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub can_manage_direct_messages: bool,
+
+    /// *Optional*. *True*, if the administrator can edit the tags of regular members; for groups and supergroups only. If omitted defaults to the value of can\_pin\_messages.
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub can_manage_tags: bool,
 
     /// *Optional*. Custom title for this user
     #[serde(default, skip_serializing_if = "Option::is_none")]

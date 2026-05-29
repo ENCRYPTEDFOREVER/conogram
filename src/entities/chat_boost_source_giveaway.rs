@@ -18,7 +18,7 @@ pub struct ChatBoostSourceGiveaway {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub prize_star_count: Option<i64>,
 
-    /// *Optional*. True, if the giveaway was completed, but there was no user to win the prize
+    /// *Optional*. *True*, if the giveaway was completed, but there was no user to win the prize
     #[serde(default, skip_serializing_if = "is_false")]
     pub is_unclaimed: bool,
 }

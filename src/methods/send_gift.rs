@@ -16,11 +16,11 @@ pub struct SendGiftParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<i64>,
 
-    /// Required if *user\_id* is not specified. Unique identifier for the chat or username of the channel (in the format `@channelusername`) that will receive the gift.
+    /// Required if *user\_id* is not specified. Unique identifier for the chat or username of the channel (in the format `@username`) that will receive the gift.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub chat_id: Option<ChatId>,
 
-    /// Identifier of the gift
+    /// Identifier of the gift; limited gifts can't be sent to channel chats
     pub gift_id: String,
 
     /// Pass *True* to pay for the gift upgrade from the bot's balance, thereby making the upgrade free for the receiver
@@ -31,11 +31,11 @@ pub struct SendGiftParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text: Option<String>,
 
-    /// Mode for parsing entities in the text. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom\_emoji” are ignored.
+    /// Mode for parsing entities in the text. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, “custom\_emoji”, and “date\_time” are ignored.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text_parse_mode: Option<String>,
 
-    /// A JSON-serialized list of special entities that appear in the gift text. It can be specified instead of *text\_parse\_mode*. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom\_emoji” are ignored.
+    /// A JSON-serialized list of special entities that appear in the gift text. It can be specified instead of *text\_parse\_mode*. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, “custom\_emoji”, and “date\_time” are ignored.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub text_entities: Vec<MessageEntity>,
 }

@@ -2,15 +2,17 @@ use serde::Serialize;
 
 use crate::entities::{
     input_media_animation::InputMediaAnimation, input_media_audio::InputMediaAudio,
-    input_media_document::InputMediaDocument, input_media_photo::InputMediaPhoto,
-    input_media_video::InputMediaVideo, misc::input_file::GetFiles,
+    input_media_document::InputMediaDocument, input_media_live_photo::InputMediaLivePhoto,
+    input_media_photo::InputMediaPhoto, input_media_video::InputMediaVideo,
+    misc::input_file::GetFiles,
 };
 
 /// This object represents the content of a media message to be sent. It should be one of
 ///
 /// * [InputMediaAnimation](https://core.telegram.org/bots/api/#inputmediaanimation)
-/// * [InputMediaDocument](https://core.telegram.org/bots/api/#inputmediadocument)
 /// * [InputMediaAudio](https://core.telegram.org/bots/api/#inputmediaaudio)
+/// * [InputMediaDocument](https://core.telegram.org/bots/api/#inputmediadocument)
+/// * [InputMediaLivePhoto](https://core.telegram.org/bots/api/#inputmedialivephoto)
 /// * [InputMediaPhoto](https://core.telegram.org/bots/api/#inputmediaphoto)
 /// * [InputMediaVideo](https://core.telegram.org/bots/api/#inputmediavideo)
 ///
@@ -24,17 +26,23 @@ pub enum InputMedia {
     #[serde(rename = "animation")]
     Animation(InputMediaAnimation),
 
+    /// Represents an audio file to be treated as music to be sent.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediaaudio)
+    #[serde(rename = "audio")]
+    Audio(InputMediaAudio),
+
     /// Represents a general file to be sent.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediadocument)
     #[serde(rename = "document")]
     Document(InputMediaDocument),
 
-    /// Represents an audio file to be treated as music to be sent.
+    /// Represents a live photo to be sent.
     ///
-    /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediaaudio)
-    #[serde(rename = "audio")]
-    Audio(InputMediaAudio),
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputmedialivephoto)
+    #[serde(rename = "live_photo")]
+    LivePhoto(InputMediaLivePhoto),
 
     /// Represents a photo to be sent.
     ///
@@ -61,15 +69,21 @@ impl From<InputMediaAnimation> for InputMedia {
     }
 }
 
+impl From<InputMediaAudio> for InputMedia {
+    fn from(value: InputMediaAudio) -> Self {
+        Self::Audio(value)
+    }
+}
+
 impl From<InputMediaDocument> for InputMedia {
     fn from(value: InputMediaDocument) -> Self {
         Self::Document(value)
     }
 }
 
-impl From<InputMediaAudio> for InputMedia {
-    fn from(value: InputMediaAudio) -> Self {
-        Self::Audio(value)
+impl From<InputMediaLivePhoto> for InputMedia {
+    fn from(value: InputMediaLivePhoto) -> Self {
+        Self::LivePhoto(value)
     }
 }
 
@@ -94,6 +108,7 @@ impl GetFiles for InputMedia {
             Self::Animation(m) => m.form(form).await,
             Self::Audio(m) => m.form(form).await,
             Self::Document(m) => m.form(form).await,
+            Self::LivePhoto(m) => m.form(form).await,
             Self::Photo(m) => m.form(form).await,
             Self::Video(m) => m.form(form).await,
         }

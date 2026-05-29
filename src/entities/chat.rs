@@ -33,6 +33,10 @@ pub struct Chat {
     /// *Optional*. *True*, if the supergroup chat is a forum (has [topics](https://telegram.org/blog/topics-in-groups-collectible-usernames#topics-in-groups) enabled)
     #[serde(default, skip_serializing_if = "is_false")]
     pub is_forum: bool,
+
+    /// *Optional*. *True*, if the chat is the direct messages chat of a channel
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub is_direct_messages: bool,
 }
 
 /// Type of the chat, can be either “private”, “group”, “supergroup” or “channel”

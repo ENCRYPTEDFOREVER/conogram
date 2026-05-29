@@ -7,23 +7,23 @@ use crate::utils::deserialize_utils::is_false;
 /// API Reference: [link](https://core.telegram.org/bots/api/#switchinlinequerychosenchat)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SwitchInlineQueryChosenChat {
-    /// *Optional*. The default inline query to be inserted in the input field. If left empty, only the bot's username will be inserted
+    /// *Optional*. The default inline query to be inserted in the input field. If left empty, only the bot's username will be inserted.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub query: Option<String>,
 
-    /// *Optional*. True, if private chats with users can be chosen
+    /// *Optional*. *True*, if private chats with users can be chosen
     #[serde(default, skip_serializing_if = "is_false")]
     pub allow_user_chats: bool,
 
-    /// *Optional*. True, if private chats with bots can be chosen
+    /// *Optional*. *True*, if private chats with bots can be chosen
     #[serde(default, skip_serializing_if = "is_false")]
     pub allow_bot_chats: bool,
 
-    /// *Optional*. True, if group and supergroup chats can be chosen
+    /// *Optional*. *True*, if group and supergroup chats can be chosen
     #[serde(default, skip_serializing_if = "is_false")]
     pub allow_group_chats: bool,
 
-    /// *Optional*. True, if channel chats can be chosen
+    /// *Optional*. *True*, if channel chats can be chosen
     #[serde(default, skip_serializing_if = "is_false")]
     pub allow_channel_chats: bool,
 }

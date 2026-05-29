@@ -15,7 +15,7 @@ pub struct UpgradeGiftParams {
     /// Unique identifier of the regular gift that should be upgraded to a unique one
     pub owned_gift_id: String,
 
-    /// Pass True to keep the original gift text, sender and receiver in the upgraded gift
+    /// Pass *True* to keep the original gift text, sender and receiver in the upgraded gift
     #[serde(skip_serializing_if = "is_false")]
     pub keep_original_details: bool,
 

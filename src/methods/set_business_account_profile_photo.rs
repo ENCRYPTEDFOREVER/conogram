@@ -15,7 +15,7 @@ pub struct SetBusinessAccountProfilePhotoParams {
     /// The new profile photo to set
     pub photo: InputProfilePhoto,
 
-    /// Pass True to set the public photo, which will be visible even if the main photo is hidden by the business account's privacy settings. An account can have only one public photo.
+    /// Pass *True* to set the public photo, which will be visible even if the main photo is hidden by the business account's privacy settings. An account can have only one public photo.
     #[serde(skip_serializing_if = "is_false")]
     pub is_public: bool,
 }

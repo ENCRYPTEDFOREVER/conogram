@@ -1,7 +1,7 @@
 [package]
 name = "conogram"
 description = "An async wrapper for Telegram Bot API"
-version = "0.2.22"
+version = "0.2.23"
 edition = "2021"
 license = "MIT"
 homepage = "https://github.com/ENCRYPTEDFOREVER/conogram"
@@ -15,14 +15,14 @@ keywords = ["telegram", "bot", "telegram-bot", "telegram-bot-api"]
 [dependencies]
 conogram-derives = { path = "./derives", version = "0.1.0" }
 
-tokio = { version = "1.44.2", features = ["fs"] }
-reqwest = { version = "0.12.15", features = ["json", "multipart", "stream"] }
-serde = { version = "1.0.219", features = ["derive"] }
-serde_json = "1.0.140"
-uuid = { version = "1.16.0", features = ["v4", "fast-rng"] }
-log = { version = "0.4.27" }
-thiserror = { version = "2.0.12" }
-dashmap = { version = "6.1.0", features = ["inline"] }
+tokio = { version = "1.52.3", features = ["fs"] }
+reqwest = { version = "0.13.4", features = ["json", "multipart", "stream"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.150"
+uuid = { version = "1.23.2", features = ["v4", "fast-rng"] }
+log = { version = "0.4.30" }
+thiserror = { version = "2.0.18" }
+dashmap = { version = "6.2.1", features = ["inline"] }
 
 
 [features]

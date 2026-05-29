@@ -5,15 +5,15 @@ use crate::entities::{
     callback_query::CallbackQuery, chat_boost_removed::ChatBoostRemoved,
     chat_boost_updated::ChatBoostUpdated, chat_join_request::ChatJoinRequest,
     chat_member_updated::ChatMemberUpdated, chosen_inline_result::ChosenInlineResult,
-    inline_query::InlineQuery, message::Message,
+    inline_query::InlineQuery, managed_bot_updated::ManagedBotUpdated, message::Message,
     message_reaction_count_updated::MessageReactionCountUpdated,
     message_reaction_updated::MessageReactionUpdated, paid_media_purchased::PaidMediaPurchased,
     poll::Poll, poll_answer::PollAnswer, pre_checkout_query::PreCheckoutQuery,
     shipping_query::ShippingQuery,
 };
 
-/// This [object](https://core.telegram.org/bots/api/#available-types) represents an incoming update.  
-/// At most **one** of the optional parameters can be present in any given update.
+/// This [object](https://core.telegram.org/bots/api/#available-types) represents an incoming update.
+/// At most **one** of the optional fields can be present in any given update.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#update)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
@@ -53,6 +53,10 @@ pub struct Update {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub deleted_business_messages: Option<BusinessMessagesDeleted>,
 
+    /// *Optional*. New guest message. The bot can use the field *Message.guest\_query\_id* and the method [answerGuestQuery](https://core.telegram.org/bots/api/#answerguestquery) to send a message in response.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub guest_message: Option<Box<Message>>,
+
     /// *Optional*. A reaction to a message was changed by a user. The bot must be an administrator in the chat and must explicitly specify `"message_reaction"` in the list of *allowed\_updates* to receive these updates. The update isn't received for reactions set by bots.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub message_reaction: Option<MessageReactionUpdated>,
@@ -73,11 +77,11 @@ pub struct Update {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub callback_query: Option<CallbackQuery>,
 
-    /// *Optional*. New incoming shipping query. Only for invoices with flexible price
+    /// *Optional*. New incoming shipping query. Only for invoices with flexible price.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub shipping_query: Option<ShippingQuery>,
 
-    /// *Optional*. New incoming pre-checkout query. Contains full information about checkout
+    /// *Optional*. New incoming pre-checkout query. Contains full information about checkout.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub pre_checkout_query: Option<PreCheckoutQuery>,
 
@@ -85,7 +89,7 @@ pub struct Update {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub purchased_paid_media: Option<PaidMediaPurchased>,
 
-    /// *Optional*. New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot
+    /// *Optional*. New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub poll: Option<Poll>,
 
@@ -112,6 +116,10 @@ pub struct Update {
     /// *Optional*. A boost was removed from a chat. The bot must be an administrator in the chat to receive these updates.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub removed_chat_boost: Option<ChatBoostRemoved>,
+
+    /// *Optional*. A new bot was created to be managed by the bot, or token or owner of a managed bot was changed
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub managed_bot: Option<ManagedBotUpdated>,
 }
 
 // Divider: all content below this line will be preserved after code regen

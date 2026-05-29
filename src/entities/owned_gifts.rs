@@ -13,7 +13,7 @@ pub struct OwnedGifts {
     /// The list of gifts
     pub gifts: Vec<OwnedGift>,
 
-    /// *Optional*. Offset for the next request. If empty, then there are no more results
+    /// *Optional*. Offset for the next request. If empty, then there are no more results.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub next_offset: Option<String>,
 }

@@ -15,7 +15,7 @@ pub struct SetGameScoreParams {
     /// New score, must be non-negative
     pub score: i64,
 
-    /// Pass *True* if the high score is allowed to decrease. This can be useful when fixing mistakes or banning cheaters
+    /// Pass *True* if the high score is allowed to decrease. This can be useful when fixing mistakes or banning cheaters.
     #[serde(skip_serializing_if = "is_false")]
     pub force: bool,
 
@@ -23,15 +23,15 @@ pub struct SetGameScoreParams {
     #[serde(skip_serializing_if = "is_false")]
     pub disable_edit_message: bool,
 
-    /// Required if *inline\_message\_id* is not specified. Unique identifier for the target chat
+    /// Required if *inline\_message\_id* is not specified. Unique identifier for the target chat.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub chat_id: Option<i64>,
 
-    /// Required if *inline\_message\_id* is not specified. Identifier of the sent message
+    /// Required if *inline\_message\_id* is not specified. Identifier of the sent message.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_id: Option<i64>,
 
-    /// Required if *chat\_id* and *message\_id* are not specified. Identifier of the inline message
+    /// Required if *chat\_id* and *message\_id* are not specified. Identifier of the inline message.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inline_message_id: Option<String>,
 }

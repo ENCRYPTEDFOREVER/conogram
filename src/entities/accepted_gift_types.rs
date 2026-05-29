@@ -5,17 +5,20 @@ use serde::{Deserialize, Serialize};
 /// API Reference: [link](https://core.telegram.org/bots/api/#acceptedgifttypes)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct AcceptedGiftTypes {
-    /// True, if unlimited regular gifts are accepted
+    /// *True*, if unlimited regular gifts are accepted
     pub unlimited_gifts: bool,
 
-    /// True, if limited regular gifts are accepted
+    /// *True*, if limited regular gifts are accepted
     pub limited_gifts: bool,
 
-    /// True, if unique gifts or gifts that can be upgraded to unique for free are accepted
+    /// *True*, if unique gifts or gifts that can be upgraded to unique for free are accepted
     pub unique_gifts: bool,
 
-    /// True, if a Telegram Premium subscription is accepted
+    /// *True*, if a Telegram Premium subscription is accepted
     pub premium_subscription: bool,
+
+    /// *True*, if transfers of unique gifts from channels are accepted
+    pub gifts_from_channels: bool,
 }
 
 // Divider: all content below this line will be preserved after code regen

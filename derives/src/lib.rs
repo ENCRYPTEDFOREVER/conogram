@@ -246,7 +246,7 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
     }
 
     // TargetChatId impl for rate limit tracker
-    if let Some(f) = fields.iter().find(|f| f.name.to_string() == "chat_id") {
+    if let Some(f) = fields.iter().find(|f| f.name == "chat_id") {
         let type_name = f._inner.ty.to_token_stream().to_string().replace(" ", "");
 
         let body = match type_name.as_ref() {

@@ -12,7 +12,7 @@ use crate::{
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = bool)]
 pub struct SetChatPermissionsParams {
-    /// Unique identifier for the target chat or username of the target supergroup (in the format `@supergroupusername`)
+    /// Unique identifier for the target chat or username of the target supergroup in the format `@username`
     pub chat_id: ChatId,
 
     /// A JSON-serialized object for new default chat permissions

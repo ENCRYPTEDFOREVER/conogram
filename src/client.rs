@@ -16,7 +16,7 @@ use crate::{
 };
 
 #[derive(Deserialize, Debug)]
-pub(crate) struct ApiResponse<ReturnValue> {
+pub(crate) struct TgApiResponse<ReturnValue> {
     pub ok: bool,
 
     pub error_code: Option<i64>,
@@ -26,7 +26,7 @@ pub(crate) struct ApiResponse<ReturnValue> {
     pub result: Option<ReturnValue>,
 }
 
-pub(crate) struct ApiClient {
+pub(crate) struct TgApiClient {
     base_url: String,
     http_client: Client,
     bot_config: ApiConfig,
@@ -34,7 +34,7 @@ pub(crate) struct ApiClient {
     default_request_params: HashMap<String, HashMap<String, Value>>,
 }
 
-impl std::fmt::Debug for ApiClient {
+impl std::fmt::Debug for TgApiClient {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("ApiClient")
             .field("config", &self.bot_config)
@@ -42,7 +42,7 @@ impl std::fmt::Debug for ApiClient {
     }
 }
 
-impl ApiClient {
+impl TgApiClient {
     pub fn new(config: ApiConfig) -> Self {
         Self {
             base_url: if config.server_config.use_test_env {
@@ -135,7 +135,7 @@ impl ApiClient {
     }
 
     fn process_api_response<ReturnType>(
-        response: ApiResponse<ReturnType>,
+        response: TgApiResponse<ReturnType>,
     ) -> Result<ReturnType, ConogramErrorType> {
         Into::<Result<ReturnType, ConogramErrorType>>::into(response)
     }
@@ -158,7 +158,7 @@ impl ApiClient {
             Err(err) => return Err(ConogramError::new(method, params, err.into())),
         };
 
-        let api_response = match serde_json::from_str::<ApiResponse<ReturnType>>(&response_text) {
+        let api_response = match serde_json::from_str::<TgApiResponse<ReturnType>>(&response_text) {
             Ok(r) => r,
             Err(err) => return Err(ConogramError::new(method, params, err.into())),
         };
@@ -246,7 +246,8 @@ impl ApiClient {
                 if let Some(v) = json_struct.as_object() {
                     for (key, value) in v {
                         let value = match value {
-                            Value::String(val) => val.to_string(),
+                            // TODO: maybe not clone
+                            Value::String(val) => val.clone(),
                             other => other.to_string(),
                         };
                         form = form.text(key.clone(), value);

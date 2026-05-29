@@ -20,11 +20,11 @@ pub struct SuccessfulPayment {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub subscription_expiration_date: Option<i64>,
 
-    /// *Optional*. True, if the payment is a recurring payment for a subscription
+    /// *Optional*. *True*, if the payment is a recurring payment for a subscription
     #[serde(default, skip_serializing_if = "is_false")]
     pub is_recurring: bool,
 
-    /// *Optional*. True, if the payment is the first payment for a subscription
+    /// *Optional*. *True*, if the payment is the first payment for a subscription
     #[serde(default, skip_serializing_if = "is_false")]
     pub is_first_recurring: bool,
 

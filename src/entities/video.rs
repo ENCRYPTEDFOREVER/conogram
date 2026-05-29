@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::entities::photo_size::PhotoSize;
+use crate::entities::{photo_size::PhotoSize, video_quality::VideoQuality};
 
 /// This object represents a video file.
 ///
@@ -33,6 +33,10 @@ pub struct Video {
     /// *Optional*. Timestamp in seconds from which the video will play in the message
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub start_timestamp: Option<i64>,
+
+    /// *Optional*. List of available qualities of the video
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub qualities: Vec<VideoQuality>,
 
     /// *Optional*. Original filename as defined by the sender
     #[serde(default, skip_serializing_if = "Option::is_none")]

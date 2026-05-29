@@ -9,7 +9,7 @@ use crate::entities::{misc::chat_id::ChatId, user_chat_boosts::UserChatBoosts};
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = UserChatBoosts)]
 pub struct GetUserChatBoostsParams {
-    /// Unique identifier for the chat or username of the channel (in the format `@channelusername`)
+    /// Unique identifier for the chat or username of the channel in the format `@username`
     pub chat_id: ChatId,
 
     /// Unique identifier of the target user

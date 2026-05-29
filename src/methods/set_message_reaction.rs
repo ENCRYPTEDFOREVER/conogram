@@ -12,7 +12,7 @@ use crate::{
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = bool)]
 pub struct SetMessageReactionParams {
-    /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    /// Unique identifier for the target chat or username of the target bot, supergroup or channel in the format `@username`
     pub chat_id: ChatId,
 
     /// Identifier of the target message. If the message belongs to a media group, the reaction is set to the first non-deleted message in the group instead.

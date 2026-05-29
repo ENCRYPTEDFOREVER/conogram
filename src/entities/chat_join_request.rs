@@ -19,7 +19,7 @@ pub struct ChatJoinRequest {
     /// Date the request was sent in Unix time
     pub date: i64,
 
-    /// *Optional*. Bio of the user.
+    /// *Optional*. Bio of the user
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub bio: Option<String>,
 

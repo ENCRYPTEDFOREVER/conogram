@@ -16,15 +16,15 @@ pub struct EditMessageTextParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub business_connection_id: Option<String>,
 
-    /// Required if *inline\_message\_id* is not specified. Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+    /// Required if *inline\_message\_id* is not specified. Unique identifier for the target chat or username of the target bot, supergroup or channel in the format `@username`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub chat_id: Option<ChatId>,
 
-    /// Required if *inline\_message\_id* is not specified. Identifier of the message to edit
+    /// Required if *inline\_message\_id* is not specified. Identifier of the message to edit.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_id: Option<i64>,
 
-    /// Required if *chat\_id* and *message\_id* are not specified. Identifier of the inline message
+    /// Required if *chat\_id* and *message\_id* are not specified. Identifier of the inline message.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inline_message_id: Option<String>,
 
@@ -43,7 +43,7 @@ pub struct EditMessageTextParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub link_preview_options: Option<LinkPreviewOptions>,
 
-    /// A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards).
+    /// A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards)
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<InlineKeyboardMarkup>,
 }

@@ -9,11 +9,11 @@ use crate::entities::menu_button::MenuButton;
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = bool)]
 pub struct SetChatMenuButtonParams {
-    /// Unique identifier for the target private chat. If not specified, default bot's menu button will be changed
+    /// Unique identifier for the target private chat. If not specified, the bot's default menu button will be changed.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub chat_id: Option<i64>,
 
-    /// A JSON-serialized object for the bot's new menu button. Defaults to [MenuButtonDefault](https://core.telegram.org/bots/api/#menubuttondefault)
+    /// A JSON-serialized object for the bot's new menu button. Defaults to [MenuButtonDefault](https://core.telegram.org/bots/api/#menubuttondefault).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub menu_button: Option<MenuButton>,
 }

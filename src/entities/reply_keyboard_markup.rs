@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{entities::keyboard_button::KeyboardButton, utils::deserialize_utils::is_false};
 
-/// This object represents a [custom keyboard](https://core.telegram.org/bots/features#keyboards) with reply options (see [Introduction to bots](https://core.telegram.org/bots/features#keyboards) for details and examples). Not supported in channels and for messages sent on behalf of a Telegram Business account.
+/// This object represents a [custom keyboard](https://core.telegram.org/bots/features#keyboards) with reply options (see [Introduction to bots](https://core.telegram.org/bots/features#keyboards) for details and examples). Not supported in channels and for messages sent on behalf of a business account.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#replykeyboardmarkup)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
@@ -26,7 +26,7 @@ pub struct ReplyKeyboardMarkup {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub input_field_placeholder: Option<String>,
 
-    /// *Optional*. Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the *text* of the [Message](https://core.telegram.org/bots/api/#message) object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message.  
+    /// *Optional*. Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the *text* of the [Message](https://core.telegram.org/bots/api/#message) object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message.
     ///
     /// *Example:* A user requests to change the bot's language, bot replies to the request with a keyboard to select the new language. Other users in the group don't see the keyboard.
     #[serde(default, skip_serializing_if = "is_false")]
