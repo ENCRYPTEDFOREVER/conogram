@@ -105,6 +105,14 @@ impl InlineKeyboardButton {
         }
     }
 
+    pub fn url(text: impl Into<String>, data: impl Into<String>) -> Self {
+        Self {
+            text: text.into(),
+            url: Some(data.into()),
+            ..Default::default()
+        }
+    }
+
     pub fn callback(text: impl Into<String>, data: impl Into<String>) -> Self {
         Self {
             text: text.into(),
