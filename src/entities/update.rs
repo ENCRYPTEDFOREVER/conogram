@@ -138,6 +138,8 @@ pub enum AllowedUpdates {
     EditedBusinessMessage,
     DeletedBusinessMessages,
 
+    GuestMessage,
+
     MessageReaction,
     MessageReactionCount,
 
@@ -160,12 +162,14 @@ pub enum AllowedUpdates {
 
     ChatBoost,
     RemovedChatBoost,
+
+    ManagedBot,
 }
 
 impl AllowedUpdates {
     /// All existing updates
     #[must_use]
-    pub const fn all() -> [Self; 23] {
+    pub const fn all() -> [Self; 25] {
         [
             Self::Message,
             Self::EditedMessage,
@@ -177,6 +181,7 @@ impl AllowedUpdates {
             Self::BusinessMessage,
             Self::EditedBusinessMessage,
             Self::DeletedBusinessMessages,
+            Self::GuestMessage,
             Self::InlineQuery,
             Self::ChosenInlineResult,
             Self::CallbackQuery,
@@ -190,6 +195,7 @@ impl AllowedUpdates {
             Self::ChatJoinRequest,
             Self::ChatBoost,
             Self::RemovedChatBoost,
+            Self::ManagedBot,
         ]
     }
 }
@@ -208,6 +214,7 @@ impl AllowedUpdates {
             Self::BusinessMessage => "business_message",
             Self::EditedBusinessMessage => "edited_business_message",
             Self::DeletedBusinessMessages => "deleted_business_messages",
+            Self::GuestMessage => "guest_message",
             Self::InlineQuery => "inline_query",
             Self::ChosenInlineResult => "chosen_inline_result",
             Self::CallbackQuery => "callback_query",
@@ -221,6 +228,7 @@ impl AllowedUpdates {
             Self::ChatJoinRequest => "chat_join_request",
             Self::ChatBoost => "chat_boost",
             Self::RemovedChatBoost => "removed_chat_boost",
+            Self::ManagedBot => "managed_bot",
         }
     }
 }
