@@ -4,13 +4,15 @@ use crate::entities::{
     input_contact_message_content::InputContactMessageContent,
     input_invoice_message_content::InputInvoiceMessageContent,
     input_location_message_content::InputLocationMessageContent,
+    input_rich_message_content::InputRichMessageContent,
     input_text_message_content::InputTextMessageContent,
     input_venue_message_content::InputVenueMessageContent,
 };
 
-/// This object represents the content of a message to be sent as a result of an inline query. Telegram clients currently support the following 5 types:
+/// This object represents the content of a message to be sent as a result of an inline query. Telegram clients currently support the following types:
 ///
 /// * [InputTextMessageContent](https://core.telegram.org/bots/api/#inputtextmessagecontent)
+/// * [InputRichMessageContent](https://core.telegram.org/bots/api/#inputrichmessagecontent)
 /// * [InputLocationMessageContent](https://core.telegram.org/bots/api/#inputlocationmessagecontent)
 /// * [InputVenueMessageContent](https://core.telegram.org/bots/api/#inputvenuemessagecontent)
 /// * [InputContactMessageContent](https://core.telegram.org/bots/api/#inputcontactmessagecontent)
@@ -24,6 +26,11 @@ pub enum InputMessageContent {
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputtextmessagecontent)
     TextMessageContent(InputTextMessageContent),
+
+    /// Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a rich message to be sent as the result of an inline query.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichmessagecontent)
+    RichMessageContent(InputRichMessageContent),
 
     /// Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a location message to be sent as the result of an inline query.
     ///
@@ -55,6 +62,12 @@ impl Default for InputMessageContent {
 impl From<InputTextMessageContent> for InputMessageContent {
     fn from(value: InputTextMessageContent) -> Self {
         Self::TextMessageContent(value)
+    }
+}
+
+impl From<InputRichMessageContent> for InputMessageContent {
+    fn from(value: InputRichMessageContent) -> Self {
+        Self::RichMessageContent(value)
     }
 }
 

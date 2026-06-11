@@ -2,11 +2,12 @@ use conogram_derives::Request;
 use serde::Serialize;
 
 use crate::entities::{
-    inline_keyboard_markup::InlineKeyboardMarkup, link_preview_options::LinkPreviewOptions,
-    message::Message, message_entity::MessageEntity, misc::chat_id::ChatId,
+    inline_keyboard_markup::InlineKeyboardMarkup, input_rich_message::InputRichMessage,
+    link_preview_options::LinkPreviewOptions, message::Message, message_entity::MessageEntity,
+    misc::chat_id::ChatId,
 };
 
-/// Use this method to edit text and [game](https://core.telegram.org/bots/api/#games) messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within **48 hours** from the time they were sent.
+/// Use this method to edit text, rich and [game](https://core.telegram.org/bots/api/#games) messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within **48 hours** from the time they were sent.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#editmessagetext)
 #[derive(Debug, Clone, Serialize, Request)]
@@ -28,8 +29,9 @@ pub struct EditMessageTextParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inline_message_id: Option<String>,
 
-    /// New text of the message, 1-4096 characters after entities parsing
-    pub text: String,
+    /// New text of the message, 1-4096 characters after entity parsing; required if *rich\_message* isn't specified
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
 
     /// Mode for parsing entities in the message text. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -42,6 +44,10 @@ pub struct EditMessageTextParams {
     /// Link preview generation options for the message
     #[serde(skip_serializing_if = "Option::is_none")]
     pub link_preview_options: Option<LinkPreviewOptions>,
+
+    /// New rich content of the message; required if *text* isn't specified
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rich_message: Option<InputRichMessage>,
 
     /// A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards)
     #[serde(skip_serializing_if = "Option::is_none")]

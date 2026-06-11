@@ -1,15 +1,17 @@
 use serde::Serialize;
 
 use crate::entities::{
-    input_media_animation::InputMediaAnimation, input_media_live_photo::InputMediaLivePhoto,
-    input_media_location::InputMediaLocation, input_media_photo::InputMediaPhoto,
-    input_media_sticker::InputMediaSticker, input_media_venue::InputMediaVenue,
-    input_media_video::InputMediaVideo, misc::input_file::GetFiles,
+    input_media_animation::InputMediaAnimation, input_media_link::InputMediaLink,
+    input_media_live_photo::InputMediaLivePhoto, input_media_location::InputMediaLocation,
+    input_media_photo::InputMediaPhoto, input_media_sticker::InputMediaSticker,
+    input_media_venue::InputMediaVenue, input_media_video::InputMediaVideo,
+    misc::input_file::GetFiles,
 };
 
 /// This object represents the content of a poll option to be sent. It should be one of
 ///
 /// * [InputMediaAnimation](https://core.telegram.org/bots/api/#inputmediaanimation)
+/// * [InputMediaLink](https://core.telegram.org/bots/api/#inputmedialink)
 /// * [InputMediaLivePhoto](https://core.telegram.org/bots/api/#inputmedialivephoto)
 /// * [InputMediaLocation](https://core.telegram.org/bots/api/#inputmedialocation)
 /// * [InputMediaPhoto](https://core.telegram.org/bots/api/#inputmediaphoto)
@@ -26,6 +28,12 @@ pub enum InputPollOptionMedia {
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediaanimation)
     #[serde(rename = "animation")]
     MediaAnimation(InputMediaAnimation),
+
+    /// Represents an HTTP link to be sent.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputmedialink)
+    #[serde(rename = "link")]
+    MediaLink(InputMediaLink),
 
     /// Represents a live photo to be sent.
     ///
@@ -76,6 +84,12 @@ impl From<InputMediaAnimation> for InputPollOptionMedia {
     }
 }
 
+impl From<InputMediaLink> for InputPollOptionMedia {
+    fn from(value: InputMediaLink) -> Self {
+        Self::MediaLink(value)
+    }
+}
+
 impl From<InputMediaLivePhoto> for InputPollOptionMedia {
     fn from(value: InputMediaLivePhoto) -> Self {
         Self::MediaLivePhoto(value)
@@ -123,7 +137,7 @@ impl GetFiles for InputPollOptionMedia {
             Self::MediaPhoto(m) => m.form(form).await,
             Self::MediaSticker(m) => m.form(form).await,
             Self::MediaVideo(m) => m.form(form).await,
-            Self::MediaLocation(_) | Self::MediaVenue(_) => Ok(form),
+            Self::MediaLink(_) | Self::MediaLocation(_) | Self::MediaVenue(_) => Ok(form),
         }
     }
 }

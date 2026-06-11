@@ -25,8 +25,8 @@ use crate::{
         paid_message_price_changed::PaidMessagePriceChanged, passport_data::PassportData,
         photo_size::PhotoSize, poll::Poll, poll_option_added::PollOptionAdded,
         poll_option_deleted::PollOptionDeleted, proximity_alert_triggered::ProximityAlertTriggered,
-        refunded_payment::RefundedPayment, sticker::Sticker, story::Story,
-        successful_payment::SuccessfulPayment,
+        refunded_payment::RefundedPayment, rich_message::RichMessage, sticker::Sticker,
+        story::Story, successful_payment::SuccessfulPayment,
         suggested_post_approval_failed::SuggestedPostApprovalFailed,
         suggested_post_approved::SuggestedPostApproved,
         suggested_post_declined::SuggestedPostDeclined, suggested_post_info::SuggestedPostInfo,
@@ -186,6 +186,10 @@ pub struct Message {
     /// *Optional*. Unique identifier of the message effect added to the message
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub effect_id: Option<MessageEffect>,
+
+    /// *Optional*. Message is a rich formatted message
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub rich_message: Option<RichMessage>,
 
     /// *Optional*. Message is an animation, information about the animation. For backward compatibility, when this field is set, the *document* field will also be set.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -512,7 +516,7 @@ use super::{
 };
 use crate::{
     api::Api,
-    entities::misc::chat_id::ChatId,
+    entities::{input_rich_message::InputRichMessage, misc::chat_id::ChatId},
     errors::ConogramError,
     methods::{
         copy_message::CopyMessageRequest, delete_message::DeleteMessageRequest,
@@ -522,8 +526,9 @@ use crate::{
         get_custom_emoji_stickers::GetCustomEmojiStickersRequest,
         pin_chat_message::PinChatMessageRequest, send_document::SendDocumentRequest,
         send_media_group::SendMediaGroupRequest, send_message::SendMessageRequest,
-        send_photo::SendPhotoRequest, send_sticker::SendStickerRequest,
-        send_video::SendVideoRequest, set_message_reaction::SetMessageReactionRequest,
+        send_photo::SendPhotoRequest, send_rich_message::SendRichMessageRequest,
+        send_sticker::SendStickerRequest, send_video::SendVideoRequest,
+        set_message_reaction::SetMessageReactionRequest,
         unpin_chat_message::UnpinChatMessageRequest,
     },
 };
@@ -811,6 +816,56 @@ impl Message {
         req
     }
 
+    pub fn reply_rich_html<'a>(
+        &'a self,
+        api: &'a Api,
+        rich_text: impl Into<String>,
+        is_rtl: bool,
+        skip_entity_detection: bool,
+    ) -> SendRichMessageRequest<'a> {
+        let rich_message = InputRichMessage {
+            html: Some(rich_text.into()),
+            is_rtl,
+            skip_entity_detection,
+            ..Default::default()
+        };
+
+        let mut req = api.send_rich_message(self.chat.id, rich_message);
+
+        if self.is_topic_message {
+            if let Some(thread_id) = self.message_thread_id {
+                req = req.message_thread_id(thread_id);
+            }
+        }
+
+        req
+    }
+
+    pub fn reply_rich_markdown<'a>(
+        &'a self,
+        api: &'a Api,
+        rich_text: impl Into<String>,
+        is_rtl: bool,
+        skip_entity_detection: bool,
+    ) -> SendRichMessageRequest<'a> {
+        let rich_message = InputRichMessage {
+            markdown: Some(rich_text.into()),
+            is_rtl,
+            skip_entity_detection,
+            ..Default::default()
+        };
+
+        let mut req = api.send_rich_message(self.chat.id, rich_message);
+
+        if self.is_topic_message {
+            if let Some(thread_id) = self.message_thread_id {
+                req = req.message_thread_id(thread_id);
+            }
+        }
+
+        req
+    }
+
     /// The same as `Message::reply().entities()`
     pub fn reply_entities<'a>(
         &'a self,
@@ -884,7 +939,19 @@ impl Message {
         api: &'a Api,
         text: impl Into<String>,
     ) -> EditMessageTextRequest<'a> {
-        api.edit_message_text(text.into())
+        api.edit_message_text()
+            .text(text.into())
+            .message_id(self.message_id)
+            .chat_id(self.chat.id)
+    }
+
+    pub fn edit_text_rich<'a>(
+        &'a self,
+        api: &'a Api,
+        rich_message: impl Into<InputRichMessage>,
+    ) -> EditMessageTextRequest<'a> {
+        api.edit_message_text()
+            .rich_message(rich_message.into())
             .message_id(self.message_id)
             .chat_id(self.chat.id)
     }

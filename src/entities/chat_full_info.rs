@@ -15,6 +15,7 @@ use crate::{
         message::Message,
         reaction_type::ReactionType,
         unique_gift_colors::UniqueGiftColors,
+        user::User,
         user_rating::UserRating,
     },
     utils::deserialize_utils::is_false,
@@ -224,6 +225,10 @@ pub struct ChatFullInfo {
     /// *Optional*. The number of Telegram Stars a general user has to pay to send a message to the chat
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub paid_message_star_count: Option<i64>,
+
+    /// *Optional*. The bot that processes join request queries in the chat. The field is only available to chat administrators.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub guard_bot: Option<User>,
 }
 
 // Divider: all content below this line will be preserved after code regen

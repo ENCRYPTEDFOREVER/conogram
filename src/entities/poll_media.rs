@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::entities::{
-    animation::Animation, audio::Audio, document::Document, live_photo::LivePhoto,
+    animation::Animation, audio::Audio, document::Document, link::Link, live_photo::LivePhoto,
     location::Location, photo_size::PhotoSize, sticker::Sticker, venue::Venue, video::Video,
 };
 
@@ -21,6 +21,10 @@ pub struct PollMedia {
     /// *Optional*. Media is a general file, information about the file; currently, can't be received in a poll option
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub document: Option<Document>,
+
+    /// *Optional*. The HTTP link attached to the poll option
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub link: Option<Link>,
 
     /// *Optional*. Media is a live photo, information about the live photo
     #[serde(default, skip_serializing_if = "Option::is_none")]

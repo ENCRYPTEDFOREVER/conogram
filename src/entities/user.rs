@@ -71,6 +71,10 @@ pub struct User {
     /// *Optional*. *True*, if other bots can be created to be controlled by the bot. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_manage_bots: bool,
+
+    /// *Optional*. *True*, if the bot supports join request queries and can be assigned to process them. Returned only in [getMe](https://core.telegram.org/bots/api/#getme).
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub supports_join_request_queries: bool,
 }
 
 // Divider: all content below this line will be preserved after code regen

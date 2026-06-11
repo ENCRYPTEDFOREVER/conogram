@@ -7,7 +7,7 @@ use crate::utils::deserialize_utils::is_false;
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatpermissions)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatPermissions {
-    /// *Optional*. *True*, if the user is allowed to send text messages, contacts, giveaways, giveaway winners, invoices, locations and venues
+    /// *Optional*. *True*, if the user is allowed to send text messages, rich messages, contacts, giveaways, giveaway winners, invoices, locations and venues
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_send_messages: bool,
 
