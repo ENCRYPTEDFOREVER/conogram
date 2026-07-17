@@ -73,7 +73,7 @@
     if let Some(message) = update.message {
         // Required request parameters are in the request constructor, optionals are set via builder-like methods
         // ChatId can be username of a channel
-        let request = message.reply(&api, "Text");
+        let request = message.reply_(&api).text("Text");
         // All requests implement IntoFuture
         let reply = request.await.unwrap();
 
