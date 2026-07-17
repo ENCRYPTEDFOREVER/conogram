@@ -38,11 +38,21 @@ use super::message::Message;
 use crate::{api::Api, methods::answer_callback_query::AnswerCallbackQueryRequest};
 
 impl CallbackQuery {
+    /// Use this method to send answers to callback queries sent from [inline keyboards](https://core.telegram.org/bots/features#inline-keyboards). The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, *True* is returned.
+    ///
+    /// Alternatively, the user can be redirected to the specified Game URL. For this option to work, you must first create a game for your bot via [@BotFather](https://t.me/botfather) and accept the terms. Otherwise, you may use links like `t.me/your_bot?start=XXXX` that open your bot with a parameter.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#answercallbackquery)
     pub fn answer<'a>(&'a self, api: &'a Api) -> AnswerCallbackQueryRequest<'a> {
         api.answer_callback_query(&self.id)
     }
 
     /// An alert will be shown by the client instead of a notification at the top of the chat screen
+    /// Use this method to send answers to callback queries sent from [inline keyboards](https://core.telegram.org/bots/features#inline-keyboards). The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, *True* is returned.
+    ///
+    /// Alternatively, the user can be redirected to the specified Game URL. For this option to work, you must first create a game for your bot via [@BotFather](https://t.me/botfather) and accept the terms. Otherwise, you may use links like `t.me/your_bot?start=XXXX` that open your bot with a parameter.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#answercallbackquery)
     pub fn alert<'a>(
         &'a self,
         api: &'a Api,
@@ -54,6 +64,11 @@ impl CallbackQuery {
     }
 
     /// Notification at the top of the chat screen will be shown instead of alert
+    /// Use this method to send answers to callback queries sent from [inline keyboards](https://core.telegram.org/bots/features#inline-keyboards). The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, *True* is returned.
+    ///
+    /// Alternatively, the user can be redirected to the specified Game URL. For this option to work, you must first create a game for your bot via [@BotFather](https://t.me/botfather) and accept the terms. Otherwise, you may use links like `t.me/your_bot?start=XXXX` that open your bot with a parameter.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#answercallbackquery)
     pub fn snackbar<'a>(
         &'a self,
         api: &'a Api,

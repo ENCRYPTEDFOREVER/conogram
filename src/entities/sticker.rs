@@ -87,6 +87,9 @@ use crate::{api::Api, methods::get_sticker_set::GetStickerSetRequest};
 
 impl Sticker {
     /// Returns a [`GetStickerSetRequest`] if the sticker has a set, e.g. ([`self.set_name`](Self::set_name) is `Some`)
+    /// Use this method to get a sticker set. On success, a [StickerSet](https://core.telegram.org/bots/api/#stickerset) object is returned.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#getstickerset)
     pub fn get_sticker_set<'a>(&self, api: &'a Api) -> Option<GetStickerSetRequest<'a>> {
         self.set_name
             .as_ref()

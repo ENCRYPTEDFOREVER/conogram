@@ -58,6 +58,10 @@ use super::inline_query_result::InlineQueryResult;
 use crate::{api::Api, methods::answer_inline_query::AnswerInlineQueryRequest};
 
 impl InlineQuery {
+    /// Use this method to send answers to an inline query. On success, *True* is returned.
+    /// No more than **50** results per query are allowed.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#answerinlinequery)
     pub fn answer<'a>(
         &'a self,
         api: &'a Api,
@@ -66,12 +70,19 @@ impl InlineQuery {
         api.answer_inline_query(&self.id, results)
     }
 
-    // Answer with no results
+    /// Answer with no results
+    /// Use this method to send answers to an inline query. On success, *True* is returned.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#answerinlinequery)
     pub fn answer_empty<'a>(&'a self, api: &'a Api) -> AnswerInlineQueryRequest<'a> {
         api.answer_inline_query(&self.id, Vec::<InlineQueryResult>::new())
     }
 
     /// Answer with all server-side caching disabled
+    /// Use this method to send answers to an inline query. On success, *True* is returned.
+    /// No more than **50** results per query are allowed.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#answerinlinequery)
     pub fn answer_persnocache<'a, T: Into<InlineQueryResult>>(
         &'a self,
         api: &'a Api,

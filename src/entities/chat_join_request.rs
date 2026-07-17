@@ -43,10 +43,16 @@ use crate::{
 };
 
 impl ChatJoinRequest {
+    /// Use this method to approve a chat join request. The bot must be an administrator in the chat for this to work and must have the *can\_invite\_users* administrator right. Returns *True* on success.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#approvechatjoinrequest)
     pub fn approve<'a>(&'a self, api: &'a Api) -> ApproveChatJoinRequestRequest<'a> {
         api.approve_chat_join_request(self.chat.id, self.from.id)
     }
 
+    /// Use this method to decline a chat join request. The bot must be an administrator in the chat for this to work and must have the *can\_invite\_users* administrator right. Returns *True* on success.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#declinechatjoinrequest)
     pub fn decline<'a>(&'a self, api: &'a Api) -> DeclineChatJoinRequestRequest<'a> {
         api.decline_chat_join_request(self.chat.id, self.from.id)
     }
