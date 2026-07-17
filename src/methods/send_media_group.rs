@@ -11,7 +11,7 @@ use crate::{
     utils::deserialize_utils::is_false,
 };
 
-/// Use this method to send a group of photos, live photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of [Message](https://core.telegram.org/bots/api/#message) objects that were sent is returned.
+/// Use this method to send a group of photos, live photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an Array of [Message](https://core.telegram.org/bots/api/#message) objects that were sent is returned.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#sendmediagroup)
 #[derive(Debug, Clone, Serialize, Request)]
@@ -32,7 +32,7 @@ pub struct SendMediaGroupParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_messages_topic_id: Option<i64>,
 
-    /// A JSON-serialized array describing messages to be sent, must include 2-10 items
+    /// A JSON-serialized Array describing messages to be sent, must include 2-10 items
     pub media: Vec<InputMedia>,
 
     /// Sends messages [silently](https://telegram.org/blog/channels-2-0#silent-messages). Users will receive a notification with no sound.

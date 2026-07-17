@@ -9,6 +9,7 @@ use crate::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richblockdetails)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "details", tag = "type")]
 pub struct RichBlockDetails {
     /// Always shown summary of the block
     pub summary: Box<RichText>,

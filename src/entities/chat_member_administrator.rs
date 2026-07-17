@@ -6,6 +6,7 @@ use crate::{entities::user::User, utils::deserialize_utils::is_false};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatmemberadministrator)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "administrator", tag = "status")]
 pub struct ChatMemberAdministrator {
     /// Information about the user
     pub user: User,
@@ -66,7 +67,7 @@ pub struct ChatMemberAdministrator {
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_manage_direct_messages: bool,
 
-    /// *Optional*. *True*, if the administrator can edit the tags of regular members; for groups and supergroups only. If omitted defaults to the value of can\_pin\_messages.
+    /// *Optional*. *True*, if the administrator can edit the tags of regular members; for groups and supergroups only. If omitted, defaults to the value of can\_pin\_messages.
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_manage_tags: bool,
 

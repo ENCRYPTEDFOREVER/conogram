@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrortranslationfile)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "translation_file", tag = "source")]
 pub struct PassportElementErrorTranslationFile {
     /// Type of element of the user's Telegram Passport which has the issue, one of “passport”, “driver\_license”, “identity\_card”, “internal\_passport”, “utility\_bill”, “bank\_statement”, “rental\_agreement”, “passport\_registration”, “temporary\_registration”
     #[serde(rename = "type")]

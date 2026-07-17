@@ -18,7 +18,7 @@ use crate::{
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = Message)]
 pub struct SendRichMessageParams {
-    /// Unique identifier of the business connection on behalf of which the message will be sent
+    /// Unique identifier of the business connection on behalf of which the message will be sent. Bot can send rich messages on behalf of a business account only if the corresponding user can send rich messages.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub business_connection_id: Option<String>,
 

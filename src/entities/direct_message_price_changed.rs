@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 /// API Reference: [link](https://core.telegram.org/bots/api/#directmessagepricechanged)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct DirectMessagePriceChanged {
-    /// *True*, if direct messages are enabled for the channel chat; false otherwise
+    /// *True*, if direct messages are enabled for the channel chat; *False* otherwise
     pub are_direct_messages_enabled: bool,
 
     /// *Optional*. The new number of Telegram Stars that must be paid by users for each direct message sent to the channel. Does not apply to users who have been exempted by administrators. Defaults to 0.

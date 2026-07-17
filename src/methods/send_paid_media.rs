@@ -37,7 +37,7 @@ pub struct SendPaidMediaParams {
     /// The number of Telegram Stars that must be paid to buy access to the media; 1-25000
     pub star_count: i64,
 
-    /// A JSON-serialized array describing the media to be sent; up to 10 items
+    /// A JSON-serialized Array describing the media to be sent; up to 10 items
     pub media: Vec<InputPaidMedia>,
 
     /// Bot-defined paid media payload, 0-128 bytes. This will not be displayed to the user, use it for your internal processes.
@@ -56,7 +56,7 @@ pub struct SendPaidMediaParams {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub caption_entities: Vec<MessageEntity>,
 
-    /// Pass *True*, if the caption must be shown above the message media
+    /// Pass *True* if the caption must be shown above the message media
     #[serde(skip_serializing_if = "is_false")]
     pub show_caption_above_media: bool,
 

@@ -1,11 +1,12 @@
 use serde::{Deserialize, Serialize};
 
 use crate::entities::{
-    business_connection::BusinessConnection, business_messages_deleted::BusinessMessagesDeleted,
-    callback_query::CallbackQuery, chat_boost_removed::ChatBoostRemoved,
-    chat_boost_updated::ChatBoostUpdated, chat_join_request::ChatJoinRequest,
-    chat_member_updated::ChatMemberUpdated, chosen_inline_result::ChosenInlineResult,
-    inline_query::InlineQuery, managed_bot_updated::ManagedBotUpdated, message::Message,
+    bot_subscription_updated::BotSubscriptionUpdated, business_connection::BusinessConnection,
+    business_messages_deleted::BusinessMessagesDeleted, callback_query::CallbackQuery,
+    chat_boost_removed::ChatBoostRemoved, chat_boost_updated::ChatBoostUpdated,
+    chat_join_request::ChatJoinRequest, chat_member_updated::ChatMemberUpdated,
+    chosen_inline_result::ChosenInlineResult, inline_query::InlineQuery,
+    managed_bot_updated::ManagedBotUpdated, message::Message,
     message_reaction_count_updated::MessageReactionCountUpdated,
     message_reaction_updated::MessageReactionUpdated, paid_media_purchased::PaidMediaPurchased,
     poll::Poll, poll_answer::PollAnswer, pre_checkout_query::PreCheckoutQuery,
@@ -120,6 +121,10 @@ pub struct Update {
     /// *Optional*. A new bot was created to be managed by the bot, or token or owner of a managed bot was changed
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub managed_bot: Option<ManagedBotUpdated>,
+
+    /// *Optional*. User payment subscription has changed
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub subscription: Option<BotSubscriptionUpdated>,
 }
 
 // Divider: all content below this line will be preserved after code regen
@@ -164,12 +169,13 @@ pub enum AllowedUpdates {
     RemovedChatBoost,
 
     ManagedBot,
+    BotSubscriptionUpdated,
 }
 
 impl AllowedUpdates {
     /// All existing updates
     #[must_use]
-    pub const fn all() -> [Self; 25] {
+    pub const fn all() -> [Self; 26] {
         [
             Self::Message,
             Self::EditedMessage,
@@ -196,6 +202,7 @@ impl AllowedUpdates {
             Self::ChatBoost,
             Self::RemovedChatBoost,
             Self::ManagedBot,
+            Self::BotSubscriptionUpdated,
         ]
     }
 }
@@ -229,6 +236,7 @@ impl AllowedUpdates {
             Self::ChatBoost => "chat_boost",
             Self::RemovedChatBoost => "removed_chat_boost",
             Self::ManagedBot => "managed_bot",
+            Self::BotSubscriptionUpdated => "subscription",
         }
     }
 }

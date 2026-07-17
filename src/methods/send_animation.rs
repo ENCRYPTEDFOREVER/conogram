@@ -36,6 +36,14 @@ pub struct SendAnimationParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_messages_topic_id: Option<i64>,
 
+    /// For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are offline. See [ephemeral message sending](https://core.telegram.org/bots/api/#ephemeral-messages-and-commands) for more details.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub receiver_user_id: Option<i64>,
+
+    /// For outgoing ephemeral messages, identifier of the callback query which triggered the message if any
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub callback_query_id: Option<String>,
+
     /// Animation to send. Pass a file\_id as String to send an animation that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or upload a new animation using multipart/form-data. [More information on Sending Files »](https://core.telegram.org/bots/api/#sending-files)
     pub animation: InputFile,
 
@@ -67,7 +75,7 @@ pub struct SendAnimationParams {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub caption_entities: Vec<MessageEntity>,
 
-    /// Pass *True*, if the caption must be shown above the message media
+    /// Pass *True* if the caption must be shown above the message media
     #[serde(skip_serializing_if = "is_false")]
     pub show_caption_above_media: bool,
 

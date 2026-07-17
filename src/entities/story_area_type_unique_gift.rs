@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#storyareatypeuniquegift)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "unique_gift", tag = "type")]
 pub struct StoryAreaTypeUniqueGift {
     /// Unique name of the gift
     pub name: String,

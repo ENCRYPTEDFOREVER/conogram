@@ -6,6 +6,7 @@ use crate::entities::user::User;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartneraffiliateprogram)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "affiliate_program", tag = "type")]
 pub struct TransactionPartnerAffiliateProgram {
     /// *Optional*. Information about the bot that sponsored the affiliate program
     #[serde(default, skip_serializing_if = "Option::is_none")]

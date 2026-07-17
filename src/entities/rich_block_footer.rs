@@ -6,6 +6,7 @@ use crate::entities::rich_text::RichText;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richblockfooter)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "footer", tag = "type")]
 pub struct RichBlockFooter {
     /// Text of the block
     pub text: Box<RichText>,

@@ -5,10 +5,11 @@ use crate::{
     utils::deserialize_utils::is_false,
 };
 
-/// A block with a photo, corresponding to the HTML tag `<photo>`.
+/// A block with a photo, corresponding to the HTML tag `<img>`.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richblockphoto)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "photo", tag = "type")]
 pub struct RichBlockPhoto {
     /// Available sizes of the photo
     pub photo: Vec<PhotoSize>,

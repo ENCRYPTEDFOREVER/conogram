@@ -9,6 +9,7 @@ use crate::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#backgroundtypepattern)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "pattern", tag = "type")]
 pub struct BackgroundTypePattern {
     /// Document with the pattern
     pub document: Document,

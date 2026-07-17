@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#reactiontypecustomemoji)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "custom_emoji", tag = "type")]
 pub struct ReactionTypeCustomEmoji {
     /// Custom emoji identifier
     pub custom_emoji_id: String,

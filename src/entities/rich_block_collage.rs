@@ -6,6 +6,7 @@ use crate::entities::{rich_block::RichBlock, rich_block_caption::RichBlockCaptio
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richblockcollage)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "collage", tag = "type")]
 pub struct RichBlockCollage {
     /// Elements of the collage
     pub blocks: Vec<RichBlock>,

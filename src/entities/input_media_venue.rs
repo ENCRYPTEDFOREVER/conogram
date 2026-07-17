@@ -4,6 +4,7 @@ use serde::Serialize;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediavenue)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
+#[serde(rename = "venue", tag = "type")]
 pub struct InputMediaVenue {
     /// Latitude of the location
     pub latitude: f64,

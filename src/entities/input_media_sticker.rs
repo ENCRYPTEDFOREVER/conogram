@@ -6,6 +6,7 @@ use crate::entities::misc::input_file::{GetFiles, InputFile};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediasticker)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
+#[serde(rename = "sticker", tag = "type")]
 pub struct InputMediaSticker {
     /// File to send. Pass a file\_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a .WEBP sticker from the Internet, or pass “attach://\<file\_attach\_name\>” to upload a new .WEBP, .TGS, or .WEBM sticker using multipart/form-data under \<file\_attach\_name\> name. [More information on Sending Files »](https://core.telegram.org/bots/api/#sending-files)
     pub media: InputFile,

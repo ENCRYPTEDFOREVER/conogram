@@ -6,7 +6,7 @@ use crate::{
     utils::deserialize_utils::is_false,
 };
 
-/// Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent messages is returned.
+/// Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an Array of [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent messages is returned.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#forwardmessages)
 #[derive(Debug, Clone, Serialize, Request)]

@@ -9,6 +9,7 @@ use crate::entities::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultcacheddocument)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
+#[serde(rename = "document", tag = "type")]
 pub struct InlineQueryResultCachedDocument {
     /// Unique identifier for this result, 1-64 bytes
     pub id: String,

@@ -9,6 +9,7 @@ use crate::entities::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultaudio)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
+#[serde(rename = "audio", tag = "type")]
 pub struct InlineQueryResultAudio {
     /// Unique identifier for this result, 1-64 bytes
     pub id: String,

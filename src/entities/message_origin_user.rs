@@ -6,6 +6,7 @@ use crate::entities::user::User;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#messageoriginuser)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "user", tag = "type")]
 pub struct MessageOriginUser {
     /// Date the message was sent originally in Unix time
     pub date: i64,

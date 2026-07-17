@@ -6,6 +6,7 @@ use crate::entities::{location::Location, rich_block_caption::RichBlockCaption};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richblockmap)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "map", tag = "type")]
 pub struct RichBlockMap {
     /// Location of the center of the map
     pub location: Location,

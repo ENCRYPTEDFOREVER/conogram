@@ -12,6 +12,7 @@ use crate::{
         chat_location::ChatLocation,
         chat_permissions::ChatPermissions,
         chat_photo::ChatPhoto,
+        community::Community,
         message::Message,
         reaction_type::ReactionType,
         unique_gift_colors::UniqueGiftColors,
@@ -229,6 +230,10 @@ pub struct ChatFullInfo {
     /// *Optional*. The bot that processes join request queries in the chat. The field is only available to chat administrators.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub guard_bot: Option<User>,
+
+    /// *Optional*. The [Community](https://core.telegram.org/bots/api/#community) to which the chat belongs
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub community: Option<Community>,
 }
 
 // Divider: all content below this line will be preserved after code regen

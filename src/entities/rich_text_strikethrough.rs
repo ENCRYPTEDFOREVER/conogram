@@ -6,6 +6,7 @@ use crate::entities::rich_text::RichText;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richtextstrikethrough)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "strikethrough", tag = "type")]
 pub struct RichTextStrikethrough {
     /// The text
     pub text: Box<RichText>,

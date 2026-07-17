@@ -12,6 +12,7 @@ use crate::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultcachedgif)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
+#[serde(rename = "gif", tag = "type")]
 pub struct InlineQueryResultCachedGif {
     /// Unique identifier for this result, 1-64 bytes
     pub id: String,
@@ -35,7 +36,7 @@ pub struct InlineQueryResultCachedGif {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub caption_entities: Vec<MessageEntity>,
 
-    /// *Optional*. Pass *True*, if the caption must be shown above the message media
+    /// *Optional*. Pass *True* if the caption must be shown above the message media
     #[serde(skip_serializing_if = "is_false")]
     pub show_caption_above_media: bool,
 

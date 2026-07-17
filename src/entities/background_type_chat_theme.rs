@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#backgroundtypechattheme)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "chat_theme", tag = "type")]
 pub struct BackgroundTypeChatTheme {
     /// Name of the chat theme, which is usually an emoji
     pub theme_name: String,

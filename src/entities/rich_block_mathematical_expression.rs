@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richblockmathematicalexpression)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "mathematical_expression", tag = "type")]
 pub struct RichBlockMathematicalExpression {
     /// The mathematical expression in LaTeX format
     pub expression: String,

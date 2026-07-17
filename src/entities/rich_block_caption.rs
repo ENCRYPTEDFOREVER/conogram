@@ -16,3 +16,11 @@ pub struct RichBlockCaption {
 }
 
 // Divider: all content below this line will be preserved after code regen
+impl RichBlockCaption {
+    pub fn new(text: impl Into<RichText>, credit: Option<impl Into<RichText>>) -> Self {
+        Self {
+            text: Box::new(text.into()),
+            credit: credit.map(Into::into).map(Box::new),
+        }
+    }
+}

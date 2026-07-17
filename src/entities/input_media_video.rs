@@ -12,6 +12,7 @@ use crate::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediavideo)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
+#[serde(rename = "video", tag = "type")]
 pub struct InputMediaVideo {
     /// File to send. Pass a file\_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://\<file\_attach\_name\>” to upload a new one using multipart/form-data under \<file\_attach\_name\> name. [More information on Sending Files »](https://core.telegram.org/bots/api/#sending-files)
     pub media: InputFile,
@@ -40,7 +41,7 @@ pub struct InputMediaVideo {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub caption_entities: Vec<MessageEntity>,
 
-    /// *Optional*. Pass *True*, if the caption must be shown above the message media
+    /// *Optional*. Pass *True* if the caption must be shown above the message media
     #[serde(skip_serializing_if = "is_false")]
     pub show_caption_above_media: bool,
 

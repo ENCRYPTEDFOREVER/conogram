@@ -3,7 +3,7 @@ use serde::Serialize;
 
 use crate::entities::misc::chat_id::ChatId;
 
-/// Use this method to get the number of members in a chat. Returns *Int* on success.
+/// Use this method to get the number of members in a chat. Returns *Integer* on success.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#getchatmembercount)
 #[derive(Debug, Clone, Serialize, Request)]

@@ -67,7 +67,7 @@ pub struct ChatPermissions {
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_pin_messages: bool,
 
-    /// *Optional*. *True*, if the user is allowed to create forum topics. If omitted defaults to the value of can\_pin\_messages.
+    /// *Optional*. *True*, if the user is allowed to create forum topics. If omitted, defaults to the value of can\_pin\_messages.
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_manage_topics: bool,
 }

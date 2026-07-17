@@ -1,8 +1,8 @@
 
 <div align="center">
     <h1><b>Conogram: async Telegram Bot API client written in Rust</b></h1>
-    <a href="https://core.telegram.org/bots/api/#june-11-2026">
-        <img src="https://img.shields.io/badge/Bot%20API%20version-10.1-brightgreen?style=for-the-badge">
+    <a href="https://core.telegram.org/bots/api/#july-14-2026">
+        <img src="https://img.shields.io/badge/Bot%20API%20version-10.2-brightgreen?style=for-the-badge">
     </a>
     <a href="https://crates.io/crates/conogram">
         <img src="https://img.shields.io/crates/v/conogram.svg?style=for-the-badge">

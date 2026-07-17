@@ -9,6 +9,7 @@ use crate::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richblockanimation)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "animation", tag = "type")]
 pub struct RichBlockAnimation {
     /// The animation
     pub animation: Animation,

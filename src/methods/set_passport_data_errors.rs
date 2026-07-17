@@ -14,7 +14,7 @@ pub struct SetPassportDataErrorsParams {
     /// User identifier
     pub user_id: i64,
 
-    /// A JSON-serialized array describing the errors
+    /// A JSON-serialized Array describing the errors
     pub errors: Vec<PassportElementError>,
 }
 

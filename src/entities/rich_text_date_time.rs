@@ -6,6 +6,7 @@ use crate::entities::rich_text::RichText;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richtextdatetime)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "date_time", tag = "type")]
 pub struct RichTextDateTime {
     /// The text
     pub text: Box<RichText>,

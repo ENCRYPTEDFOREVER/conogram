@@ -6,6 +6,7 @@ use crate::{entities::document::Document, utils::deserialize_utils::is_false};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#backgroundtypewallpaper)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "wallpaper", tag = "type")]
 pub struct BackgroundTypeWallpaper {
     /// Document with the wallpaper
     pub document: Document,

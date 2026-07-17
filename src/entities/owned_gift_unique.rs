@@ -9,6 +9,7 @@ use crate::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#ownedgiftunique)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "unique", tag = "type")]
 pub struct OwnedGiftUnique {
     /// Information about the unique gift
     pub gift: UniqueGift,

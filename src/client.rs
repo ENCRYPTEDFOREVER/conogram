@@ -1,12 +1,12 @@
 #![allow(dead_code, unused_variables)]
 
 use std::{
-    collections::{hash_map::Entry, HashMap},
+    collections::{HashMap, hash_map::Entry},
     str::FromStr,
 };
 
-use reqwest::{multipart::Form, Client, RequestBuilder, Url};
-use serde::{de::DeserializeOwned, Deserialize, Serialize};
+use reqwest::{Client, RequestBuilder, Url, multipart::Form};
+use serde::{Deserialize, Serialize, de::DeserializeOwned};
 use serde_json::Value;
 
 use crate::{
@@ -99,13 +99,13 @@ impl TgApiClient {
     }
 
     fn apply_default_params(&self, method: &str, default_value: &mut Value) {
-        if let Some(method_entry) = self.default_request_params.get(method) {
-            if let Value::Object(object) = default_value {
-                for (param_name, v) in method_entry {
-                    if !object.contains_key(param_name) {
-                        log::debug!("Setting {param_name}={v} in {method}");
-                        object.insert(param_name.clone(), v.clone());
-                    }
+        if let Some(method_entry) = self.default_request_params.get(method)
+            && let Value::Object(object) = default_value
+        {
+            for (param_name, v) in method_entry {
+                if !object.contains_key(param_name) {
+                    log::debug!("Setting {param_name}={v} in {method}");
+                    object.insert(param_name.clone(), v.clone());
                 }
             }
         }

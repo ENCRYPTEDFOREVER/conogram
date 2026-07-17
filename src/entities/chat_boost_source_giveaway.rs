@@ -6,6 +6,7 @@ use crate::{entities::user::User, utils::deserialize_utils::is_false};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatboostsourcegiveaway)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "giveaway", tag = "source")]
 pub struct ChatBoostSourceGiveaway {
     /// Identifier of a message in the chat with the giveaway; the message could have been deleted already. May be 0 if the message isn't sent yet.
     pub giveaway_message_id: i64,

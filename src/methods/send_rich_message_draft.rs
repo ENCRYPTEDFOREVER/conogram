@@ -19,7 +19,7 @@ pub struct SendRichMessageDraftParams {
     /// Unique identifier of the message draft; must be non-zero. Changes to drafts with the same identifier are animated.
     pub draft_id: i64,
 
-    /// The partial message to be streamed
+    /// The partial message to be streamed. Direct upload of new files isn't supported.
     pub rich_message: InputRichMessage,
 }
 

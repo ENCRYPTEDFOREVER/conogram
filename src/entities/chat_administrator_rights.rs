@@ -60,7 +60,7 @@ pub struct ChatAdministratorRights {
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_manage_direct_messages: bool,
 
-    /// *Optional*. *True*, if the administrator can edit the tags of regular members; for groups and supergroups only. If omitted defaults to the value of can\_pin\_messages.
+    /// *Optional*. *True*, if the administrator can edit the tags of regular members; for groups and supergroups only. If omitted, defaults to the value of can\_pin\_messages.
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_manage_tags: bool,
 }

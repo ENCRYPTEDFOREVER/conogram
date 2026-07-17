@@ -6,6 +6,7 @@ use crate::entities::rich_text::RichText;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richtextbotcommand)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "bot_command", tag = "type")]
 pub struct RichTextBotCommand {
     /// The text
     pub text: Box<RichText>,

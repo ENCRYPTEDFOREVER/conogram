@@ -16,7 +16,7 @@ pub struct SendMessageDraftParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_thread_id: Option<i64>,
 
-    /// Unique identifier of the message draft; must be non-zero. Changes of drafts with the same identifier are animated.
+    /// Unique identifier of the message draft; must be non-zero. Changes to drafts with the same identifier are animated.
     pub draft_id: i64,
 
     /// Text of the message to be sent, 0-4096 characters after entities parsing. Pass an empty text to show a “Thinking…” placeholder.

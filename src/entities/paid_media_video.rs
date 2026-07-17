@@ -6,6 +6,7 @@ use crate::entities::video::Video;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#paidmediavideo)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "video", tag = "type")]
 pub struct PaidMediaVideo {
     /// The video
     pub video: Video,

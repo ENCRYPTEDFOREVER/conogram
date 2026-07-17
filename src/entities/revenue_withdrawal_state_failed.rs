@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#revenuewithdrawalstatefailed)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "failed", tag = "type")]
 pub struct RevenueWithdrawalStateFailed {}
 
 // Divider: all content below this line will be preserved after code regen

@@ -6,6 +6,7 @@ use crate::entities::location_address::LocationAddress;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#storyareatypelocation)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "location", tag = "type")]
 pub struct StoryAreaTypeLocation {
     /// Location latitude in degrees
     pub latitude: f64,

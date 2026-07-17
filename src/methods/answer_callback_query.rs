@@ -18,7 +18,7 @@ pub struct AnswerCallbackQueryParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text: Option<String>,
 
-    /// If *True*, an alert will be shown by the client instead of a notification at the top of the chat screen. Defaults to *false*.
+    /// If *True*, an alert will be shown by the client instead of a notification at the top of the chat screen. Defaults to *False*.
     #[serde(skip_serializing_if = "is_false")]
     pub show_alert: bool,
 

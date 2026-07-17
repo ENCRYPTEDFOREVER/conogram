@@ -6,6 +6,7 @@ use crate::entities::rich_text::RichText;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richtextsuperscript)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "superscript", tag = "type")]
 pub struct RichTextSuperscript {
     /// The text
     pub text: Box<RichText>,

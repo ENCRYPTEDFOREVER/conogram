@@ -6,6 +6,7 @@ use crate::entities::{rich_text::RichText, user::User};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richtexttextmention)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "text_mention", tag = "type")]
 pub struct RichTextTextMention {
     /// The text
     pub text: Box<RichText>,

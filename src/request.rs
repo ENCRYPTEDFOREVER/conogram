@@ -6,7 +6,7 @@ use std::{
 };
 
 // use async_trait::async_trait;
-use serde::{de::DeserializeOwned, Serialize};
+use serde::{Serialize, de::DeserializeOwned};
 
 use crate::{
     api::Api,
@@ -91,7 +91,9 @@ where
                                         );
 
                                         if retry_after > 600 {
-                                            log::warn!("Unusually high RetryAfter: {retry_after}s, clamping to 600s");
+                                            log::warn!(
+                                                "Unusually high RetryAfter: {retry_after}s, clamping to 600s"
+                                            );
                                             retry_after = 600;
                                         }
 
@@ -196,15 +198,15 @@ where
     {
         let threshold = threshold.into();
         async move {
-            if let Some(wait_for) = self.get_api_ref().get_flood_wait_duration(self) {
-                if wait_for > threshold {
-                    log::debug!(
-                        "Skipped {} in chat {:?}, RetryAfter: {wait_for:?} > {threshold:?}",
-                        Self::get_name(),
-                        self.get_params_ref().get_target_chat_id()
-                    );
-                    return Ok(None);
-                }
+            if let Some(wait_for) = self.get_api_ref().get_flood_wait_duration(self)
+                && wait_for > threshold
+            {
+                log::debug!(
+                    "Skipped {} in chat {:?}, RetryAfter: {wait_for:?} > {threshold:?}",
+                    Self::get_name(),
+                    self.get_params_ref().get_target_chat_id()
+                );
+                return Ok(None);
             }
             self.wrap().await.map(Some)
         }
@@ -225,15 +227,15 @@ where
     {
         let threshold = threshold.into();
         async move {
-            if let Some(wait_for) = self.get_api_ref().get_flood_wait_duration(self) {
-                if wait_for > threshold {
-                    log::debug!(
-                        "Skipped {} in chat {:?}, RetryAfter: {wait_for:?} > {threshold:?}",
-                        Self::get_name(),
-                        self.get_params_ref().get_target_chat_id()
-                    );
-                    return None;
-                }
+            if let Some(wait_for) = self.get_api_ref().get_flood_wait_duration(self)
+                && wait_for > threshold
+            {
+                log::debug!(
+                    "Skipped {} in chat {:?}, RetryAfter: {wait_for:?} > {threshold:?}",
+                    Self::get_name(),
+                    self.get_params_ref().get_target_chat_id()
+                );
+                return None;
             }
             Some(self.wrap().await)
         }

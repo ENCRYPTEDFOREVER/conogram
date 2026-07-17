@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#backgroundfillsolid)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "solid", tag = "type")]
 pub struct BackgroundFillSolid {
     /// The color of the background fill in the RGB24 format
     pub color: i64,

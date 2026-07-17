@@ -6,6 +6,7 @@ use crate::entities::chat::Chat;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#messageoriginchat)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "chat", tag = "type")]
 pub struct MessageOriginChat {
     /// Date the message was sent originally in Unix time
     pub date: i64,

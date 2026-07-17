@@ -6,6 +6,7 @@ use crate::entities::user::User;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatmemberleft)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "left", tag = "status")]
 pub struct ChatMemberLeft {
     /// Information about the user
     pub user: User,

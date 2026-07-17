@@ -105,14 +105,17 @@ impl FormattedText {
         Self::empty()
     }
 
-    pub fn with_text(text: impl Into<String>, entities: impl Into<Vec<MessageEntity>>) -> Self {
+    pub fn with_text(
+        text: impl Into<String>,
+        entities: impl IntoIterator<Item = impl Into<MessageEntity>>,
+    ) -> Self {
         let text = text.into();
         let len = text.utf16_codeunits();
 
         Self {
             text,
             len_utf16: len,
-            entities: entities.into(),
+            entities: entities.into_iter().map(Into::into).collect(),
             trim_spaces: true,
             use_last_offsets: false,
             last_ent_offset: 0,

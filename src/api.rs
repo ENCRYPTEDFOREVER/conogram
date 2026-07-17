@@ -7,7 +7,7 @@ use std::{
 };
 
 use dashmap::DashMap;
-use serde::{de::DeserializeOwned, Serialize};
+use serde::{Serialize, de::DeserializeOwned};
 
 use crate::{
     chat_member_cache::ChatMemberCache,
@@ -21,13 +21,9 @@ use crate::{
     methods::{
         edit_message_caption::EditMessageCaptionRequest, edit_message_text::EditMessageTextRequest,
         get_chat_member::GetChatMemberParams, send_animation::SendAnimationRequest,
-        send_audio::SendAudioRequest, send_contact::SendContactRequest, send_dice::SendDiceRequest,
-        send_document::SendDocumentRequest, send_game::SendGameRequest,
-        send_invoice::SendInvoiceRequest, send_location::SendLocationRequest,
-        send_media_group::SendMediaGroupRequest, send_message::SendMessageRequest,
-        send_photo::SendPhotoRequest, send_poll::SendPollRequest, send_sticker::SendStickerRequest,
-        send_venue::SendVenueRequest, send_video::SendVideoRequest,
-        send_video_note::SendVideoNoteRequest, send_voice::SendVoiceRequest,
+        send_audio::SendAudioRequest, send_document::SendDocumentRequest,
+        send_message::SendMessageRequest, send_photo::SendPhotoRequest, send_poll::SendPollRequest,
+        send_voice::SendVoiceRequest,
     },
     request::{RequestT, TargetChatId},
     server_config::ApiServerConfig,
@@ -247,36 +243,6 @@ impl Api {
         }
     }
 
-    /// Sets `allow_sending_without_reply` to `true` for all applicable requests
-    pub fn set_essential_request_defaults(&mut self) -> Result<(), serde_json::Error> {
-        set_default_param!(
-            self.client,
-            "allow_sending_without_reply",
-            true,
-            [
-                // crate::entities::reply_parameters::ReplyParameters,
-                SendMessageRequest,
-                SendPhotoRequest,
-                SendAnimationRequest,
-                SendAudioRequest,
-                SendDocumentRequest,
-                SendVoiceRequest,
-                SendContactRequest,
-                SendDiceRequest,
-                SendGameRequest,
-                SendInvoiceRequest,
-                SendStickerRequest,
-                SendVenueRequest,
-                SendVideoRequest,
-                SendLocationRequest,
-                SendVideoNoteRequest,
-                SendMediaGroupRequest
-            ]
-        );
-
-        Ok(())
-    }
-
     /// Sets the timeout for [GetUpdatesRequest] request
     pub const fn set_polling_timeout(&mut self, timeout_secs: u64) {
         self.polling_timeout = timeout_secs;
@@ -352,16 +318,35 @@ impl Api {
     }
 
     /// Internal conogram method. Returns ``Ok(false)`` instead of `Err` if the message can't be deleted
+    pub async fn delete_ephemeral_message_exp(
+        &self,
+        chat_id: impl Into<ChatId> + Send,
+        ephemeral_message_id: impl Into<i64> + Send,
+        receiver_user_id: impl Into<i64> + Send,
+    ) -> Result<bool, ConogramError> {
+        let result = self
+            .delete_ephemeral_message(chat_id, receiver_user_id, ephemeral_message_id)
+            .wrap()
+            .await;
+        if let Err(err) = &result
+            && let ConogramErrorType::ApiError(_) = &err.type_
+        {
+            return Ok(false);
+        }
+        result
+    }
+
+    /// Internal conogram method. Returns ``Ok(false)`` instead of `Err` if the message can't be deleted
     pub async fn delete_message_exp(
         &self,
         chat_id: impl Into<ChatId> + Send,
         message_id: impl Into<i64> + Send,
     ) -> Result<bool, ConogramError> {
         let result = self.delete_message(chat_id, message_id).wrap().await;
-        if let Err(err) = &result {
-            if let ConogramErrorType::ApiError(_) = &err.type_ {
-                return Ok(false);
-            }
+        if let Err(err) = &result
+            && let ConogramErrorType::ApiError(_) = &err.type_
+        {
+            return Ok(false);
         }
         result
     }
@@ -373,10 +358,10 @@ impl Api {
         message_ids: impl IntoIterator<Item = impl Into<i64>> + Send,
     ) -> Result<bool, ConogramError> {
         let result = self.delete_messages(chat_id, message_ids).wrap().await;
-        if let Err(err) = &result {
-            if let ConogramErrorType::ApiError(_) = &err.type_ {
-                return Ok(false);
-            }
+        if let Err(err) = &result
+            && let ConogramErrorType::ApiError(_) = &err.type_
+        {
+            return Ok(false);
         }
         result
     }
@@ -389,10 +374,10 @@ impl Api {
                 max_update_id = Some(update.update_id);
             }
 
-            if let Some(chat_member_updated) = &update.chat_member {
-                if let Some(cache) = &self.chat_member_cache {
-                    cache.cache_update(chat_member_updated);
-                }
+            if let Some(chat_member_updated) = &update.chat_member
+                && let Some(cache) = &self.chat_member_cache
+            {
+                cache.cache_update(chat_member_updated);
             }
         }
 
@@ -430,38 +415,34 @@ impl Api {
     ) -> Result<ReturnType, ConogramError> {
         if TypeId::of::<Params>() == TypeId::of::<GetChatMemberParams>()
             && TypeId::of::<ReturnType>() == TypeId::of::<ChatMember>()
+            && let Some(cache) = &self.chat_member_cache
+            && let Some(params) = params
         {
-            if let Some(cache) = &self.chat_member_cache {
-                if let Some(params) = params {
-                    let params = unsafe {
-                        &*std::ptr::from_ref::<Params>(params).cast::<GetChatMemberParams>()
-                    };
+            let params =
+                unsafe { &*std::ptr::from_ref::<Params>(params).cast::<GetChatMemberParams>() };
 
-                    if let Some(chat_member) = cache.get(&params.chat_id, params.user_id) {
-                        let return_type = unsafe {
-                            (*(std::ptr::from_ref(&chat_member).cast::<ReturnType>())).clone()
-                        };
-                        if self.request_stats_enabled {
-                            self.request_stats
-                                .entry(format!("{method}(CacheHit)"))
-                                .and_modify(|n| *n += 1)
-                                .or_insert(1);
-                        }
-                        return Ok(return_type);
-                    }
-
-                    if self.request_stats_enabled {
-                        self.request_stats
-                            .entry(method.to_string())
-                            .and_modify(|n| *n += 1)
-                            .or_insert(1);
-                    }
-                    let value: ReturnType = self.client.method_json(method, Some(params)).await?;
-                    let chat_member = unsafe { &*std::ptr::from_ref(&value).cast::<ChatMember>() };
-                    cache.cache_chat_member(&params.chat_id, chat_member);
-                    return Ok(value);
+            if let Some(chat_member) = cache.get(&params.chat_id, params.user_id) {
+                let return_type =
+                    unsafe { (*(std::ptr::from_ref(&chat_member).cast::<ReturnType>())).clone() };
+                if self.request_stats_enabled {
+                    self.request_stats
+                        .entry(format!("{method}(CacheHit)"))
+                        .and_modify(|n| *n += 1)
+                        .or_insert(1);
                 }
+                return Ok(return_type);
             }
+
+            if self.request_stats_enabled {
+                self.request_stats
+                    .entry(method.to_string())
+                    .and_modify(|n| *n += 1)
+                    .or_insert(1);
+            }
+            let value: ReturnType = self.client.method_json(method, Some(params)).await?;
+            let chat_member = unsafe { &*std::ptr::from_ref(&value).cast::<ChatMember>() };
+            cache.cache_chat_member(&params.chat_id, chat_member);
+            return Ok(value);
         }
 
         if self.request_stats_enabled {

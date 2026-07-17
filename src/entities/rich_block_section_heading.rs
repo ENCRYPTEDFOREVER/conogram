@@ -6,6 +6,7 @@ use crate::entities::rich_text::RichText;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richblocksectionheading)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "heading", tag = "type")]
 pub struct RichBlockSectionHeading {
     /// Text of the block
     pub text: Box<RichText>,

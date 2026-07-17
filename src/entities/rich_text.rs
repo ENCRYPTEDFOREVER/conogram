@@ -365,3 +365,9 @@ impl From<RichTextReferenceLink> for RichText {
 }
 
 // Divider: all content below this line will be preserved after code regen
+
+impl<T: Into<String>> From<T> for RichText {
+    fn from(value: T) -> Self {
+        Self::Plain(value.into())
+    }
+}

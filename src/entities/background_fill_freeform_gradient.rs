@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#backgroundfillfreeformgradient)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "freeform_gradient", tag = "type")]
 pub struct BackgroundFillFreeformGradient {
     /// A list of the 3 or 4 base colors that are used to generate the freeform gradient in the RGB24 format
     pub colors: Vec<i64>,

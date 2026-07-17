@@ -6,6 +6,7 @@ use crate::entities::{audio::Audio, rich_block_caption::RichBlockCaption};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richblockaudio)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "audio", tag = "type")]
 pub struct RichBlockAudio {
     /// The audio
     pub audio: Audio,

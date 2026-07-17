@@ -4,13 +4,15 @@ use serde::{Deserialize, Serialize};
 
 use crate::entities::chat::Chat;
 
+pub const CHAT_ID_CONST: i64 = -1000000000000;
+
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq, Hash)]
 #[serde(untagged)]
 pub enum ChatId {
     /// Chat/Channel username, for example: ``@BotNews``
     Username(String),
 
-    /// Chat/Channel ID, for example: ``-1001004276399``, ``36265675``
+    /// Chat/Channel ID, for example: ``-1001279877202``, ``432651513``
     Id(i64),
 }
 
@@ -20,6 +22,14 @@ impl ChatId {
             Self::Username(value.to_owned())
         } else {
             Self::Username(format!("@{value}"))
+        }
+    }
+
+    #[must_use]
+    pub const fn is_user_chat(&self) -> bool {
+        match self {
+            Self::Username(_) => false,
+            Self::Id(id) => *id > 0,
         }
     }
 }

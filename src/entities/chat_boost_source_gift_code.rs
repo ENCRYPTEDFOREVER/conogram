@@ -6,6 +6,7 @@ use crate::entities::user::User;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatboostsourcegiftcode)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "gift_code", tag = "source")]
 pub struct ChatBoostSourceGiftCode {
     /// User for which the gift code was created
     pub user: User,

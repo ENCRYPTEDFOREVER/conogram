@@ -1,14 +1,18 @@
 [package]
 name = "conogram-derives"
-version = "0.1.0"
-edition = "2021"
+description = "Derive macros for conogram"
+license = "MIT"
+homepage = "https://github.com/ENCRYPTEDFOREVER/conogram"
+repository = "https://github.com/ENCRYPTEDFOREVER/conogram"
+version = "0.1.1"
+edition = "2024"
 
 [lib]
 proc-macro = true
 
 [dependencies]
-quote = "1.0.45"
-syn = "2.0.117"
+quote = "1.0.46"
+syn = "2.0.119"
 proc-macro2 = "1.0.106"
 
 [dev-dependencies]

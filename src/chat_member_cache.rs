@@ -64,12 +64,9 @@ impl ChatMemberCache {
 
                 if let Some(chat_id_int) = chat_id_int {
                     chat_id_int
-                } else if let Some(chat_member) =
-                    self.chat_members_chat_username.get(&(username, user_id))
-                {
-                    return Some(chat_member.value().clone());
                 } else {
-                    return None;
+                    let chat_member = self.chat_members_chat_username.get(&(username, user_id))?;
+                    return Some(chat_member.value().clone());
                 }
             }
             ChatId::Id(id) => *id,

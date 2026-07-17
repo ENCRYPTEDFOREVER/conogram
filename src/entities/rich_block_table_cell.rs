@@ -65,3 +65,23 @@ pub enum RichBlockTableCellValign {
 }
 
 // Divider: all content below this line will be preserved after code regen
+impl RichBlockTableCell {
+    pub fn new(
+        text: Option<impl Into<RichText>>,
+        is_header: bool,
+        colspan: Option<i64>,
+        rowspan: Option<i64>,
+        align: RichBlockTableCellAlign,
+        valign: RichBlockTableCellValign,
+    ) -> Self {
+        Self {
+            text: text.map(Into::into).map(Box::new),
+
+            colspan,
+            rowspan,
+            align,
+            valign,
+            is_header,
+        }
+    }
+}

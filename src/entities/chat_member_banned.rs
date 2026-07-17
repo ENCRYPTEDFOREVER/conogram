@@ -6,6 +6,7 @@ use crate::entities::user::User;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatmemberbanned)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "kicked", tag = "status")]
 pub struct ChatMemberBanned {
     /// Information about the user
     pub user: User,

@@ -1,7 +1,7 @@
 use proc_macro::TokenStream;
 use proc_macro2::TokenStream as TokenStream2;
-use quote::{format_ident, quote, quote_spanned, ToTokens};
-use syn::{parse_macro_input, spanned::Spanned, Data, DeriveInput, Error, Field, Ident, TypePath};
+use quote::{ToTokens, format_ident, quote, quote_spanned};
+use syn::{Data, DeriveInput, Error, Field, Ident, TypePath, parse_macro_input, spanned::Spanned};
 
 /// Derive RequestT, IntoFuture, Builder, etc on this request params struct
 ///
@@ -188,14 +188,20 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
             "InputMedia",
             "InputFile",
             "LocalFile",
-            "Option<LocalFile>",
-            "Option<InputFile>",
-            "Vec<InputMedia>",
+            "InputPaidMedia",
+            "InputPollOptionMedia",
+            "InputRichMedia",
+            "InputRichBlock",
+            "InputRichMessage",
         ];
         // False-positives
         let multipart_blacklist = ["InputStickerFormat"];
-        let is_multipart = multipart_starts.iter().any(|n| type_name.starts_with(n))
-            && multipart_blacklist.iter().all(|n| !type_name.eq(n));
+
+        let is_multipart = multipart_starts.iter().any(|n| {
+            type_name.starts_with(n)
+                || type_name.starts_with(&format!("Vec<{n}"))
+                || type_name.starts_with(&format!("Option<{n}"))
+        }) && multipart_blacklist.iter().all(|n| !type_name.eq(n));
 
         fields.push(RequestField {
             _inner: f,
@@ -332,13 +338,33 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
         .cloned()
         .collect::<Vec<_>>();
 
+    // For replacing (text+entities) combos by Into<InputMessageText>
+    let (mut _has_caption_entities, mut has_entities) = (false, false);
+    let text_is_required = required_fields.iter().any(|f| f.name == "text");
+    for f in &optional_fields {
+        if f.name == "caption_entities" {
+            _has_caption_entities = true;
+            break;
+        }
+        if f.name == "entities" {
+            has_entities = true;
+            break;
+        }
+    }
+
     let constructor_method_params = required_fields
         .iter()
         .map(|f| {
-            let name = &f.name;
-            let method_type = &f.method_type;
-            quote! {
-                #name: #method_type,
+            if text_is_required && has_entities && f.name == "text" {
+                quote! {
+                    text: impl Into<crate::entities::message::InputMessageText>,
+                }
+            } else {
+                let name = &f.name;
+                let method_type = &f.method_type;
+                quote! {
+                    #name: #method_type,
+                }
             }
         })
         .collect::<TokenStream2>();
@@ -346,10 +372,16 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
     let constructor_invoke_params = required_fields
         .iter()
         .map(|f| {
-            let name = &f.name;
-            let invocation = &f.assing_impl;
-            quote! {
-                #name: #invocation,
+            if text_is_required && has_entities && f.name == "text" {
+                quote! {
+                    text, entities,
+                }
+            } else {
+                let name = &f.name;
+                let invocation = &f.assing_impl;
+                quote! {
+                    #name: #invocation,
+                }
             }
         })
         .collect::<TokenStream2>();
@@ -357,9 +389,13 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
     let default_ = optional_fields
         .iter()
         .map(|f| {
-            let name = &f.name;
-            quote! {
-                #name: Default::default(),
+            if text_is_required && has_entities && f.name == "entities" {
+                quote! {}
+            } else {
+                let name = &f.name;
+                quote! {
+                    #name: Default::default(),
+                }
             }
         })
         .collect::<TokenStream2>();
@@ -381,12 +417,23 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
         });
     }
 
+    let text_entities_match = if text_is_required && has_entities {
+        quote! {
+            let (text, entities) = match text.into() {
+                crate::entities::message::InputMessageText::String(text) => (text, vec![]),
+                crate::entities::message::InputMessageText::FormattedText(ft) => ft.build(),
+            };
+        }
+    } else {
+        quote! {}
+    };
     stream.extend(quote! {
         impl<'a> #request_struct_ident<'a> {
             pub fn new(
                 api: &'a crate::api::Api,
                 #constructor_method_params
             ) -> Self {
+                #text_entities_match
                 Self {
                     api,
                     params: #params_struct_ident {
@@ -401,18 +448,7 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
     });
 
     {
-        let args = required_fields
-            .iter()
-            .map(|f| {
-                let name = &f.name;
-                let method_type = &f.method_type;
-                quote! {
-                    #name: #method_type,
-                }
-            })
-            .collect::<TokenStream2>();
-
-        let args_assign = required_fields
+        let api_helper_args_assign = required_fields
             .iter()
             .map(|f| {
                 let name = &f.name;
@@ -429,12 +465,99 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
                 #request_struct_doc_comment
                 pub fn #request_struct_ident_snake(
                     &self,
-                    #args
+                    #constructor_method_params
                 ) -> #request_struct_ident {
-                    #request_struct_ident::new(self, #args_assign)
+                    #request_struct_ident::new(self, #api_helper_args_assign)
                 }
             }
         });
+
+        // Helper method on ReplyBuilder
+        if !required_fields
+            .iter()
+            .any(|f| f.name == "business_connection_id")
+            && optional_fields.iter().any(|f| f.name == "reply_parameters")
+        {
+            let request_struct_ident_snake_str = request_struct_ident_snake.to_string();
+            let ident_without_send =
+                if let Some(stripped) = request_struct_ident_snake_str.strip_prefix("send_") {
+                    stripped
+                } else {
+                    &request_struct_ident_snake_str
+                };
+
+            let helper_method_ident =
+                Ident::new(ident_without_send, request_struct_ident_snake.span());
+
+            let required_fields = required_fields.iter().filter(|f| f.name != "chat_id");
+            let helper_args = required_fields
+                .clone()
+                .map(|f| {
+                    if text_is_required && has_entities && f.name == "text" {
+                        quote! {
+                            text: impl Into<crate::entities::message::InputMessageText>,
+                        }
+                    } else {
+                        let name = &f.name;
+                        let method_type = &f.method_type;
+                        quote! {
+                            #name: #method_type,
+                        }
+                    }
+                })
+                .collect::<TokenStream2>();
+
+            let helper_args_assign = required_fields
+                .map(|f| {
+                    let name = &f.name;
+                    quote! {
+                        #name,
+                    }
+                })
+                .collect::<TokenStream2>();
+
+            if optional_fields.iter().any(|f| f.name == "receiver_user_id") {
+                stream.extend(quote! {
+                    impl<'a> crate::entities::misc::reply_builder::ReplyBuilder<'a> {
+                        #request_struct_doc_comment
+                        pub fn #helper_method_ident(
+                            self,
+                            #helper_args
+                        ) -> #request_struct_ident<'a> {
+                            if let Some(ephemeral_target_id) = self.ephemeral_target_id
+                                && (!self.allow_ephemeral_leak || (ephemeral_target_id > 0
+                                && !self.chat_id.is_user_chat())) {
+                                    if let Some(message_thread_id) = self.message_thread_id {
+                                        self.api.#request_struct_ident_snake(self.chat_id, #helper_args_assign)
+                                            .reply_parameters(self.reply_parameters)
+                                            .receiver_user_id(ephemeral_target_id)
+                                            .message_thread_id(message_thread_id)
+                                    } else {
+                                        self.api.#request_struct_ident_snake(self.chat_id, #helper_args_assign)
+                                            .reply_parameters(self.reply_parameters)
+                                            .receiver_user_id(ephemeral_target_id)
+                                    }
+
+                            } else {
+                                self.api.#request_struct_ident_snake(self.chat_id, #helper_args_assign).reply_parameters(self.reply_parameters)
+                            }
+                        }
+                    }
+                });
+            } else {
+                stream.extend(quote! {
+                    impl<'a> crate::entities::misc::reply_builder::ReplyBuilder<'a> {
+                        #request_struct_doc_comment
+                        pub fn #helper_method_ident(
+                            self,
+                            #helper_args
+                        ) -> #request_struct_ident<'a> {
+                            self.api.#request_struct_ident_snake(self.chat_id, #helper_args_assign).reply_parameters(self.reply_parameters)
+                        }
+                    }
+                });
+            }
+        }
     }
 
     stream.into()

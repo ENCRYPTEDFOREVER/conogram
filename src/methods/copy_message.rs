@@ -51,7 +51,7 @@ pub struct CopyMessageParams {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub caption_entities: Vec<MessageEntity>,
 
-    /// Pass *True*, if the caption must be shown above the message media. Ignored if a new caption isn't specified.
+    /// Pass *True* if the caption must be shown above the message media. Ignored if a new caption isn't specified.
     #[serde(skip_serializing_if = "is_false")]
     pub show_caption_above_media: bool,
 

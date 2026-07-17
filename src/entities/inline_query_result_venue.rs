@@ -8,6 +8,7 @@ use crate::entities::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultvenue)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
+#[serde(rename = "venue", tag = "type")]
 pub struct InlineQueryResultVenue {
     /// Unique identifier for this result, 1-64 Bytes
     pub id: String,

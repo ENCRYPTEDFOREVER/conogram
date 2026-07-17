@@ -6,6 +6,7 @@ use crate::entities::rich_text::RichText;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richtextcashtag)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "cashtag", tag = "type")]
 pub struct RichTextCashtag {
     /// The text
     pub text: Box<RichText>,

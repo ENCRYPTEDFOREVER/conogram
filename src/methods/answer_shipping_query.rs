@@ -15,7 +15,7 @@ pub struct AnswerShippingQueryParams {
     /// Pass *True* if delivery to the specified address is possible and *False* if there are any problems (for example, if delivery to the specified address is not possible)
     pub ok: bool,
 
-    /// Required if *ok* is *True*. A JSON-serialized array of available shipping options.
+    /// Required if *ok* is *True*. A JSON-serialized Array of available shipping options.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub shipping_options: Vec<ShippingOption>,
 

@@ -53,27 +53,27 @@ pub struct SendPollParams {
     #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
     pub type_: Option<PollType>,
 
-    /// Pass *True*, if the poll allows multiple answers, defaults to *False*
+    /// Pass *True* if the poll allows multiple answers, defaults to *False*
     #[serde(skip_serializing_if = "is_false")]
     pub allows_multiple_answers: bool,
 
-    /// Pass *True*, if the poll allows to change chosen answer options, defaults to *False* for quizzes and to *True* for regular polls
+    /// Pass *True* if the poll allows to change chosen answer options, defaults to *False* for quizzes and to *True* for regular polls
     #[serde(skip_serializing_if = "is_false")]
     pub allows_revoting: bool,
 
-    /// Pass *True*, if the poll options must be shown in random order
+    /// Pass *True* if the poll options must be shown in random order
     #[serde(skip_serializing_if = "is_false")]
     pub shuffle_options: bool,
 
-    /// Pass *True*, if answer options can be added to the poll after creation; not supported for anonymous polls and quizzes
+    /// Pass *True* if answer options can be added to the poll after creation; not supported for anonymous polls and quizzes
     #[serde(skip_serializing_if = "is_false")]
     pub allow_adding_options: bool,
 
-    /// Pass *True*, if poll results must be shown only after the poll closes
+    /// Pass *True* if poll results must be shown only after the poll closes
     #[serde(skip_serializing_if = "is_false")]
     pub hide_results_until_closes: bool,
 
-    /// Pass *True*, if voting is limited to users who have been members of the chat where the poll is being sent for more than 24 hours; for channel chats only
+    /// Pass *True* if voting is limited to users who have been members of the chat where the poll is being sent for more than 24 hours; for channel chats only
     #[serde(skip_serializing_if = "is_false")]
     pub members_only: bool,
 

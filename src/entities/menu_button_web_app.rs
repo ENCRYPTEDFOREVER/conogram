@@ -6,6 +6,7 @@ use crate::entities::web_app_info::WebAppInfo;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#menubuttonwebapp)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "web_app", tag = "type")]
 pub struct MenuButtonWebApp {
     /// Text on the button
     pub text: String,

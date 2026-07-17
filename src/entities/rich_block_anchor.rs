@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richblockanchor)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "anchor", tag = "type")]
 pub struct RichBlockAnchor {
     /// The name of the anchor
     pub name: String,

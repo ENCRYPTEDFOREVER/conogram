@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrorunspecified)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "unspecified", tag = "source")]
 pub struct PassportElementErrorUnspecified {
     /// Type of element of the user's Telegram Passport which has the issue
     #[serde(rename = "type")]

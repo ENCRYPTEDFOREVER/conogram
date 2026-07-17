@@ -6,6 +6,7 @@ use crate::entities::passport_element_error_front_side::PassportElementErrorFron
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrorselfie)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "selfie", tag = "source")]
 pub struct PassportElementErrorSelfie {
     /// The section of the user's Telegram Passport which has the issue, one of “passport”, “driver\_license”, “identity\_card”, “internal\_passport”
     #[serde(rename = "type")]

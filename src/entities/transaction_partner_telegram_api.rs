@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartnertelegramapi)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "telegram_api", tag = "type")]
 pub struct TransactionPartnerTelegramApi {
     /// The number of successful requests that exceeded regular limits and were therefore billed
     pub request_count: i64,

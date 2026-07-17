@@ -29,3 +29,23 @@ pub struct Location {
 }
 
 // Divider: all content below this line will be preserved after code regen
+
+impl Location {
+    pub fn new(
+        latitude: impl Into<f64>,
+        longitude: impl Into<f64>,
+        horizontal_accuracy: Option<f64>,
+        live_period: Option<i64>,
+        heading: Option<i64>,
+        proximity_alert_radius: Option<i64>,
+    ) -> Self {
+        Self {
+            latitude: latitude.into(),
+            longitude: longitude.into(),
+            horizontal_accuracy,
+            live_period,
+            heading,
+            proximity_alert_radius,
+        }
+    }
+}

@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#storyareatypelink)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "link", tag = "type")]
 pub struct StoryAreaTypeLink {
     /// HTTP or tg:// URL to be opened when the area is clicked
     pub url: String,

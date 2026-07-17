@@ -32,6 +32,14 @@ pub struct SendLocationParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_messages_topic_id: Option<i64>,
 
+    /// For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are offline. See [ephemeral message sending](https://core.telegram.org/bots/api/#ephemeral-messages-and-commands) for more details.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub receiver_user_id: Option<i64>,
+
+    /// For outgoing ephemeral messages, identifier of the callback query which triggered the message if any
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub callback_query_id: Option<String>,
+
     /// Latitude of the location
     pub latitude: f64,
 
@@ -42,7 +50,7 @@ pub struct SendLocationParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub horizontal_accuracy: Option<f64>,
 
-    /// Period in seconds during which the location will be updated (see [Live Locations](https://telegram.org/blog/live-locations), should be between 60 and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely
+    /// Period in seconds during which the location will be updated (see [Live Locations](https://telegram.org/blog/live-locations)), must be between 60 and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely. Must be 0 for ephemeral messages.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub live_period: Option<i64>,
 

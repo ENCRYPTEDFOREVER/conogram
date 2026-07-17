@@ -145,7 +145,7 @@ pub enum RichBlock {
     #[serde(rename = "audio")]
     Audio(RichBlockAudio),
 
-    /// A block with a photo, corresponding to the HTML tag `<photo>`.
+    /// A block with a photo, corresponding to the HTML tag `<img>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richblockphoto)
     #[serde(rename = "photo")]
@@ -163,7 +163,7 @@ pub enum RichBlock {
     #[serde(rename = "voice_note")]
     VoiceNote(RichBlockVoiceNote),
 
-    /// A block with a “Thinking…” placeholder, corresponding to the custom HTML tag `<tg-thinking>`. The block may be used only in [sendRichMessageDraft](https://core.telegram.org/bots/api/#sendrichmessagedraft), therefore it can't be received in messages. See [https://t.me/addemoji/AIActions](https://t.me/addemoji/AIActions) for examples of custom emoji, which are recommended for usage in the block.
+    /// A block with a “Thinking…” placeholder, corresponding to the custom HTML tag `<tg-thinking>`. The block may be used only in [sendRichMessageDraft](https://core.telegram.org/bots/api/#sendrichmessagedraft), therefore it can't be received in messages. See [https://t.me/addemoji/AIActions](https://t.me/addemoji/AIActions) for examples of custom emoji that are recommended for usage in the block.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richblockthinking)
     #[serde(rename = "thinking")]

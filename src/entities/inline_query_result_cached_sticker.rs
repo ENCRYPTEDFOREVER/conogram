@@ -8,6 +8,7 @@ use crate::entities::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultcachedsticker)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
+#[serde(rename = "sticker", tag = "type")]
 pub struct InlineQueryResultCachedSticker {
     /// Unique identifier for this result, 1-64 bytes
     pub id: String,

@@ -36,6 +36,14 @@ pub struct SendPhotoParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_messages_topic_id: Option<i64>,
 
+    /// For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are offline. See [ephemeral message sending](https://core.telegram.org/bots/api/#ephemeral-messages-and-commands) for more details.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub receiver_user_id: Option<i64>,
+
+    /// For outgoing ephemeral messages, identifier of the callback query which triggered the message if any
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub callback_query_id: Option<String>,
+
     /// Photo to send. Pass a file\_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20. [More information on Sending Files »](https://core.telegram.org/bots/api/#sending-files)
     pub photo: InputFile,
 
@@ -51,7 +59,7 @@ pub struct SendPhotoParams {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub caption_entities: Vec<MessageEntity>,
 
-    /// Pass *True*, if the caption must be shown above the message media
+    /// Pass *True* if the caption must be shown above the message media
     #[serde(skip_serializing_if = "is_false")]
     pub show_caption_above_media: bool,
 

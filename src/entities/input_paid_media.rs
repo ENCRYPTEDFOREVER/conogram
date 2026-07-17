@@ -90,3 +90,12 @@ impl<T: Into<InputFile>> From<T> for InputPaidMediaVideo {
         }
     }
 }
+
+impl<T: Into<InputFile>> From<T> for InputPaidMediaLivePhoto {
+    fn from(value: T) -> Self {
+        Self {
+            media: value.into(),
+            ..Default::default()
+        }
+    }
+}

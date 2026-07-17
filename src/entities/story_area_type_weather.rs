@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#storyareatypeweather)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "weather", tag = "type")]
 pub struct StoryAreaTypeWeather {
     /// Temperature, in degree Celsius
     pub temperature: f64,

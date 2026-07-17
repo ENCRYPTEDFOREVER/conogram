@@ -28,7 +28,7 @@ pub struct EditMessageMediaParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inline_message_id: Option<String>,
 
-    /// A JSON-serialized object for a new media content of the message
+    /// A JSON-serialized object for the new media content of the message
     pub media: InputMedia,
 
     /// A JSON-serialized object for a new [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards)

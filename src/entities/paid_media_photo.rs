@@ -6,6 +6,7 @@ use crate::entities::photo_size::PhotoSize;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#paidmediaphoto)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "photo", tag = "type")]
 pub struct PaidMediaPhoto {
     /// The photo
     pub photo: Vec<PhotoSize>,

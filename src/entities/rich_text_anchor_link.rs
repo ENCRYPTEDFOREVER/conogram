@@ -6,6 +6,7 @@ use crate::entities::rich_text::RichText;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richtextanchorlink)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "anchor_link", tag = "type")]
 pub struct RichTextAnchorLink {
     /// The link text
     pub text: Box<RichText>,

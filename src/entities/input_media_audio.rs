@@ -9,6 +9,7 @@ use crate::entities::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediaaudio)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
+#[serde(rename = "audio", tag = "type")]
 pub struct InputMediaAudio {
     /// File to send. Pass a file\_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://\<file\_attach\_name\>” to upload a new one using multipart/form-data under \<file\_attach\_name\> name. [More information on Sending Files »](https://core.telegram.org/bots/api/#sending-files)
     pub media: InputFile,

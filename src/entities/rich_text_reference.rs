@@ -6,6 +6,7 @@ use crate::entities::rich_text::RichText;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richtextreference)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "reference", tag = "type")]
 pub struct RichTextReference {
     /// Text of the reference
     pub text: Box<RichText>,

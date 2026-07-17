@@ -6,6 +6,7 @@ use crate::entities::misc::input_file::{GetFiles, InputFile};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputprofilephotoanimated)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
+#[serde(rename = "animated", tag = "type")]
 pub struct InputProfilePhotoAnimated {
     /// The animated profile photo. Profile photos can't be reused and can only be uploaded as a new file, so you can pass “attach://\<file\_attach\_name\>” if the photo was uploaded using multipart/form-data under \<file\_attach\_name\>. [More information on Sending Files »](https://core.telegram.org/bots/api/#sending-files)
     pub animation: InputFile,

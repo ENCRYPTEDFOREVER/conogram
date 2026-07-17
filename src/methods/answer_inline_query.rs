@@ -19,7 +19,7 @@ pub struct AnswerInlineQueryParams {
     /// Unique identifier for the answered query
     pub inline_query_id: String,
 
-    /// A JSON-serialized array of results for the inline query
+    /// A JSON-serialized Array of results for the inline query
     pub results: Vec<InlineQueryResult>,
 
     /// The maximum amount of time in seconds that the result of the inline query may be cached on the server. Defaults to 300.

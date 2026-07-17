@@ -6,6 +6,7 @@ use crate::{
         chat_boost_added::ChatBoostAdded, chat_owner_changed::ChatOwnerChanged,
         chat_owner_left::ChatOwnerLeft, chat_shared::ChatShared, checklist::Checklist,
         checklist_tasks_added::ChecklistTasksAdded, checklist_tasks_done::ChecklistTasksDone,
+        community_chat_added::CommunityChatAdded, community_chat_removed::CommunityChatRemoved,
         contact::Contact, dice::Dice, direct_message_price_changed::DirectMessagePriceChanged,
         direct_messages_topic::DirectMessagesTopic, document::Document,
         external_reply_info::ExternalReplyInfo, forum_topic_closed::ForumTopicClosed,
@@ -46,7 +47,7 @@ use crate::{
 /// API Reference: [link](https://core.telegram.org/bots/api/#message)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Message {
-    /// Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent.
+    /// Unique message identifier inside this chat; 0 for ephemeral messages. In specific instances (e.g., a message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent.
     pub message_id: i64,
 
     /// *Optional*. Unique identifier of a message thread or forum topic to which the message belongs; for supergroups and private chats only
@@ -77,6 +78,14 @@ pub struct Message {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub sender_tag: Option<String>,
 
+    /// *Optional*. For ephemeral messages, the user who received the message
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub receiver_user: Option<User>,
+
+    /// *Optional*. For ephemeral messages, identifier of the ephemeral message inside this chat. The identifier may be reused for another ephemeral message after the message is deleted or expires.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub ephemeral_message_id: Option<i64>,
+
     /// Date the message was sent in Unix time. It is always a positive number, representing a valid date.
     pub date: i64,
 
@@ -103,7 +112,7 @@ pub struct Message {
     #[serde(default, skip_serializing_if = "is_false")]
     pub is_automatic_forward: bool,
 
-    /// *Optional*. For replies in the same chat and message thread, the original message. Note that the [Message](https://core.telegram.org/bots/api/#message) object in this field will not contain further *reply\_to\_message* fields even if it itself is a reply.
+    /// *Optional*. For replies in the same chat and message thread, the original message. Note that the [Message](https://core.telegram.org/bots/api/#message) object in this field will not contain further *reply\_to\_message* fields even if it itself is a reply. If the message is a reply to an ephemeral message, then this field may be omitted.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub reply_to_message: Option<Box<Self>>,
 
@@ -379,7 +388,7 @@ pub struct Message {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub passport_data: Option<PassportData>,
 
-    /// *Optional*. Service message. A user in the chat triggered another user's proximity alert while sharing Live Location.
+    /// *Optional*. Service message: a user in the chat triggered another user's proximity alert while sharing Live Location
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub proximity_alert_triggered: Option<ProximityAlertTriggered>,
 
@@ -398,6 +407,14 @@ pub struct Message {
     /// *Optional*. Service message: tasks were added to a checklist
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub checklist_tasks_added: Option<ChecklistTasksAdded>,
+
+    /// *Optional*. Service message: chat added to a [Community](https://core.telegram.org/bots/api/#community)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub community_chat_added: Option<CommunityChatAdded>,
+
+    /// *Optional*. Service message: chat removed from a [Community](https://core.telegram.org/bots/api/#community)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub community_chat_removed: Option<CommunityChatRemoved>,
 
     /// *Optional*. Service message: the price for paid messages in the corresponding direct messages chat of a channel has changed
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -506,31 +523,34 @@ pub struct Message {
 
 // Divider: all content below this line will be preserved after code regen
 
-use std::ops::Range;
-
 use super::{
-    input_media::InputMedia,
-    misc::{formatting::FormattedText, input_file::InputFile},
-    reaction_type::ReactionType,
-    reply_parameters::ReplyParameters,
+    input_media::InputMedia, misc::formatting::FormattedText, reaction_type::ReactionType,
 };
 use crate::{
     api::Api,
-    entities::{input_rich_message::InputRichMessage, misc::chat_id::ChatId},
+    entities::{
+        input_rich_message::InputRichMessage,
+        misc::{
+            chat_id::{CHAT_ID_CONST, ChatId},
+            reply_builder::ReplyBuilder,
+        },
+    },
     errors::ConogramError,
     methods::{
-        copy_message::CopyMessageRequest, delete_message::DeleteMessageRequest,
+        copy_message::CopyMessageRequest, delete_message_reaction::DeleteMessageReactionRequest,
+        edit_ephemeral_message_caption::EditEphemeralMessageCaptionRequest,
+        edit_ephemeral_message_media::EditEphemeralMessageMediaRequest,
+        edit_ephemeral_message_reply_markup::EditEphemeralMessageReplyMarkupRequest,
+        edit_ephemeral_message_text::EditEphemeralMessageTextRequest,
         edit_message_media::EditMessageMediaRequest,
         edit_message_reply_markup::EditMessageReplyMarkupRequest,
         edit_message_text::EditMessageTextRequest, forward_message::ForwardMessageRequest,
         get_custom_emoji_stickers::GetCustomEmojiStickersRequest,
-        pin_chat_message::PinChatMessageRequest, send_document::SendDocumentRequest,
-        send_media_group::SendMediaGroupRequest, send_message::SendMessageRequest,
-        send_photo::SendPhotoRequest, send_rich_message::SendRichMessageRequest,
-        send_sticker::SendStickerRequest, send_video::SendVideoRequest,
+        pin_chat_message::PinChatMessageRequest, send_message::SendMessageRequest,
         set_message_reaction::SetMessageReactionRequest,
         unpin_chat_message::UnpinChatMessageRequest,
     },
+    request::RequestT,
 };
 
 pub enum InputMessageText {
@@ -614,6 +634,17 @@ impl Message {
         } else {
             0
         }
+    }
+
+    #[must_use]
+    pub const fn is_ephemeral(&self) -> bool {
+        self.ephemeral_message_id.is_some()
+    }
+
+    /// For ephemeral messages, ID of the user who received the messag
+    #[must_use]
+    pub fn receiver_user_id(&self) -> Option<i64> {
+        self.receiver_user.as_ref().map(|u| u.id)
     }
 
     /// Returns `text` or `caption` if `text` is empty
@@ -703,219 +734,47 @@ impl Message {
         }
     }
 
-    /// Quote entire message and reply in the same Chat
-    pub fn quote_reply<'a>(
-        &'a self,
-        api: &'a Api,
-        text: impl Into<String>,
-    ) -> SendMessageRequest<'a> {
-        self.quote_reply_args(api, text, Option::<Range<usize>>::None, Option::<i64>::None)
-    }
-
-    /// Quote part of the message and reply in the same Chat
-    pub fn quote_reply_partial<'a>(
-        &'a self,
-        api: &'a Api,
-        text: impl Into<String>,
-        quoting_range: impl Into<Range<usize>>,
-    ) -> SendMessageRequest<'a> {
-        self.quote_reply_args(api, text, Some(quoting_range), Option::<i64>::None)
-    }
-
-    /// Quote entire message and reply in the Chat, specified by `chat_id`
-    pub fn quote_reply_to<'a>(
-        &'a self,
-        api: &'a Api,
-        text: impl Into<String>,
-        chat_id: impl Into<ChatId>,
-    ) -> SendMessageRequest<'a> {
-        self.quote_reply_args(api, text, Option::<Range<usize>>::None, Some(chat_id))
-    }
-
-    /// Quote part of the message and reply in the Chat, specified by `chat_id`
-    pub fn quote_reply_partial_to<'a>(
-        &'a self,
-        api: &'a Api,
-        text: impl Into<String>,
-        quoting_range: impl Into<Range<usize>>,
-        chat_id: impl Into<ChatId>,
-    ) -> SendMessageRequest<'a> {
-        self.quote_reply_args(api, text, Some(quoting_range), Some(chat_id))
-    }
-
-    /// Params:
-    ///
-    /// `chat_id`: identifier of the target chat
-    ///
-    /// `quoting_range`: char-range of the part of the original message which needs to be quoted
-    pub fn quote_reply_args<'a>(
-        &'a self,
-        api: &'a Api,
-        text: impl Into<String>,
-        quoting_range: Option<impl Into<Range<usize>>>,
-        chat_id: Option<impl Into<ChatId>>,
-    ) -> SendMessageRequest<'a> {
-        let chat_id = if let Some(chat_id) = chat_id {
-            chat_id.into()
-        } else {
-            self.chat.id.into()
-        };
-
-        let (quote_text, quote_entities, quote_pos) = if let Some(range) = quoting_range {
-            let range = range.into();
-            let range_start = range.start as i64;
-
-            let (quote_text, quote_entities) = self
-                .get_formatted_text()
-                .unwrap_or_default()
-                .slice(range)
-                .build();
-
-            (Some(quote_text), quote_entities, Some(range_start))
-        } else {
-            (None, vec![], None)
-        };
-
-        let mut req =
-            SendMessageRequest::new(api, chat_id, text).reply_parameters(ReplyParameters {
-                message_id: self.message_id,
-                chat_id: Some(self.chat.id.into()),
-                quote: quote_text,
-                quote_entities,
-                quote_position: quote_pos,
-                ..Default::default()
-            });
-
-        if self.is_topic_message {
-            if let Some(thread_id) = self.message_thread_id {
-                req = req.message_thread_id(thread_id);
-            }
-        }
-
-        req
-    }
-
     pub fn reply<'a>(
         &'a self,
         api: &'a Api,
         text: impl Into<InputMessageText>,
     ) -> SendMessageRequest<'a> {
-        let mut req = match text.into() {
-            InputMessageText::String(v) => api
-                .send_message(self.chat.id, v)
-                .reply_parameters(ReplyParameters::new_current_chat(self.message_id)),
-            InputMessageText::FormattedText(ft) => self.reply_formatted(api, ft),
-        };
-
-        if self.is_topic_message {
-            if let Some(thread_id) = self.message_thread_id {
-                req = req.message_thread_id(thread_id);
-            }
-        }
-
-        req
+        ReplyBuilder::reply(api, self).text(text)
     }
 
-    pub fn reply_rich_html<'a>(
-        &'a self,
-        api: &'a Api,
-        rich_text: impl Into<String>,
-        is_rtl: bool,
-        skip_entity_detection: bool,
-    ) -> SendRichMessageRequest<'a> {
-        let rich_message = InputRichMessage {
-            html: Some(rich_text.into()),
-            is_rtl,
-            skip_entity_detection,
-            ..Default::default()
-        };
-
-        let mut req = api.send_rich_message(self.chat.id, rich_message);
-
-        if self.is_topic_message {
-            if let Some(thread_id) = self.message_thread_id {
-                req = req.message_thread_id(thread_id);
-            }
-        }
-
-        req
-    }
-
-    pub fn reply_rich_markdown<'a>(
-        &'a self,
-        api: &'a Api,
-        rich_text: impl Into<String>,
-        is_rtl: bool,
-        skip_entity_detection: bool,
-    ) -> SendRichMessageRequest<'a> {
-        let rich_message = InputRichMessage {
-            markdown: Some(rich_text.into()),
-            is_rtl,
-            skip_entity_detection,
-            ..Default::default()
-        };
-
-        let mut req = api.send_rich_message(self.chat.id, rich_message);
-
-        if self.is_topic_message {
-            if let Some(thread_id) = self.message_thread_id {
-                req = req.message_thread_id(thread_id);
-            }
-        }
-
-        req
+    /// Reply to the message, must work the same way as using the 'reply' option in official Telegram clients
+    pub fn reply_<'a>(&'a self, api: &'a Api) -> ReplyBuilder<'a> {
+        ReplyBuilder::reply(api, self)
     }
 
     /// The same as `Message::reply().entities()`
     pub fn reply_entities<'a>(
         &'a self,
         api: &'a Api,
-        text: impl Into<InputMessageText>,
-        entities: impl IntoIterator<Item = MessageEntity>,
-    ) -> SendMessageRequest<'a> {
-        self.reply(api, text).entities(entities).parse_mode("")
-    }
-
-    pub fn reply_formatted<'a>(
-        &'a self,
-        api: &'a Api,
-        formatted_text: FormattedText,
-    ) -> SendMessageRequest<'a> {
-        let (text, entities) = formatted_text.build();
-        self.reply(api, text).entities(entities).parse_mode("")
-    }
-
-    /// Sends message to the same chat and thread
-    pub fn answer<'a>(&'a self, api: &'a Api, text: impl Into<String>) -> SendMessageRequest<'a> {
-        let mut req = api.send_message(self.chat.id, text);
-
-        if self.is_topic_message {
-            if let Some(thread_id) = self.message_thread_id {
-                req = req.message_thread_id(thread_id);
-            }
-        }
-
-        req
-    }
-
-    /// The same as `Message::answer().entities()`
-    pub fn answer_entities<'a>(
-        &'a self,
-        api: &'a Api,
         text: impl Into<String>,
         entities: impl IntoIterator<Item = MessageEntity>,
     ) -> SendMessageRequest<'a> {
-        self.answer(api, text).entities(entities).parse_mode("")
+        self.reply_(api)
+            .text(FormattedText::with_text(text, entities))
     }
 
+    /// Use this method to remove a message from the list of pinned messages in a chat. In private chats and channel direct messages chats, all messages can be unpinned. Conversely, the bot must be an administrator with the 'can\_pin\_messages' right or the 'can\_edit\_messages' right to unpin messages in groups and channels respectively. Returns *True* on success.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#unpinchatmessage)
     pub fn unpin<'a>(&'a self, api: &'a Api) -> UnpinChatMessageRequest<'a> {
         api.unpin_chat_message(self.chat.id)
     }
 
+    /// Use this method to add a message to the list of pinned messages in a chat. In private chats and channel direct messages chats, all non-service messages can be pinned. Conversely, the bot must be an administrator with the 'can\_pin\_messages' right or the 'can\_edit\_messages' right to pin messages in groups and channels respectively. Returns *True* on success.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#pinchatmessage)
     pub fn pin<'a>(&'a self, api: &'a Api) -> PinChatMessageRequest<'a> {
         api.pin_chat_message(self.chat.id, self.message_id)
     }
 
+    /// Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#forwardmessage)
     pub fn forward<'a>(
         &'a self,
         api: &'a Api,
@@ -924,6 +783,9 @@ impl Message {
         api.forward_message(to_chat_id, self.chat.id, self.message_id)
     }
 
+    /// Use this method to edit animation, audio, document, live photo, photo, or video messages, or to replace a text or a rich message with a media. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo, a live photo, or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file\_id or specify a URL. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within **48 hours** from the time they were sent.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#editmessagemedia)
     pub fn edit_media<'a>(
         &'a self,
         api: &'a Api,
@@ -934,6 +796,53 @@ impl Message {
             .message_id(self.message_id)
     }
 
+    /// Use this method to edit only the reply markup of an ephemeral message. Note that it is not guaranteed that the user will receive the message edit event, especially if they are offline. On success, *True* is returned.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#editephemeralmessagereplymarkup)
+    pub fn edit_reply_markup_ephemeral<'a>(
+        &'a self,
+        api: &'a Api,
+    ) -> EditEphemeralMessageReplyMarkupRequest<'a> {
+        api.edit_ephemeral_message_reply_markup(
+            self.chat.id,
+            self.receiver_user_id().unwrap_or_default(),
+            self.ephemeral_message_id.unwrap_or_default(),
+        )
+    }
+
+    /// Use this method to edit the caption of an ephemeral message. Note that it is not guaranteed that the user will receive the message edit event, especially if they are offline. On success, *True* is returned.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#editephemeralmessagecaption)
+    pub fn edit_caption_ephemeral<'a>(
+        &'a self,
+        api: &'a Api,
+    ) -> EditEphemeralMessageCaptionRequest<'a> {
+        api.edit_ephemeral_message_caption(
+            self.chat.id,
+            self.receiver_user_id().unwrap_or_default(),
+            self.ephemeral_message_id.unwrap_or_default(),
+        )
+    }
+
+    /// Use this method to edit the media of an ephemeral message. Note that it is not guaranteed that the user will receive the message edit event, especially if they are offline. On success, *True* is returned.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#editephemeralmessagemedia)
+    pub fn edit_media_ephemeral<'a>(
+        &'a self,
+        api: &'a Api,
+        media: impl Into<InputMedia>,
+    ) -> EditEphemeralMessageMediaRequest<'a> {
+        api.edit_ephemeral_message_media(
+            self.chat.id,
+            self.receiver_user_id().unwrap_or_default(),
+            self.ephemeral_message_id.unwrap_or_default(),
+            media,
+        )
+    }
+
+    /// Use this method to edit text, rich and [game](https://core.telegram.org/bots/api/#games) messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within **48 hours** from the time they were sent.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#editmessagetext)
     pub fn edit_text<'a>(
         &'a self,
         api: &'a Api,
@@ -945,6 +854,25 @@ impl Message {
             .chat_id(self.chat.id)
     }
 
+    /// Use this method to edit an ephemeral text message. Note that it is not guaranteed that the user will receive the message edit event, especially if they are offline. On success, *True* is returned.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#editephemeralmessagetext)
+    pub fn edit_text_ephemeral<'a>(
+        &'a self,
+        api: &'a Api,
+        text: impl Into<InputMessageText>,
+    ) -> EditEphemeralMessageTextRequest<'a> {
+        api.edit_ephemeral_message_text(
+            self.chat.id,
+            self.receiver_user_id().unwrap_or_default(),
+            self.ephemeral_message_id.unwrap_or_default(),
+            text,
+        )
+    }
+
+    /// Use this method to edit text, rich and [game](https://core.telegram.org/bots/api/#games) messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within **48 hours** from the time they were sent.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#editmessagetext)
     pub fn edit_text_rich<'a>(
         &'a self,
         api: &'a Api,
@@ -956,6 +884,9 @@ impl Message {
             .chat_id(self.chat.id)
     }
 
+    /// Use this method to edit text, rich and [game](https://core.telegram.org/bots/api/#games) messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within **48 hours** from the time they were sent.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#editmessagetext)
     pub fn edit_text_formatted<'a>(
         &'a self,
         api: &'a Api,
@@ -965,16 +896,25 @@ impl Message {
         self.edit_text(api, text).entities(entities).parse_mode("")
     }
 
+    /// Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz [poll](https://core.telegram.org/bots/api/#poll) can be copied only if the value of the field *correct\_option\_id* is known to the bot. The method is analogous to the method [forwardMessage](https://core.telegram.org/bots/api/#forwardmessage), but the copied message doesn't have a link to the original message. Returns the [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent message on success.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#copymessage)
     pub fn copy<'a>(&'a self, api: &'a Api, chat_id: impl Into<ChatId>) -> CopyMessageRequest<'a> {
         api.copy_message(chat_id, self.chat.id, self.message_id)
     }
 
+    /// Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within **48 hours** from the time they were sent.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#editmessagereplymarkup)
     pub fn edit_reply_markup<'a>(&'a self, api: &'a Api) -> EditMessageReplyMarkupRequest<'a> {
         api.edit_message_reply_markup()
             .message_id(self.message_id)
             .chat_id(self.chat.id)
     }
 
+    /// Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within **48 hours** from the time they were sent.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#editmessagereplymarkup)
     pub fn delete_reply_markup<'a>(&'a self, api: &'a Api) -> EditMessageReplyMarkupRequest<'a> {
         api.edit_message_reply_markup()
             .message_id(self.message_id)
@@ -982,101 +922,70 @@ impl Message {
             .reply_markup(InlineKeyboardMarkup::empty())
     }
 
-    pub fn delete<'a>(&'a self, api: &'a Api) -> DeleteMessageRequest<'a> {
-        api.delete_message(self.chat.id, self.message_id)
+    /// Use this method to delete a message, including service messages, with the following limitations:
+    /// \- A message can only be deleted if it was sent less than 48 hours ago.
+    /// \- Service messages about a supergroup, channel, or forum topic creation can't be deleted.
+    /// \- A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.
+    /// \- Bots can delete outgoing messages in private chats, groups, and supergroups.
+    /// \- Bots can delete incoming messages in private chats.
+    /// \- Bots granted *can\_post\_messages* permissions can delete outgoing messages in channels.
+    /// \- If the bot is an administrator of a group, it can delete any message there.
+    /// \- If the bot has *can\_delete\_messages* administrator right in a supergroup or a channel, it can delete any message there.
+    /// \- If the bot has *can\_manage\_direct\_messages* administrator right in a channel, it can delete any message in the corresponding direct messages chat.
+    /// Returns *True* on success.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#deletemessage)
+    pub async fn delete<'a>(&'a self, api: &'a Api) -> Result<bool, ConogramError> {
+        if self.is_ephemeral() {
+            api.delete_ephemeral_message(
+                self.chat.id,
+                self.receiver_user_id().unwrap_or_default(),
+                self.ephemeral_message_id.unwrap_or_default(),
+            )
+            .wrap()
+            .await
+        } else {
+            api.delete_message(self.chat.id, self.message_id)
+                .wrap()
+                .await
+        }
     }
 
     /// Internal conogram method. Returns `Ok(false)` instead of `Err` if the message can't be deleted
     pub async fn delete_exp<'a>(&'a self, api: &'a Api) -> Result<bool, ConogramError> {
-        api.delete_message_exp(self.chat.id, self.message_id).await
+        if self.is_ephemeral() {
+            api.delete_ephemeral_message_exp(
+                self.chat.id,
+                self.receiver_user_id().unwrap_or_default(),
+                self.ephemeral_message_id.unwrap_or_default(),
+            )
+            .await
+        } else {
+            api.delete_message_exp(self.chat.id, self.message_id).await
+        }
     }
 
-    pub fn reply_photo<'a>(
+    /// Use this method to remove a reaction from a message in a group or a supergroup chat. The bot must have the 'can\_delete\_messages' administrator right in the chat. Returns *True* on success.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#deletemessagereaction)
+    pub fn delete_reaction<'a>(
         &'a self,
         api: &'a Api,
-        photo: impl Into<InputFile>,
-    ) -> SendPhotoRequest<'a> {
-        let mut req = api
-            .send_photo(self.chat.id, photo)
-            .reply_parameters(ReplyParameters::new_current_chat(self.message_id));
-
-        if self.is_topic_message {
-            if let Some(thread_id) = self.message_thread_id {
-                req = req.message_thread_id(thread_id);
-            }
+        actor_id: impl Into<i64>,
+    ) -> DeleteMessageReactionRequest<'a> {
+        let actor_id = actor_id.into();
+        if actor_id < CHAT_ID_CONST {
+            api.delete_message_reaction(self.chat.id, self.message_id)
+                .actor_chat_id(actor_id)
+        } else {
+            api.delete_message_reaction(self.chat.id, self.message_id)
+                .user_id(actor_id)
         }
-        req
     }
 
-    pub fn reply_media_group<'a>(
-        &'a self,
-        api: &'a Api,
-        media: impl IntoIterator<Item = impl Into<InputMedia>>,
-    ) -> SendMediaGroupRequest<'a> {
-        let mut req = api
-            .send_media_group(self.chat.id, media)
-            .reply_parameters(ReplyParameters::new_current_chat(self.message_id));
-
-        if self.is_topic_message {
-            if let Some(thread_id) = self.message_thread_id {
-                req = req.message_thread_id(thread_id);
-            }
-        }
-        req
-    }
-
-    pub fn reply_video<'a>(
-        &'a self,
-        api: &'a Api,
-        video: impl Into<InputFile>,
-    ) -> SendVideoRequest<'a> {
-        let mut req = api
-            .send_video(self.chat.id, video)
-            .reply_parameters(ReplyParameters::new_current_chat(self.message_id));
-
-        if self.is_topic_message {
-            if let Some(thread_id) = self.message_thread_id {
-                req = req.message_thread_id(thread_id);
-            }
-        }
-        req
-    }
-
-    pub fn reply_document<'a>(
-        &'a self,
-        api: &'a Api,
-        document: impl Into<InputFile>,
-    ) -> SendDocumentRequest<'a> {
-        let mut req = api
-            .send_document(self.chat.id, document)
-            .reply_parameters(ReplyParameters::new_current_chat(self.message_id));
-
-        if self.is_topic_message {
-            if let Some(thread_id) = self.message_thread_id {
-                req = req.message_thread_id(thread_id);
-            }
-        }
-        req
-    }
-
-    pub fn reply_sticker<'a>(
-        &'a self,
-        api: &'a Api,
-        sticker: impl Into<InputFile>,
-    ) -> SendStickerRequest<'a> {
-        let mut req = api
-            .send_sticker(self.chat.id, sticker)
-            .reply_parameters(ReplyParameters::new_current_chat(self.message_id));
-
-        if self.is_topic_message {
-            if let Some(thread_id) = self.message_thread_id {
-                req = req.message_thread_id(thread_id);
-            }
-        }
-
-        req
-    }
-
+    /// Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz [poll](https://core.telegram.org/bots/api/#poll) can be copied only if the value of the field *correct\_option\_id* is known to the bot. The method is analogous to the method [forwardMessage](https://core.telegram.org/bots/api/#forwardmessage), but the copied message doesn't have a link to the original message. Returns the [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent message on success.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#copymessage)
     pub fn copy_to<'a>(
         &'a self,
         api: &'a Api,
@@ -1085,6 +994,9 @@ impl Message {
         api.copy_message(chat_id, self.chat.id, self.message_id)
     }
 
+    /// Use this method to change the chosen reactions on a message. Service messages of some types can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can't use paid reactions. Returns *True* on success.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#setmessagereaction)
     pub fn set_reactions<'a>(
         &'a self,
         api: &'a Api,
@@ -1094,7 +1006,10 @@ impl Message {
             .reaction(reactions)
     }
 
-    pub fn delete_reactions<'a>(&'a self, api: &'a Api) -> SetMessageReactionRequest<'a> {
+    /// Use this method to change the chosen reactions on a message. Service messages of some types can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can't use paid reactions. Returns *True* on success.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#setmessagereaction)
+    pub fn delete_my_reactions<'a>(&'a self, api: &'a Api) -> SetMessageReactionRequest<'a> {
         let reactions: [ReactionType; 0] = [];
         self.set_reactions(api, reactions)
     }

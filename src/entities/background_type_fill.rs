@@ -6,6 +6,7 @@ use crate::entities::background_fill::BackgroundFill;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#backgroundtypefill)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "fill", tag = "type")]
 pub struct BackgroundTypeFill {
     /// The background fill
     pub fill: BackgroundFill,

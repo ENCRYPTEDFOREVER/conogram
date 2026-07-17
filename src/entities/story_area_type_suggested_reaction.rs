@@ -6,6 +6,7 @@ use crate::{entities::reaction_type::ReactionType, utils::deserialize_utils::is_
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#storyareatypesuggestedreaction)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "suggested_reaction", tag = "type")]
 pub struct StoryAreaTypeSuggestedReaction {
     /// Type of the reaction
     pub reaction_type: ReactionType,

@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrorreverseside)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "reverse_side", tag = "source")]
 pub struct PassportElementErrorReverseSide {
     /// The section of the user's Telegram Passport which has the issue, one of “driver\_license”, “identity\_card”
     #[serde(rename = "type")]

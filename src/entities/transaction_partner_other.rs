@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartnerother)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "other", tag = "type")]
 pub struct TransactionPartnerOther {}
 
 // Divider: all content below this line will be preserved after code regen

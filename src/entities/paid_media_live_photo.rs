@@ -6,6 +6,7 @@ use crate::entities::live_photo::LivePhoto;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#paidmedialivephoto)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "live_photo", tag = "type")]
 pub struct PaidMediaLivePhoto {
     /// The photo
     pub live_photo: LivePhoto,

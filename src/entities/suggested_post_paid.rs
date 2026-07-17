@@ -11,10 +11,10 @@ pub struct SuggestedPostPaid {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub suggested_post_message: Option<Box<Message>>,
 
-    /// Currency in which the payment was made. Currently, one of “XTR” for Telegram Stars or “TON” for toncoins.
+    /// Currency in which the payment was made. Currently, one of “XTR” for Telegram Stars or “TON” for TON grams.
     pub currency: SuggestedPostPaidCurrency,
 
-    /// *Optional*. The amount of the currency that was received by the channel in nanotoncoins; for payments in toncoins only
+    /// *Optional*. The amount of the currency that was received by the channel in nanograms; for payments in TON grams only
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub amount: Option<i64>,
 
@@ -23,7 +23,7 @@ pub struct SuggestedPostPaid {
     pub star_amount: Option<StarAmount>,
 }
 
-/// Currency in which the payment was made. Currently, one of “XTR” for Telegram Stars or “TON” for toncoins.
+/// Currency in which the payment was made. Currently, one of “XTR” for Telegram Stars or “TON” for TON grams.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub enum SuggestedPostPaidCurrency {
     /// `XTR`

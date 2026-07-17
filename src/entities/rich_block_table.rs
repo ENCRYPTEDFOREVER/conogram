@@ -9,6 +9,7 @@ use crate::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richblocktable)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "table", tag = "type")]
 pub struct RichBlockTable {
     /// Cells of the table
     pub cells: Vec<Vec<RichBlockTableCell>>,

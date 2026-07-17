@@ -6,6 +6,7 @@ use crate::entities::user::User;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#chatboostsourcepremium)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "premium", tag = "source")]
 pub struct ChatBoostSourcePremium {
     /// User that boosted the chat
     pub user: User,

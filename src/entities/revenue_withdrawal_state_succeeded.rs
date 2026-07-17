@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#revenuewithdrawalstatesucceeded)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "succeeded", tag = "type")]
 pub struct RevenueWithdrawalStateSucceeded {
     /// Date the withdrawal was completed in Unix time
     pub date: i64,

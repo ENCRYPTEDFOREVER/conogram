@@ -6,6 +6,7 @@ use crate::entities::revenue_withdrawal_state::RevenueWithdrawalState;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartnerfragment)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "fragment", tag = "type")]
 pub struct TransactionPartnerFragment {
     /// *Optional*. State of the transaction if the transaction is outgoing
     #[serde(default, skip_serializing_if = "Option::is_none")]

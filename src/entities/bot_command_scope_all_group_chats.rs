@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#botcommandscopeallgroupchats)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "all_group_chats", tag = "type")]
 pub struct BotCommandScopeAllGroupChats {}
 
 // Divider: all content below this line will be preserved after code regen

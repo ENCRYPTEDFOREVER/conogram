@@ -6,6 +6,7 @@ use crate::entities::{chat::Chat, gift::Gift};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartnerchat)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "chat", tag = "type")]
 pub struct TransactionPartnerChat {
     /// Information about the chat
     pub chat: Box<Chat>,

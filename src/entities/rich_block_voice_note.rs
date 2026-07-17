@@ -6,6 +6,7 @@ use crate::entities::{rich_block_caption::RichBlockCaption, voice::Voice};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richblockvoicenote)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "voice_note", tag = "type")]
 pub struct RichBlockVoiceNote {
     /// The voice note
     pub voice_note: Voice,

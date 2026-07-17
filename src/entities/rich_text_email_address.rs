@@ -6,6 +6,7 @@ use crate::entities::rich_text::RichText;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richtextemailaddress)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "email_address", tag = "type")]
 pub struct RichTextEmailAddress {
     /// The text
     pub text: Box<RichText>,

@@ -3,7 +3,7 @@ use serde::Serialize;
 
 use crate::entities::message::Message;
 
-/// Use this method to get the last messages from the personal chat (i.e., the chat currently added to their profile) of a given user. On success, an array of [Message](https://core.telegram.org/bots/api/#message) objects is returned.
+/// Use this method to get the last messages from the personal chat (i.e., the chat currently added to their profile) of a given user. On success, an Array of [Message](https://core.telegram.org/bots/api/#message) objects is returned.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#getuserpersonalchatmessages)
 #[derive(Debug, Clone, Serialize, Request)]

@@ -13,7 +13,7 @@ pub struct InputChecklistTask {
     /// Text of the task; 1-100 characters after entities parsing
     pub text: String,
 
-    /// *Optional*. Mode for parsing entities in the text. See [formatting options](https://core.telegram.org/bots/api#formatting-options) for more details.
+    /// *Optional*. Mode for parsing entities in the text. See [formatting options](https://core.telegram.org/bots/api/#formatting-options) for more details.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parse_mode: Option<String>,
 

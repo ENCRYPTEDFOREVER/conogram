@@ -6,6 +6,7 @@ use crate::entities::rich_text::RichText;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richtextspoiler)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "spoiler", tag = "type")]
 pub struct RichTextSpoiler {
     /// The text
     pub text: Box<RichText>,

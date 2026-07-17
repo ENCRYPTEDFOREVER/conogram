@@ -6,6 +6,7 @@ use crate::entities::misc::input_file::{GetFiles, InputFile};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputpaidmedialivephoto)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
+#[serde(rename = "live_photo", tag = "type")]
 pub struct InputPaidMediaLivePhoto {
     /// Video of the live photo to send. Pass a file\_id to send a file that exists on the Telegram servers (recommended) or pass “attach://\<file\_attach\_name\>” to upload a new one using multipart/form-data under \<file\_attach\_name\> name. [More information on Sending Files »](https://core.telegram.org/bots/api/#sending-files). Sending live photos by a URL is currently unsupported.
     pub media: InputFile,

@@ -6,6 +6,7 @@ use crate::entities::passport_element_error_translation_file::PassportElementErr
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#passportelementerrortranslationfiles)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "translation_files", tag = "source")]
 pub struct PassportElementErrorTranslationFiles {
     /// Type of element of the user's Telegram Passport which has the issue, one of “passport”, “driver\_license”, “identity\_card”, “internal\_passport”, “utility\_bill”, “bank\_statement”, “rental\_agreement”, “passport\_registration”, “temporary\_registration”
     #[serde(rename = "type")]

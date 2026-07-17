@@ -9,6 +9,7 @@ use crate::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richblockvideo)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "video", tag = "type")]
 pub struct RichBlockVideo {
     /// The video
     pub video: Video,

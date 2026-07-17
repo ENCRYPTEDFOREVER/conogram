@@ -45,7 +45,7 @@ pub struct EditMessageTextParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub link_preview_options: Option<LinkPreviewOptions>,
 
-    /// New rich content of the message; required if *text* isn't specified
+    /// New rich content of the message; required if *text* isn't specified. Direct upload of new files isn't supported when an inline message is edited.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rich_message: Option<InputRichMessage>,
 

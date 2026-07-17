@@ -79,6 +79,11 @@ pub struct User {
 
 // Divider: all content below this line will be preserved after code regen
 
+use crate::{
+    api::Api, entities::misc::chat_id::ChatId,
+    methods::delete_all_message_reactions::DeleteAllMessageReactionsRequest,
+};
+
 impl User {
     #[must_use]
     pub fn get_url(&self) -> String {
@@ -109,5 +114,16 @@ impl User {
                 self.full_name()
             )
         }
+    }
+
+    /// Use this method to remove up to 10000 recent reactions in a group or a supergroup chat added by a given user or chat. The bot must have the 'can\_delete\_messages' administrator right in the chat. Returns *True* on success.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#deleteallmessagereactions)
+    pub fn delete_all_message_reactions<'a>(
+        &'a self,
+        api: &'a Api,
+        chat_id: impl Into<ChatId>,
+    ) -> DeleteAllMessageReactionsRequest<'a> {
+        api.delete_all_message_reactions(chat_id).user_id(self.id)
     }
 }

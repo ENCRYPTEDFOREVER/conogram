@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#messageoriginhiddenuser)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "hidden_user", tag = "type")]
 pub struct MessageOriginHiddenUser {
     /// Date the message was sent originally in Unix time
     pub date: i64,

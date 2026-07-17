@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartnertelegramads)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename = "telegram_ads", tag = "type")]
 pub struct TransactionPartnerTelegramAds {}
 
 // Divider: all content below this line will be preserved after code regen

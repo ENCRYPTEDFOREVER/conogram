@@ -27,7 +27,7 @@ pub struct ChatJoinRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub invite_link: Option<ChatInviteLink>,
 
-    /// *Optional*. Identifier of the join request query. If present, then the bot must call [sendChatJoinRequestWebApp](https://core.telegram.org/bots/api/#sendchatjoinrequestwebapp) or directly call [answerChatJoinRequestQuery](https://core.telegram.org/bots/api/#answerchatjoinrequestquery) within 10 seconds.
+    /// *Optional*. Identifier of the join request query; for bots assigned to process join requests only. If present, then the bot must call [sendChatJoinRequestWebApp](https://core.telegram.org/bots/api/#sendchatjoinrequestwebapp) or directly call [answerChatJoinRequestQuery](https://core.telegram.org/bots/api/#answerchatjoinrequestquery) within 10 seconds.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub query_id: Option<String>,
 }

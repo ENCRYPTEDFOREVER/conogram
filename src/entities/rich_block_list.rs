@@ -6,6 +6,7 @@ use crate::entities::rich_block_list_item::RichBlockListItem;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richblocklist)
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[serde(rename = "list", tag = "type")]
 pub struct RichBlockList {
     /// Items of the list
     pub items: Vec<RichBlockListItem>,

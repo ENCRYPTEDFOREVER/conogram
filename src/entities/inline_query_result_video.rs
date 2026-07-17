@@ -14,6 +14,7 @@ use crate::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultvideo)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
+#[serde(rename = "video", tag = "type")]
 pub struct InlineQueryResultVideo {
     /// Unique identifier for this result, 1-64 bytes
     pub id: String,
@@ -42,7 +43,7 @@ pub struct InlineQueryResultVideo {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub caption_entities: Vec<MessageEntity>,
 
-    /// *Optional*. Pass *True*, if the caption must be shown above the message media
+    /// *Optional*. Pass *True* if the caption must be shown above the message media
     #[serde(skip_serializing_if = "is_false")]
     pub show_caption_above_media: bool,
 

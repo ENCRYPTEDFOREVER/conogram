@@ -4,6 +4,7 @@ use serde::Serialize;
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputmedialink)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
+#[serde(rename = "link", tag = "type")]
 pub struct InputMediaLink {
     /// HTTP URL of the link
     pub url: String,

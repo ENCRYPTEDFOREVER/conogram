@@ -142,7 +142,17 @@ impl<T: Into<InputFile>> From<T> for InputMediaAudio {
         }
     }
 }
+
 impl<T: Into<InputFile>> From<T> for InputMediaPhoto {
+    fn from(value: T) -> Self {
+        Self {
+            media: value.into(),
+            ..Default::default()
+        }
+    }
+}
+
+impl<T: Into<InputFile>> From<T> for InputMediaLivePhoto {
     fn from(value: T) -> Self {
         Self {
             media: value.into(),
