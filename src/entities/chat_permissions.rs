@@ -48,11 +48,11 @@ pub struct ChatPermissions {
     pub can_add_web_page_previews: bool,
 
     /// *Optional*. *True*, if the user is allowed to react to messages. If omitted, defaults to the value of *can\_send\_messages*.
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(default)]
     pub can_react_to_messages: bool,
 
     /// *Optional*. *True*, if the user is allowed to edit their own tag. If omitted, defaults to the value of *can\_pin\_messages*.
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(default)]
     pub can_edit_tag: bool,
 
     /// *Optional*. *True*, if the user is allowed to change the chat title, photo and other settings. Ignored in public supergroups.
@@ -68,11 +68,12 @@ pub struct ChatPermissions {
     pub can_pin_messages: bool,
 
     /// *Optional*. *True*, if the user is allowed to create forum topics. If omitted, defaults to the value of can\_pin\_messages.
-    #[serde(default, skip_serializing_if = "is_false")]
+    #[serde(default)]
     pub can_manage_topics: bool,
 }
 
 // Divider: all content below this line will be preserved after code regen
+
 impl ChatPermissions {
     /// An instance with **none** permissions
     #[must_use]
