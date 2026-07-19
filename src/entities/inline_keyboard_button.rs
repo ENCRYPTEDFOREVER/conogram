@@ -75,68 +75,120 @@ pub struct InlineKeyboardButton {
 // Divider: all content below this line will be preserved after code regen
 
 impl InlineKeyboardButton {
+    /// Pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted.
+    ///
+    /// This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options. Not supported in channels and for messages sent in channel direct messages chats and on behalf of a business account.
     pub fn switch_inline_query_current_chat(
         text: impl Into<String>,
         query: impl Into<String>,
+        style: Option<KeyboardButtonStyle>,
+        icon_custom_emoji_id: Option<String>,
     ) -> Self {
         Self {
             text: text.into(),
             switch_inline_query_current_chat: Some(query.into()),
+            icon_custom_emoji_id,
+            style,
             ..Default::default()
         }
     }
 
+    /// Pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot’s username and the specified inline query in the input field. Not supported for messages sent in channel direct messages chats and on behalf of a business account.
     pub fn switch_inline_query_chosen_chat(
         text: impl Into<String>,
         query: impl Into<SwitchInlineQueryChosenChat>,
+        style: Option<KeyboardButtonStyle>,
+        icon_custom_emoji_id: Option<String>,
     ) -> Self {
         Self {
             text: text.into(),
             switch_inline_query_chosen_chat: Some(query.into()),
+            icon_custom_emoji_id,
+            style,
             ..Default::default()
         }
     }
 
-    pub fn switch_inline_query(text: impl Into<String>, query: impl Into<String>) -> Self {
+    /// Pressing the button will prompt the user to select one of their chats, open that chat and insert the bot’s username and the specified inline query in the input field. May be empty, in which case just the bot’s username will be inserted. Not supported for messages sent in channel direct messages chats and on behalf of a business account.
+    pub fn switch_inline_query(
+        text: impl Into<String>,
+        query: impl Into<String>,
+        style: Option<KeyboardButtonStyle>,
+        icon_custom_emoji_id: Option<String>,
+    ) -> Self {
         Self {
             text: text.into(),
             switch_inline_query: Some(query.into()),
+            icon_custom_emoji_id,
+            style,
             ..Default::default()
         }
     }
 
-    pub fn url(text: impl Into<String>, data: impl Into<String>) -> Self {
+    /// HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=<user_id> can be used to mention a user by their identifier without using a username, if this is allowed by their privacy settings.
+    pub fn url(
+        text: impl Into<String>,
+        url: impl Into<String>,
+        style: Option<KeyboardButtonStyle>,
+        icon_custom_emoji_id: Option<String>,
+    ) -> Self {
         Self {
             text: text.into(),
-            url: Some(data.into()),
+            url: Some(url.into()),
+            icon_custom_emoji_id,
+            style,
             ..Default::default()
         }
     }
 
-    pub fn callback(text: impl Into<String>, data: impl Into<String>) -> Self {
+    /// Data will be sent in a callback query to the bot when the button is pressed, 1-64 bytes
+    pub fn callback(
+        text: impl Into<String>,
+        data: impl Into<String>,
+        style: Option<KeyboardButtonStyle>,
+        icon_custom_emoji_id: Option<String>,
+    ) -> Self {
         Self {
             text: text.into(),
             callback_data: Some(data.into()),
+            icon_custom_emoji_id,
+            style,
             ..Default::default()
         }
     }
 
-    pub fn copy_text(text: impl Into<String>, copy_text: impl Into<String>) -> Self {
+    /// The button that copies the specified text to the clipboard
+    pub fn copy_text(
+        text: impl Into<String>,
+        copy_text: impl Into<String>,
+        style: Option<KeyboardButtonStyle>,
+        icon_custom_emoji_id: Option<String>,
+    ) -> Self {
         Self {
             text: text.into(),
             copy_text: Some(CopyTextButton {
                 text: copy_text.into(),
             }),
+            icon_custom_emoji_id,
+            style,
             ..Default::default()
         }
     }
 
-    pub fn web_app(text: impl Into<String>, web_app_url: impl Into<String>) -> Self {
+    /// [Web App](https://core.telegram.org/bots/webapps) will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method [answerWebAppQuery](https://core.telegram.org/bots/api/#answerwebappquery). Available only in private chats between a user and the bot. Not supported for messages sent on behalf of a business account.
+    pub fn web_app(
+        text: impl Into<String>,
+        web_app_url: impl Into<String>,
+        style: Option<KeyboardButtonStyle>,
+        icon_custom_emoji_id: Option<String>,
+    ) -> Self {
         Self {
             text: text.into(),
             web_app: Some(WebAppInfo {
                 url: web_app_url.into(),
             }),
+            icon_custom_emoji_id,
+            style,
             ..Default::default()
         }
     }
