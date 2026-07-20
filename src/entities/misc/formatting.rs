@@ -12,6 +12,8 @@ use crate::{
     impl_trait,
 };
 
+const INVISIBLE_CHAR: char = '⁬';
+
 pub trait FormatMention {
     fn mention<'a>(&self, ft: &'a mut FormattedText) -> &'a mut FormattedText;
 }
@@ -519,6 +521,55 @@ impl FormattedText {
             None,
             None,
         )
+    }
+
+    /// Formats date-time entities according to a format string.
+    ///
+    /// The format string must match the regular expression `r|w?[dD]?[tT]?`.
+    ///
+    /// If the format string is empty, the underlying text is displayed as-is,
+    /// though the user can still receive the underlying date in their local format.
+    ///
+    /// When populated, the format string determines the output based on the presence
+    /// of the following control characters:
+    ///
+    /// - `r`: Displays the time relative to the current time. **Cannot be combined with any other control character.**
+    /// - `w`: Displays the day of the week in the user's localized language.
+    /// - `d`: Displays the date in short form _(e.g., 17.03.22)_.
+    /// - `D`: Displays the date in long form _(e.g., March 17, 2022)_.
+    /// - `t`: Displays the time in short form _(e.g., 22:45)_.
+    /// - `T`: Displays the time in long form _(e.g., 22:45:00)_.
+    pub fn date(
+        &mut self,
+        text: impl Into<String>,
+        unix_time: impl Into<i64>,
+        date_time_format: Option<impl Into<String>>,
+    ) -> &mut Self {
+        self.push_entity_extended(
+            text.into(),
+            MessageEntityType::DateTime,
+            None,
+            None,
+            None,
+            None,
+            Some(unix_time.into()),
+            date_time_format.map(Into::into),
+        )
+    }
+
+    /// Displays the date and time in short form _(e.g., "17.03.22 22:45")_.
+    pub fn date_time(&mut self, unix_time: impl Into<i64>) -> &mut Self {
+        self.date(INVISIBLE_CHAR, unix_time, Some("dt"))
+    }
+
+    /// Displays the time relative to the current time, _(e.g., "in 5 minutes")_
+    pub fn time_rel(&mut self, unix_time: impl Into<i64>) -> &mut Self {
+        self.date(INVISIBLE_CHAR, unix_time, Some("r"))
+    }
+
+    /// Displays the date and time in short form and the time relative to the current time, _(e.g., "17.03.22 22:45, in 5 minutes")_
+    pub fn date_time_rel(&mut self, unix_time: impl Into<i64> + Copy) -> &mut Self {
+        self.date_time(unix_time).text(", ").time_rel(unix_time)
     }
 
     #[must_use]
