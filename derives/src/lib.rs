@@ -47,8 +47,8 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
     let mut params_struct_doc_comment = Vec::new();
     let mut result_type = None;
     for attr in input.attrs {
-        if attr.path().is_ident("conogram") {
-            if let Err(err) = attr.parse_nested_meta(|meta| {
+        if attr.path().is_ident("conogram")
+            && let Err(err) = attr.parse_nested_meta(|meta| {
                 if meta.path.is_ident("result") {
                     let type_ = meta.value()?;
                     result_type = Some(type_.parse::<TypePath>()?);
@@ -60,10 +60,11 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
                 }
 
                 Ok(())
-            }) {
-                return err.into_compile_error().into();
-            }
+            })
+        {
+            return err.into_compile_error().into();
         }
+
         if attr.path().is_ident("doc") {
             params_struct_doc_comment.push(attr);
         }
@@ -524,22 +525,23 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
                             self,
                             #helper_args
                         ) -> #request_struct_ident<'a> {
-                            if let Some(ephemeral_target_id) = self.ephemeral_target_id
-                                && (!self.allow_ephemeral_leak || (ephemeral_target_id > 0
-                                && !self.chat_id.is_user_chat())) {
-                                    if let Some(message_thread_id) = self.message_thread_id {
-                                        self.api.#request_struct_ident_snake(self.chat_id, #helper_args_assign)
-                                            .reply_parameters(self.reply_parameters)
-                                            .receiver_user_id(ephemeral_target_id)
-                                            .message_thread_id(message_thread_id)
-                                    } else {
-                                        self.api.#request_struct_ident_snake(self.chat_id, #helper_args_assign)
-                                            .reply_parameters(self.reply_parameters)
-                                            .receiver_user_id(ephemeral_target_id)
-                                    }
-
+                            let r = if let Some(ephemeral_target_id) = self.ephemeral_target_id
+                                && (!self.allow_ephemeral_leak
+                                    || (ephemeral_target_id > 0 && !self.chat_id.is_user_chat()))
+                            {
+                                self.api
+                                    .#request_struct_ident_snake(self.chat_id, #helper_args_assign)
+                                    .reply_parameters(self.reply_parameters)
+                                    .receiver_user_id(ephemeral_target_id)
                             } else {
-                                self.api.#request_struct_ident_snake(self.chat_id, #helper_args_assign).reply_parameters(self.reply_parameters)
+                                self.api
+                                    .#request_struct_ident_snake(self.chat_id, #helper_args_assign)
+                                    .reply_parameters(self.reply_parameters)
+                            };
+                            if let Some(message_thread_id) = self.message_thread_id {
+                                r.message_thread_id(message_thread_id)
+                            } else {
+                                r
                             }
                         }
                     }
@@ -552,7 +554,12 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
                             self,
                             #helper_args
                         ) -> #request_struct_ident<'a> {
-                            self.api.#request_struct_ident_snake(self.chat_id, #helper_args_assign).reply_parameters(self.reply_parameters)
+                            let r = self.api.#request_struct_ident_snake(self.chat_id, #helper_args_assign).reply_parameters(self.reply_parameters);
+                            if let Some(message_thread_id) = self.message_thread_id {
+                                r.message_thread_id(message_thread_id)
+                            } else {
+                                r
+                            }
                         }
                     }
                 });
