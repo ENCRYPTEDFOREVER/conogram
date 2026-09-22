@@ -329,7 +329,7 @@ impl Api {
             .wrap()
             .await;
         if let Err(err) = &result
-            && let ConogramErrorType::ApiError(_) = &err.type_
+            && let ConogramErrorType::ApiError(_) = &*err.type_
         {
             return Ok(false);
         }
@@ -344,7 +344,7 @@ impl Api {
     ) -> Result<bool, ConogramError> {
         let result = self.delete_message(chat_id, message_id).wrap().await;
         if let Err(err) = &result
-            && let ConogramErrorType::ApiError(_) = &err.type_
+            && let ConogramErrorType::ApiError(_) = &*err.type_
         {
             return Ok(false);
         }
@@ -359,7 +359,7 @@ impl Api {
     ) -> Result<bool, ConogramError> {
         let result = self.delete_messages(chat_id, message_ids).wrap().await;
         if let Err(err) = &result
-            && let ConogramErrorType::ApiError(_) = &err.type_
+            && let ConogramErrorType::ApiError(_) = &*err.type_
         {
             return Ok(false);
         }
@@ -499,7 +499,7 @@ impl Api {
 
         while !match &result {
             Err(err) => {
-                if let ConogramErrorType::ApiError(error) = &err.type_ {
+                if let ConogramErrorType::ApiError(error) = &*err.type_ {
                     match error {
                         TgApiError::RetryAfter(params) => {
                             if let Some(params) = params.parameters.as_ref() {

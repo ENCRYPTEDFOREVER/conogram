@@ -10,7 +10,7 @@ use crate::client::TgApiResponse;
 pub struct ConogramError {
     pub method_name: String,
     pub params: serde_json::Value,
-    pub type_: ConogramErrorType,
+    pub type_: Box<ConogramErrorType>,
 }
 
 impl Debug for ConogramError {
@@ -40,7 +40,7 @@ impl ConogramError {
         Self {
             method_name: method_name.into(),
             params: serde_json::to_value(params).unwrap(),
-            type_: error,
+            type_: Box::new(error),
         }
     }
 }
