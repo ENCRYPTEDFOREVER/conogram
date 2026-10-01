@@ -7,7 +7,7 @@ use crate::utils::deserialize_utils::is_false;
 /// API Reference: [link](https://core.telegram.org/bots/api/#forcereply)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForceReply {
-    /// Shows reply interface to the user, as if they manually selected the bot's message and tapped 'Reply'
+    /// Shows reply interface to the user, as if they had manually selected the bot's message and tapped 'Reply'
     pub force_reply: bool,
 
     /// *Optional*. The placeholder to be shown in the input field when the reply is active; 1-64 characters

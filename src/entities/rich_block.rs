@@ -3,9 +3,12 @@ use serde::{Deserialize, Serialize};
 use crate::entities::{
     rich_block_anchor::RichBlockAnchor, rich_block_animation::RichBlockAnimation,
     rich_block_audio::RichBlockAudio, rich_block_block_quotation::RichBlockBlockQuotation,
-    rich_block_collage::RichBlockCollage, rich_block_details::RichBlockDetails,
-    rich_block_divider::RichBlockDivider, rich_block_footer::RichBlockFooter,
-    rich_block_list::RichBlockList, rich_block_map::RichBlockMap,
+    rich_block_buttons::RichBlockButtons, rich_block_collage::RichBlockCollage,
+    rich_block_details::RichBlockDetails, rich_block_divider::RichBlockDivider,
+    rich_block_document::RichBlockDocument,
+    rich_block_expandable_block_quotation::RichBlockExpandableBlockQuotation,
+    rich_block_footer::RichBlockFooter, rich_block_list::RichBlockList,
+    rich_block_map::RichBlockMap,
     rich_block_mathematical_expression::RichBlockMathematicalExpression,
     rich_block_paragraph::RichBlockParagraph, rich_block_photo::RichBlockPhoto,
     rich_block_preformatted::RichBlockPreformatted,
@@ -26,14 +29,17 @@ use crate::entities::{
 /// * [RichBlockAnchor](https://core.telegram.org/bots/api/#richblockanchor)
 /// * [RichBlockList](https://core.telegram.org/bots/api/#richblocklist)
 /// * [RichBlockBlockQuotation](https://core.telegram.org/bots/api/#richblockblockquotation)
+/// * [RichBlockExpandableBlockQuotation](https://core.telegram.org/bots/api/#richblockexpandableblockquotation)
 /// * [RichBlockPullQuotation](https://core.telegram.org/bots/api/#richblockpullquotation)
 /// * [RichBlockCollage](https://core.telegram.org/bots/api/#richblockcollage)
 /// * [RichBlockSlideshow](https://core.telegram.org/bots/api/#richblockslideshow)
 /// * [RichBlockTable](https://core.telegram.org/bots/api/#richblocktable)
 /// * [RichBlockDetails](https://core.telegram.org/bots/api/#richblockdetails)
 /// * [RichBlockMap](https://core.telegram.org/bots/api/#richblockmap)
+/// * [RichBlockButtons](https://core.telegram.org/bots/api/#richblockbuttons)
 /// * [RichBlockAnimation](https://core.telegram.org/bots/api/#richblockanimation)
 /// * [RichBlockAudio](https://core.telegram.org/bots/api/#richblockaudio)
+/// * [RichBlockDocument](https://core.telegram.org/bots/api/#richblockdocument)
 /// * [RichBlockPhoto](https://core.telegram.org/bots/api/#richblockphoto)
 /// * [RichBlockVideo](https://core.telegram.org/bots/api/#richblockvideo)
 /// * [RichBlockVoiceNote](https://core.telegram.org/bots/api/#richblockvoicenote)
@@ -97,6 +103,12 @@ pub enum RichBlock {
     #[serde(rename = "blockquote")]
     BlockQuotation(RichBlockBlockQuotation),
 
+    /// A block quotation, corresponding to the HTML tag `<blockquote>` with custom attribute `"expandable"`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richblockexpandableblockquotation)
+    #[serde(rename = "expandable_blockquote")]
+    ExpandableBlockQuotation(RichBlockExpandableBlockQuotation),
+
     /// A quotation with centered text, loosely corresponding to the HTML tag `<aside>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richblockpullquotation)
@@ -133,6 +145,12 @@ pub enum RichBlock {
     #[serde(rename = "map")]
     Map(RichBlockMap),
 
+    /// A block containing a list of buttons that are shown in one row, corresponding to the custom HTML tag `<tg-button-row>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richblockbuttons)
+    #[serde(rename = "buttons")]
+    Buttons(RichBlockButtons),
+
     /// A block with an animation, corresponding to the HTML tag `<video>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richblockanimation)
@@ -144,6 +162,12 @@ pub enum RichBlock {
     /// API Reference: [link](https://core.telegram.org/bots/api/#richblockaudio)
     #[serde(rename = "audio")]
     Audio(RichBlockAudio),
+
+    /// A block with a general file, corresponding to the custom HTML tag `<tg-document>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richblockdocument)
+    #[serde(rename = "document")]
+    Document(RichBlockDocument),
 
     /// A block with a photo, corresponding to the HTML tag `<img>`.
     ///
@@ -230,6 +254,12 @@ impl From<RichBlockBlockQuotation> for RichBlock {
     }
 }
 
+impl From<RichBlockExpandableBlockQuotation> for RichBlock {
+    fn from(value: RichBlockExpandableBlockQuotation) -> Self {
+        Self::ExpandableBlockQuotation(value)
+    }
+}
+
 impl From<RichBlockPullQuotation> for RichBlock {
     fn from(value: RichBlockPullQuotation) -> Self {
         Self::PullQuotation(value)
@@ -266,6 +296,12 @@ impl From<RichBlockMap> for RichBlock {
     }
 }
 
+impl From<RichBlockButtons> for RichBlock {
+    fn from(value: RichBlockButtons) -> Self {
+        Self::Buttons(value)
+    }
+}
+
 impl From<RichBlockAnimation> for RichBlock {
     fn from(value: RichBlockAnimation) -> Self {
         Self::Animation(value)
@@ -275,6 +311,12 @@ impl From<RichBlockAnimation> for RichBlock {
 impl From<RichBlockAudio> for RichBlock {
     fn from(value: RichBlockAudio) -> Self {
         Self::Audio(value)
+    }
+}
+
+impl From<RichBlockDocument> for RichBlock {
+    fn from(value: RichBlockDocument) -> Self {
+        Self::Document(value)
     }
 }
 

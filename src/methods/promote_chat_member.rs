@@ -82,6 +82,10 @@ pub struct PromoteChatMemberParams {
     /// Pass *True* if the administrator can edit the tags of regular members; for groups and supergroups only
     #[serde(skip_serializing_if = "is_false")]
     pub can_manage_tags: bool,
+
+    /// Pass *True* if the administrator can manage chat welcome messages or directly send them in the case of bots
+    #[serde(skip_serializing_if = "is_false")]
+    pub can_send_welcome_messages: bool,
 }
 
 // Divider: all content below this line will be preserved after code regen

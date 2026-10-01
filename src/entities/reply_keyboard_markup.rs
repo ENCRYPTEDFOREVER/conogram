@@ -31,6 +31,10 @@ pub struct ReplyKeyboardMarkup {
     /// *Example:* A user requests to change the bot's language, bot replies to the request with a keyboard to select the new language. Other users in the group don't see the keyboard.
     #[serde(default, skip_serializing_if = "is_false")]
     pub selective: bool,
+
+    /// *Optional*. Pass *True* if the reply interface must be shown to the user, as if they had manually selected the bot's message and tapped 'Reply'
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub force_reply: bool,
 }
 
 // Divider: all content below this line will be preserved after code regen

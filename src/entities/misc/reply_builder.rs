@@ -3,6 +3,7 @@ use std::range::Range;
 use crate::{
     api::Api,
     entities::{
+        ephemeral_message_parameters::EphemeralMessageParameters,
         message::{InputMessageText, Message},
         misc::chat_id::ChatId,
         reply_parameters::ReplyParameters,
@@ -14,8 +15,8 @@ use crate::{
 pub struct ReplyBuilder<'a> {
     pub(crate) api: &'a Api,
     pub(crate) reply_parameters: ReplyParameters,
+    pub(crate) ephemeral_message_parameters: Option<EphemeralMessageParameters>,
     pub(crate) chat_id: ChatId,
-    pub(crate) ephemeral_target_id: Option<i64>,
     pub(crate) allow_ephemeral_leak: bool,
     pub(crate) message_thread_id: Option<i64>,
 
@@ -26,8 +27,12 @@ pub struct ReplyBuilder<'a> {
 impl<'a> ReplyBuilder<'a> {
     pub fn reply(api: &'a Api, message: &'a Message) -> Self {
         let reply_parameters = ReplyParameters::reply(message);
-        let ephemeral_target_id = if reply_parameters.ephemeral_message_id.is_some() {
-            Some(message.from_id())
+        let ephemeral_message_parameters = if reply_parameters.ephemeral_message_id.is_some() {
+            Some(EphemeralMessageParameters {
+                receiver_user_id: message.from_id(),
+                callback_query_id: None,
+                replace_callback_query_message: false,
+            })
         } else {
             None
         };
@@ -38,7 +43,7 @@ impl<'a> ReplyBuilder<'a> {
             reply_parameters,
             chat_id: message.chat.id.into(),
             original_sender_id: message.from_id(),
-            ephemeral_target_id,
+            ephemeral_message_parameters,
             allow_ephemeral_leak: true,
             message_thread_id: message.message_thread_id,
         }
@@ -61,8 +66,8 @@ impl<'a> ReplyBuilder<'a> {
 
     /// See: https://core.telegram.org/bots/api/#ephemeral-messages-and-commands
     #[must_use]
-    pub const fn ephemeral_disable(mut self) -> Self {
-        self.ephemeral_target_id = None;
+    pub fn ephemeral_disable(mut self) -> Self {
+        self.ephemeral_message_parameters = None;
         self.allow_ephemeral_leak = true;
         self.reply_parameters.ephemeral_message_id = None;
         self.reply_parameters.allow_sending_without_reply = true;
@@ -73,8 +78,10 @@ impl<'a> ReplyBuilder<'a> {
     ///
     /// See: https://core.telegram.org/bots/api/#ephemeral-messages-and-commands
     #[must_use]
-    pub const fn ephemeral(mut self) -> Self {
-        self.ephemeral_target_id = Some(self.original_sender_id);
+    pub fn ephemeral(mut self) -> Self {
+        self.ephemeral_message_parameters
+            .get_or_insert_default()
+            .receiver_user_id = self.original_sender_id;
         self
     }
 
@@ -83,8 +90,10 @@ impl<'a> ReplyBuilder<'a> {
     ///
     /// See: https://core.telegram.org/bots/api/#ephemeral-messages-and-commands
     #[must_use]
-    pub const fn force_ephemeral(mut self) -> Self {
-        self.ephemeral_target_id = Some(self.original_sender_id);
+    pub fn force_ephemeral(mut self) -> Self {
+        self.ephemeral_message_parameters
+            .get_or_insert_default()
+            .receiver_user_id = self.original_sender_id;
         self.allow_ephemeral_leak = false;
         self
     }
@@ -94,7 +103,9 @@ impl<'a> ReplyBuilder<'a> {
     /// See: https://core.telegram.org/bots/api/#ephemeral-messages-and-commands
     #[must_use]
     pub fn ephemeral_for(mut self, user_id: impl Into<i64>) -> Self {
-        self.ephemeral_target_id = Some(user_id.into());
+        self.ephemeral_message_parameters
+            .get_or_insert_default()
+            .receiver_user_id = user_id.into();
         self
     }
 
@@ -103,7 +114,9 @@ impl<'a> ReplyBuilder<'a> {
     /// See: https://core.telegram.org/bots/api/#ephemeral-messages-and-commands
     #[must_use]
     pub fn force_ephemeral_for(mut self, user_id: impl Into<i64>) -> Self {
-        self.ephemeral_target_id = Some(user_id.into());
+        self.ephemeral_message_parameters
+            .get_or_insert_default()
+            .receiver_user_id = user_id.into();
         self.allow_ephemeral_leak = false;
         self
     }

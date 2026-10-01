@@ -3,6 +3,7 @@ use serde::Serialize;
 
 use crate::{
     entities::{
+        ephemeral_message_parameters::EphemeralMessageParameters,
         message::Message,
         misc::{chat_id::ChatId, message_effects::MessageEffect, reply_markup::ReplyMarkup},
         reply_parameters::ReplyParameters,
@@ -32,13 +33,9 @@ pub struct SendLocationParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_messages_topic_id: Option<i64>,
 
-    /// For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are offline. See [ephemeral message sending](https://core.telegram.org/bots/api/#ephemeral-messages-and-commands) for more details.
+    /// A JSON-serialized object containing the parameters of the ephemeral message to send
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub receiver_user_id: Option<i64>,
-
-    /// For outgoing ephemeral messages, identifier of the callback query which triggered the message if any
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub callback_query_id: Option<String>,
+    pub ephemeral_message_parameters: Option<EphemeralMessageParameters>,
 
     /// Latitude of the location
     pub latitude: f64,

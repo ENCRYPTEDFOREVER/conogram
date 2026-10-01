@@ -2,12 +2,12 @@ use serde::{Deserialize, Serialize};
 
 use crate::entities::community::Community;
 
-/// Describes a service message about a chat or a bot being added to a community.
+/// Describes a service message about a chat being joined by a user from a community.
 ///
-/// API Reference: [link](https://core.telegram.org/bots/api/#communitychatadded)
+/// API Reference: [link](https://core.telegram.org/bots/api/#communitychatjoined)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
-pub struct CommunityChatAdded {
-    /// The new community to which the chat or the bot belongs
+pub struct CommunityChatJoined {
+    /// The community from which the chat was joined
     pub community: Community,
 }
 

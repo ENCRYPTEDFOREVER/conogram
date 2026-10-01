@@ -22,6 +22,10 @@ pub struct InputRichBlockTable {
     #[serde(skip_serializing_if = "is_false")]
     pub is_striped: bool,
 
+    /// *Optional*. Pass *True* if table cells must have smaller indents
+    #[serde(skip_serializing_if = "is_false")]
+    pub is_compact: bool,
+
     /// *Optional*. Caption of the table
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption: Option<Box<RichText>>,

@@ -3,6 +3,7 @@ use serde::Serialize;
 
 use crate::{
     entities::{
+        ephemeral_message_parameters::EphemeralMessageParameters,
         message::Message,
         message_entity::MessageEntity,
         misc::{
@@ -36,13 +37,9 @@ pub struct SendLivePhotoParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_messages_topic_id: Option<i64>,
 
-    /// For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are offline. See [ephemeral message sending](https://core.telegram.org/bots/api/#ephemeral-messages-and-commands) for more details.
+    /// A JSON-serialized object containing the parameters of the ephemeral message to send
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub receiver_user_id: Option<i64>,
-
-    /// For outgoing ephemeral messages, identifier of the callback query which triggered the message if any
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub callback_query_id: Option<String>,
+    pub ephemeral_message_parameters: Option<EphemeralMessageParameters>,
 
     /// Live photo video to send. The video must be no longer than 10 seconds and must not exceed 10 MB in size. Pass a file\_id as String to send a video that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data. [More information on Sending Files »](https://core.telegram.org/bots/api/#sending-files). Sending live photos by a URL is currently unsupported.
     pub live_photo: InputFile,

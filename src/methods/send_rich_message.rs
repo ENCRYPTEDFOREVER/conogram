@@ -3,6 +3,7 @@ use serde::Serialize;
 
 use crate::{
     entities::{
+        ephemeral_message_parameters::EphemeralMessageParameters,
         input_rich_message::InputRichMessage,
         message::Message,
         misc::{chat_id::ChatId, message_effects::MessageEffect, reply_markup::ReplyMarkup},
@@ -32,6 +33,10 @@ pub struct SendRichMessageParams {
     /// Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_messages_topic_id: Option<i64>,
+
+    /// A JSON-serialized object containing the parameters of the ephemeral message to send
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ephemeral_message_parameters: Option<EphemeralMessageParameters>,
 
     /// The message to be sent
     pub rich_message: InputRichMessage,

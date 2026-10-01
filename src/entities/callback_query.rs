@@ -28,7 +28,7 @@ pub struct CallbackQuery {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub data: Option<String>,
 
-    /// *Optional*. Short name of a [Game](https://core.telegram.org/bots/api/#games) to be returned, serves as the unique identifier for the game
+    /// *Optional*. Short name of a [Game](https://core.telegram.org/bots/api/#game) to be returned, serves as the unique identifier for the game
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub game_short_name: Option<String>,
 }

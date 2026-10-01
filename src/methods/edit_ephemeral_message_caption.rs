@@ -1,9 +1,12 @@
 use conogram_derives::Request;
 use serde::Serialize;
 
-use crate::entities::{
-    inline_keyboard_markup::InlineKeyboardMarkup, message_entity::MessageEntity,
-    misc::chat_id::ChatId,
+use crate::{
+    entities::{
+        inline_keyboard_markup::InlineKeyboardMarkup, message_entity::MessageEntity,
+        misc::chat_id::ChatId,
+    },
+    utils::deserialize_utils::is_false,
 };
 
 /// Use this method to edit the caption of an ephemeral message. Note that it is not guaranteed that the user will receive the message edit event, especially if they are offline. On success, *True* is returned.
@@ -32,6 +35,10 @@ pub struct EditEphemeralMessageCaptionParams {
     /// A JSON-serialized list of special entities that appear in the caption, which can be specified instead of *parse\_mode*
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub caption_entities: Vec<MessageEntity>,
+
+    /// Pass *True* if the caption must be shown above the message media. Supported only for animation, photo and video messages.
+    #[serde(skip_serializing_if = "is_false")]
+    pub show_caption_above_media: bool,
 
     /// A JSON-serialized object for an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards)
     #[serde(skip_serializing_if = "Option::is_none")]

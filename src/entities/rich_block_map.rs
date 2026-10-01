@@ -11,7 +11,7 @@ pub struct RichBlockMap {
     /// Location of the center of the map
     pub location: Location,
 
-    /// Map zoom level; 13-20
+    /// Map zoom level
     pub zoom: i64,
 
     /// Expected width of the map

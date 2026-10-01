@@ -3,11 +3,11 @@ use serde::{Deserialize, Serialize};
 use crate::entities::{
     rich_text_anchor::RichTextAnchor, rich_text_anchor_link::RichTextAnchorLink,
     rich_text_bank_card_number::RichTextBankCardNumber, rich_text_bold::RichTextBold,
-    rich_text_bot_command::RichTextBotCommand, rich_text_cashtag::RichTextCashtag,
-    rich_text_code::RichTextCode, rich_text_custom_emoji::RichTextCustomEmoji,
-    rich_text_date_time::RichTextDateTime, rich_text_email_address::RichTextEmailAddress,
-    rich_text_hashtag::RichTextHashtag, rich_text_italic::RichTextItalic,
-    rich_text_marked::RichTextMarked,
+    rich_text_bot_command::RichTextBotCommand, rich_text_button::RichTextButton,
+    rich_text_cashtag::RichTextCashtag, rich_text_code::RichTextCode,
+    rich_text_custom_emoji::RichTextCustomEmoji, rich_text_date_time::RichTextDateTime,
+    rich_text_email_address::RichTextEmailAddress, rich_text_hashtag::RichTextHashtag,
+    rich_text_italic::RichTextItalic, rich_text_marked::RichTextMarked,
     rich_text_mathematical_expression::RichTextMathematicalExpression,
     rich_text_mention::RichTextMention, rich_text_phone_number::RichTextPhoneNumber,
     rich_text_reference::RichTextReference, rich_text_reference_link::RichTextReferenceLink,
@@ -40,6 +40,7 @@ use crate::entities::{
 /// * [RichTextHashtag](https://core.telegram.org/bots/api/#richtexthashtag)
 /// * [RichTextCashtag](https://core.telegram.org/bots/api/#richtextcashtag)
 /// * [RichTextBotCommand](https://core.telegram.org/bots/api/#richtextbotcommand)
+/// * [RichTextButton](https://core.telegram.org/bots/api/#richtextbutton)
 /// * [RichTextAnchor](https://core.telegram.org/bots/api/#richtextanchor)
 /// * [RichTextAnchorLink](https://core.telegram.org/bots/api/#richtextanchorlink)
 /// * [RichTextReference](https://core.telegram.org/bots/api/#richtextreference)
@@ -174,6 +175,12 @@ pub enum RichText {
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextbotcommand)
     #[serde(rename = "bot_command")]
     BotCommand(RichTextBotCommand),
+
+    /// A button.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextbutton)
+    #[serde(rename = "button")]
+    Button(RichTextButton),
 
     /// An anchor.
     ///
@@ -337,6 +344,12 @@ impl From<RichTextCashtag> for RichText {
 impl From<RichTextBotCommand> for RichText {
     fn from(value: RichTextBotCommand) -> Self {
         Self::BotCommand(value)
+    }
+}
+
+impl From<RichTextButton> for RichText {
+    fn from(value: RichTextButton) -> Self {
+        Self::Button(value)
     }
 }
 

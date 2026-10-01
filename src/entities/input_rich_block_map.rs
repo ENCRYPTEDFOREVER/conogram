@@ -11,14 +11,17 @@ pub struct InputRichBlockMap {
     /// Location of the center of the map
     pub location: Location,
 
-    /// Map zoom level; 0-24
-    pub zoom: i64,
+    /// *Optional*. Map zoom level; 0-24
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub zoom: Option<i64>,
 
-    /// Map width; 0-10000
-    pub width: i64,
+    /// *Optional*. Map width; 0-10000
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub width: Option<i64>,
 
-    /// Map height; 0-10000
-    pub height: i64,
+    /// *Optional*. Map height; 0-10000
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub height: Option<i64>,
 
     /// *Optional*. Caption of the block
     #[serde(skip_serializing_if = "Option::is_none")]

@@ -7,7 +7,7 @@ use crate::entities::input_rich_message::InputRichMessage;
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichmessagecontent)
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
 pub struct InputRichMessageContent {
-    /// The message to be sent
+    /// The message to be sent. Only previously uploaded files may be used in the message.
     pub rich_message: InputRichMessage,
 }
 

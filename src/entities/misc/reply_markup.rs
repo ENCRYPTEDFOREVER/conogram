@@ -62,6 +62,7 @@ impl ReplyMarkup {
         one_time_keyboard: bool,
         input_field_placeholder: Option<impl Into<String>>,
         selective: bool,
+        force_reply: bool,
     ) -> Self {
         Self::Keyboard(ReplyKeyboardMarkup {
             keyboard: keyboard.into(),
@@ -70,14 +71,16 @@ impl ReplyMarkup {
             one_time_keyboard,
             input_field_placeholder: input_field_placeholder.map(Into::into),
             selective,
+            force_reply,
         })
     }
 
     ///This object represents an [inline keyboard](https://core.telegram.org/bots/features#inline-keyboards) that appears right next to the message it belongs to.
     ///API Reference: [link](https://core.telegram.org/bots/api/#inlinekeyboardmarkup)
-    pub fn inline(keyboard: impl Into<Vec<Vec<InlineKeyboardButton>>>) -> Self {
+    pub fn inline(keyboard: impl Into<Vec<Vec<InlineKeyboardButton>>>, force_reply: bool) -> Self {
         Self::Inline(InlineKeyboardMarkup {
             inline_keyboard: keyboard.into(),
+            force_reply,
         })
     }
 

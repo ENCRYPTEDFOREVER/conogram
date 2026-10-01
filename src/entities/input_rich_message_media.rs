@@ -2,8 +2,8 @@ use serde::Serialize;
 
 use crate::entities::{
     input_media_animation::InputMediaAnimation, input_media_audio::InputMediaAudio,
-    input_media_photo::InputMediaPhoto, input_media_video::InputMediaVideo,
-    input_media_voice_note::InputMediaVoiceNote,
+    input_media_document::InputMediaDocument, input_media_photo::InputMediaPhoto,
+    input_media_video::InputMediaVideo, input_media_voice_note::InputMediaVoiceNote,
 };
 
 /// Describes a media element embedded in an outgoing rich message.
@@ -11,7 +11,7 @@ use crate::entities::{
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichmessagemedia)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize)]
 pub struct InputRichMessageMedia {
-    /// Unique identifier of the media used in a `tg://photo?id=`, `tg://video?id=`, or `tg://audio?id=` link. 1-64 characters, only `A-Z`, `a-z`, `0-9`, `_` and `-` are allowed.
+    /// Unique identifier of the media used in a `tg://photo?id=`, `tg://video?id=`, `tg://document?id=`, or `tg://audio?id=` link. 1-64 characters, only `A-Z`, `a-z`, `0-9`, `_` and `-` are allowed.
     pub id: String,
 
     /// The media to be sent. Everything except the media itself and its properties is ignored.
@@ -39,6 +39,12 @@ pub enum InputRichMedia {
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediaaudio)
     #[serde(rename = "audio")]
     Audio(InputMediaAudio),
+
+    /// Represents a general file to be sent.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api#inputmediadocument)
+    #[serde(rename = "document")]
+    Document(InputMediaDocument),
 
     /// Represents a photo to be sent.
     ///
@@ -77,6 +83,12 @@ impl From<InputMediaAudio> for InputRichMedia {
     }
 }
 
+impl From<InputMediaDocument> for InputRichMedia {
+    fn from(value: InputMediaDocument) -> Self {
+        Self::Document(value)
+    }
+}
+
 impl From<InputMediaPhoto> for InputRichMedia {
     fn from(value: InputMediaPhoto) -> Self {
         Self::Photo(value)
@@ -103,6 +115,7 @@ impl GetFiles for InputRichMedia {
         match self {
             Self::Animation(m) => m.form(form).await,
             Self::Audio(m) => m.form(form).await,
+            Self::Document(m) => m.form(form).await,
             Self::Photo(m) => m.form(form).await,
             Self::Video(m) => m.form(form).await,
             Self::VoiceNote(m) => m.form(form).await,

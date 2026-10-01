@@ -5,10 +5,14 @@ use crate::entities::{
     input_rich_block_animation::InputRichBlockAnimation,
     input_rich_block_audio::InputRichBlockAudio,
     input_rich_block_block_quotation::InputRichBlockBlockQuotation,
+    input_rich_block_buttons::InputRichBlockButtons,
     input_rich_block_collage::InputRichBlockCollage,
     input_rich_block_details::InputRichBlockDetails,
-    input_rich_block_divider::InputRichBlockDivider, input_rich_block_footer::InputRichBlockFooter,
-    input_rich_block_list::InputRichBlockList, input_rich_block_map::InputRichBlockMap,
+    input_rich_block_divider::InputRichBlockDivider,
+    input_rich_block_document::InputRichBlockDocument,
+    input_rich_block_expandable_block_quotation::InputRichBlockExpandableBlockQuotation,
+    input_rich_block_footer::InputRichBlockFooter, input_rich_block_list::InputRichBlockList,
+    input_rich_block_map::InputRichBlockMap,
     input_rich_block_mathematical_expression::InputRichBlockMathematicalExpression,
     input_rich_block_paragraph::InputRichBlockParagraph,
     input_rich_block_photo::InputRichBlockPhoto,
@@ -32,14 +36,17 @@ use crate::entities::{
 /// * [InputRichBlockAnchor](https://core.telegram.org/bots/api/#inputrichblockanchor)
 /// * [InputRichBlockList](https://core.telegram.org/bots/api/#inputrichblocklist)
 /// * [InputRichBlockBlockQuotation](https://core.telegram.org/bots/api/#inputrichblockblockquotation)
+/// * [InputRichBlockExpandableBlockQuotation](https://core.telegram.org/bots/api/#inputrichblockexpandableblockquotation)
 /// * [InputRichBlockPullQuotation](https://core.telegram.org/bots/api/#inputrichblockpullquotation)
 /// * [InputRichBlockCollage](https://core.telegram.org/bots/api/#inputrichblockcollage)
 /// * [InputRichBlockSlideshow](https://core.telegram.org/bots/api/#inputrichblockslideshow)
 /// * [InputRichBlockTable](https://core.telegram.org/bots/api/#inputrichblocktable)
 /// * [InputRichBlockDetails](https://core.telegram.org/bots/api/#inputrichblockdetails)
 /// * [InputRichBlockMap](https://core.telegram.org/bots/api/#inputrichblockmap)
+/// * [InputRichBlockButtons](https://core.telegram.org/bots/api/#inputrichblockbuttons)
 /// * [InputRichBlockAnimation](https://core.telegram.org/bots/api/#inputrichblockanimation)
 /// * [InputRichBlockAudio](https://core.telegram.org/bots/api/#inputrichblockaudio)
+/// * [InputRichBlockDocument](https://core.telegram.org/bots/api/#inputrichblockdocument)
 /// * [InputRichBlockPhoto](https://core.telegram.org/bots/api/#inputrichblockphoto)
 /// * [InputRichBlockVideo](https://core.telegram.org/bots/api/#inputrichblockvideo)
 /// * [InputRichBlockVoiceNote](https://core.telegram.org/bots/api/#inputrichblockvoicenote)
@@ -103,6 +110,12 @@ pub enum InputRichBlock {
     #[serde(rename = "blockquote")]
     BlockQuotation(InputRichBlockBlockQuotation),
 
+    /// A block quotation, corresponding to the HTML tag `<blockquote>` with custom attribute `"expandable"`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockexpandableblockquotation)
+    #[serde(rename = "expandable_blockquote")]
+    ExpandableBlockQuotation(InputRichBlockExpandableBlockQuotation),
+
     /// A quotation with centered text, loosely corresponding to the HTML tag `<aside>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockpullquotation)
@@ -139,6 +152,12 @@ pub enum InputRichBlock {
     #[serde(rename = "map")]
     Map(InputRichBlockMap),
 
+    /// A block containing a list of buttons that are shown in one row, corresponding to the custom HTML tag `<tg-button-row>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockbuttons)
+    #[serde(rename = "buttons")]
+    Buttons(InputRichBlockButtons),
+
     /// A block with an animation, corresponding to the HTML tag `<video>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockanimation)
@@ -150,6 +169,12 @@ pub enum InputRichBlock {
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockaudio)
     #[serde(rename = "audio")]
     Audio(InputRichBlockAudio),
+
+    /// A block with a general file, corresponding to the custom HTML tag `<tg-document>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockdocument)
+    #[serde(rename = "document")]
+    Document(InputRichBlockDocument),
 
     /// A block with a photo, corresponding to the HTML tag `<img>`.
     ///
@@ -236,6 +261,12 @@ impl From<InputRichBlockBlockQuotation> for InputRichBlock {
     }
 }
 
+impl From<InputRichBlockExpandableBlockQuotation> for InputRichBlock {
+    fn from(value: InputRichBlockExpandableBlockQuotation) -> Self {
+        Self::ExpandableBlockQuotation(value)
+    }
+}
+
 impl From<InputRichBlockPullQuotation> for InputRichBlock {
     fn from(value: InputRichBlockPullQuotation) -> Self {
         Self::PullQuotation(value)
@@ -272,6 +303,12 @@ impl From<InputRichBlockMap> for InputRichBlock {
     }
 }
 
+impl From<InputRichBlockButtons> for InputRichBlock {
+    fn from(value: InputRichBlockButtons) -> Self {
+        Self::Buttons(value)
+    }
+}
+
 impl From<InputRichBlockAnimation> for InputRichBlock {
     fn from(value: InputRichBlockAnimation) -> Self {
         Self::Animation(value)
@@ -281,6 +318,12 @@ impl From<InputRichBlockAnimation> for InputRichBlock {
 impl From<InputRichBlockAudio> for InputRichBlock {
     fn from(value: InputRichBlockAudio) -> Self {
         Self::Audio(value)
+    }
+}
+
+impl From<InputRichBlockDocument> for InputRichBlock {
+    fn from(value: InputRichBlockDocument) -> Self {
+        Self::Document(value)
     }
 }
 
@@ -351,6 +394,7 @@ impl InputRichBlock {
 
                 Self::Animation(v) => v.form(form).await,
                 Self::Audio(v) => v.form(form).await,
+                Self::Document(v) => v.form(form).await,
                 Self::Photo(v) => v.form(form).await,
                 Self::Video(v) => v.form(form).await,
                 Self::VoiceNote(v) => v.form(form).await,
@@ -459,6 +503,7 @@ impl InputRichBlock {
         caption: Option<impl Into<RichText>>,
         is_bordered: bool,
         is_striped: bool,
+        is_compact: bool,
     ) -> Self {
         InputRichBlockTable {
             cells: cells
@@ -469,6 +514,7 @@ impl InputRichBlock {
 
             is_bordered,
             is_striped,
+            is_compact,
         }
         .into()
     }
@@ -489,9 +535,9 @@ impl InputRichBlock {
 
     pub fn map(
         location: impl Into<Location>,
-        zoom: impl Into<i64>,
-        width: impl Into<i64>,
-        height: impl Into<i64>,
+        zoom: impl Into<Option<i64>>,
+        width: impl Into<Option<i64>>,
+        height: impl Into<Option<i64>>,
         caption: Option<RichBlockCaption>,
     ) -> Self {
         InputRichBlockMap {

@@ -517,7 +517,10 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
                 })
                 .collect::<TokenStream2>();
 
-            if optional_fields.iter().any(|f| f.name == "receiver_user_id") {
+            if optional_fields
+                .iter()
+                .any(|f| f.name == "ephemeral_message_parameters")
+            {
                 stream.extend(quote! {
                     impl<'a> crate::entities::misc::reply_builder::ReplyBuilder<'a> {
                         #request_struct_doc_comment
@@ -525,14 +528,14 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
                             self,
                             #helper_args
                         ) -> #request_struct_ident<'a> {
-                            let r = if let Some(ephemeral_target_id) = self.ephemeral_target_id
+                            let r = if let Some(ephemeral_message_parameters) = self.ephemeral_message_parameters
                                 && (!self.allow_ephemeral_leak
-                                    || (ephemeral_target_id > 0 && !self.chat_id.is_user_chat()))
+                                    || (ephemeral_message_parameters.receiver_user_id > 0 && !self.chat_id.is_user_chat()))
                             {
                                 self.api
                                     .#request_struct_ident_snake(self.chat_id, #helper_args_assign)
                                     .reply_parameters(self.reply_parameters)
-                                    .receiver_user_id(ephemeral_target_id)
+                                    .ephemeral_message_parameters(ephemeral_message_parameters)
                             } else {
                                 self.api
                                     .#request_struct_ident_snake(self.chat_id, #helper_args_assign)

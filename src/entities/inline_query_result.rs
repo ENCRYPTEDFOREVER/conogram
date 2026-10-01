@@ -115,7 +115,7 @@ pub enum InlineQueryResult {
     #[serde(rename = "contact")]
     Contact(InlineQueryResultContact),
 
-    /// Represents a [Game](https://core.telegram.org/bots/api/#games).
+    /// Represents a [Game](https://core.telegram.org/bots/api/#game).
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inlinequeryresultgame)
     #[serde(rename = "game")]

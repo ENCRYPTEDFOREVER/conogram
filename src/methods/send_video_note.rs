@@ -3,6 +3,7 @@ use serde::Serialize;
 
 use crate::{
     entities::{
+        ephemeral_message_parameters::EphemeralMessageParameters,
         message::Message,
         misc::{
             chat_id::ChatId, input_file::InputFile, message_effects::MessageEffect,
@@ -14,7 +15,7 @@ use crate::{
     utils::deserialize_utils::is_false,
 };
 
-/// As of [v.4.0](https://telegram.org/blog/video-messages-and-telescope), Telegram clients support rounded square MPEG4 videos of up to 1 minute long. Use this method to send video messages. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
+/// Use this method to send a rounded square MPEG4 video of up to 1 minute long. On success, the sent [Message](https://core.telegram.org/bots/api/#message) is returned.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#sendvideonote)
 #[derive(Debug, Clone, Serialize, Request)]
@@ -35,13 +36,9 @@ pub struct SendVideoNoteParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_messages_topic_id: Option<i64>,
 
-    /// For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are offline. See [ephemeral message sending](https://core.telegram.org/bots/api/#ephemeral-messages-and-commands) for more details.
+    /// A JSON-serialized object containing the parameters of the ephemeral message to send
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub receiver_user_id: Option<i64>,
-
-    /// For outgoing ephemeral messages, identifier of the callback query which triggered the message if any
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub callback_query_id: Option<String>,
+    pub ephemeral_message_parameters: Option<EphemeralMessageParameters>,
 
     /// Video note to send. Pass a file\_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data. [More information on Sending Files »](https://core.telegram.org/bots/api/#sending-files). Sending video notes by a URL is currently unsupported.
     pub video_note: InputFile,

@@ -1,6 +1,12 @@
 use serde::{Deserialize, Serialize};
 
-use crate::entities::{suggested_post_paid::SuggestedPostPaidCurrency, unique_gift::UniqueGift};
+use crate::{
+    entities::{
+        message_entity::MessageEntity, suggested_post_paid::SuggestedPostPaidCurrency,
+        unique_gift::UniqueGift,
+    },
+    utils::deserialize_utils::is_false,
+};
 
 /// Describes a service message about a unique gift that was sent or received.
 ///
@@ -12,6 +18,18 @@ pub struct UniqueGiftInfo {
 
     /// Origin of the gift. Currently, either “upgrade” for gifts upgraded from regular gifts, “transfer” for gifts transferred from other users or channels, “resale” for gifts bought from other users, “gifted\_upgrade” for upgrades purchased after the gift was sent, or “offer” for gifts bought or sold through gift purchase offers.
     pub origin: UniqueGiftInfoOrigin,
+
+    /// *Optional*. Text of the message that was added to the gift
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
+
+    /// *Optional*. Special entities that appear in the text
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub entities: Vec<MessageEntity>,
+
+    /// *Optional*. *True*, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub is_private: bool,
 
     /// *Optional*. For gifts bought from other users, the currency in which the payment for the gift was done. Currently, one of “XTR” for Telegram Stars or “TON” for TON grams.
     #[serde(default, skip_serializing_if = "Option::is_none")]

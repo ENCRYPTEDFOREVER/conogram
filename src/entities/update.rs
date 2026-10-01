@@ -7,6 +7,7 @@ use crate::entities::{
     chat_join_request::ChatJoinRequest, chat_member_updated::ChatMemberUpdated,
     chosen_inline_result::ChosenInlineResult, inline_query::InlineQuery,
     managed_bot_updated::ManagedBotUpdated, message::Message,
+    message_generation_stopped::MessageGenerationStopped,
     message_reaction_count_updated::MessageReactionCountUpdated,
     message_reaction_updated::MessageReactionUpdated, paid_media_purchased::PaidMediaPurchased,
     poll::Poll, poll_answer::PollAnswer, pre_checkout_query::PreCheckoutQuery,
@@ -125,6 +126,10 @@ pub struct Update {
     /// *Optional*. User payment subscription has changed
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub subscription: Option<BotSubscriptionUpdated>,
+
+    /// *Optional*. A user asked the bot to stop the generation of a message
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub stopped_message_generation: Option<MessageGenerationStopped>,
 }
 
 // Divider: all content below this line will be preserved after code regen
@@ -170,12 +175,13 @@ pub enum AllowedUpdates {
 
     ManagedBot,
     BotSubscriptionUpdated,
+    MessageGenerationStopped,
 }
 
 impl AllowedUpdates {
     /// All existing updates
     #[must_use]
-    pub const fn all() -> [Self; 26] {
+    pub const fn all() -> [Self; 27] {
         [
             Self::Message,
             Self::EditedMessage,
@@ -203,6 +209,7 @@ impl AllowedUpdates {
             Self::RemovedChatBoost,
             Self::ManagedBot,
             Self::BotSubscriptionUpdated,
+            Self::MessageGenerationStopped,
         ]
     }
 }
@@ -237,6 +244,7 @@ impl AllowedUpdates {
             Self::RemovedChatBoost => "removed_chat_boost",
             Self::ManagedBot => "managed_bot",
             Self::BotSubscriptionUpdated => "subscription",
+            Self::MessageGenerationStopped => "stopped_message_generation",
         }
     }
 }

@@ -1,8 +1,8 @@
 
 <div align="center">
     <h1><b>Conogram: async Telegram Bot API client written in Rust</b></h1>
-    <a href="https://core.telegram.org/bots/api/#july-14-2026">
-        <img src="https://img.shields.io/badge/Bot%20API%20version-10.2-brightgreen?style=for-the-badge">
+    <a href="https://core.telegram.org/bots/api#august-24-2026">
+        <img src="https://img.shields.io/badge/Bot%20API%20version-10.3-brightgreen?style=for-the-badge">
     </a>
     <a href="https://crates.io/crates/conogram">
         <img src="https://img.shields.io/crates/v/conogram.svg?style=for-the-badge">
@@ -14,7 +14,7 @@
 </div>
 
 # Aims
- - Full support of latest Bot API version (except no webhooks yet)
+ - Full support of latest Bot API version
  - 1 to 1 API methods and entitities mapping
  - Ease and convenience of use
 

@@ -6,8 +6,9 @@ use crate::{
         chat_boost_added::ChatBoostAdded, chat_owner_changed::ChatOwnerChanged,
         chat_owner_left::ChatOwnerLeft, chat_shared::ChatShared, checklist::Checklist,
         checklist_tasks_added::ChecklistTasksAdded, checklist_tasks_done::ChecklistTasksDone,
-        community_chat_added::CommunityChatAdded, community_chat_removed::CommunityChatRemoved,
-        contact::Contact, dice::Dice, direct_message_price_changed::DirectMessagePriceChanged,
+        community_chat_added::CommunityChatAdded, community_chat_joined::CommunityChatJoined,
+        community_chat_removed::CommunityChatRemoved, contact::Contact, dice::Dice,
+        direct_message_price_changed::DirectMessagePriceChanged,
         direct_messages_topic::DirectMessagesTopic, document::Document,
         external_reply_info::ExternalReplyInfo, forum_topic_closed::ForumTopicClosed,
         forum_topic_created::ForumTopicCreated, forum_topic_edited::ForumTopicEdited,
@@ -408,11 +409,15 @@ pub struct Message {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub checklist_tasks_added: Option<ChecklistTasksAdded>,
 
-    /// *Optional*. Service message: chat added to a [Community](https://core.telegram.org/bots/api/#community)
+    /// *Optional*. Service message: chat or bot added to a [Community](https://core.telegram.org/bots/api/#community)
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub community_chat_added: Option<CommunityChatAdded>,
 
-    /// *Optional*. Service message: chat removed from a [Community](https://core.telegram.org/bots/api/#community)
+    /// *Optional*. Service message: chat was joined by a user from a [Community](https://core.telegram.org/bots/api/#community)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub community_chat_joined: Option<CommunityChatJoined>,
+
+    /// *Optional*. Service message: chat or bot removed from a [Community](https://core.telegram.org/bots/api/#community)
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub community_chat_removed: Option<CommunityChatRemoved>,
 
@@ -860,14 +865,14 @@ impl Message {
     pub fn edit_text_ephemeral<'a>(
         &'a self,
         api: &'a Api,
-        text: impl Into<InputMessageText>,
+        text: impl Into<String>,
     ) -> EditEphemeralMessageTextRequest<'a> {
         api.edit_ephemeral_message_text(
             self.chat.id,
             self.receiver_user_id().unwrap_or_default(),
             self.ephemeral_message_id.unwrap_or_default(),
-            text,
         )
+        .text(text)
     }
 
     /// Use this method to edit text, rich and [game](https://core.telegram.org/bots/api/#games) messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within **48 hours** from the time they were sent.

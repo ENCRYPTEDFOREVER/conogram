@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use crate::{
     entities::{
         callback_game::CallbackGame, copy_text_button::CopyTextButton,
-        keyboard_button::KeyboardButtonStyle, login_url::LoginUrl,
+        disabled_button::DisabledButton, keyboard_button::KeyboardButtonStyle, login_url::LoginUrl,
         switch_inline_query_chosen_chat::SwitchInlineQueryChosenChat, web_app_info::WebAppInfo,
     },
     utils::deserialize_utils::is_false,
@@ -37,7 +37,7 @@ pub struct InlineKeyboardButton {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub web_app: Option<WebAppInfo>,
 
-    /// *Optional*. An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the [Telegram Login Widget](https://core.telegram.org/widgets/login).
+    /// *Optional*. An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the [Telegram Login Widget](https://core.telegram.org/widgets/login). Not supported for ephemeral messages.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub login_url: Option<LoginUrl>,
 
@@ -70,6 +70,10 @@ pub struct InlineKeyboardButton {
     /// **NOTE:** This type of button **must** always be the first button in the first row and can only be used in invoice messages.
     #[serde(default, skip_serializing_if = "is_false")]
     pub pay: bool,
+
+    /// *Optional*. If set, then the button is disabled and does nothing
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub disabled: Option<DisabledButton>,
 }
 
 // Divider: all content below this line will be preserved after code regen

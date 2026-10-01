@@ -67,9 +67,12 @@ pub struct ChatMemberAdministrator {
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_manage_direct_messages: bool,
 
-    /// *Optional*. *True*, if the administrator can edit the tags of regular members; for groups and supergroups only. If omitted, defaults to the value of can\_pin\_messages.
-    #[serde(default)]
+    /// *Optional*. *True*, if the administrator can edit the tags of regular members; for groups and supergroups only
+    #[serde(default, skip_serializing_if = "is_false")]
     pub can_manage_tags: bool,
+
+    /// *True*, if the administrator can manage chat welcome messages or directly send them in the case of bots
+    pub can_send_welcome_messages: bool,
 
     /// *Optional*. Custom title for this user
     #[serde(default, skip_serializing_if = "Option::is_none")]
