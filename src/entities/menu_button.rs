@@ -13,24 +13,21 @@ use crate::entities::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#menubutton)
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(tag = "type")]
+#[serde(untagged)]
 pub enum MenuButton {
     /// Represents a menu button, which opens the bot's list of commands.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#menubuttoncommands)
-    #[serde(rename = "commands")]
     Commands(MenuButtonCommands),
 
     /// Represents a menu button, which launches a [Web App](https://core.telegram.org/bots/webapps).
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#menubuttonwebapp)
-    #[serde(rename = "web_app")]
     WebApp(MenuButtonWebApp),
 
     /// Describes that no specific value for the menu button was set.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#menubuttondefault)
-    #[serde(rename = "default")]
     Default(MenuButtonDefault),
 }
 

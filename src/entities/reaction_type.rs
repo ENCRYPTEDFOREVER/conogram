@@ -13,24 +13,21 @@ use crate::entities::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#reactiontype)
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(tag = "type")]
+#[serde(untagged)]
 pub enum ReactionType {
     /// The reaction is based on an emoji.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#reactiontypeemoji)
-    #[serde(rename = "emoji")]
     Emoji(ReactionTypeEmoji),
 
     /// The reaction is based on a custom emoji.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#reactiontypecustomemoji)
-    #[serde(rename = "custom_emoji")]
     CustomEmoji(ReactionTypeCustomEmoji),
 
     /// The reaction is paid.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#reactiontypepaid)
-    #[serde(rename = "paid")]
     Paid(ReactionTypePaid),
 }
 

@@ -12,18 +12,16 @@ use crate::entities::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputstorycontent)
 #[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(tag = "type")]
+#[serde(untagged)]
 pub enum InputStoryContent {
     /// Describes a photo to post as a story.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputstorycontentphoto)
-    #[serde(rename = "photo")]
     Photo(InputStoryContentPhoto),
 
     /// Describes a video to post as a story.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputstorycontentvideo)
-    #[serde(rename = "video")]
     Video(InputStoryContentVideo),
 }
 

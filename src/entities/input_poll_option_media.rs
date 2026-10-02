@@ -21,54 +21,46 @@ use crate::entities::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputpolloptionmedia)
 #[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(tag = "type")]
+#[serde(untagged)]
 pub enum InputPollOptionMedia {
     /// Represents an animation file (GIF or H.264/MPEG-4 AVC video without sound) to be sent.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediaanimation)
-    #[serde(rename = "animation")]
     MediaAnimation(InputMediaAnimation),
 
     /// Represents an HTTP link to be sent.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputmedialink)
-    #[serde(rename = "link")]
     MediaLink(InputMediaLink),
 
     /// Represents a live photo to be sent.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputmedialivephoto)
-    #[serde(rename = "live_photo")]
     MediaLivePhoto(InputMediaLivePhoto),
 
     /// Represents a location to be sent.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputmedialocation)
-    #[serde(rename = "location")]
     MediaLocation(InputMediaLocation),
 
     /// Represents a photo to be sent.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediaphoto)
-    #[serde(rename = "photo")]
     MediaPhoto(InputMediaPhoto),
 
     /// Represents a sticker file to be sent.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediasticker)
-    #[serde(rename = "sticker")]
     MediaSticker(InputMediaSticker),
 
     /// Represents a venue to be sent.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediavenue)
-    #[serde(rename = "venue")]
     MediaVenue(InputMediaVenue),
 
     /// Represents a video to be sent.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputmediavideo)
-    #[serde(rename = "video")]
     MediaVideo(InputMediaVideo),
 }
 

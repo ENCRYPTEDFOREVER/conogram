@@ -54,150 +54,126 @@ use crate::entities::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblock)
 #[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(tag = "type")]
+#[serde(untagged)]
 pub enum InputRichBlock {
     /// A text paragraph, corresponding to the HTML tag `<p>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockparagraph)
-    #[serde(rename = "paragraph")]
     Paragraph(InputRichBlockParagraph),
 
     /// A section heading, corresponding to the HTML tags `<h1>`, `<h2>`, `<h3>`, `<h4>`, `<h5>`, or `<h6>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblocksectionheading)
-    #[serde(rename = "heading")]
     SectionHeading(InputRichBlockSectionHeading),
 
     /// A preformatted text block, corresponding to the nested HTML tags `<pre>` and `<code>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockpreformatted)
-    #[serde(rename = "pre")]
     Preformatted(InputRichBlockPreformatted),
 
     /// A footer, corresponding to the HTML tag `<footer>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockfooter)
-    #[serde(rename = "footer")]
     Footer(InputRichBlockFooter),
 
     /// A divider, corresponding to the HTML tag `<hr/>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockdivider)
-    #[serde(rename = "divider")]
     Divider(InputRichBlockDivider),
 
     /// A block with a mathematical expression in LaTeX format, corresponding to the custom HTML tag `<tg-math-block>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockmathematicalexpression)
-    #[serde(rename = "mathematical_expression")]
     MathematicalExpression(InputRichBlockMathematicalExpression),
 
     /// A block with an anchor, corresponding to the HTML tag `<a>` with the attribute `name`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockanchor)
-    #[serde(rename = "anchor")]
     Anchor(InputRichBlockAnchor),
 
     /// A list of blocks, corresponding to the HTML tag `<ul>` or `<ol>` with multiple nested tags `<li>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblocklist)
-    #[serde(rename = "list")]
     List(InputRichBlockList),
 
     /// A block quotation, corresponding to the HTML tag `<blockquote>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockblockquotation)
-    #[serde(rename = "blockquote")]
     BlockQuotation(InputRichBlockBlockQuotation),
 
     /// A block quotation, corresponding to the HTML tag `<blockquote>` with custom attribute `"expandable"`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockexpandableblockquotation)
-    #[serde(rename = "expandable_blockquote")]
     ExpandableBlockQuotation(InputRichBlockExpandableBlockQuotation),
 
     /// A quotation with centered text, loosely corresponding to the HTML tag `<aside>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockpullquotation)
-    #[serde(rename = "pullquote")]
     PullQuotation(InputRichBlockPullQuotation),
 
     /// A collage, corresponding to the custom HTML tag `<tg-collage>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockcollage)
-    #[serde(rename = "collage")]
     Collage(InputRichBlockCollage),
 
     /// A slideshow, corresponding to the custom HTML tag `<tg-slideshow>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockslideshow)
-    #[serde(rename = "slideshow")]
     Slideshow(InputRichBlockSlideshow),
 
     /// A table, corresponding to the HTML tag `<table>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblocktable)
-    #[serde(rename = "table")]
     Table(InputRichBlockTable),
 
     /// An expandable block for details disclosure, corresponding to the HTML tag `<details>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockdetails)
-    #[serde(rename = "details")]
     Details(InputRichBlockDetails),
 
     /// A block with a map, corresponding to the custom HTML tag `<tg-map>`. The map's width and height must not exceed 10000 in total. The width and height ratio must be at most 20.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockmap)
-    #[serde(rename = "map")]
     Map(InputRichBlockMap),
 
     /// A block containing a list of buttons that are shown in one row, corresponding to the custom HTML tag `<tg-button-row>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockbuttons)
-    #[serde(rename = "buttons")]
     Buttons(InputRichBlockButtons),
 
     /// A block with an animation, corresponding to the HTML tag `<video>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockanimation)
-    #[serde(rename = "animation")]
     Animation(InputRichBlockAnimation),
 
     /// A block with a music file, corresponding to the HTML tag `<audio>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockaudio)
-    #[serde(rename = "audio")]
     Audio(InputRichBlockAudio),
 
     /// A block with a general file, corresponding to the custom HTML tag `<tg-document>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockdocument)
-    #[serde(rename = "document")]
     Document(InputRichBlockDocument),
 
     /// A block with a photo, corresponding to the HTML tag `<img>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockphoto)
-    #[serde(rename = "photo")]
     Photo(InputRichBlockPhoto),
 
     /// A block with a video, corresponding to the HTML tag `<video>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockvideo)
-    #[serde(rename = "video")]
     Video(InputRichBlockVideo),
 
     /// A block with a voice note, corresponding to the HTML tag `<audio>`.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockvoicenote)
-    #[serde(rename = "voice_note")]
     VoiceNote(InputRichBlockVoiceNote),
 
     /// A block with a “Thinking…” placeholder, corresponding to the custom HTML tag `<tg-thinking>`. The block may be used only in [sendRichMessageDraft](https://core.telegram.org/bots/api/#sendrichmessagedraft), therefore it can't be received in messages. See [https://t.me/addemoji/AIActions](https://t.me/addemoji/AIActions) for examples of custom emoji that are recommended for usage in the block.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockthinking)
-    #[serde(rename = "thinking")]
     Thinking(InputRichBlockThinking),
 }
 

@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::utils::deserialize_utils::is_false;
 
-/// Parameters of the ephemeral message
+///
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#ephemeralmessageparameters)
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]

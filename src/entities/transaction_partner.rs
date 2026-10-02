@@ -22,48 +22,41 @@ use crate::entities::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartner)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(tag = "type")]
+#[serde(untagged)]
 pub enum TransactionPartner {
     /// Describes a transaction with a user.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartneruser)
-    #[serde(rename = "user")]
     User(TransactionPartnerUser),
 
     /// Describes a transaction with a chat.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartnerchat)
-    #[serde(rename = "chat")]
     Chat(TransactionPartnerChat),
 
     /// Describes the affiliate program that issued the affiliate commission received via this transaction.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartneraffiliateprogram)
-    #[serde(rename = "affiliate_program")]
     AffiliateProgram(TransactionPartnerAffiliateProgram),
 
     /// Describes a withdrawal transaction with Fragment.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartnerfragment)
-    #[serde(rename = "fragment")]
     Fragment(TransactionPartnerFragment),
 
     /// Describes a withdrawal transaction to the Telegram Ads platform.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartnertelegramads)
-    #[serde(rename = "telegram_ads")]
     TelegramAds(TransactionPartnerTelegramAds),
 
     /// Describes a transaction with payment for [paid broadcasting](https://core.telegram.org/bots/api/#paid-broadcasts).
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartnertelegramapi)
-    #[serde(rename = "telegram_api")]
     TelegramApi(TransactionPartnerTelegramApi),
 
     /// Describes a transaction with an unknown source or recipient.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#transactionpartnerother)
-    #[serde(rename = "other")]
     Other(TransactionPartnerOther),
 }
 
