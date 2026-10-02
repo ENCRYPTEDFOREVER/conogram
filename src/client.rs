@@ -98,16 +98,33 @@ impl TgApiClient {
         .unwrap()
     }
 
-    fn apply_default_params(&self, method: &str, default_value: &mut Value) {
+    fn prepare_request_params(&self, method: &str, value: &mut Value) {
         if let Some(method_entry) = self.default_request_params.get(method)
-            && let Value::Object(object) = default_value
+            && let Value::Object(object) = value
         {
-            for (param_name, v) in method_entry {
+            for (param_name, default_value) in method_entry {
                 if !object.contains_key(param_name) {
-                    log::debug!("Setting {param_name}={v} in {method}");
-                    object.insert(param_name.clone(), v.clone());
+                    if param_name == "parse_mode"
+                        && (object.contains_key("entities")
+                            || object.contains_key("caption_entities"))
+                    {
+                        continue;
+                    }
+                    log::debug!("Setting {param_name}={default_value} in {method}");
+                    object.insert(param_name.clone(), default_value.clone());
                 }
             }
+        }
+
+        if let Value::Object(object) = value
+            && (object.contains_key("entities") || object.contains_key("caption_entities"))
+            && object.contains_key("parse_mode")
+        {
+            log::warn!(
+                "Call to {method} contains both \"entities\"/\"caption_entities\" and \"parse_mode\", removing \"parse_mode\""
+            );
+
+            object.remove("parse_mode");
         }
     }
 
@@ -212,7 +229,7 @@ impl TgApiClient {
                     Ok(v) => v,
                     Err(err) => return Err(ConogramError::new(method, params, err.into())),
                 };
-                self.apply_default_params(method, &mut value);
+                self.prepare_request_params(method, &mut value);
 
                 log::debug!("Calling {method}({})", Self::value_to_string(&value));
 
@@ -238,7 +255,7 @@ impl TgApiClient {
                     Ok(v) => v,
                     Err(err) => return Err(ConogramError::new(method, params, err.into())),
                 };
-                self.apply_default_params(method, &mut json_struct);
+                self.prepare_request_params(method, &mut json_struct);
 
                 log::debug!("Calling {method}({})", Self::value_to_string(&json_struct));
 

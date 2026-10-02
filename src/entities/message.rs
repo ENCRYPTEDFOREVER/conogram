@@ -115,7 +115,7 @@ pub struct Message {
 
     /// *Optional*. For replies in the same chat and message thread, the original message. Note that the [Message](https://core.telegram.org/bots/api/#message) object in this field will not contain further *reply\_to\_message* fields even if it itself is a reply. If the message is a reply to an ephemeral message, then this field may be omitted.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub reply_to_message: Option<Box<Message>>,
+    pub reply_to_message: Option<Box<Self>>,
 
     /// *Optional*. Information about the message that is being replied to, which may come from another chat or forum topic
     #[serde(default, skip_serializing_if = "Option::is_none")]
