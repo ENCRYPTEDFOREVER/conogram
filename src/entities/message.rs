@@ -558,6 +558,36 @@ use crate::{
     request::RequestT,
 };
 
+pub enum InputEditMessageText {
+    Text(String),
+    FormattedText(FormattedText),
+    RichText(InputRichMessage),
+}
+
+impl From<&str> for InputEditMessageText {
+    fn from(value: &str) -> Self {
+        Self::Text(value.to_owned())
+    }
+}
+
+impl From<String> for InputEditMessageText {
+    fn from(value: String) -> Self {
+        Self::Text(value)
+    }
+}
+
+impl From<FormattedText> for InputEditMessageText {
+    fn from(value: FormattedText) -> Self {
+        Self::FormattedText(value)
+    }
+}
+
+impl From<InputRichMessage> for InputEditMessageText {
+    fn from(value: InputRichMessage) -> Self {
+        Self::RichText(value)
+    }
+}
+
 pub enum InputMessageText {
     String(String),
     FormattedText(FormattedText),
@@ -845,60 +875,51 @@ impl Message {
         )
     }
 
-    /// Use this method to edit text, rich and [game](https://core.telegram.org/bots/api/#games) messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within **48 hours** from the time they were sent.
-    ///
-    /// API Reference: [link](https://core.telegram.org/bots/api/#editmessagetext)
-    pub fn edit_text<'a>(
-        &'a self,
-        api: &'a Api,
-        text: impl Into<String>,
-    ) -> EditMessageTextRequest<'a> {
-        api.edit_message_text()
-            .text(text.into())
-            .message_id(self.message_id)
-            .chat_id(self.chat.id)
-    }
-
     /// Use this method to edit an ephemeral text message. Note that it is not guaranteed that the user will receive the message edit event, especially if they are offline. On success, *True* is returned.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#editephemeralmessagetext)
     pub fn edit_text_ephemeral<'a>(
         &'a self,
         api: &'a Api,
-        text: impl Into<String>,
+        text: impl Into<InputEditMessageText>,
     ) -> EditEphemeralMessageTextRequest<'a> {
-        api.edit_ephemeral_message_text(
+        let r = api.edit_ephemeral_message_text(
             self.chat.id,
-            self.receiver_user_id().unwrap_or_default(),
+            self.from_id(),
             self.ephemeral_message_id.unwrap_or_default(),
-        )
-        .text(text)
+        );
+
+        match text.into() {
+            InputEditMessageText::Text(text) => r.text(text),
+            InputEditMessageText::FormattedText(ft) => {
+                let (text, entities) = ft.build();
+                r.text(text).entities(entities)
+            }
+            InputEditMessageText::RichText(rm) => r.rich_message(rm),
+        }
     }
 
     /// Use this method to edit text, rich and [game](https://core.telegram.org/bots/api/#games) messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within **48 hours** from the time they were sent.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#editmessagetext)
-    pub fn edit_text_rich<'a>(
+    pub fn edit_text<'a>(
         &'a self,
         api: &'a Api,
-        rich_message: impl Into<InputRichMessage>,
+        text: impl Into<InputEditMessageText>,
     ) -> EditMessageTextRequest<'a> {
-        api.edit_message_text()
-            .rich_message(rich_message.into())
+        let r = api
+            .edit_message_text()
             .message_id(self.message_id)
-            .chat_id(self.chat.id)
-    }
+            .chat_id(self.chat.id);
 
-    /// Use this method to edit text, rich and [game](https://core.telegram.org/bots/api/#games) messages. On success, if the edited message is not an inline message, the edited [Message](https://core.telegram.org/bots/api/#message) is returned, otherwise *True* is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within **48 hours** from the time they were sent.
-    ///
-    /// API Reference: [link](https://core.telegram.org/bots/api/#editmessagetext)
-    pub fn edit_text_formatted<'a>(
-        &'a self,
-        api: &'a Api,
-        ft: impl Into<FormattedText>,
-    ) -> EditMessageTextRequest<'a> {
-        let (text, entities) = ft.into().build();
-        self.edit_text(api, text).entities(entities).parse_mode("")
+        match text.into() {
+            InputEditMessageText::Text(text) => r.text(text),
+            InputEditMessageText::FormattedText(ft) => {
+                let (text, entities) = ft.build();
+                r.text(text).entities(entities)
+            }
+            InputEditMessageText::RichText(rm) => r.rich_message(rm),
+        }
     }
 
     /// Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz [poll](https://core.telegram.org/bots/api/#poll) can be copied only if the value of the field *correct\_option\_id* is known to the bot. The method is analogous to the method [forwardMessage](https://core.telegram.org/bots/api/#forwardmessage), but the copied message doesn't have a link to the original message. Returns the [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent message on success.
