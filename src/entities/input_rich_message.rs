@@ -52,6 +52,12 @@ impl GetFiles for InputRichMessage {
     }
 }
 
+impl<T: IntoIterator<Item = impl Into<InputRichBlock>>> From<T> for InputRichMessage {
+    fn from(value: T) -> Self {
+        Self::from_blocks(value, false, true)
+    }
+}
+
 impl InputRichMessage {
     /// Content of the rich message to send described as a list of blocks
     pub fn from_blocks(

@@ -1,13 +1,14 @@
 use serde::{Deserialize, Serialize};
 
 use crate::entities::{
-    rich_text_anchor::RichTextAnchor, rich_text_anchor_link::RichTextAnchorLink,
-    rich_text_bank_card_number::RichTextBankCardNumber, rich_text_bold::RichTextBold,
-    rich_text_bot_command::RichTextBotCommand, rich_text_button::RichTextButton,
-    rich_text_cashtag::RichTextCashtag, rich_text_code::RichTextCode,
-    rich_text_custom_emoji::RichTextCustomEmoji, rich_text_date_time::RichTextDateTime,
-    rich_text_email_address::RichTextEmailAddress, rich_text_hashtag::RichTextHashtag,
-    rich_text_italic::RichTextItalic, rich_text_marked::RichTextMarked,
+    rich_message_button::RichMessageButton, rich_text_anchor::RichTextAnchor,
+    rich_text_anchor_link::RichTextAnchorLink, rich_text_bank_card_number::RichTextBankCardNumber,
+    rich_text_bold::RichTextBold, rich_text_bot_command::RichTextBotCommand,
+    rich_text_button::RichTextButton, rich_text_cashtag::RichTextCashtag,
+    rich_text_code::RichTextCode, rich_text_custom_emoji::RichTextCustomEmoji,
+    rich_text_date_time::RichTextDateTime, rich_text_email_address::RichTextEmailAddress,
+    rich_text_hashtag::RichTextHashtag, rich_text_italic::RichTextItalic,
+    rich_text_marked::RichTextMarked,
     rich_text_mathematical_expression::RichTextMathematicalExpression,
     rich_text_mention::RichTextMention, rich_text_phone_number::RichTextPhoneNumber,
     rich_text_reference::RichTextReference, rich_text_reference_link::RichTextReferenceLink,
@@ -357,4 +358,27 @@ impl<T: Into<String>> From<T> for RichText {
     fn from(value: T) -> Self {
         Self::Plain(value.into())
     }
+}
+
+impl From<RichMessageButton> for RichText {
+    fn from(value: RichMessageButton) -> Self {
+        Self::Button(RichTextButton { button: value })
+    }
+}
+
+impl RichText {
+    pub fn from_iter<T: IntoIterator<Item = impl Into<RichText>>>(iter: T) -> Self {
+        Self::Array(iter.into_iter().map(|v| Box::new(v.into())).collect())
+    }
+}
+
+#[macro_export]
+macro_rules! rich_text {
+    ($($b: expr),*$(,)?) => {
+        $crate::entities::rich_text::RichText::Array(vec![
+            $(
+                Box::new($b.into())
+            ),*
+        ])
+    };
 }

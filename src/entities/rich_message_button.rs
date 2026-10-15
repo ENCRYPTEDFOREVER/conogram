@@ -77,3 +77,131 @@ pub enum RichMessageButtonStyle {
 }
 
 // Divider: all content below this line will be preserved after code regen
+
+impl RichMessageButton {
+    /// HTTP or tg:// URL to be opened when the button is pressed. Links `tg://user?id=<user_id>` can be used to mention a user by their identifier without using a username, if this is allowed by their privacy settings.
+    pub fn url(
+        text: impl Into<RichText>,
+        url: impl Into<String>,
+        style: Option<RichMessageButtonStyle>,
+    ) -> Self {
+        Self {
+            text: Box::new(text.into()),
+            url: Some(url.into()),
+            style,
+            ..Default::default()
+        }
+    }
+
+    /// Data to be sent in a [callback query](https://core.telegram.org/bots/api/#callbackquery) to the bot when the button is pressed, 1-64 bytes
+    pub fn callback(
+        text: impl Into<RichText>,
+        data: impl Into<String>,
+        style: Option<RichMessageButtonStyle>,
+    ) -> Self {
+        Self {
+            text: Box::new(text.into()),
+            callback_data: Some(data.into()),
+            style,
+            ..Default::default()
+        }
+    }
+
+    /// [Web App](https://core.telegram.org/bots/webapps) that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method [answerWebAppQuery](https://core.telegram.org/bots/api/#answerwebappquery). Available only in private chats between a user and the bot. Not supported for messages sent on behalf of a business account.
+    ///
+    /// An HTTPS URL of a Web App to be opened with additional data as specified in [Initializing Web Apps](https://core.telegram.org/bots/webapps#initializing-mini-apps)
+    pub fn web_app(
+        text: impl Into<RichText>,
+        url: impl Into<String>,
+        style: Option<RichMessageButtonStyle>,
+    ) -> Self {
+        Self {
+            text: Box::new(text.into()),
+            web_app: Some(WebAppInfo { url: url.into() }),
+            style,
+            ..Default::default()
+        }
+    }
+
+    /// An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the [Telegram Login Widget](https://core.telegram.org/widgets/login). Not supported for ephemeral messages.
+    pub fn login(
+        text: impl Into<RichText>,
+        url: impl Into<LoginUrl>,
+        style: Option<RichMessageButtonStyle>,
+    ) -> Self {
+        Self {
+            text: Box::new(text.into()),
+            login_url: Some(url.into()),
+            style,
+            ..Default::default()
+        }
+    }
+
+    /// Pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted. Not supported for messages sent in channel direct messages chats and on behalf of a business account.
+    pub fn switch_inline_query(
+        text: impl Into<RichText>,
+        query: impl Into<String>,
+        style: Option<RichMessageButtonStyle>,
+    ) -> Self {
+        Self {
+            text: Box::new(text.into()),
+            switch_inline_query: Some(query.into()),
+            style,
+            ..Default::default()
+        }
+    }
+
+    /// Pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted. Not supported in channels and for messages sent in channel direct messages chats and on behalf of a business account.
+    pub fn switch_inline_query_current_chat(
+        text: impl Into<RichText>,
+        query: impl Into<String>,
+        style: Option<RichMessageButtonStyle>,
+    ) -> Self {
+        Self {
+            text: Box::new(text.into()),
+            switch_inline_query_current_chat: Some(query.into()),
+            style,
+            ..Default::default()
+        }
+    }
+
+    /// Pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field. Not supported for messages sent in channel direct messages chats and on behalf of a business account.
+    pub fn switch_inline_query_chosen_chat(
+        text: impl Into<RichText>,
+        query: impl Into<SwitchInlineQueryChosenChat>,
+        style: Option<RichMessageButtonStyle>,
+    ) -> Self {
+        Self {
+            text: Box::new(text.into()),
+            switch_inline_query_chosen_chat: Some(query.into()),
+            style,
+            ..Default::default()
+        }
+    }
+
+    /// A button that copies the specified text to the clipboard, 1-256 characters
+    pub fn copy_text(
+        text: impl Into<RichText>,
+        copy_text: impl Into<String>,
+        style: Option<RichMessageButtonStyle>,
+    ) -> Self {
+        Self {
+            text: Box::new(text.into()),
+            copy_text: Some(CopyTextButton {
+                text: copy_text.into(),
+            }),
+            style,
+            ..Default::default()
+        }
+    }
+
+    /// Disabled button which does nothing
+    pub fn disabled(text: impl Into<RichText>, style: Option<RichMessageButtonStyle>) -> Self {
+        Self {
+            text: Box::new(text.into()),
+            disabled: Some(DisabledButton {}),
+            style,
+            ..Default::default()
+        }
+    }
+}

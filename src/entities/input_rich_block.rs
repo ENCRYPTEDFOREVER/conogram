@@ -330,12 +330,19 @@ impl From<InputRichBlockThinking> for InputRichBlock {
 // Divider: all content below this line will be preserved after code regen
 
 use crate::entities::{
-    input_media_animation::InputMediaAnimation, input_media_audio::InputMediaAudio,
-    input_media_photo::InputMediaPhoto, input_media_video::InputMediaVideo,
+    input_media_animation::InputMediaAnimation,
+    input_media_audio::InputMediaAudio,
+    input_media_document::InputMediaDocument,
+    input_media_photo::InputMediaPhoto,
+    input_media_video::InputMediaVideo,
     input_media_voice_note::InputMediaVoiceNote,
-    input_rich_block_list_item::InputRichBlockListItem, location::Location,
-    misc::input_file::GetFiles, rich_block_caption::RichBlockCaption,
-    rich_block_table_cell::RichBlockTableCell, rich_text::RichText,
+    input_rich_block_list_item::InputRichBlockListItem,
+    location::Location,
+    misc::input_file::GetFiles,
+    rich_block_caption::RichBlockCaption,
+    rich_block_table_cell::{RichBlockTableCell, RichBlockTableCellAlign},
+    rich_message_button::RichMessageButton,
+    rich_text::RichText,
 };
 
 impl GetFiles for InputRichBlock {
@@ -380,6 +387,9 @@ impl InputRichBlock {
         })
     }
 
+    /// A text paragraph, corresponding to the HTML tag `<p>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockparagraph)
     pub fn paragraph(text: impl Into<RichText>) -> Self {
         InputRichBlockParagraph {
             text: Box::new(text.into()),
@@ -387,6 +397,9 @@ impl InputRichBlock {
         .into()
     }
 
+    /// A section heading, corresponding to the HTML tags `<h1>`, `<h2>`, `<h3>`, `<h4>`, `<h5>`, or `<h6>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblocksectionheading)
     pub fn section_heading(text: impl Into<RichText>, size: impl Into<i64>) -> Self {
         InputRichBlockSectionHeading {
             text: Box::new(text.into()),
@@ -395,6 +408,9 @@ impl InputRichBlock {
         .into()
     }
 
+    /// A preformatted text block, corresponding to the nested HTML tags `<pre>` and `<code>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockpreformatted)
     pub fn preformatted(text: impl Into<RichText>, language: Option<impl Into<String>>) -> Self {
         InputRichBlockPreformatted {
             text: Box::new(text.into()),
@@ -403,6 +419,9 @@ impl InputRichBlock {
         .into()
     }
 
+    /// A footer, corresponding to the HTML tag `<footer>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockfooter)
     pub fn footer(text: impl Into<RichText>) -> Self {
         InputRichBlockFooter {
             text: Box::new(text.into()),
@@ -410,11 +429,17 @@ impl InputRichBlock {
         .into()
     }
 
+    /// A divider, corresponding to the HTML tag `<hr/>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockdivider)
     #[must_use]
     pub fn divider() -> Self {
         InputRichBlockDivider {}.into()
     }
 
+    /// A block with a mathematical expression in LaTeX format, corresponding to the custom HTML tag `<tg-math-block>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockmathematicalexpression)
     pub fn mathematical_expression(expression: impl Into<String>) -> Self {
         InputRichBlockMathematicalExpression {
             expression: expression.into(),
@@ -422,10 +447,16 @@ impl InputRichBlock {
         .into()
     }
 
+    /// A block with an anchor, corresponding to the HTML tag `<a>` with the attribute `name`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockanchor)
     pub fn anchor(name: impl Into<String>) -> Self {
         InputRichBlockAnchor { name: name.into() }.into()
     }
 
+    /// A list of blocks, corresponding to the HTML tag `<ul>` or `<ol>` with multiple nested tags `<li>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblocklist)
     pub fn list(items: impl IntoIterator<Item = impl Into<InputRichBlockListItem>>) -> Self {
         InputRichBlockList {
             items: items.into_iter().map(Into::into).collect(),
@@ -433,6 +464,9 @@ impl InputRichBlock {
         .into()
     }
 
+    /// A block quotation, corresponding to the HTML tag `<blockquote>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockblockquotation)
     pub fn block_quotation(
         blocks: impl IntoIterator<Item = impl Into<Self>>,
         credit: Option<impl Into<RichText>>,
@@ -444,6 +478,23 @@ impl InputRichBlock {
         .into()
     }
 
+    /// A block quotation, corresponding to the HTML tag `<blockquote>` with custom attribute `"expandable"`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockexpandableblockquotation)
+    pub fn expandable_blockquotation(
+        text: impl Into<RichText>,
+        credit: Option<impl Into<RichText>>,
+    ) -> Self {
+        InputRichBlockExpandableBlockQuotation {
+            text: Box::new(text.into()),
+            credit: credit.map(Into::into).map(Box::new),
+        }
+        .into()
+    }
+
+    /// A quotation with centered text, loosely corresponding to the HTML tag `<aside>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockpullquotation)
     pub fn pull_quotation(text: impl Into<RichText>, credit: Option<impl Into<RichText>>) -> Self {
         InputRichBlockPullQuotation {
             text: Box::new(text.into()),
@@ -452,6 +503,9 @@ impl InputRichBlock {
         .into()
     }
 
+    /// A collage, corresponding to the custom HTML tag `<tg-collage>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockcollage)
     pub fn collage(
         blocks: impl IntoIterator<Item = impl Into<Self>>,
         caption: Option<RichBlockCaption>,
@@ -463,6 +517,9 @@ impl InputRichBlock {
         .into()
     }
 
+    /// A slideshow, corresponding to the custom HTML tag `<tg-slideshow>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockslideshow)
     pub fn slideshow(
         blocks: impl IntoIterator<Item = impl Into<Self>>,
         caption: Option<RichBlockCaption>,
@@ -474,6 +531,9 @@ impl InputRichBlock {
         .into()
     }
 
+    /// A table, corresponding to the HTML tag `<table>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblocktable)
     pub fn table(
         cells: impl IntoIterator<Item = impl IntoIterator<Item = impl Into<RichBlockTableCell>>>,
         caption: Option<impl Into<RichText>>,
@@ -495,6 +555,9 @@ impl InputRichBlock {
         .into()
     }
 
+    /// An expandable block for details disclosure, corresponding to the HTML tag `<details>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockdetails)
     pub fn details(
         summary: impl Into<RichText>,
         blocks: impl IntoIterator<Item = impl Into<Self>>,
@@ -509,6 +572,9 @@ impl InputRichBlock {
         .into()
     }
 
+    /// A block with a map, corresponding to the custom HTML tag `<tg-map>`. The map's width and height must not exceed 10000 in total. The width and height ratio must be at most 20.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockmap)
     pub fn map(
         location: impl Into<Location>,
         zoom: impl Into<Option<i64>>,
@@ -527,6 +593,23 @@ impl InputRichBlock {
         .into()
     }
 
+    /// A block containing a list of buttons that are shown in one row, corresponding to the custom HTML tag `<tg-button-row>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockbuttons)
+    pub fn buttons(
+        buttons: impl IntoIterator<Item = impl Into<RichMessageButton>>,
+        align: Option<RichBlockTableCellAlign>,
+    ) -> Self {
+        InputRichBlockButtons {
+            buttons: buttons.into_iter().map(Into::into).collect(),
+            align,
+        }
+        .into()
+    }
+
+    /// A block with an animation, corresponding to the HTML tag `<video>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockanimation)
     pub fn animation(
         animation: impl Into<InputMediaAnimation>,
         caption: Option<RichBlockCaption>,
@@ -538,6 +621,9 @@ impl InputRichBlock {
         .into()
     }
 
+    /// A block with a music file, corresponding to the HTML tag `<audio>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockaudio)
     pub fn audio(audio: impl Into<InputMediaAudio>, caption: Option<RichBlockCaption>) -> Self {
         InputRichBlockAudio {
             audio: audio.into(),
@@ -546,6 +632,23 @@ impl InputRichBlock {
         .into()
     }
 
+    /// A block with a general file, corresponding to the custom HTML tag `<tg-document>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockdocument)
+    pub fn document(
+        document: impl Into<InputMediaDocument>,
+        caption: Option<RichBlockCaption>,
+    ) -> Self {
+        InputRichBlockDocument {
+            document: document.into(),
+            caption,
+        }
+        .into()
+    }
+
+    /// A block with a photo, corresponding to the HTML tag `<img>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockphoto)
     pub fn photo(photo: impl Into<InputMediaPhoto>, caption: Option<RichBlockCaption>) -> Self {
         InputRichBlockPhoto {
             photo: photo.into(),
@@ -554,6 +657,9 @@ impl InputRichBlock {
         .into()
     }
 
+    /// A block with a video, corresponding to the HTML tag `<video>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockvideo)
     pub fn video(video: impl Into<InputMediaVideo>, caption: Option<RichBlockCaption>) -> Self {
         InputRichBlockVideo {
             video: video.into(),
@@ -562,6 +668,9 @@ impl InputRichBlock {
         .into()
     }
 
+    /// A block with a voice note, corresponding to the HTML tag `<audio>`.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockvoicenote)
     pub fn voice_note(
         voice_note: impl Into<InputMediaVoiceNote>,
         caption: Option<RichBlockCaption>,
@@ -573,6 +682,9 @@ impl InputRichBlock {
         .into()
     }
 
+    /// A block with a “Thinking…” placeholder, corresponding to the custom HTML tag `<tg-thinking>`. The block may be used only in [sendRichMessageDraft](https://core.telegram.org/bots/api/#sendrichmessagedraft), therefore it can't be received in messages. See [https://t.me/addemoji/AIActions](https://t.me/addemoji/AIActions) for examples of custom emoji that are recommended for usage in the block.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputrichblockthinking)
     pub fn thinking(text: impl Into<RichText>) -> Self {
         InputRichBlockThinking {
             text: Box::new(text.into()),
