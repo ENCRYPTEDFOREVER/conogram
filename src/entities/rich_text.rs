@@ -191,7 +191,7 @@ pub enum RichText {
 
 impl Default for RichText {
     fn default() -> Self {
-        Self::Bold(RichTextBold::default())
+        Self::Plain(String::default())
     }
 }
 
