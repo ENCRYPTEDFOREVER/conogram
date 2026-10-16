@@ -366,12 +366,6 @@ impl From<RichMessageButton> for RichText {
     }
 }
 
-impl RichText {
-    pub fn from_iter<T: IntoIterator<Item = impl Into<RichText>>>(iter: T) -> Self {
-        Self::Array(iter.into_iter().map(|v| Box::new(v.into())).collect())
-    }
-}
-
 #[macro_export]
 macro_rules! rich_text {
     ($($b: expr),*$(,)?) => {
@@ -381,4 +375,256 @@ macro_rules! rich_text {
             ),*
         ])
     };
+}
+
+impl RichText {
+    /// A bold text.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextbold)
+    pub fn bold(text: impl Into<Self>) -> Self {
+        Self::Bold(RichTextBold {
+            text: Box::new(text.into()),
+        })
+    }
+
+    /// An italicized text.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextitalic)
+    pub fn italic(text: impl Into<Self>) -> Self {
+        Self::Italic(RichTextItalic {
+            text: Box::new(text.into()),
+        })
+    }
+
+    /// An underlined text.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextunderline)
+    pub fn underline(text: impl Into<Self>) -> Self {
+        Self::Underline(RichTextUnderline {
+            text: Box::new(text.into()),
+        })
+    }
+
+    /// A strikethrough text.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextstrikethrough)
+    pub fn strikethrough(text: impl Into<Self>) -> Self {
+        Self::Strikethrough(RichTextStrikethrough {
+            text: Box::new(text.into()),
+        })
+    }
+
+    /// A text covered by a spoiler.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextspoiler)
+    pub fn spoiler(text: impl Into<Self>) -> Self {
+        Self::Spoiler(RichTextSpoiler {
+            text: Box::new(text.into()),
+        })
+    }
+
+    /// Formatted date and time.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextdatetime)
+    pub fn datetime(text: impl Into<Self>, unix_time: i64, format: impl Into<String>) -> Self {
+        Self::DateTime(RichTextDateTime {
+            text: Box::new(text.into()),
+            unix_time,
+            date_time_format: format.into(),
+        })
+    }
+
+    /// A mention of a Telegram user by their identifier.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtexttextmention)
+    pub fn mention(text: impl Into<Self>, user_id: impl Into<i64>) -> Self {
+        Self::TextMention(RichTextTextMention {
+            text: Box::new(text.into()),
+            user: super::user::User {
+                id: user_id.into(),
+                ..Default::default()
+            },
+        })
+    }
+
+    /// A subscript text.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextsubscript)
+    pub fn subscript(text: impl Into<Self>) -> Self {
+        Self::Subscript(RichTextSubscript {
+            text: Box::new(text.into()),
+        })
+    }
+
+    /// A superscript text.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextsuperscript)
+    pub fn superscript(text: impl Into<Self>) -> Self {
+        Self::Superscript(RichTextSuperscript {
+            text: Box::new(text.into()),
+        })
+    }
+
+    /// A marked text.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextmarked)
+    pub fn marked(text: impl Into<Self>) -> Self {
+        Self::Marked(RichTextMarked {
+            text: Box::new(text.into()),
+        })
+    }
+
+    /// A monowidth text.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextcode)
+    pub fn code(text: impl Into<Self>) -> Self {
+        Self::Code(RichTextCode {
+            text: Box::new(text.into()),
+        })
+    }
+
+    /// A custom emoji.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextcustomemoji)
+    pub fn custom_emoji(custom_emoji_id: impl Into<String>, alt_text: impl Into<String>) -> Self {
+        Self::CustomEmoji(RichTextCustomEmoji {
+            custom_emoji_id: custom_emoji_id.into(),
+            alternative_text: alt_text.into(),
+        })
+    }
+
+    /// A mathematical expression.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextmathematicalexpression)
+    pub fn math(expression: impl Into<String>) -> Self {
+        Self::MathematicalExpression(RichTextMathematicalExpression {
+            expression: expression.into(),
+        })
+    }
+
+    /// A text with a link.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtexturl)
+    pub fn url(text: impl Into<Self>, url: impl Into<String>) -> Self {
+        Self::Url(RichTextUrl {
+            text: Box::new(text.into()),
+            url: url.into(),
+        })
+    }
+
+    /// A text with an email address.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextemailaddress)
+    pub fn email(text: impl Into<Self>, email: impl Into<String>) -> Self {
+        Self::EmailAddress(RichTextEmailAddress {
+            text: Box::new(text.into()),
+            email_address: email.into(),
+        })
+    }
+
+    /// A text with a phone number.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextphonenumber)
+    pub fn phone_number(text: impl Into<Self>, phone_number: impl Into<String>) -> Self {
+        Self::PhoneNumber(RichTextPhoneNumber {
+            text: Box::new(text.into()),
+            phone_number: phone_number.into(),
+        })
+    }
+
+    /// A text with a bank card number.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextbankcardnumber)
+    pub fn bank_card(text: impl Into<Self>, card_number: impl Into<String>) -> Self {
+        Self::BankCardNumber(RichTextBankCardNumber {
+            text: Box::new(text.into()),
+            bank_card_number: card_number.into(),
+        })
+    }
+
+    /// A mention by a username.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextmention)
+    pub fn mention_username(text: impl Into<Self>, username: impl Into<String>) -> Self {
+        Self::Mention(RichTextMention {
+            text: Box::new(text.into()),
+            username: username.into(),
+        })
+    }
+
+    /// A hashtag.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtexthashtag)
+    pub fn hashtag(text: impl Into<Self>, hashtag: impl Into<String>) -> Self {
+        Self::Hashtag(RichTextHashtag {
+            text: Box::new(text.into()),
+            hashtag: hashtag.into(),
+        })
+    }
+
+    /// A cashtag.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextcashtag)
+    pub fn cashtag(text: impl Into<Self>, cashtag: impl Into<String>) -> Self {
+        Self::Cashtag(RichTextCashtag {
+            text: Box::new(text.into()),
+            cashtag: cashtag.into(),
+        })
+    }
+
+    /// A bot command.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextbotcommand)
+    pub fn bot_command(text: impl Into<Self>, command: impl Into<String>) -> Self {
+        Self::BotCommand(RichTextBotCommand {
+            text: Box::new(text.into()),
+            bot_command: command.into(),
+        })
+    }
+
+    /// A button.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextbutton)
+    pub fn button(button: impl Into<RichMessageButton>) -> Self {
+        Self::Button(RichTextButton {
+            button: button.into(),
+        })
+    }
+
+    /// An anchor.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextanchor)
+    pub fn anchor(name: impl Into<String>) -> Self {
+        Self::Anchor(RichTextAnchor { name: name.into() })
+    }
+
+    /// A link to an anchor.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextanchorlink)
+    pub fn anchor_link(text: impl Into<Self>, anchor_name: impl Into<String>) -> Self {
+        Self::AnchorLink(RichTextAnchorLink {
+            text: Box::new(text.into()),
+            anchor_name: anchor_name.into(),
+        })
+    }
+
+    /// A reference.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextreference)
+    pub fn reference(text: impl Into<Self>, name: impl Into<String>) -> Self {
+        Self::Reference(RichTextReference {
+            text: Box::new(text.into()),
+            name: name.into(),
+        })
+    }
+
+    /// A link to a reference.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtextreferencelink)
+    pub fn reference_link(text: impl Into<Self>, ref_name: impl Into<String>) -> Self {
+        Self::ReferenceLink(RichTextReferenceLink {
+            text: Box::new(text.into()),
+            reference_name: ref_name.into(),
+        })
+    }
 }
