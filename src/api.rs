@@ -10,20 +10,24 @@ use dashmap::DashMap;
 use serde::{Serialize, de::DeserializeOwned};
 
 use crate::{
+    callback_data_cache::CallbackDataCache,
     chat_member_cache::ChatMemberCache,
     client::TgApiClient,
     entities::{
         chat_member::ChatMember,
+        link_preview_options::LinkPreviewOptions,
         misc::{chat_id::ChatId, input_file::GetFiles},
         update::{AllowedUpdates, Update},
     },
     errors::{ConogramError, ConogramErrorType, TgApiError},
     methods::{
+        answer_inline_query::AnswerInlineQueryRequest,
+        edit_ephemeral_message_text::EditEphemeralMessageTextRequest,
         edit_message_caption::EditMessageCaptionRequest, edit_message_text::EditMessageTextRequest,
         get_chat_member::GetChatMemberParams, send_animation::SendAnimationRequest,
-        send_audio::SendAudioRequest, send_document::SendDocumentRequest,
-        send_message::SendMessageRequest, send_photo::SendPhotoRequest, send_poll::SendPollRequest,
-        send_voice::SendVoiceRequest,
+        send_audio::SendAudioRequest, send_checklist::SendChecklistRequest,
+        send_document::SendDocumentRequest, send_message::SendMessageRequest,
+        send_photo::SendPhotoRequest, send_poll::SendPollRequest, send_voice::SendVoiceRequest,
     },
     request::{RequestT, TargetChatId},
     server_config::ApiServerConfig,
@@ -145,6 +149,7 @@ impl Api {
             polling_timeout: 600,
 
             chat_member_cache: None,
+
             request_stats: DashMap::new(),
             request_stats_enabled: false,
 
@@ -158,6 +163,7 @@ impl Api {
     /// * Disabled by default
     /// * Stored inside this [Api] instance
     /// * [ChatMember](AllowedUpdates::ChatMember) update will be automatically enabled if you enable caching
+    /// * Doesn't make sense when using a local Bot API instanse, because it does caching already
     pub fn set_chat_member_cache_enabled(&mut self, enabled: bool) {
         self.chat_member_cache = if enabled {
             Some(ChatMemberCache::default())
@@ -166,6 +172,19 @@ impl Api {
         };
 
         self.check_allowed_updates();
+    }
+
+    /// Enable when you want to use arbitrary long `callback_data`. The library replaces user-provided `callback_data` before sending it to Bot API server and replaces it back when the hash comes in an update, so the process is 100% seamless
+    ///
+    /// Notes:
+    /// * Used when `callback_data` is >= 64 bytes
+    /// * Stored inside this [Api] instance
+    pub fn set_callback_data_cache_enabled(&mut self, enabled: bool) {
+        self.client.callback_data_cache = if enabled {
+            Some(CallbackDataCache::default())
+        } else {
+            None
+        };
     }
 
     /// Enable request count statistics collection, which can be retrieved using [Api::get_request_stats()]
@@ -248,18 +267,20 @@ impl Api {
         self.polling_timeout = timeout_secs;
     }
 
-    /// Set default value for particular request
+    /// Set a default parameter for some request
+    ///
+    /// Currently only supports top-level parameters
     pub fn set_default_request_param(
         &mut self,
-        method: impl Into<String>,
+        method_name: impl Into<String>,
         param_name: impl Into<String>,
         value: impl Serialize,
     ) -> Result<(), serde_json::Error> {
         self.client
-            .set_default_request_param(method.into(), param_name, value)
+            .set_default_request_param(method_name.into(), param_name, value)
     }
 
-    /// Sets default ``parse_mode`` for applicable requests
+    /// Sets default ``parse_mode`` for some applicable requests
     pub fn set_parse_mode(&mut self, value: impl Into<String>) -> Result<(), ConogramErrorType> {
         let value = value.into();
 
@@ -275,7 +296,10 @@ impl Api {
                 SendDocumentRequest,
                 SendVoiceRequest,
                 EditMessageTextRequest,
-                EditMessageCaptionRequest
+                EditEphemeralMessageTextRequest,
+                EditMessageCaptionRequest,
+                AnswerInlineQueryRequest,
+                SendChecklistRequest
             ]
         );
 
@@ -285,13 +309,15 @@ impl Api {
             value,
         )?;
 
+        // TODO: InputChecklist, InputChecklistTask, InputMedia*, InputPollOption, InputTextMessageContent, ReplyParameters
+
         Ok(())
     }
 
-    /// Sets default `link_preview_options` for applicable requests
+    /// Sets default `link_preview_options` for some applicable requests
     pub fn set_default_link_preview(
         &mut self,
-        value: impl Into<crate::entities::link_preview_options::LinkPreviewOptions>,
+        value: impl Into<LinkPreviewOptions>,
     ) -> Result<(), serde_json::Error> {
         let value = value.into();
 
@@ -299,8 +325,14 @@ impl Api {
             self.client,
             "link_preview_options",
             value,
-            [SendMessageRequest, EditMessageTextRequest]
+            [
+                SendMessageRequest,
+                EditMessageTextRequest,
+                EditEphemeralMessageTextRequest
+            ]
         );
+
+        // TODO: InputTextMessageContent
 
         Ok(())
     }
@@ -367,7 +399,7 @@ impl Api {
     }
 
     /// Internal method used for caching
-    pub fn preprocess_updates(&self, updates: &[Update]) {
+    pub fn preprocess_updates(&self, updates: &mut [Update]) {
         let mut max_update_id = None;
         for update in updates {
             if max_update_id.is_none_or(|prev_max| prev_max < update.update_id) {
@@ -378,6 +410,12 @@ impl Api {
                 && let Some(cache) = &self.chat_member_cache
             {
                 cache.cache_update(chat_member_updated);
+            } else if let Some(cache) = &self.client.callback_data_cache
+                && let Some(q) = &mut update.callback_query
+                && let Some(hash) = &q.data
+                && let Some(data) = cache.pull(hash)
+            {
+                q.data = Some(data);
             }
         }
 
@@ -399,8 +437,8 @@ impl Api {
             .offset(offset)
             .timeout(self.polling_timeout.clamp(0, i64::MAX as u64) as i64);
 
-        let updates = r.await?;
-        self.preprocess_updates(&updates);
+        let mut updates = r.await?;
+        self.preprocess_updates(&mut updates);
         Ok(updates)
     }
 

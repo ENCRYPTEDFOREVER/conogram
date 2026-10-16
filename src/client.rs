@@ -11,6 +11,7 @@ use serde_json::Value;
 
 use crate::{
     api::ApiConfig,
+    callback_data_cache::CallbackDataCache,
     entities::misc::input_file::GetFiles,
     errors::{ConogramError, ConogramErrorType, TgApiError, TgApiErrorParams},
 };
@@ -32,6 +33,7 @@ pub(crate) struct TgApiClient {
     bot_config: ApiConfig,
 
     default_request_params: HashMap<String, HashMap<String, Value>>,
+    pub(crate) callback_data_cache: Option<CallbackDataCache>,
 }
 
 impl std::fmt::Debug for TgApiClient {
@@ -61,6 +63,7 @@ impl TgApiClient {
             http_client: Client::new(),
             bot_config: config,
             default_request_params: HashMap::new(),
+            callback_data_cache: None,
         }
     }
 
@@ -116,15 +119,48 @@ impl TgApiClient {
             }
         }
 
-        if let Value::Object(object) = value
-            && (object.contains_key("entities") || object.contains_key("caption_entities"))
-            && object.contains_key("parse_mode")
-        {
-            log::warn!(
-                "Call to {method} contains both \"entities\"/\"caption_entities\" and \"parse_mode\", removing \"parse_mode\""
-            );
+        self.prepare_request_params_traverse(method, value);
+    }
 
-            object.remove("parse_mode");
+    fn prepare_request_params_traverse(&self, method: &str, value: &mut Value) {
+        match value {
+            Value::Array(values) => {
+                for value in values {
+                    self.prepare_request_params_traverse(method, value);
+                }
+            }
+
+            Value::Object(map) => {
+                for (parse_mode, entities) in [
+                    ("parse_mode", "entities"),
+                    ("parse_mode", "caption_entities"),
+                    ("text_parse_mode", "text_entities"),
+                    ("quote_parse_mode", "quote_entities"),
+                    ("question_parse_mode", "question_entities"),
+                    ("explanation_parse_mode", "explanation_entities"),
+                    ("description_parse_mode", "description_entities"),
+                ] {
+                    if map.contains_key(parse_mode) && map.contains_key(entities) {
+                        log::warn!(
+                            "Call to {method} contains both \"{parse_mode}\" and \"{entities}\" removing \"{parse_mode}\""
+                        );
+                        map.remove(parse_mode);
+                        break;
+                    }
+                }
+
+                for (k, v) in map {
+                    if k == "callback_data"
+                        && let Value::String(data) = &v
+                        && let Some(cache) = &self.callback_data_cache
+                        && let Some(hash) = cache.put(data)
+                    {
+                        *v = Value::String(hash);
+                    }
+                    self.prepare_request_params_traverse(method, v);
+                }
+            }
+            _ => {}
         }
     }
 

@@ -15,7 +15,7 @@
     clippy::too_long_first_doc_paragraph,
     clippy::doc_markdown,
 
-    // In request param structs and their constructors, we have no control over it 
+    // In request param structs and their constructors, we have no control over it
     clippy::struct_excessive_bools,
     clippy::fn_params_excessive_bools,
 
@@ -26,10 +26,11 @@
     clippy::unreadable_literal,
     clippy::enum_clike_unportable_variant,
 
-    // Large enums are boxed when contained inside of structs 
+    // Large enums are boxed when contained inside of structs
     clippy::large_enum_variant
 )]
 
+mod callback_data_cache;
 mod chat_member_cache;
 
 pub mod api;
