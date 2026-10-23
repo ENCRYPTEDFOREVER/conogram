@@ -4,3 +4,6 @@ pub mod input_file;
 pub mod message_effects;
 pub mod reply_builder;
 pub mod reply_markup;
+
+#[cfg(feature = "web_app_types")]
+pub mod web_app_types;
