@@ -1,7 +1,7 @@
 [package]
 name = "conogram"
 description = "An async wrapper for Telegram Bot API"
-version = "0.2.30"
+version = "0.2.31"
 edition = "2024"
 license = "MIT"
 homepage = "https://github.com/ENCRYPTEDFOREVER/conogram"
@@ -23,8 +23,8 @@ tokio = { version = "1.54.1", features = ["fs"] }
 reqwest = { version = "0.13.5", features = ["json", "multipart", "stream"] }
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.154"
-uuid = { version = "1.28.0", features = ["v4", "fast-rng"] }
-log = { version = "0.4.34" }
+uuid = { version = "1.29.2", features = ["v4", "fast-rng"] }
+log = { version = "0.4.35" }
 thiserror = { version = "2.0.21" }
 dashmap = { version = "6.2.1", features = ["inline", "serde"] }
 sha2 = { version = "0.11.1", default-features = false, features = ["alloc"] }
