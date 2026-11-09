@@ -117,8 +117,6 @@ pub struct Api {
     request_stats_enabled: bool,
     request_stats: DashMap<String, usize>,
 
-    chat_member_cache: Option<ChatMemberCache>,
-
     flood_wait_hits: DashMap<(String, Option<ChatId>), (Instant, Duration)>,
 
     allowed_updates: Vec<String>,
@@ -139,22 +137,23 @@ impl Debug for Api {
 }
 
 impl Api {
-    #[must_use]
-    pub fn new(config: ApiConfig) -> Self {
-        Self {
-            client: TgApiClient::new(config),
+    pub fn new(config: ApiConfig) -> Result<Self, ConogramError> {
+        Ok(Self {
+            client: TgApiClient::new(config)?,
 
             allowed_updates: vec![],
             get_updates_offset: AtomicI64::new(0),
             polling_timeout: 600,
 
-            chat_member_cache: None,
-
             request_stats: DashMap::new(),
             request_stats_enabled: false,
 
             flood_wait_hits: DashMap::new(),
-        }
+        })
+    }
+
+    pub fn save_storage(&self) -> Result<bool, ConogramError> {
+        self.client.storage.save()
     }
 
     /// Enable [ChatMember] caching from updates and requests
@@ -164,10 +163,28 @@ impl Api {
     /// * Stored inside this [Api] instance
     /// * [ChatMember](AllowedUpdates::ChatMember) update will be automatically enabled if you enable caching
     /// * Doesn't make sense when using a local Bot API instanse, because it does caching already
+    /// * The cache is saved to a [temporary directory](std::env::temp_dir) which by default on some systems is purged on reboot etc. You may want to use non-default temporary directory to avoid this
     pub fn set_chat_member_cache_enabled(&mut self, enabled: bool) {
-        self.chat_member_cache = if enabled {
+        let had_data = !self
+            .client
+            .storage
+            .chat_member_cache
+            .as_ref()
+            .is_none_or(ChatMemberCache::is_empty);
+        if had_data == enabled {
+            return;
+        }
+
+        if enabled && self.client.bot_config.server_config.url != "https://api.telegram.org" {
+            log::warn!(
+                "You seem to be using a local Bot API server with ChatMember cache enabled. This is not needed, as Bot API server already caches it"
+            );
+        }
+
+        self.client.storage.chat_member_cache = if enabled {
             Some(ChatMemberCache::default())
         } else {
+            log::info!("Chat member cache disabled, clearing existing data");
             None
         };
 
@@ -179,10 +196,22 @@ impl Api {
     /// Notes:
     /// * Used when `callback_data` is >= 64 bytes
     /// * Stored inside this [Api] instance
+    /// * The cache is saved to a [temporary directory](std::env::temp_dir) which by default on some systems is purged on reboot etc. You may want to use non-default temporary directory to avoid this
     pub fn set_callback_data_cache_enabled(&mut self, enabled: bool) {
-        self.client.callback_data_cache = if enabled {
+        let had_data = !self
+            .client
+            .storage
+            .callback_data_cache
+            .as_ref()
+            .is_none_or(CallbackDataCache::is_empty);
+        if had_data == enabled {
+            return;
+        }
+
+        self.client.storage.callback_data_cache = if enabled {
             Some(CallbackDataCache::default())
         } else {
+            log::info!("Callback data cache disabled, clearing existing data");
             None
         };
     }
@@ -254,7 +283,7 @@ impl Api {
     }
 
     fn check_allowed_updates(&mut self) {
-        if self.chat_member_cache.is_some() {
+        if self.client.storage.chat_member_cache.is_some() {
             let chat_member = AllowedUpdates::ChatMember.to_string();
             if !self.allowed_updates.contains(&chat_member) {
                 self.allowed_updates.push(chat_member);
@@ -407,10 +436,10 @@ impl Api {
             }
 
             if let Some(chat_member_updated) = &update.chat_member
-                && let Some(cache) = &self.chat_member_cache
+                && let Some(cache) = &self.client.storage.chat_member_cache
             {
                 cache.cache_update(chat_member_updated);
-            } else if let Some(cache) = &self.client.callback_data_cache
+            } else if let Some(cache) = &self.client.storage.callback_data_cache
                 && let Some(q) = &mut update.callback_query
                 && let Some(hash) = &q.data
                 && let Some(data) = cache.pull(hash)
@@ -453,7 +482,7 @@ impl Api {
     ) -> Result<ReturnType, ConogramError> {
         if TypeId::of::<Params>() == TypeId::of::<GetChatMemberParams>()
             && TypeId::of::<ReturnType>() == TypeId::of::<ChatMember>()
-            && let Some(cache) = &self.chat_member_cache
+            && let Some(cache) = &self.client.storage.chat_member_cache
             && let Some(params) = params
         {
             let params =

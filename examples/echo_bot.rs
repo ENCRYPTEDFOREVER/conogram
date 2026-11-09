@@ -6,7 +6,13 @@ use conogram::{
 fn main() {
     let bot_token = "123456:AABBCCDDEEFF";
     let api_config = ApiConfig::remote(bot_token, false);
-    let api = Api::new(api_config);
+    let api = match Api::new(api_config) {
+        Ok(api) => api,
+        Err(err) => {
+            println!("Error initializing API instance: {err}");
+            return;
+        }
+    };
 
     let rt = match tokio::runtime::Builder::new_current_thread()
         .enable_all()

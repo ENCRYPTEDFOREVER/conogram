@@ -41,4 +41,5 @@ pub mod server_config;
 
 pub mod entities;
 pub mod methods;
+pub mod storage;
 pub mod utils;

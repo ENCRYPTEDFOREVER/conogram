@@ -11,9 +11,9 @@ use serde_json::Value;
 
 use crate::{
     api::ApiConfig,
-    callback_data_cache::CallbackDataCache,
     entities::misc::input_file::GetFiles,
     errors::{ConogramError, ConogramErrorType, TgApiError, TgApiErrorParams},
+    storage::Storage,
 };
 
 #[derive(Deserialize, Debug)]
@@ -30,10 +30,10 @@ pub(crate) struct TgApiResponse<ReturnValue> {
 pub(crate) struct TgApiClient {
     base_url: String,
     http_client: Client,
-    bot_config: ApiConfig,
+    pub(crate) bot_config: ApiConfig,
 
     default_request_params: HashMap<String, HashMap<String, Value>>,
-    pub(crate) callback_data_cache: Option<CallbackDataCache>,
+    pub(crate) storage: Storage,
 }
 
 impl std::fmt::Debug for TgApiClient {
@@ -45,26 +45,22 @@ impl std::fmt::Debug for TgApiClient {
 }
 
 impl TgApiClient {
-    pub fn new(config: ApiConfig) -> Self {
-        Self {
+    pub fn new(config: ApiConfig) -> Result<Self, ConogramError> {
+        let url = &config.server_config.url;
+        let token = config.token.leak();
+        let storage = Storage::load(crate::utils::sha2_digest(token))?;
+
+        Ok(Self {
             base_url: if config.server_config.use_test_env {
-                format!(
-                    "{url}/bot{token}/test",
-                    url = config.server_config.url,
-                    token = config.token.leak()
-                )
+                format!("{url}/bot{token}/test")
             } else {
-                format!(
-                    "{url}/bot{token}",
-                    url = config.server_config.url,
-                    token = config.token.leak()
-                )
+                format!("{url}/bot{token}")
             },
             http_client: Client::new(),
             bot_config: config,
             default_request_params: HashMap::new(),
-            callback_data_cache: None,
-        }
+            storage,
+        })
     }
 
     /// # Errors
@@ -152,7 +148,7 @@ impl TgApiClient {
                 for (k, v) in map {
                     if k == "callback_data"
                         && let Value::String(data) = &v
-                        && let Some(cache) = &self.callback_data_cache
+                        && let Some(cache) = &self.storage.callback_data_cache
                         && let Some(hash) = cache.put(data)
                     {
                         *v = Value::String(hash);

@@ -1,13 +1,29 @@
 use dashmap::DashMap;
+use serde::{Deserialize, Serialize};
 
 use crate::entities::{
     chat_member::ChatMember, chat_member_updated::ChatMemberUpdated, misc::chat_id::ChatId,
 };
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct ChatMemberCache {
+    #[serde(
+        default,
+        rename = "by_chat_id",
+        skip_serializing_if = "DashMap::is_empty"
+    )]
     chat_members_chat_id: DashMap<(i64, i64), ChatMember>,
+    #[serde(
+        default,
+        rename = "by_chat_username",
+        skip_serializing_if = "DashMap::is_empty"
+    )]
     chat_members_chat_username: DashMap<(String, i64), ChatMember>,
+    #[serde(
+        default,
+        rename = "username_chat_id_map",
+        skip_serializing_if = "DashMap::is_empty"
+    )]
     username_to_chat_id: DashMap<String, i64>,
 }
 
@@ -75,5 +91,9 @@ impl ChatMemberCache {
         self.chat_members_chat_id
             .get(&(chat_id, user_id))
             .map(|chat_member| chat_member.value().clone())
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.chat_members_chat_id.is_empty() && self.chat_members_chat_username.is_empty()
     }
 }

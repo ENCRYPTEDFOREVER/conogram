@@ -64,6 +64,24 @@ pub enum ConogramErrorType {
     IO(#[from] std::io::Error),
 }
 
+pub trait ConogramErrorT<T> {
+    fn with_details(
+        self,
+        method_name: impl Into<String>,
+        params: impl serde::Serialize + std::fmt::Debug,
+    ) -> Result<T, ConogramError>;
+}
+
+impl<T, U: Into<ConogramErrorType>> ConogramErrorT<T> for Result<T, U> {
+    fn with_details(
+        self,
+        method_name: impl Into<String>,
+        params: impl serde::Serialize + std::fmt::Debug,
+    ) -> Result<T, ConogramError> {
+        self.map_err(|error| ConogramError::new(method_name, params, error.into()))
+    }
+}
+
 #[allow(clippy::fallible_impl_from)]
 impl<ReturnType> From<TgApiResponse<ReturnType>> for Result<ReturnType, ConogramErrorType> {
     fn from(value: TgApiResponse<ReturnType>) -> Self {

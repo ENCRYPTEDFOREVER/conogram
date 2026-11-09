@@ -1,10 +1,11 @@
-use std::fmt::Write as _;
-
 use dashmap::DashMap;
-use sha2::Digest;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Default)]
+use crate::utils::sha2_digest;
+
+#[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct CallbackDataCache {
+    #[serde(flatten)]
     inner: DashMap<String, String>,
 }
 
@@ -13,11 +14,7 @@ impl CallbackDataCache {
         if data.len() < 64 {
             None
         } else {
-            let digest = sha2::Sha256::digest(data);
-            let mut hash = String::with_capacity(64);
-            for b in digest {
-                let _ = write!(&mut hash, "{b:02x}");
-            }
+            let hash = sha2_digest(data);
             self.inner.insert(hash.clone(), data.to_owned());
             Some(hash)
         }
@@ -25,5 +22,13 @@ impl CallbackDataCache {
 
     pub fn pull(&self, hash: &str) -> Option<String> {
         self.inner.get(hash).map(|data| data.clone())
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.inner.is_empty()
+    }
+
+    pub fn len(&self) -> usize {
+        self.inner.len()
     }
 }
