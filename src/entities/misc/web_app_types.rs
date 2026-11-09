@@ -4,7 +4,7 @@ use sha2::Sha256;
 
 use crate::{
     entities::{chat::ChatType, inline_query::ChatType as InlineChatType},
-    utils::deserialize_utils::is_false,
+    utils::{ToHex, deserialize_utils::is_false},
 };
 
 fn deserialize_json_string<'de, D, T>(deserializer: D) -> Result<Option<T>, D::Error>
@@ -119,7 +119,7 @@ impl WebAppInitData {
             return false;
         };
         calc_mac.update(data_check_string.as_bytes());
-        let computed_hash = hex::encode(calc_mac.finalize().into_bytes());
+        let computed_hash = calc_mac.finalize().into_bytes().hex();
 
         computed_hash == *received_hash
     }
