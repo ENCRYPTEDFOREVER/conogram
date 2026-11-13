@@ -6,13 +6,13 @@ use crate::{
     utils::deserialize_utils::is_false,
 };
 
-/// Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz [poll](https://core.telegram.org/bots/api/#poll) can be copied only if the value of the field *correct\_option\_ids* is known to the bot. The method is analogous to the method [forwardMessages](https://core.telegram.org/bots/api/#forwardmessages), but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an Array of [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent messages is returned.
+/// Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, invoice messages, and widget messages can't be copied. A quiz [poll](https://core.telegram.org/bots/api/#poll) can be copied only if the value of the field *correct\_option\_ids* is known to the bot. The method is analogous to the method [forwardMessages](https://core.telegram.org/bots/api/#forwardmessages), but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an Array of [MessageId](https://core.telegram.org/bots/api/#messageid) of the sent messages is returned.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#copymessages)
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = Vec<MessageId>)]
 pub struct CopyMessagesParams {
-    /// Unique identifier for the target chat or username of the target bot, supergroup or channel in the format `@username`
+    /// Unique identifier for the target chat or username of the target bot, supergroup, or channel in the format `@username`
     pub chat_id: ChatId,
 
     /// Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only
@@ -23,7 +23,7 @@ pub struct CopyMessagesParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_messages_topic_id: Option<i64>,
 
-    /// Unique identifier for the chat where the original messages were sent (or username of the target bot, supergroup or channel in the format `@username`)
+    /// Unique identifier for the chat where the original messages were sent (or username of the target bot, supergroup, or channel in the format `@username`)
     pub from_chat_id: ChatId,
 
     /// A JSON-serialized list of 1-100 identifiers of messages in the chat *from\_chat\_id* to copy. The identifiers must be specified in a strictly increasing order.

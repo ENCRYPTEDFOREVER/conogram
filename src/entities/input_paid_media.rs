@@ -14,21 +14,24 @@ use crate::entities::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputpaidmedia)
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
-#[serde(untagged)]
+#[serde(tag = "type")]
 pub enum InputPaidMedia {
     /// The paid media to send is a live photo.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputpaidmedialivephoto)
+    #[serde(rename = "live_photo")]
     LivePhoto(InputPaidMediaLivePhoto),
 
     /// The paid media to send is a photo.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputpaidmediaphoto)
+    #[serde(rename = "photo")]
     Photo(InputPaidMediaPhoto),
 
     /// The paid media to send is a video.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputpaidmediavideo)
+    #[serde(rename = "video")]
     Video(InputPaidMediaVideo),
 }
 

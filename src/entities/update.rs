@@ -11,7 +11,8 @@ use crate::entities::{
     message_reaction_count_updated::MessageReactionCountUpdated,
     message_reaction_updated::MessageReactionUpdated, paid_media_purchased::PaidMediaPurchased,
     poll::Poll, poll_answer::PollAnswer, pre_checkout_query::PreCheckoutQuery,
-    shipping_query::ShippingQuery,
+    shared_widget_query::SharedWidgetQuery, shipping_query::ShippingQuery,
+    widget_query::WidgetQuery,
 };
 
 /// This [object](https://core.telegram.org/bots/api/#available-types) represents an incoming update.
@@ -78,6 +79,14 @@ pub struct Update {
     /// *Optional*. New incoming callback query
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub callback_query: Option<CallbackQuery>,
+
+    /// *Optional*. New incoming query from a widget in a message sent by the bot or via the bot
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub widget_query: Option<WidgetQuery>,
+
+    /// *Optional*. New incoming query from a forwarded message with a shared widget
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub shared_widget_query: Option<SharedWidgetQuery>,
 
     /// *Optional*. New incoming shipping query. Only for invoices with flexible price.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -157,6 +166,8 @@ pub enum AllowedUpdates {
     ChosenInlineResult,
 
     CallbackQuery,
+    WidgetQuery,
+    SharedWidgetQuery,
     ShippingQuery,
     PreCheckoutQuery,
 
@@ -181,7 +192,7 @@ pub enum AllowedUpdates {
 impl AllowedUpdates {
     /// All existing updates
     #[must_use]
-    pub const fn all() -> [Self; 27] {
+    pub const fn all() -> [Self; 29] {
         [
             Self::Message,
             Self::EditedMessage,
@@ -197,6 +208,8 @@ impl AllowedUpdates {
             Self::InlineQuery,
             Self::ChosenInlineResult,
             Self::CallbackQuery,
+            Self::WidgetQuery,
+            Self::SharedWidgetQuery,
             Self::ShippingQuery,
             Self::PreCheckoutQuery,
             Self::PurchasedPaidMedia,
@@ -232,6 +245,8 @@ impl AllowedUpdates {
             Self::InlineQuery => "inline_query",
             Self::ChosenInlineResult => "chosen_inline_result",
             Self::CallbackQuery => "callback_query",
+            Self::WidgetQuery => "widget_query",
+            Self::SharedWidgetQuery => "shared_widget_query",
             Self::ShippingQuery => "shipping_query",
             Self::PreCheckoutQuery => "pre_checkout_query",
             Self::PurchasedPaidMedia => "purchased_paid_media",

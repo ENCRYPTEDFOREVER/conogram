@@ -12,7 +12,7 @@ pub struct KeyboardButtonRequestManagedBot {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub suggested_name: Option<String>,
 
-    /// *Optional*. Suggested username for the bot
+    /// *Optional*. Suggested username for the bot. The username must end with “bot”. If the user creating the bot has a Telegram Premium subscription, then the username can also end with “agent”, “ai”, “app”, “game”, or “gay”; in this case, the username will be assigned to the bot as a secondary username, and a regular username ending with “bot” will be assigned to the bot automatically.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub suggested_username: Option<String>,
 }

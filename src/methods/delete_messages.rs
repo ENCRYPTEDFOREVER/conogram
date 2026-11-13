@@ -9,7 +9,7 @@ use crate::entities::misc::chat_id::ChatId;
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = bool)]
 pub struct DeleteMessagesParams {
-    /// Unique identifier for the target chat or username of the target bot, supergroup or channel in the format `@username`
+    /// Unique identifier for the target chat or username of the target bot, supergroup, or channel in the format `@username`
     pub chat_id: ChatId,
 
     /// A JSON-serialized list of 1-100 identifiers of messages to delete. See [deleteMessage](https://core.telegram.org/bots/api/#deletemessage) for limitations on which messages can be deleted.

@@ -1,7 +1,7 @@
 
 <div align="center">
     <h1><b>Conogram: async Telegram Bot API client written in Rust</b></h1>
-    <a href="https://core.telegram.org/bots/api#august-24-2026">
+    <a href="https://core.telegram.org/bots/api#november-9-2026">
         <img src="https://img.shields.io/badge/Bot%20API%20version-10.3-brightgreen?style=for-the-badge">
     </a>
     <a href="https://crates.io/crates/conogram">
@@ -30,7 +30,8 @@
 
 # TODO
 - More handy entity extension methods
-- Webhooks support
+- Somehow abstract over ephemeral
+- Make cases when there is a required subset of optional parameters in a request compile-time check
 - More examples
 
 # Logging
@@ -90,7 +91,7 @@
 
 ## Mutating and calling requests by references
 ```rust, no_run    
-    let mut request = api.send_message(-10012345678, "Text");
+    let mut request = api.send_message("Text").chat_id(-10012345678);
     for i in 0..5 {
         request = request.chat_id(i);
 

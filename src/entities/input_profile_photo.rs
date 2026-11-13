@@ -12,16 +12,18 @@ use crate::entities::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputprofilephoto)
 #[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
+#[serde(tag = "type")]
 pub enum InputProfilePhoto {
     /// A static profile photo in the .JPG format.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputprofilephotostatic)
+    #[serde(rename = "static")]
     Static(InputProfilePhotoStatic),
 
     /// An animated profile photo in the MPEG4 format.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputprofilephotoanimated)
+    #[serde(rename = "animated")]
     Animated(InputProfilePhotoAnimated),
 }
 

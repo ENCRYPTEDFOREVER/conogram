@@ -16,7 +16,7 @@ use crate::{
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = Message)]
 pub struct ForwardMessageParams {
-    /// Unique identifier for the target chat or username of the target bot, supergroup or channel in the format `@username`
+    /// Unique identifier for the target chat or username of the target bot, supergroup, or channel in the format `@username`
     pub chat_id: ChatId,
 
     /// Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only
@@ -27,7 +27,7 @@ pub struct ForwardMessageParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_messages_topic_id: Option<i64>,
 
-    /// Unique identifier for the chat where the original message was sent (or username of the target bot, supergroup or channel in the format `@username`)
+    /// Unique identifier for the chat where the original message was sent (or username of the target bot, supergroup, or channel in the format `@username`)
     pub from_chat_id: ChatId,
 
     /// New start timestamp for the forwarded video in the message

@@ -14,26 +14,30 @@ use crate::entities::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#paidmedia)
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(untagged)]
+#[serde(tag = "type")]
 pub enum PaidMedia {
     /// The paid media is a [live photo](https://core.telegram.org/bots/api/#livephoto).
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#paidmedialivephoto)
+    #[serde(rename = "live_photo")]
     LivePhoto(PaidMediaLivePhoto),
 
     /// The paid media is a photo.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#paidmediaphoto)
+    #[serde(rename = "photo")]
     Photo(PaidMediaPhoto),
 
     /// The paid media isn't available before the payment.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#paidmediapreview)
+    #[serde(rename = "preview")]
     Preview(PaidMediaPreview),
 
     /// The paid media is a video.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#paidmediavideo)
+    #[serde(rename = "video")]
     Video(PaidMediaVideo),
 }
 

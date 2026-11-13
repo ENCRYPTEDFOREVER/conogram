@@ -14,21 +14,24 @@ use crate::entities::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#revenuewithdrawalstate)
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(untagged)]
+#[serde(tag = "type")]
 pub enum RevenueWithdrawalState {
     /// The withdrawal is in progress.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#revenuewithdrawalstatepending)
+    #[serde(rename = "pending")]
     Pending(RevenueWithdrawalStatePending),
 
     /// The withdrawal succeeded.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#revenuewithdrawalstatesucceeded)
+    #[serde(rename = "succeeded")]
     Succeeded(RevenueWithdrawalStateSucceeded),
 
     /// The withdrawal failed and the transaction was refunded.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#revenuewithdrawalstatefailed)
+    #[serde(rename = "failed")]
     Failed(RevenueWithdrawalStateFailed),
 }
 

@@ -42,7 +42,7 @@ pub struct ChatMemberRestricted {
     /// *True*, if the user is allowed to send polls and checklists
     pub can_send_polls: bool,
 
-    /// *True*, if the user is allowed to send animations, games, stickers and use inline bots
+    /// *True*, if the user is allowed to send animations, games, stickers, widgets and use inline bots
     pub can_send_other_messages: bool,
 
     /// *True*, if the user is allowed to add web page previews to their messages

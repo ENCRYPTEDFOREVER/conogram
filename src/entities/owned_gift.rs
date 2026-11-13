@@ -9,16 +9,18 @@ use crate::entities::{owned_gift_regular::OwnedGiftRegular, owned_gift_unique::O
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#ownedgift)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(untagged)]
+#[serde(tag = "type")]
 pub enum OwnedGift {
     /// Describes a regular gift owned by a user or a chat.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#ownedgiftregular)
+    #[serde(rename = "regular")]
     Regular(OwnedGiftRegular),
 
     /// Describes a unique gift received and owned by a user or a chat.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#ownedgiftunique)
+    #[serde(rename = "unique")]
     Unique(OwnedGiftUnique),
 }
 

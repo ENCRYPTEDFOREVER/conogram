@@ -19,7 +19,7 @@ use crate::{
 #[derive(Debug, Clone, Serialize, Request)]
 #[conogram(result = Message)]
 pub struct SendInvoiceParams {
-    /// Unique identifier for the target chat or username of the target bot, supergroup or channel in the format `@username`
+    /// Unique identifier for the target chat or username of the target bot, supergroup, or channel in the format `@username`
     pub chat_id: ChatId,
 
     /// Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of bots with forum topic mode enabled only

@@ -339,6 +339,9 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
         .cloned()
         .collect::<Vec<_>>();
 
+    let has_required_chat_id = fields.iter().any(|f| !f.optional && f.name == "chat_id");
+    let has_optional_chat_id = fields.iter().any(|f| f.optional && f.name == "chat_id");
+
     // For replacing (text+entities) combos by Into<InputMessageText>
     let (mut _has_caption_entities, mut has_entities) = (false, false);
     let text_is_required = required_fields.iter().any(|f| f.name == "text");
@@ -490,9 +493,19 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
             let helper_method_ident =
                 Ident::new(ident_without_send, request_struct_ident_snake.span());
 
-            let required_fields = required_fields.iter().filter(|f| f.name != "chat_id");
+            let required_chat_id = if has_required_chat_id {
+                quote! {self.chat_id,}
+            } else {
+                quote! {}
+            };
+            let optional_chat_id = if has_optional_chat_id {
+                quote! {.chat_id(self.chat_id)}
+            } else {
+                quote! {}
+            };
             let helper_args = required_fields
-                .clone()
+                .iter()
+                .filter(|f| f.name != "chat_id")
                 .map(|f| {
                     if text_is_required && has_entities && f.name == "text" {
                         quote! {
@@ -509,6 +522,8 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
                 .collect::<TokenStream2>();
 
             let helper_args_assign = required_fields
+                .iter()
+                .filter(|f| f.name != "chat_id")
                 .map(|f| {
                     let name = &f.name;
                     quote! {
@@ -521,6 +536,14 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
                 .iter()
                 .any(|f| f.name == "ephemeral_message_parameters")
             {
+                let chat_id_is_user_chat = if has_optional_chat_id {
+                    quote! {
+                        || (ephemeral_message_parameters.receiver_user_id.is_none_or(|i| i > 0) && !self.chat_id.is_user_chat())
+                    }
+                } else {
+                    quote! {}
+                };
+
                 stream.extend(quote! {
                     impl<'a> crate::entities::misc::reply_builder::ReplyBuilder<'a> {
                         #request_struct_doc_comment
@@ -530,17 +553,18 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
                         ) -> #request_struct_ident<'a> {
                             let r = if let Some(ephemeral_message_parameters) = self.ephemeral_message_parameters
                                 && (!self.allow_ephemeral_leak
-                                    || (ephemeral_message_parameters.receiver_user_id > 0 && !self.chat_id.is_user_chat()))
+                                    #chat_id_is_user_chat
+                                    || (ephemeral_message_parameters.callback_query_id.is_some()))
                             {
                                 self.api
-                                    .#request_struct_ident_snake(self.chat_id, #helper_args_assign)
+                                    .#request_struct_ident_snake(#required_chat_id #helper_args_assign)
                                     .reply_parameters(self.reply_parameters)
                                     .ephemeral_message_parameters(ephemeral_message_parameters)
                             } else {
                                 self.api
-                                    .#request_struct_ident_snake(self.chat_id, #helper_args_assign)
+                                    .#request_struct_ident_snake(#required_chat_id #helper_args_assign)
                                     .reply_parameters(self.reply_parameters)
-                            };
+                            }#optional_chat_id;
                             if let Some(message_thread_id) = self.message_thread_id {
                                 r.message_thread_id(message_thread_id)
                             } else {
@@ -557,7 +581,7 @@ pub fn derive_request(input: TokenStream) -> TokenStream {
                             self,
                             #helper_args
                         ) -> #request_struct_ident<'a> {
-                            let r = self.api.#request_struct_ident_snake(self.chat_id, #helper_args_assign).reply_parameters(self.reply_parameters);
+                            let r = self.api.#request_struct_ident_snake(#required_chat_id #helper_args_assign).reply_parameters(self.reply_parameters)#optional_chat_id;
                             if let Some(message_thread_id) = self.message_thread_id {
                                 r.message_thread_id(message_thread_id)
                             } else {

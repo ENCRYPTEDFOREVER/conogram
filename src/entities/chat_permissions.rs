@@ -39,7 +39,7 @@ pub struct ChatPermissions {
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_send_polls: bool,
 
-    /// *Optional*. *True*, if the user is allowed to send animations, games, stickers and use inline bots
+    /// *Optional*. *True*, if the user is allowed to send animations, games, stickers, widgets and use inline bots
     #[serde(default, skip_serializing_if = "is_false")]
     pub can_send_other_messages: bool,
 

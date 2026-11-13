@@ -29,7 +29,7 @@ impl<'a> ReplyBuilder<'a> {
         let reply_parameters = ReplyParameters::reply(message);
         let ephemeral_message_parameters = if reply_parameters.ephemeral_message_id.is_some() {
             Some(EphemeralMessageParameters {
-                receiver_user_id: message.from_id(),
+                receiver_user_id: Some(message.from_id()),
                 callback_query_id: None,
                 replace_callback_query_message: false,
             })
@@ -81,7 +81,7 @@ impl<'a> ReplyBuilder<'a> {
     pub fn ephemeral(mut self) -> Self {
         self.ephemeral_message_parameters
             .get_or_insert_default()
-            .receiver_user_id = self.original_sender_id;
+            .receiver_user_id = Some(self.original_sender_id);
         self
     }
 
@@ -93,7 +93,7 @@ impl<'a> ReplyBuilder<'a> {
     pub fn force_ephemeral(mut self) -> Self {
         self.ephemeral_message_parameters
             .get_or_insert_default()
-            .receiver_user_id = self.original_sender_id;
+            .receiver_user_id = Some(self.original_sender_id);
         self.allow_ephemeral_leak = false;
         self
     }
@@ -105,7 +105,7 @@ impl<'a> ReplyBuilder<'a> {
     pub fn ephemeral_for(mut self, user_id: impl Into<i64>) -> Self {
         self.ephemeral_message_parameters
             .get_or_insert_default()
-            .receiver_user_id = user_id.into();
+            .receiver_user_id = Some(user_id.into());
         self
     }
 
@@ -116,7 +116,7 @@ impl<'a> ReplyBuilder<'a> {
     pub fn force_ephemeral_for(mut self, user_id: impl Into<i64>) -> Self {
         self.ephemeral_message_parameters
             .get_or_insert_default()
-            .receiver_user_id = user_id.into();
+            .receiver_user_id = Some(user_id.into());
         self.allow_ephemeral_leak = false;
         self
     }

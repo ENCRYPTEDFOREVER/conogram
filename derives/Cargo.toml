@@ -2,9 +2,8 @@
 name = "conogram-derives"
 description = "Derive macros for conogram"
 license = "MIT"
-homepage = "https://github.com/ENCRYPTEDFOREVER/conogram"
 repository = "https://github.com/ENCRYPTEDFOREVER/conogram"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2024"
 
 [lib]

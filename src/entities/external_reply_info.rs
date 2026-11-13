@@ -8,7 +8,7 @@ use crate::{
         link_preview_options::LinkPreviewOptions, live_photo::LivePhoto, location::Location,
         message_origin::MessageOrigin, paid_media_info::PaidMediaInfo, photo_size::PhotoSize,
         poll::Poll, sticker::Sticker, story::Story, venue::Venue, video::Video,
-        video_note::VideoNote, voice::Voice,
+        video_note::VideoNote, voice::Voice, widget::Widget,
     },
     utils::deserialize_utils::is_false,
 };
@@ -76,6 +76,10 @@ pub struct ExternalReplyInfo {
     /// *Optional*. Message is a voice message, information about the file
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub voice: Option<Voice>,
+
+    /// *Optional*. Message is an HTML widget, information about the widget
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub widget: Option<Widget>,
 
     /// *Optional*. *True*, if the message media is covered by a spoiler animation
     #[serde(default, skip_serializing_if = "is_false")]

@@ -3,7 +3,7 @@ use serde::Serialize;
 
 use crate::entities::{forum_topic::ForumTopic, misc::chat_id::ChatId};
 
-/// Use this method to create a topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator right. Returns information about the created topic as a [ForumTopic](https://core.telegram.org/bots/api/#forumtopic) object.
+/// Use this method to create a topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the *can\_manage\_topics* administrator right. In the case of a private chat, a link to the topic can be created in the format `https://t.me/<bot_username>/<message_thread_id>`; the link opens the topic only for the user. Returns information about the created topic as a [ForumTopic](https://core.telegram.org/bots/api/#forumtopic) object.
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#createforumtopic)
 #[derive(Debug, Clone, Serialize, Request)]

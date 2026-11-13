@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::entities::{story_area_position::StoryAreaPosition, story_area_type::StoryAreaType};
+use crate::entities::{area_position::AreaPosition, story_area_type::StoryAreaType};
 
 /// Describes a clickable area on a story media.
 ///
@@ -8,7 +8,7 @@ use crate::entities::{story_area_position::StoryAreaPosition, story_area_type::S
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct StoryArea {
     /// Position of the area
-    pub position: StoryAreaPosition,
+    pub position: AreaPosition,
 
     /// Type of the area
     #[serde(rename = "type")]

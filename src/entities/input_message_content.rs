@@ -5,8 +5,10 @@ use crate::entities::{
     input_invoice_message_content::InputInvoiceMessageContent,
     input_location_message_content::InputLocationMessageContent,
     input_rich_message_content::InputRichMessageContent,
+    input_shared_widget_message_content::InputSharedWidgetMessageContent,
     input_text_message_content::InputTextMessageContent,
     input_venue_message_content::InputVenueMessageContent,
+    input_widget_message_content::InputWidgetMessageContent,
 };
 
 /// This object represents the content of a message to be sent as a result of an inline query. Telegram clients currently support the following types:
@@ -17,6 +19,8 @@ use crate::entities::{
 /// * [InputVenueMessageContent](https://core.telegram.org/bots/api/#inputvenuemessagecontent)
 /// * [InputContactMessageContent](https://core.telegram.org/bots/api/#inputcontactmessagecontent)
 /// * [InputInvoiceMessageContent](https://core.telegram.org/bots/api/#inputinvoicemessagecontent)
+/// * [InputWidgetMessageContent](https://core.telegram.org/bots/api/#inputwidgetmessagecontent)
+/// * [InputSharedWidgetMessageContent](https://core.telegram.org/bots/api/#inputsharedwidgetmessagecontent)
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#inputmessagecontent)
 #[derive(Debug, Clone, PartialEq, Serialize)]
@@ -51,6 +55,16 @@ pub enum InputMessageContent {
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#inputinvoicemessagecontent)
     InvoiceMessageContent(InputInvoiceMessageContent),
+
+    /// Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a message with an [HTML widget](https://core.telegram.org/bots/widgets) to be sent as the result of an inline query. Currently, widgets can't be sent in response to inline queries in the production environment.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputwidgetmessagecontent)
+    WidgetMessageContent(InputWidgetMessageContent),
+
+    /// Represents the [content](https://core.telegram.org/bots/api/#inputmessagecontent) of a message with a shared widget to be sent as the result of an inline query. Currently, widgets can't be sent in response to inline queries in the production environment.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#inputsharedwidgetmessagecontent)
+    SharedWidgetMessageContent(InputSharedWidgetMessageContent),
 }
 
 impl Default for InputMessageContent {
@@ -92,6 +106,18 @@ impl From<InputContactMessageContent> for InputMessageContent {
 impl From<InputInvoiceMessageContent> for InputMessageContent {
     fn from(value: InputInvoiceMessageContent) -> Self {
         Self::InvoiceMessageContent(value)
+    }
+}
+
+impl From<InputWidgetMessageContent> for InputMessageContent {
+    fn from(value: InputWidgetMessageContent) -> Self {
+        Self::WidgetMessageContent(value)
+    }
+}
+
+impl From<InputSharedWidgetMessageContent> for InputMessageContent {
+    fn from(value: InputSharedWidgetMessageContent) -> Self {
+        Self::SharedWidgetMessageContent(value)
     }
 }
 

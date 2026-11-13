@@ -1,10 +1,9 @@
 [package]
 name = "conogram"
 description = "An async wrapper for Telegram Bot API"
-version = "0.2.31"
+version = "0.2.32"
 edition = "2024"
 license = "MIT"
-homepage = "https://github.com/ENCRYPTEDFOREVER/conogram"
 repository = "https://github.com/ENCRYPTEDFOREVER/conogram"
 readme = "readme.md"
 categories = ["api-bindings", "asynchronous"]
@@ -17,7 +16,7 @@ default = ["web_app_types"]
 web_app_types = ["dep:form_urlencoded", "dep:hmac", "dep:serde_urlencoded"]
 
 [dependencies]
-conogram-derives = { path = "./derives", version = "0.1.2" }
+conogram-derives = { path = "./derives", version = "0.1.3" }
 
 tokio = { version = "1.54.1", features = ["fs"] }
 reqwest = { version = "0.13.5", features = ["json", "multipart", "stream"] }

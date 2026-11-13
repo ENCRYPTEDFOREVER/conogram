@@ -33,7 +33,7 @@ pub struct InlineKeyboardButton {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub callback_data: Option<String>,
 
-    /// *Optional*. Description of the [Web App](https://core.telegram.org/bots/webapps) that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method [answerWebAppQuery](https://core.telegram.org/bots/api/#answerwebappquery). Available only in private chats between a user and the bot. Not supported for messages sent on behalf of a business account.
+    /// *Optional*. Description of the [Web App](https://core.telegram.org/bots/webapps) that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method [answerWebAppQuery](https://core.telegram.org/bots/api/#answerwebappquery). Available only in private chats between a user and the bot. Not supported for messages sent on behalf of a business account and ephemeral messages.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub web_app: Option<WebAppInfo>,
 

@@ -1,21 +1,20 @@
 use serde::{Deserialize, Serialize};
 
 use crate::entities::{
-    rich_message_button::RichMessageButton, rich_text_anchor::RichTextAnchor,
-    rich_text_anchor_link::RichTextAnchorLink, rich_text_bank_card_number::RichTextBankCardNumber,
-    rich_text_bold::RichTextBold, rich_text_bot_command::RichTextBotCommand,
-    rich_text_button::RichTextButton, rich_text_cashtag::RichTextCashtag,
-    rich_text_code::RichTextCode, rich_text_custom_emoji::RichTextCustomEmoji,
-    rich_text_date_time::RichTextDateTime, rich_text_email_address::RichTextEmailAddress,
-    rich_text_hashtag::RichTextHashtag, rich_text_italic::RichTextItalic,
-    rich_text_marked::RichTextMarked,
+    rich_text_anchor::RichTextAnchor, rich_text_anchor_link::RichTextAnchorLink,
+    rich_text_bank_card_number::RichTextBankCardNumber, rich_text_bold::RichTextBold,
+    rich_text_bot_command::RichTextBotCommand, rich_text_button::RichTextButton,
+    rich_text_cashtag::RichTextCashtag, rich_text_code::RichTextCode,
+    rich_text_custom_emoji::RichTextCustomEmoji, rich_text_date_time::RichTextDateTime,
+    rich_text_email_address::RichTextEmailAddress, rich_text_hashtag::RichTextHashtag,
+    rich_text_italic::RichTextItalic, rich_text_marked::RichTextMarked,
     rich_text_mathematical_expression::RichTextMathematicalExpression,
     rich_text_mention::RichTextMention, rich_text_phone_number::RichTextPhoneNumber,
     rich_text_reference::RichTextReference, rich_text_reference_link::RichTextReferenceLink,
     rich_text_spoiler::RichTextSpoiler, rich_text_strikethrough::RichTextStrikethrough,
     rich_text_subscript::RichTextSubscript, rich_text_superscript::RichTextSuperscript,
-    rich_text_text_mention::RichTextTextMention, rich_text_underline::RichTextUnderline,
-    rich_text_url::RichTextUrl,
+    rich_text_text_mention::RichTextTextMention, rich_text_ton_address::RichTextTonAddress,
+    rich_text_underline::RichTextUnderline, rich_text_url::RichTextUrl,
 };
 
 /// This object represents a rich formatted text. Currently, it can be either a String for plain text, an Array of [RichText](https://core.telegram.org/bots/api/#richtext), or any of the following types:
@@ -37,6 +36,7 @@ use crate::entities::{
 /// * [RichTextEmailAddress](https://core.telegram.org/bots/api/#richtextemailaddress)
 /// * [RichTextPhoneNumber](https://core.telegram.org/bots/api/#richtextphonenumber)
 /// * [RichTextBankCardNumber](https://core.telegram.org/bots/api/#richtextbankcardnumber)
+/// * [RichTextTonAddress](https://core.telegram.org/bots/api/#richtexttonaddress)
 /// * [RichTextMention](https://core.telegram.org/bots/api/#richtextmention)
 /// * [RichTextHashtag](https://core.telegram.org/bots/api/#richtexthashtag)
 /// * [RichTextCashtag](https://core.telegram.org/bots/api/#richtextcashtag)
@@ -49,136 +49,168 @@ use crate::entities::{
 ///
 /// API Reference: [link](https://core.telegram.org/bots/api/#richtext)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(untagged)]
+#[serde(tag = "type")]
 pub enum RichText {
     /// A bold text.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextbold)
+    #[serde(rename = "bold")]
     Bold(RichTextBold),
 
     /// An italicized text.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextitalic)
+    #[serde(rename = "italic")]
     Italic(RichTextItalic),
 
     /// An underlined text.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextunderline)
+    #[serde(rename = "underline")]
     Underline(RichTextUnderline),
 
     /// A strikethrough text.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextstrikethrough)
+    #[serde(rename = "strikethrough")]
     Strikethrough(RichTextStrikethrough),
 
     /// A text covered by a spoiler.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextspoiler)
+    #[serde(rename = "spoiler")]
     Spoiler(RichTextSpoiler),
 
     /// Formatted date and time.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextdatetime)
+    #[serde(rename = "date_time")]
     DateTime(RichTextDateTime),
 
     /// A mention of a Telegram user by their identifier.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtexttextmention)
+    #[serde(rename = "text_mention")]
     TextMention(RichTextTextMention),
 
     /// A subscript text.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextsubscript)
+    #[serde(rename = "subscript")]
     Subscript(RichTextSubscript),
 
     /// A superscript text.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextsuperscript)
+    #[serde(rename = "superscript")]
     Superscript(RichTextSuperscript),
 
     /// A marked text.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextmarked)
+    #[serde(rename = "marked")]
     Marked(RichTextMarked),
 
     /// A monowidth text.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextcode)
+    #[serde(rename = "code")]
     Code(RichTextCode),
 
     /// A custom emoji.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextcustomemoji)
+    #[serde(rename = "custom_emoji")]
     CustomEmoji(RichTextCustomEmoji),
 
     /// A mathematical expression.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextmathematicalexpression)
+    #[serde(rename = "mathematical_expression")]
     MathematicalExpression(RichTextMathematicalExpression),
 
     /// A text with a link.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtexturl)
+    #[serde(rename = "url")]
     Url(RichTextUrl),
 
     /// A text with an email address.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextemailaddress)
+    #[serde(rename = "email_address")]
     EmailAddress(RichTextEmailAddress),
 
     /// A text with a phone number.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextphonenumber)
+    #[serde(rename = "phone_number")]
     PhoneNumber(RichTextPhoneNumber),
 
     /// A text with a bank card number.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextbankcardnumber)
+    #[serde(rename = "bank_card_number")]
     BankCardNumber(RichTextBankCardNumber),
+
+    /// An address in the TON blockchain.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtexttonaddress)
+    #[serde(rename = "ton_address")]
+    TonAddress(RichTextTonAddress),
 
     /// A mention by a username.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextmention)
+    #[serde(rename = "mention")]
     Mention(RichTextMention),
 
     /// A hashtag.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtexthashtag)
+    #[serde(rename = "hashtag")]
     Hashtag(RichTextHashtag),
 
     /// A cashtag.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextcashtag)
+    #[serde(rename = "cashtag")]
     Cashtag(RichTextCashtag),
 
     /// A bot command.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextbotcommand)
+    #[serde(rename = "bot_command")]
     BotCommand(RichTextBotCommand),
 
     /// A button.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextbutton)
+    #[serde(rename = "button")]
     Button(RichTextButton),
 
     /// An anchor.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextanchor)
+    #[serde(rename = "anchor")]
     Anchor(RichTextAnchor),
 
     /// A link to an anchor.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextanchorlink)
+    #[serde(rename = "anchor_link")]
     AnchorLink(RichTextAnchorLink),
 
     /// A reference.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextreference)
+    #[serde(rename = "reference")]
     Reference(RichTextReference),
 
     /// A link to a reference.
     ///
     /// API Reference: [link](https://core.telegram.org/bots/api/#richtextreferencelink)
+    #[serde(rename = "reference_link")]
     ReferenceLink(RichTextReferenceLink),
 
     /// Bruh
@@ -188,12 +220,6 @@ pub enum RichText {
     /// Plain text
     #[serde(untagged)]
     Plain(String),
-}
-
-impl Default for RichText {
-    fn default() -> Self {
-        Self::Plain(String::default())
-    }
 }
 
 impl From<RichTextBold> for RichText {
@@ -298,6 +324,12 @@ impl From<RichTextBankCardNumber> for RichText {
     }
 }
 
+impl From<RichTextTonAddress> for RichText {
+    fn from(value: RichTextTonAddress) -> Self {
+        Self::TonAddress(value)
+    }
+}
+
 impl From<RichTextMention> for RichText {
     fn from(value: RichTextMention) -> Self {
         Self::Mention(value)
@@ -353,6 +385,13 @@ impl From<RichTextReferenceLink> for RichText {
 }
 
 // Divider: all content below this line will be preserved after code regen
+use crate::entities::rich_message_button::RichMessageButton;
+
+impl Default for RichText {
+    fn default() -> Self {
+        Self::Plain(String::new())
+    }
+}
 
 impl<T: Into<String>> From<T> for RichText {
     fn from(value: T) -> Self {
@@ -539,6 +578,16 @@ impl RichText {
         Self::BankCardNumber(RichTextBankCardNumber {
             text: Box::new(text.into()),
             bank_card_number: card_number.into(),
+        })
+    }
+
+    /// An address in the TON blockchain.
+    ///
+    /// API Reference: [link](https://core.telegram.org/bots/api/#richtexttonaddress)
+    pub fn ton_address(text: impl Into<Self>, address: impl Into<String>) -> Self {
+        Self::TonAddress(RichTextTonAddress {
+            text: Box::new(text.into()),
+            address: address.into(),
         })
     }
 

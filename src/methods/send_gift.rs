@@ -16,7 +16,7 @@ pub struct SendGiftParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<i64>,
 
-    /// Required if *user\_id* is not specified. Unique identifier for the chat or username of the channel (in the format `@username`) that will receive the gift.
+    /// Required if *user\_id* is not specified. Unique identifier for the chat that will receive the gift or username of the channel in the format `@username`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub chat_id: Option<ChatId>,
 

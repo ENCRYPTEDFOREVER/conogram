@@ -12,9 +12,11 @@ use crate::{
         chat_location::ChatLocation,
         chat_permissions::ChatPermissions,
         chat_photo::ChatPhoto,
+        chat_share_theme::ChatShareTheme,
         community::Community,
         message::Message,
         reaction_type::ReactionType,
+        ton_wallet_card::TonWalletCard,
         unique_gift_colors::UniqueGiftColors,
         user::User,
         user_rating::UserRating,
@@ -234,6 +236,14 @@ pub struct ChatFullInfo {
     /// *Optional*. The [Community](https://core.telegram.org/bots/api/#community) to which the chat belongs
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub community: Option<Community>,
+
+    /// *Optional*. For private chats, the TON wallet card of the user, which is shown on their profile page
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub ton_wallet_card: Option<TonWalletCard>,
+
+    /// *Optional*. For private chats, supergroups and channels, the theme of the screen for sharing a link to the user or the chat; omitted if the default theme is used
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub share_theme: Option<ChatShareTheme>,
 }
 
 // Divider: all content below this line will be preserved after code regen

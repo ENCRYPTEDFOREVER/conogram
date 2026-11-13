@@ -24,7 +24,8 @@ use crate::{
         message_auto_delete_timer_changed::MessageAutoDeleteTimerChanged,
         message_entity::MessageEntity, message_origin::MessageOrigin,
         misc::message_effects::MessageEffect, paid_media_info::PaidMediaInfo,
-        paid_message_price_changed::PaidMessagePriceChanged, passport_data::PassportData,
+        paid_message_price_changed::PaidMessagePriceChanged,
+        paid_messages_waived::PaidMessagesWaived, passport_data::PassportData,
         photo_size::PhotoSize, poll::Poll, poll_option_added::PollOptionAdded,
         poll_option_deleted::PollOptionDeleted, proximity_alert_triggered::ProximityAlertTriggered,
         refunded_payment::RefundedPayment, rich_message::RichMessage, sticker::Sticker,
@@ -33,11 +34,12 @@ use crate::{
         suggested_post_approved::SuggestedPostApproved,
         suggested_post_declined::SuggestedPostDeclined, suggested_post_info::SuggestedPostInfo,
         suggested_post_paid::SuggestedPostPaid, suggested_post_refunded::SuggestedPostRefunded,
-        text_quote::TextQuote, unique_gift_info::UniqueGiftInfo, user::User,
-        users_shared::UsersShared, venue::Venue, video::Video, video_chat_ended::VideoChatEnded,
+        text_quote::TextQuote, ton_wallet_transfer::TonWalletTransfer,
+        unique_gift_info::UniqueGiftInfo, user::User, users_shared::UsersShared, venue::Venue,
+        video::Video, video_chat_ended::VideoChatEnded,
         video_chat_participants_invited::VideoChatParticipantsInvited,
         video_chat_scheduled::VideoChatScheduled, video_chat_started::VideoChatStarted,
-        video_note::VideoNote, voice::Voice, web_app_data::WebAppData,
+        video_note::VideoNote, voice::Voice, web_app_data::WebAppData, widget::Widget,
         write_access_allowed::WriteAccessAllowed,
     },
     utils::deserialize_utils::is_false,
@@ -245,7 +247,11 @@ pub struct Message {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub voice: Option<Voice>,
 
-    /// *Optional*. Caption for the animation, audio, document, paid media, photo, video or voice
+    /// *Optional*. Message is an HTML widget, information about the widget
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub widget: Option<Widget>,
+
+    /// *Optional*. Caption for the animation, audio, document, live photo, paid media, photo, video, voice, or widget
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub caption: Option<String>,
 
@@ -253,7 +259,7 @@ pub struct Message {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub caption_entities: Vec<MessageEntity>,
 
-    /// *Optional*. *True*, if the caption must be shown above the message media
+    /// *Optional*. *True*, if the caption must be shown above the message media or the widget
     #[serde(default, skip_serializing_if = "is_false")]
     pub show_caption_above_media: bool,
 
@@ -473,6 +479,10 @@ pub struct Message {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub paid_message_price_changed: Option<PaidMessagePriceChanged>,
 
+    /// *Optional*. Service message: the sender of the message used a link of the other user, which allows sending messages to the user without paying Telegram Stars
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub paid_messages_waived: Option<PaidMessagesWaived>,
+
     /// *Optional*. Service message: answer option was added to a poll
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub poll_option_added: Option<PollOptionAdded>,
@@ -500,6 +510,10 @@ pub struct Message {
     /// *Optional*. Service message: payment for a suggested post was refunded
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub suggested_post_refunded: Option<SuggestedPostRefunded>,
+
+    /// *Optional*. Service message: a transfer with a TON wallet
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub ton_wallet_transfer: Option<TonWalletTransfer>,
 
     /// *Optional*. Service message: video chat scheduled
     #[serde(default, skip_serializing_if = "Option::is_none")]
