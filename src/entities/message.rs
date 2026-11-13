@@ -885,7 +885,7 @@ impl Message {
     ) -> EditEphemeralMessageTextRequest<'a> {
         let r = api.edit_ephemeral_message_text(
             self.chat.id,
-            self.from_id(),
+            self.receiver_user_id().unwrap_or_default(),
             self.ephemeral_message_id.unwrap_or_default(),
         );
 
